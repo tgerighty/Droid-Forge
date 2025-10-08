@@ -1,20 +1,20 @@
-# Geonosis - The Droid Factory
+# Droid Forge
 
-> A comprehensive droid factory framework designed to host, manage, and orchestrate Factory.ai droids with an ST-series Super Tactical Droid "Kalani" orchestrator.
+> A comprehensive droid factory framework designed to host, manage, and orchestrate Factory.ai droids with a BAAS orchestrator.
 
-**Disclaimer: Not affiliated with or endorsed by Lucasfilm/Disney.**
+**Disclaimer: Not affiliated with or endorsed by Factory.ai.**
 
-Named after the planet where the Separatist Alliance created their droid armies, Geonosis serves as a centralized hub for developing, deploying, and managing various specialized droids through intelligent orchestration. The Star Wars-themed naming is used purely as a metaphor for automated, specialized task execution.
+Droid Forge serves as a centralized hub for developing, deploying, and managing various specialized droids through intelligent orchestration.
 
 ## 🎯 Overview
 
-Geonosis is a declarative, droid-based framework that uses Factory.ai's own droid system to create a meta-orchestration layer. All functionality is implemented as Factory.ai droids (markdown with YAML frontmatter) and executed through the Factory.ai CLI.
+Droid Forge is a declarative, droid-based framework that uses Factory.ai's own droid system to create a meta-orchestration layer. All functionality is implemented as Factory.ai droids (markdown with YAML frontmatter) and executed through the Factory.ai CLI.
 
 ## 🏗️ Architecture
 
 ### Core Components
 
-- **🧠 Kalani Orchestrator** - ST-series Super Tactical Droid master orchestrator
+- **🧠 BAAS Orchestrator** - Broker and Automation System for task management and coordination
 - **📋 Task Manager** - Atomic task lifecycle management with file locking
 - **🔀 Git Workflow Orchestrator** - Branch management and commit coordination  
 - **🔗 AI-Dev-Tasks Integrator** - Process file synchronization and PRD integration
@@ -23,14 +23,14 @@ Geonosis is a declarative, droid-based framework that uses Factory.ai's own droi
 ### Directory Structure
 
 ```
-geonosis/
+droid-forge/
 ├── .factory/droids/          # Factory.ai droids (our custom ones)
-├── .geonosis/               # Geonosis-specific data
+├── .droid-forge/            # Droid Forge-specific data
 │   └── logs/                # NDJSON audit and event logs
 ├── ai-dev-tasks/            # Process files (linked, not copied)
 ├── tasks/                   # Generated task lists
 ├── tools/                   # Analysis utilities
-├── geonosis.yaml            # Configuration file
+├── droid-forge.yaml         # Configuration file
 └── README.md
 ```
 
@@ -48,7 +48,7 @@ geonosis/
 - Python analysis tools for log inspection
 
 ### ⚙️ Configuration-Driven
-- All behavior configurable via `geonosis.yaml`
+- All behavior configurable via `corellian.yaml`
 - Delegation rules with pattern matching
 - Git workflow settings and conventions
 - Error handling and recovery options
@@ -71,8 +71,8 @@ geonosis/
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/your-org/geonosis.git
-cd geonosis
+git clone https://github.com/tgerighty/Droid-Forge.git
+cd Droid-Forge
 ```
 
 2. Copy droids to your Factory.ai personal directory:
@@ -80,7 +80,7 @@ cd geonosis
 cp .factory/droids/*.md ~/.factory/droids/
 ```
 
-3. Configure your project in `geonosis.yaml`:
+3. Configure your project in `droid-forge.yaml`:
 ```yaml
 # Customize delegation rules, Git settings, logging etc.
 ```
@@ -89,8 +89,8 @@ cp .factory/droids/*.md ~/.factory/droids/
 
 #### Start Orchestration
 ```bash
-# Use Factory.ai CLI with Kalani orchestrator
-droid kalani-orchestrator "Analyze tasks/0001-prd-geonosis-droid-factory.md and orchestrate implementation"
+# Use Factory.ai CLI with Corellian Master Orchestrator
+droid corellian-orchestrator "Analyze tasks/0001-prd-corellian-droid-factory.md and orchestrate implementation"
 ```
 
 #### Individual Droid Operations
@@ -116,7 +116,7 @@ python tools/analyze-audit.py --events
 
 ## 📋 Configuration
 
-The `geonosis.yaml` file controls all factory behavior:
+The `corellian.yaml` file controls all factory behavior:
 
 ### Delegation Rules
 Pattern-based task routing to appropriate droids:
@@ -157,12 +157,12 @@ concurrency:
 
 1. Create droid specification in `.factory/droids/`
 2. Follow Factory.ai droid format (YAML frontmatter + markdown)
-3. Add delegation rules in `geonosis.yaml`
+3. Add delegation rules in `corellian.yaml`
 4. Copy to personal droids directory
 
 ### Task Management
 
-Geonosis integrates with [ai-dev-tasks](https://github.com/factory-ai/ai-dev-tasks) for PRD-driven development:
+Corellian Droid Factory integrates with [ai-dev-tasks](https://github.com/factory-ai/ai-dev-tasks) for PRD-driven development:
 
 - PRD analysis and task breakdown
 - Structured task list generation
@@ -173,7 +173,7 @@ Geonosis integrates with [ai-dev-tasks](https://github.com/factory-ai/ai-dev-tas
 
 ### Log Analysis
 
-Comprehensive logging in `.geonosis/logs/`:
+Comprehensive logging in `.corellian/logs/`:
 - `audit.ndjson` - High-level audit trail
 - `events.ndjson` - Detailed execution events
 
@@ -212,7 +212,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### Inspiration
 
-The "droid factory" concept is inspired by the strategic manufacturing capabilities shown in the Star Wars universe, where specialized droids are created and orchestrated to accomplish complex missions through intelligent coordination.
+The "droid factory" concept is inspired by advanced manufacturing and orchestration systems, where specialized autonomous agents are created and coordinated to accomplish complex missions through intelligent task management.
 
 ## 🔗 Related Projects
 

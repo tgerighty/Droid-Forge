@@ -1,8 +1,8 @@
-# Product Requirements Document: Geonosis - The Droid Factory
+# Product Requirements Document: Corellian Droid Factory
 
 ## Introduction/Overview
 
-Geonosis is a comprehensive droid factory framework designed to host, manage, and orchestrate Factory.ai droids. Named after the planet where the Separatist Alliance created their droid armies, this project serves as a centralized hub for developing, deploying, and managing various specialized droids. The centerpiece is the ST-series Super Tactical Droid "Kalani" orchestrator that intelligently delegates tasks to specialized droids based on project requirements and PRD analysis.
+Corellian Droid Factory is a comprehensive framework designed to host, manage, and orchestrate Factory.ai droids. This project serves as a centralized hub for developing, deploying, and managing various specialized droids. The centerpiece is the Corellian Master Orchestrator that intelligently delegates tasks to specialized droids based on project requirements and PRD analysis.
 
 ## Goals
 
@@ -44,7 +44,7 @@ Geonosis is a comprehensive droid factory framework designed to host, manage, an
 1.5 The system shall be tech-stack agnostic, allowing droids to use whatever technology stack their target projects require
 
 ### 2. ST-Series Kalani Master Orchestrator Droid
-2.1 The system shall implement an ST-series Super Tactical Droid "Kalani" as the master orchestrator
+2.1 The system shall implement a Corellian Master Orchestrator as the master coordinator
 2.2 The orchestrator shall analyze PRD documents using rule-based, structured parsing to understand project scope and requirements
 2.3 The orchestrator shall automatically break down tasks based on structured PRD analysis (rule-based initially, AI-based as future enhancement)
 2.4 The orchestrator shall delegate tasks to appropriate specialized droids based on:
@@ -103,7 +103,7 @@ Investigate the files referenced in the prompt for security issues:
 4.4 The orchestrator shall facilitate code review workflows by coordinating between droids (e.g., code changes → review droid → commit)
 4.5 The orchestrator shall maintain audit trails of all Git operations performed by droids
 4.6 The orchestrator shall handle branch creation, merging, and cleanup based on task requirements
-4.7 Kalani shall maintain a project changelog at `CHANGELOG.md` (created if missing). Only Kalani writes to this file. For each orchestrated change, Kalani appends an entry including the date, `run_id`, affected task IDs/titles, and commit SHAs.
+4.7 The Corellian Master Orchestrator shall maintain a project changelog at `CHANGELOG.md` (created if missing). Only the orchestrator writes to this file. For each orchestrated change, it appends an entry including the date, `run_id`, affected task IDs/titles, and commit SHAs.
 
 Example entry:
 
@@ -131,12 +131,12 @@ Example entry:
 7.2 The system shall use PRD documents for project understanding and task breakdown
 7.3 The system shall support task list generation and execution tracking
 7.4 The system shall maintain audit trails for all PRD-driven development activities
-7.5 The orchestrator shall update the generated task list file (`/tasks/tasks-[prd-file-name].md`) to reflect task states using inline status markers:
+7.5 The Corellian Master Orchestrator shall update the generated task list file (`/tasks/tasks-[prd-file-name].md`) to reflect task states using inline status markers:
    - `status: scheduled` when a task is queued for execution
    - `status: started` when execution begins
    - Check the task's checkbox (`[x]`) when completed and optionally append `status: completed`
    - All updates shall preserve the existing Markdown structure
-7.6 Kalani shall ensure the ai-dev-tasks process files are available locally; if missing, it will pull them from a configured GitHub repository (pinned ref/commit recommended) into `ai-dev-tasks/`. Sync operations are captured in the audit log.
+7.6 The Corellian Master Orchestrator shall ensure the ai-dev-tasks process files are available locally; if missing, it will pull them from a configured GitHub repository (pinned ref/commit recommended) into `ai-dev-tasks/`. Sync operations are captured in the audit log.
 
 Example task status (single line):
 
@@ -183,7 +183,7 @@ Default conventions: Use these task status markers unless the project specifies 
 - **Target Project Integration**: Droids must be able to integrate with their target project's existing technology stack
 - **CLI Runtime**: The factory framework shall use Factory.ai's Droid CLI for command execution
 - **Storage**: Project-scoped, file-based JSON logs only (no database)
-- **Process Files (ai-dev-tasks)**: Kalani ensures required ai-dev-tasks process files are present locally. If missing, it pulls them from a configured GitHub source (pinned ref/commit recommended) into the `ai-dev-tasks/` directory. Failures are recorded to the audit log and do not crash the orchestrator.
+- **Process Files (ai-dev-tasks)**: The Corellian Master Orchestrator ensures required ai-dev-tasks process files are present locally. If missing, it pulls them from a configured GitHub source (pinned ref/commit recommended) into the `ai-dev-tasks/` directory. Failures are recorded to the audit log and do not crash the orchestrator.
 
 ## Audit & Events
 
@@ -199,8 +199,8 @@ Default conventions: Use these task status markers unless the project specifies 
   - `.factory/logs/events.ndjson` for runtime events
   - Optionally `.factory/logs/run-<run_id>.ndjson` for per-run events
 - **Access**: Orchestrator appends; developers can inspect with standard CLI tools. No database.
-- **Creation**: On startup or first write, Kalani ensures `.factory/logs/` exists and creates `events.ndjson` and `audit.ndjson` if missing.
-  - When fetching ai-dev-tasks process files, Kalani records an `audit.recorded` entry with `details.action = "process_files_sync"` and the source/ref.
+- **Creation**: On startup or first write, the Corellian Master Orchestrator ensures `.factory/logs/` exists and creates `events.ndjson` and `audit.ndjson` if missing.
+  - When fetching ai-dev-tasks process files, it records an `audit.recorded` entry with `details.action = "process_files_sync"` and the source/ref.
 
 Example event (single-line NDJSON):
 
@@ -231,7 +231,7 @@ Default conventions: Use these event shapes unless the project specifies a diffe
 - Git workflow integration foundation
 - Basic branch management and commit coordination
 
-### Phase 2: Kalani Orchestrator Implementation
+### Phase 2: Corellian Master Orchestrator Implementation
 - Rule-based task analysis and breakdown system
 - Droid capability matching and delegation logic
 - Task execution monitoring and result collection

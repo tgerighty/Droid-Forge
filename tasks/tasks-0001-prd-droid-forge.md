@@ -1,16 +1,16 @@
 ## Relevant Files
 
-- `.factory/droids/kalani-orchestrator.md` - Main orchestrator droid specification with comprehensive tooling access
+- `.factory/droids/baas-orchestrator.md` - Main BAAS orchestrator droid specification with comprehensive tooling access
 - `.factory/droids/task-manager.md` - Task lifecycle management droid for status tracking
 - `.factory/droids/git-workflow-orchestrator.md` - Git workflow and branch management droid
 - `.factory/droids/ai-dev-tasks-integrator.md` - Integration droid for ai-dev-tasks workflow
 - `.factory/droids/changelog-maintainer.md` - Droid for maintaining CHANGELOG.md entries
-- `geonosis.yaml` - Geonosis configuration file with orchestrator settings and rules
+- `droid-forge.yaml` - Droid Forge configuration file with orchestrator settings and rules
 - `tools/analyze-audit.py` - Python script for analyzing audit logs and performance metrics
-- `.geonosis/logs/audit.ndjson` - Audit trail log file for geonosis operations
-- `.geonosis/logs/events.ndjson` - Runtime events log file for task/droid execution
-- `CHANGELOG.md` - Project changelog maintained by Kalani (created if missing)
-- `tasks/tasks-0001-prd-geonosis-droid-factory.md` - This task list file for tracking implementation
+- `.droid-forge/logs/audit.ndjson` - Audit trail log file for Droid Forge operations
+- `.droid-forge/logs/events.ndjson` - Runtime events log file for task/droid execution
+- `CHANGELOG.md` - Project changelog maintained by BAAS (created if missing)
+- `tasks/tasks-0001-prd-droid-forge.md` - This task list file for tracking implementation
 
 ### Notes
 
@@ -30,13 +30,13 @@
   - [x] 1.3 Create changelog maintainer droid for automated changelog updates
   - [x] 1.4 Set up Factory.ai droid discovery and integration with personal droids
   - [x] 1.5 Configure geonosis.yaml with delegation rules and Git workflow settings
-- [ ] 2.0 Implement Kalani orchestrator core functionality
-  - [x] 2.1 Enhance Kalani droid with PRD parsing and task breakdown capabilities
-  - [x] 2.2 Implement rule-based task delegation logic in Kalani
+- [ ] 2.0 Implement Corellian Master Orchestrator core functionality
+  - [x] 2.1 Enhance Corellian Master Orchestrator with PRD parsing and task breakdown capabilities
+  - [x] 2.2 Implement rule-based task delegation logic in Corellian Master Orchestrator
   - [x] 3.1 Complete task manager droid with status tracking functionality
-  - [ ] 2.3 Add task execution monitoring and result collection to Kalani
-  - [ ] 2.4 Integrate audit logging system into Kalani's operations
-  - [ ] 2.5 Create error handling and retry mechanisms in Kalani
+  - [ ] 2.3 Add task execution monitoring and result collection to Corellian Master Orchestrator
+  - [ ] 2.4 Integrate audit logging system into Corellian Master Orchestrator's operations
+  - [ ] 2.5 Create error handling and retry mechanisms in Corellian Master Orchestrator
 - [ ] 3.0 Create supporting droids for specialized operations
   - [ ] 3.1 Complete task manager droid with status tracking functionality
   - [ ] 3.2 Create droid capability matching and discovery system

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Simple audit log analysis tool for Geonosis Droid Factory
+Simple audit log analysis tool for Corellian Droid Factory
 Analyzes NDJSON logs to provide insights on droid performance and usage
 """
 
@@ -92,7 +92,7 @@ def analyze_events(events):
 
 def print_summary(metrics):
     """Print analysis summary"""
-    print(f"\n📊 Geonosis Droid Factory Audit Analysis")
+    print(f"\n📊 Corellian Droid Factory Audit Analysis")
     print("=" * 50)
     
     print(f"Total Events: {metrics['total_events']}")
@@ -136,7 +136,7 @@ def print_summary(metrics):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Analyze Geonosis audit logs')
+    parser = argparse.ArgumentParser(description='Analyze Corellian audit logs')
     parser.add_argument('--project-dir', default='.', help='Project directory path')
     parser.add_argument('--events', action='store_true', help='Analyze events.ndjson')
     parser.add_argument('--audit', action='store_true', help='Analyze audit.ndjson')

@@ -1,5 +1,5 @@
 """
-Audit logging system for Geonosis Droid Factory
+Audit logging system for Corellian Droid Factory
 Implements NDJSON logging as specified in the PRD
 """
 
@@ -11,7 +11,7 @@ from typing import Dict, Any, Optional
 
 
 class AuditLogger:
-    """NDJSON audit logger for the Geonosis factory"""
+    """NDJSON audit logger for the Corellian factory"""
     
     def __init__(self, project_root: str):
         self.project_root = Path(project_root)
