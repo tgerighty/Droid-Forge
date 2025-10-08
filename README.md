@@ -45,7 +45,7 @@ droid-forge/
 - NDJSON structured logging
 - Complete audit trails with timestamps
 - Performance metrics and execution tracking
-- Python analysis tools for log inspection
+- Interactive HTML dashboard for log visualization
 
 ### ⚙️ Configuration-Driven
 - All behavior configurable via `droid-forge.yaml`
@@ -65,7 +65,6 @@ droid-forge/
 
 - [Factory.ai CLI](https://github.com/google-gemini/gemini-cli) installed
 - Git repository initialized
-- Python 3.9+ (for analysis tools only)
 
 ### Installation
 
@@ -107,11 +106,12 @@ droid ai-dev-tasks-integrator "Sync latest process files"
 
 #### Analyze Logs
 ```bash
-# Analyze audit logs
-python tools/analyze-audit.py --all
+# Open interactive dashboard
+open baas-dashboard.html
 
-# Check performance metrics
-python tools/analyze-audit.py --events
+# View raw logs
+cat .droid-forge/logs/audit.ndjson
+cat .droid-forge/logs/events.ndjson
 ```
 
 ## 📋 Configuration
