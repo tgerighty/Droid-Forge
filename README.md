@@ -173,7 +173,7 @@ Droid Forge integrates with [ai-dev-tasks](https://github.com/snarktank/ai-dev-t
 
 ### Log Analysis
 
-Comprehensive logging in `.corellian/logs/`:
+Comprehensive logging in `.droid-forge/logs/`:
 - `audit.ndjson` - High-level audit trail
 - `events.ndjson` - Detailed execution events
 

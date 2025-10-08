@@ -151,6 +151,13 @@ logging:
     - droid.completed
     - git.commit
     - audit.recorded
+    - task.execution.started
+    - task.execution.completed
+    - task.execution.abandoned
+    - droid.self_report
+    - performance.metrics
+    - task.result
+    - task.result.validated
 
 # Performance settings
 performance:
@@ -162,6 +169,23 @@ performance:
   
   # Retry delay in seconds
   retry_delay: 5
+  
+  # Execution tracking settings
+  execution_tracking:
+    # Timeout for task execution (seconds)
+    default_timeout: 3600  # 1 hour
+    
+    # Cleanup interval for stale executions (seconds)
+    cleanup_interval: 300  # 5 minutes
+    
+    # Performance metrics collection interval (seconds)
+    metrics_interval: 600  # 10 minutes
+    
+    # Result validation enabled
+    enable_result_validation: true
+    
+    # Droid self-reporting enabled
+    enable_self_reporting: true
 
 # Concurrency and file locking settings
 concurrency:

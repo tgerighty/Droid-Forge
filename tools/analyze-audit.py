@@ -136,7 +136,7 @@ def print_summary(metrics):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Analyze Corellian audit logs')
+    parser = argparse.ArgumentParser(description='Analyze Droid Forge audit logs')
     parser.add_argument('--project-dir', default='.', help='Project directory path')
     parser.add_argument('--events', action='store_true', help='Analyze events.ndjson')
     parser.add_argument('--audit', action='store_true', help='Analyze audit.ndjson')

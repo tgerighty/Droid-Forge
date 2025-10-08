@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Droid Forge - Dashboard</title>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --popover: 0 0% 100%;
+            --popover-foreground: 222.2 84% 4.9%;
+            --primary: 221.2 83.2% 53.3%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 221.2 83.2% 53.3%;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: hsl(var(--background));
+            color: hsl(var(--foreground));
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            padding: 2rem;
+            border-radius: calc(var(--radius) + 4px);
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: hsl(var(--foreground));
+        }
+        
+        .header .subtitle {
+            color: hsl(var(--muted-foreground));
+            font-size: 1.125rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: hsl(var(--muted-foreground));
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+        
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: hsl(var(--foreground));
+            line-height: 1;
+        }
+        
+        .stat-card .change {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            color: hsl(var(--muted-foreground));
+        }
+        
+        .positive { color: hsl(142.1 76.2% 36.3%); }
+        .negative { color: hsl(0 84.2% 60.2%); }
+        .neutral { color: hsl(var(--muted-foreground)); }
+        
+        .section {
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            padding: 2rem;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        
+        .section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: hsl(var(--foreground));
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+        
+        .log-viewer {
+            background: hsl(var(--muted));
+            color: hsl(var(--foreground));
+            padding: 1.5rem;
+            border-radius: calc(var(--radius) - 2px);
+            font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.875rem;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid hsl(var(--border));
+        }
+        
+        .log-entry {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: hsl(var(--card));
+            border-radius: calc(var(--radius) - 2px);
+            border-left: 3px solid hsl(var(--border));
+        }
+        
+        .log-entry.task-scheduled { border-left-color: hsl(221.2 83.2% 53.3%); }
+        .log-entry.task-started { border-left-color: hsl(38.1 92.5% 50.2%); }
+        .log-entry.task-completed { border-left-color: hsl(142.1 76.2% 36.3%); }
+        .log-entry.task-failed { border-left-color: hsl(0 84.2% 60.2%); }
+        .log-entry.droid-started { border-left-color: hsl(262.1 83.3% 57.8%); }
+        .log-entry.droid-completed { border-left-color: hsl(174.3 80.4% 28%); }
+        
+        .timestamp {
+            color: hsl(var(--muted-foreground));
+            font-size: 0.75rem;
+        }
+        
+        .event-type {
+            color: hsl(var(--primary));
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .details {
+            color: hsl(var(--muted-foreground));
+            margin-top: 0.5rem;
+            font-size: 0.8125rem;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            border: 1px solid hsl(var(--border));
+            padding: 0.5rem 1rem;
+            border-radius: calc(var(--radius) - 2px);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.15s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn:hover {
+            background: hsl(221.2 83.2% 47.8%);
+        }
+        
+        .btn.secondary {
+            background: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+        }
+        
+        .btn.secondary:hover {
+            background: hsl(210 40% 86.3%);
+        }
+        
+        .file-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .file-tag {
+            background: hsl(var(--muted));
+            color: hsl(var(--muted-foreground));
+            padding: 0.375rem 0.75rem;
+            border-radius: calc(var(--radius) - 2px);
+            font-size: 0.8125rem;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            border: 1px solid hsl(var(--border));
+        }
+        
+        .file-tag:hover {
+            background: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+        }
+        
+        .file-tag.active {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            border-color: hsl(var(--primary));
+        }
+        
+        .performance-chart {
+            background: hsl(var(--muted));
+            padding: 1.5rem;
+            border-radius: calc(var(--radius) - 2px);
+            margin-top: 1rem;
+            border: 1px solid hsl(var(--border));
+        }
+        
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .chart-label {
+            width: 150px;
+            font-size: 0.875rem;
+            color: hsl(var(--foreground));
+            font-weight: 500;
+        }
+        
+        .chart-bar-container {
+            flex: 1;
+            height: 20px;
+            background: hsl(var(--muted));
+            border-radius: calc(var(--radius) - 4px);
+            overflow: hidden;
+            margin: 0 0.75rem;
+        }
+        
+        .chart-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, hsl(var(--primary)), hsl(142.1 76.2% 36.3%));
+            transition: width 0.3s ease;
+        }
+        
+        .chart-value {
+            font-weight: 600;
+            color: hsl(var(--foreground));
+            font-size: 0.875rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: hsl(var(--muted-foreground));
+            font-size: 1.125rem;
+        }
+        
+        .error {
+            background: hsl(0 84.2% 60.2% / 0.1);
+            color: hsl(var(--destructive));
+            padding: 1rem;
+            border-radius: calc(var(--radius) - 2px);
+            border: 1px solid hsl(var(--destructive) / 0.2);
+        }
+        
+        .last-updated {
+            text-align: center;
+            color: hsl(var(--muted-foreground));
+            font-size: 0.8125rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Droid Forge Dashboard</h1>
+            <div class="subtitle">Droid Forge - Real-time Monitoring & Analytics</div>
+        </div>
+        
+        <div id="loading" class="loading">
+            Loading dashboard data...
+        </div>
+        
+        <div id="error" class="error" style="display: none;"></div>
+        
+        <div id="dashboard" style="display: none;">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Events</h3>
+                    <div class="value" id="totalEvents">0</div>
+                    <div class="change neutral">All time</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Tasks Completed</h3>
+                    <div class="value" id="tasksCompleted">0</div>
+                    <div class="change" id="completionRate">0% completion rate</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Droids</h3>
+                    <div class="value" id="activeDroids">0</div>
+                    <div class="change neutral">Currently running</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Avg Duration</h3>
+                    <div class="value" id="avgDuration">0s</div>
+                    <div class="change neutral" id="durationSample">Sample size: 0</div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn" onclick="refreshDashboard()">🔄 Refresh</button>
+                <button class="btn secondary" onclick="toggleAutoRefresh()" id="autoRefreshBtn">🔄 Auto-refresh: OFF</button>
+                <button class="btn secondary" onclick="clearLogs()">🗑️ Clear Local Cache</button>
+            </div>
+            
+            <div class="section">
+                <h2>📊 Performance Metrics</h2>
+                <div class="file-list" id="fileList"></div>
+                <div class="performance-chart" id="performanceChart"></div>
+            </div>
+            
+            <div class="section">
+                <h2>📋 Recent Events</h2>
+                <div class="controls">
+                    <button class="btn" onclick="loadFile('audit.ndjson')">📊 Audit Trail</button>
+                    <button class="btn" onclick="loadFile('events.ndjson')">⚡ Runtime Events</button>
+                    <button class="btn" onclick="loadFile('results.ndjson')">🎯 Task Results</button>
+                    <button class="btn" onclick="loadFile('performance.ndjson')">📈 Performance Data</button>
+                </div>
+                <div class="log-viewer" id="logViewer">
+                    <div class="loading">No log file selected</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="last-updated" id="lastUpdated">
+            Last updated: Never
+        </div>
+    </div>
+    
+    <script>
+        let autoRefreshInterval = null;
+        let logData = {};
+        
+        async function fetchLogFile(filename) {
+            try {
+                const response = await fetch(filename);
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        return { data: [], exists: false };
+                    }
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const text = await response.text();
+                if (!text.trim()) {
+                    return { data: [], exists: true };
+                }
+                const lines = text.trim().split('\n');
+                const data = lines.filter(line => line.trim()).map(line => {
+                    try {
+                        return JSON.parse(line);
+                    } catch (e) {
+                        console.warn('Invalid JSON line:', line);
+                        return null;
+                    }
+                }).filter(item => item !== null);
+                return { data, exists: true };
+            } catch (error) {
+                console.error(`Error fetching ${filename}:`, error);
+                return { data: [], exists: false, error: error.message };
+            }
+        }
+        
+        async function loadAllLogs() {
+            const files = ['audit.ndjson', 'events.ndjson', 'results.ndjson', 'performance.ndjson'];
+            
+            for (const file of files) {
+                const result = await fetchLogFile(file);
+                logData[file] = result;
+            }
+            
+            return logData;
+        }
+        
+        function calculateStats() {
+            const allEvents = [];
+            const tasks = [];
+            const droids = new Set();
+            const durations = [];
+            
+            Object.values(logData).forEach(fileData => {
+                if (fileData.data) {
+                    allEvents.push(...fileData.data);
+                    
+                    fileData.data.forEach(event => {
+                        if (event.event_type?.includes('task')) {
+                            tasks.push(event);
+                        }
+                        if (event.droid_id) {
+                            droids.add(event.droid_id);
+                        }
+                        
+                        // Calculate durations from performance data
+                        if (event.execution_summary?.droid_performance) {
+                            Object.values(event.execution_summary.droid_performance).forEach(metrics => {
+                                if (metrics.avg_duration) {
+                                    durations.push(metrics.avg_duration);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+            
+            const completedTasks = tasks.filter(t => 
+                t.event_type === 'task.completed' || t.status === 'completed'
+            ).length;
+            const totalTasks = tasks.filter(t => 
+                t.event_type?.includes('task') || t.status
+            ).length;
+            
+            const avgDuration = durations.length > 0 ? 
+                (durations.reduce((a, b) => a + b, 0) / durations.length).toFixed(1) : 0;
+            
+            return {
+                totalEvents: allEvents.length,
+                tasksCompleted: completedTasks,
+                totalTasks: totalTasks,
+                activeDroids: droids.size,
+                avgDuration: avgDuration,
+                durationSample: durations.length
+            };
+        }
+        
+        function updateDashboard() {
+            const stats = calculateStats();
+            
+            document.getElementById('totalEvents').textContent = stats.totalEvents.toLocaleString();
+            document.getElementById('tasksCompleted').textContent = stats.tasksCompleted.toLocaleString();
+            document.getElementById('activeDroids').textContent = stats.activeDroids.toLocaleString();
+            document.getElementById('avgDuration').textContent = `${stats.avgDuration}s`;
+            document.getElementById('durationSample').textContent = `Sample size: ${stats.durationSample}`;
+            
+            const completionRate = stats.totalTasks > 0 ? 
+                Math.round((stats.tasksCompleted / stats.totalTasks) * 100) : 0;
+            const completionElement = document.getElementById('completionRate');
+            completionElement.textContent = `${completionRate}% completion rate`;
+            completionElement.className = `change ${completionRate >= 80 ? 'positive' : completionRate >= 60 ? 'neutral' : 'negative'}`;
+            
+            updateFileList();
+            updatePerformanceChart();
+            
+            document.getElementById('lastUpdated').textContent = 
+                `Last updated: ${new Date().toLocaleString()}`;
+        }
+        
+        function updateFileList() {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            
+            Object.keys(logData).forEach(filename => {
+                const fileData = logData[filename];
+                const tag = document.createElement('div');
+                tag.className = 'file-tag';
+                tag.textContent = `${filename} (${fileData.data?.length || 0} entries)`;
+                tag.onclick = () => loadFile(filename);
+                fileList.appendChild(tag);
+            });
+        }
+        
+        function updatePerformanceChart() {
+            const chart = document.getElementById('performanceChart');
+            const perfData = logData['performance.ndjson']?.data || [];
+            
+            if (perfData.length === 0) {
+                chart.innerHTML = '<p style="text-align: center; color: #718096;">No performance data available</p>';
+                return;
+            }
+            
+            const latestPerf = perfData[perfData.length - 1];
+            const droidPerf = latestPerf.execution_summary?.droid_performance || {};
+            
+            let chartHTML = '<h3 style="margin-bottom: 15px; color: #2d3748;">Droid Performance</h3>';
+            
+            Object.entries(droidPerf).forEach(([droidId, metrics]) => {
+                const successRate = metrics.success_rate * 100;
+                const avgDuration = metrics.avg_duration || 0;
+                
+                chartHTML += `
+                    <div class="chart-bar">
+                        <div class="chart-label">${droidId}</div>
+                        <div class="chart-bar-container">
+                            <div class="chart-bar-fill" style="width: ${successRate}%"></div>
+                        </div>
+                        <div class="chart-value">${successRate.toFixed(1)}%</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">Avg Duration</div>
+                        <div class="chart-bar-container">
+                            <div class="chart-bar-fill" style="width: ${Math.min(avgDuration / 10, 100)}%; background: linear-gradient(90deg, #f6ad55, #ed8936);"></div>
+                        </div>
+                        <div class="chart-value">${avgDuration.toFixed(1)}s</div>
+                    </div>
+                `;
+            });
+            
+            chart.innerHTML = chartHTML;
+        }
+        
+        function loadFile(filename) {
+            const viewer = document.getElementById('logViewer');
+            const fileData = logData[filename];
+            
+            // Update active file tag
+            document.querySelectorAll('.file-tag').forEach(tag => {
+                tag.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            if (!fileData || !fileData.exists) {
+                viewer.innerHTML = '<div class="loading">File does not exist or is empty</div>';
+                return;
+            }
+            
+            if (fileData.error) {
+                viewer.innerHTML = `<div class="error">Error loading file: ${fileData.error}</div>`;
+                return;
+            }
+            
+            if (fileData.data.length === 0) {
+                viewer.innerHTML = '<div class="loading">File is empty</div>';
+                return;
+            }
+            
+            // Show last 50 events
+            const recentEvents = fileData.data.slice(-50).reverse();
+            
+            let html = `<div style="margin-bottom: 15px; color: #a0aec0;">
+                Showing last ${recentEvents.length} of ${fileData.data.length} events from ${filename}
+            </div>`;
+            
+            recentEvents.forEach(event => {
+                const timestamp = event.timestamp ? 
+                    new Date(event.timestamp).toLocaleString() : 'No timestamp';
+                const eventType = event.event_type || 'unknown';
+                const taskId = event.task_id || '';
+                const droidId = event.droid_id || '';
+                const status = event.status || '';
+                
+                html += `
+                    <div class="log-entry ${eventType}">
+                        <div class="timestamp">${timestamp}</div>
+                        <div class="event-type">${eventType}</div>
+                        ${taskId ? `<div style="color: #4299e1;">Task: ${taskId}</div>` : ''}
+                        ${droidId ? `<div style="color: #9f7aea;">Droid: ${droidId}</div>` : ''}
+                        ${status ? `<div style="color: #63b3ed;">Status: ${status}</div>` : ''}
+                        ${event.details ? `<div class="details">${JSON.stringify(event.details, null, 2)}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            viewer.innerHTML = html;
+            
+            // Scroll to top
+            viewer.scrollTop = 0;
+        }
+        
+        async function refreshDashboard() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            
+            try {
+                await loadAllLogs();
+                updateDashboard();
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+            } catch (error) {
+                console.error('Dashboard refresh error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = `Error loading dashboard: ${error.message}`;
+            }
+        }
+        
+        function toggleAutoRefresh() {
+            const btn = document.getElementById('autoRefreshBtn');
+            
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+                btn.textContent = '🔄 Auto-refresh: OFF';
+            } else {
+                autoRefreshInterval = setInterval(refreshDashboard, 5000); // Refresh every 5 seconds
+                btn.textContent = '🔄 Auto-refresh: ON';
+            }
+        }
+        
+        function clearLogs() {
+            if (confirm('Clear local dashboard cache? This will reload all data from files.')) {
+                logData = {};
+                localStorage.removeItem('baasDashboardData');
+                refreshDashboard();
+            }
+        }
+        
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshDashboard();
+        });
+        
+        // Auto-refresh every 30 seconds by default
+        setInterval(() => {
+            if (!autoRefreshInterval) {
+                refreshDashboard();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

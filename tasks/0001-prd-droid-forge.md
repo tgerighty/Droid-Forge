@@ -151,7 +151,7 @@ Additional examples:
 - [x] 1.1 Implement orchestrator bootstrap status: completed
 ```
 
-Default conventions: Use these task status markers unless the project specifies a different convention; Kalani adapts and preserves the existing Markdown structure.
+Default conventions: Use these task status markers unless the project specifies a different convention; BAAS adapts and preserves the existing Markdown structure.
 
 ### 8. Testing and Quality Assurance
 8.1 The system shall provide comprehensive unit testing framework for droid development
@@ -183,23 +183,23 @@ Default conventions: Use these task status markers unless the project specifies 
 - **Target Project Integration**: Droids must be able to integrate with their target project's existing technology stack
 - **CLI Runtime**: The factory framework shall use Factory.ai's Droid CLI for command execution
 - **Storage**: Project-scoped, file-based JSON logs only (no database)
-- **Process Files (ai-dev-tasks)**: The Corellian Master Orchestrator ensures required ai-dev-tasks process files are present locally. If missing, it pulls them from a configured GitHub source (pinned ref/commit recommended) into the `ai-dev-tasks/` directory. Failures are recorded to the audit log and do not crash the orchestrator.
+- **Process Files (ai-dev-tasks)**: The BAAS Master Orchestrator ensures required ai-dev-tasks process files are present locally. If missing, it pulls them from a configured GitHub source (pinned ref/commit recommended) into the `ai-dev-tasks/` directory. Failures are recorded to the audit log and do not crash the orchestrator.
 
 ## Audit & Events
 
 - **Scope**: Project-based only; no global master lists.
-- **Location**: `.factory/logs/` within the project.
+- **Location**: `.droid-forge/logs/` within the project.
 - **Format**: One JSON object per line (NDJSON) or small JSON files per run. Fields include at minimum:
   - `timestamp` (ISO 8601), `event_type`, `run_id`, `task_id` (if applicable)
   - `droid_id` (if applicable), `status` (e.g., scheduled|started|completed|failed)
   - `details` (object; optional), `git` (object; optional, e.g., commit SHA)
 - **Event Types** (minimal): `task.scheduled`, `task.started`, `task.completed`, `task.failed`, `droid.started`, `droid.completed`, `git.commit`, `audit.recorded`
 - **Files**:
-  - `.factory/logs/audit.ndjson` for audit trail
-  - `.factory/logs/events.ndjson` for runtime events
-  - Optionally `.factory/logs/run-<run_id>.ndjson` for per-run events
+  - `.droid-forge/logs/audit.ndjson` for audit trail
+  - `.droid-forge/logs/events.ndjson` for runtime events
+  - Optionally `.droid-forge/logs/run-<run_id>.ndjson` for per-run events
 - **Access**: Orchestrator appends; developers can inspect with standard CLI tools. No database.
-- **Creation**: On startup or first write, the Corellian Master Orchestrator ensures `.factory/logs/` exists and creates `events.ndjson` and `audit.ndjson` if missing.
+- **Creation**: On startup or first write, the BAAS Master Orchestrator ensures `.droid-forge/logs/` exists and creates `events.ndjson` and `audit.ndjson` if missing.
   - When fetching ai-dev-tasks process files, it records an `audit.recorded` entry with `details.action = "process_files_sync"` and the source/ref.
 
 Example event (single-line NDJSON):
@@ -216,7 +216,7 @@ Additional examples:
 {"timestamp":"2025-10-08T10:07:44.002Z","event_type":"git.commit","run_id":"r-20251008-0955","git":{"sha":"abc1234","branch":"feat/orchestrator"}}
 ```
 
-Default conventions: Use these event shapes unless the project specifies a different convention; Kalani adapts to project-specific standards.
+Default conventions: Use these event shapes unless the project specifies a different convention; BAAS adapts to project-specific standards.
 
 ## Success Metrics
 
@@ -231,7 +231,7 @@ Default conventions: Use these event shapes unless the project specifies a diffe
 - Git workflow integration foundation
 - Basic branch management and commit coordination
 
-### Phase 2: Corellian Master Orchestrator Implementation
+### Phase 2: BAAS Master Orchestrator Implementation
 - Rule-based task analysis and breakdown system
 - Droid capability matching and delegation logic
 - Task execution monitoring and result collection

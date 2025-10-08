@@ -18,7 +18,7 @@
 - Use Factory.ai CLI (`droid`) for all droid discovery and execution
 - No custom Python code for core functionality - only analysis tools
 - Task status updates use inline markers: `status: scheduled|started|completed`
-- All logging uses NDJSON format in `.factory/logs/` directory
+- All logging uses NDJSON format in `.droid-forge/logs/` directory
 - Integration with existing Factory.ai droid ecosystem via personal droids
 - Git workflows coordinated through specialized droid, not direct commands
 
@@ -34,9 +34,9 @@
   - [x] 2.1 Enhance BAAS Orchestrator with PRD parsing and task breakdown capabilities
   - [x] 2.2 Implement rule-based task delegation logic in BAAS Orchestrator
   - [x] 3.1 Complete task manager droid with status tracking functionality
-  - [ ] 2.3 Add task execution monitoring and result collection to BAAS Orchestrator
-  - [ ] 2.4 Integrate audit logging system into BAAS Orchestrator's operations
-  - [ ] 2.5 Create error handling and retry mechanisms in BAAS Orchestrator
+  - [x] 2.3 Add task execution monitoring and result collection to BAAS Orchestrator
+  - [x] 2.4 Integrate audit logging system into BAAS Orchestrator's operations
+  - [x] 2.5 Create error handling and retry mechanisms in BAAS Orchestrator
 - [ ] 3.0 Create supporting droids for specialized operations
   - [ ] 3.1 Complete task manager droid with status tracking functionality
   - [ ] 3.2 Create droid capability matching and discovery system

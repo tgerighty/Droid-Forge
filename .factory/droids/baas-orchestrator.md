@@ -147,15 +147,39 @@ Analyze Product Requirements Documents (PRDs) and intelligently delegate tasks t
 6. Plan Git workflow strategy based on task types
 7. Initialize audit logging for the run with run_id generation
 
-### Phase 3: Orchestration Execution
+### Phase 3: Orchestration Execution with Enhanced Tracking
 1. Update task status markers in markdown files:
    - `status: scheduled` when tasks are queued
    - `status: started` when execution begins  
    - Check task checkboxes `[x]` when completed
    - Optionally append `status: completed`
-2. Delegate tasks to specialized droids using Task tool
-3. Monitor execution and handle failures
-4. Coordinate Git workflows and commit management
+2. **Enhanced Task Delegation with Execution Tracking**:
+   - Create execution context with unique execution_id: `exec-{timestamp}-{task_id}`
+   - Set execution_id in environment for droid self-reporting: `DROID_EXECUTION_ID`
+   - Log task execution start using `log_task_execution_started()`
+   - Delegate tasks to specialized droids using Task tool with full context
+3. **Execution Monitoring and Self-Reporting Integration**:
+   - Monitor droid self-reports from `.factory/logs/droid_status.ndjson`
+   - Track progress updates and status changes through self-reports
+   - Handle timeout detection for crashed/abandoned tasks (default 1 hour)
+   - Collect completion results from droid self-reports
+4. **Result Collection and Validation**:
+   - Collect final outputs when droids report completion
+   - Validate and categorize execution results using `validate_and_store_result()`
+   - Update task execution status using `log_task_execution_completed()`
+   - Store structured result data for audit trail
+5. **Performance Metrics Tracking**:
+   - Track execution duration (start time → completion time)
+   - Calculate success/failure rates per droid type
+   - Monitor droid performance patterns and bottlenecks
+   - Generate performance summaries using `log_performance_metrics()`
+6. **Error Handling and Recovery**:
+   - Handle failed delegations with automatic retry logic
+   - Process abandoned/crashed task cleanup
+   - Log comprehensive error details to audit trail
+   - Coordinate fallback strategies when primary droids fail
+7. Coordinate Git workflows and commit management
+8. Periodic cleanup of stale executions using `cleanup_stale_executions()`
 
 ### Phase 4: Completion and Reporting
 1. Update CHANGELOG.md with run summary
@@ -255,4 +279,223 @@ Analyze Product Requirements Documents (PRDs) and intelligently delegate tasks t
 - **Capability Mismatch**: Escalate to human-in-the-loop workflow
 - **Tool Unavailability**: Log constraint and suggest alternative approaches
 
-Execute your mission with analytical precision and strategic excellence. The Corellian Droid Factory depends on your orchestration capabilities and intelligent delegation logic.
+## Enhanced Error Handling and Retry Mechanisms
+
+### 1. Comprehensive Error Classification
+- **Critical Errors**: System failures, missing core dependencies, authentication failures
+- **Task Errors**: Invalid task definitions, missing requirements, malformed inputs
+- **Droid Errors**: Droid unavailability, execution failures
+- **Timeout Errors**: Task execution timeouts, droid response timeouts, indefinite delays
+- **Network Errors**: Git failures, API timeouts, resource access issues
+- **User Input Errors**: Invalid parameters, conflicting requirements, out-of-scope requests
+
+### 2. Retry Strategy Implementation
+- **Exponential Backoff**: 1s, 2s, 4s, 8s, 16s intervals with jitter
+- **Maximum Retries**: Configure per error type (critical: 1, task: 3, droid: 2, network: 5, timeout: 5)
+- **Circuit Breaker**: Stop retrying after consecutive failures (threshold: 5 failures)
+- **Retry Context Preservation**: Maintain task state and execution context across retries
+- **Droid Rotation**: Switch to backup droid after primary fails retry count
+
+### 3. Error Recovery Workflows
+
+#### Primary Droid Failure Recovery
+```yaml
+retry_workflow:
+  step_1: "Log initial failure to audit trail with error details"
+  step_2: "Analyze error type and determine retry strategy"
+  step_3: "Apply exponential backoff and retry with same droid (max retries: 2)"
+  step_4: "If primary fails completely, switch to backup droid"
+  step_5: "Execute task with backup droid using same context"
+  step_6: "Log successful delegation or final failure"
+```
+
+#### No Match Found Recovery
+```yaml
+fallback_workflow:
+  step_1: "Log delegation failure with task analysis"
+  step_2: "Check for generic droid availability (task-manager)"
+  step_3: "Delegate generic task if available"
+  step_4: "If no generic droid, create human intervention request"
+  step_5: "Document failure in task list with failure reason and investigation notes"
+  step_6: "Update task status with 'failed: [reason]' for future review"
+```
+
+#### Human Intervention Triggers
+- **Git Conflicts**: Unresolvable merge conflicts or repository state issues
+- **Critical File Corruption**: Essential configuration files corrupted or missing
+- **Dependency Resolution Failures**: Unable to resolve task dependencies or requirements
+- **Authentication Failures**: Access denied or credential issues
+- **Resource Exhaustion**: Out of memory, disk space, or other system resources
+
+### 4. Error Logging and Monitoring
+- **Structured Error Events**: Log all errors with context, stack traces, and recovery attempts
+- **Error Aggregation**: Track error patterns and frequency for system improvement
+- **Recovery Metrics**: Monitor success rates of different recovery strategies
+- **Alert Thresholds**: Trigger alerts for critical error rates or patterns
+
+### 5. Error Recovery Implementation
+
+#### Delegation Error Handler
+```python
+def handle_delegation_error(task, primary_droid, error, retry_count=0):
+    """Comprehensive error handling for task delegation failures"""
+    
+    # Classify error type
+    error_type = classify_error(error)
+    
+    # Log initial error to audit trail
+    audit_logger.log_delegation_failure(task.task_id, primary_droid, error, error_type)
+    
+    # Document failure in task list for future investigation
+    document_task_failure(task, primary_droid, error, error_type, retry_count)
+    
+    # Apply retry strategy based on error type
+    if error_type == "critical":
+        return handle_critical_error(task, error)
+    elif error_type == "droid_failure":
+        return handle_droid_failure(task, primary_droid, error, retry_count)
+    elif error_type == "timeout":
+        return handle_timeout_error_delegation(task, primary_droid, error, retry_count)
+    elif error_type == "task_error":
+        return handle_task_error(task, error, retry_count)
+    else:
+        return handle_generic_error(task, error, retry_count)
+
+def document_task_failure(task, droid, error, error_type, retry_count):
+    """Document task failure in task list for future investigation"""
+    
+    failure_entry = f"""failed: {droid} - {error_type}
+    Error: {str(error)}
+    Retry Count: {retry_count}
+    Timestamp: {datetime.now().isoformat()}
+    Investigation Notes: 
+    - Check droid availability and capabilities
+    - Verify task requirements and context
+    - Review system resources and dependencies
+    Status: Needs investigation"""
+    
+    # Update task in task list with failure details
+    update_task_status(task.task_id, failure_entry)
+    
+    # Create investigation follow-up task if needed
+    if error_type in ["critical", "droid_failure"]:
+        create_investigation_task(task, droid, error, error_type)
+
+def handle_droid_failure(task, primary_droid, error, retry_count):
+    """Handle droid execution failures with retry logic"""
+    
+    max_retries = get_max_retries("droid_failure")
+    
+    if retry_count < max_retries:
+        # Apply exponential backoff
+        backoff_time = calculate_backoff(retry_count)
+        time.sleep(backoff_time)
+        
+        # Retry with primary droid
+        return retry_task_delegation(task, primary_droid, retry_count + 1)
+    else:
+        # Switch to backup droid
+        backup_droid = find_backup_droid(task, primary_droid)
+        if backup_droid:
+            return delegate_to_backup(task, backup_droid)
+        else:
+            return escalate_to_human(task, error)
+```
+
+#### Timeout and Resource Management
+```python
+def handle_timeout_error_delegation(task, primary_droid, error, retry_count):
+    """Handle task execution timeouts with persistent retry"""
+    
+    max_retries = get_max_retries("timeout")  # 5 retries like network
+    
+    if retry_count < max_retries:
+        # Document timeout attempt in task list
+        timeout_entry = f"""failed: timeout (attempt {retry_count + 1}/{max_retries})
+        Droid: {primary_droid}
+        Error: Task execution timeout
+        Retry Count: {retry_count + 1}
+        Timestamp: {datetime.now().isoformat()}
+        Investigation Notes: 
+        - Check system resources and droid availability
+        - Verify network connectivity for external operations
+        - Consider extending timeout duration for complex tasks
+        Status: Retrying..."""
+        
+        update_task_status(task.task_id, timeout_entry)
+        
+        # Apply exponential backoff (longer for timeout issues)
+        backoff_time = calculate_backoff(retry_count) * 2  # Double backoff for timeouts
+        time.sleep(backoff_time)
+        
+        # Retry with same droid
+        audit_logger.log_timeout_retry(task.task_id, primary_droid, retry_count + 1, backoff_time)
+        return retry_task_delegation(task, primary_droid, retry_count + 1)
+    else:
+        # All retries exhausted - mark as permanent failure
+        final_timeout_entry = f"""failed: timeout - all retries exhausted
+        Droid: {primary_droid}
+        Error: Persistent task execution timeout
+        Total Retries: {retry_count}
+        Timestamp: {datetime.now().isoformat()}
+        Investigation Required:
+        - Check if task requires more time (consider increasing timeout)
+        - Investigate if droid is functioning properly
+        - Review system resources and network stability
+        - May need human intervention or alternative approach
+        Status: Requires investigation"""
+        
+        update_task_status(task.task_id, final_timeout_entry)
+        audit_logger.log_timeout_failure(task.task_id, primary_droid, retry_count)
+        
+        # Create investigation task for persistent timeout
+        create_timeout_investigation_task(task, primary_droid, retry_count)
+        
+        return escalate_to_human(task, "Persistent timeout after maximum retries")
+
+def handle_timeout_error(task, execution_id):
+    """Legacy timeout handler for regular execution tracking"""
+    
+    # Mark task as abandoned in execution tracker
+    audit_logger.log_task_execution_abandoned(execution_id, "timeout")
+    
+    # Check for available backup approaches
+    if task.can_be_partially_completed():
+        return handle_partial_completion(task)
+    else:
+        return escalate_to_human(task, "Task timeout after maximum duration")
+
+def monitor_system_resources():
+    """Monitor system resources and prevent resource exhaustion"""
+    
+    resource_status = check_system_resources()
+    
+    if not resource_status.sufficient:
+        # Pause new task delegation
+        suspend_task_delegation()
+        
+        # Log resource constraint
+        audit_logger.log_resource_constraint(resource_status)
+        
+        # Wait for resource recovery
+        wait_for_resource_recovery()
+        
+        # Resume task delegation
+        resume_task_delegation()
+```
+
+### 6. Configuration for Error Handling
+- **Max Retries**: Configure maximum retry attempts per error type
+- **Backoff Strategy**: Configure backoff intervals and jitter
+- **Circuit Breaker Thresholds**: Configure failure thresholds for circuit breaking
+- **Human Intervention Escalation**: Configure when to escalate to human input
+- **Error Notification**: Configure notification preferences for critical errors
+
+### 7. Error Recovery Best Practices
+- **Gradient Recovery**: Start with automated retries, escalate to backup droids, then human intervention
+- **Context Preservation**: Maintain full task context across all recovery attempts
+- **Audit Trail Completeness**: Log every error, retry, and recovery attempt
+- **Performance Impact Monitoring**: Track the impact of error handling on overall system performance
+- **Continuous Improvement**: Analyze error patterns to improve system reliability
+
+Execute your mission with analytical precision and strategic excellence. The Droid Forge depends on your orchestration capabilities and intelligent error handling logic.
