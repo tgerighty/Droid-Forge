@@ -1,0 +1,205 @@
+# Geonosis Droid Factory Configuration
+# This file defines the behavior and rules for the Kalani orchestrator
+
+factory:
+  name: "Geonosis"
+  version: "0.1.0"
+  description: "ST-series Super Tactical Droid Kalani orchestrator"
+
+# Orchestrator configuration
+orchestrator:
+  name: "Kalani"
+  series: "ST-series"
+  personality: "tactical, analytical, efficient"
+  
+  # Task state machine configuration
+  task_states:
+    - PENDING
+    - ANALYZING  
+    - DELEGATED
+    - EXECUTING
+    - AWAITING_REVIEW
+    - COMPLETED
+    - FAILED
+
+# Droid discovery and execution
+droids:
+  # Directory where droids are stored (relative to project root)
+  directory: ".factory/droids"
+  
+  # Default execution timeout in seconds
+  default_timeout: 300
+  
+  # Security settings
+  security:
+    # Require explicit permissions in droid manifests
+    require_permissions: true
+    
+    # Default permissions if not specified
+    default_permissions:
+      filesystem: ["read:."]
+      git: []
+      network: false
+
+# Rule-based task delegation rules
+delegation_rules:
+  # Pattern matching for task types to droid capabilities
+  rules:
+    - pattern: "refactor|cleanup|optimize|improve"
+      capabilities: ["code-refactoring", "code-analysis", "performance-audit"]
+      droid_types: ["fix-issue", "code-review", "performance-audit"]
+      priority: 1
+      
+    - pattern: "test|spec|coverage|testing"
+      capabilities: ["testing", "quality-assurance", "setup-comprehensive-testing"]
+      droid_types: ["setup-comprehensive-testing", "write-unit-tests"]
+      priority: 2
+      
+    - pattern: "security|audit|vulnerability|penetration"
+      capabilities: ["security-audit", "security-review"]
+      droid_types: ["security-audit", "security-review"]
+      priority: 3
+      
+    - pattern: "docker|deploy|ci/cd|devops|infrastructure"
+      capabilities: ["devops", "deployment", "docker-expert"]
+      droid_types: ["docker-expert", "setup-monitoring-observability"]
+      priority: 4
+      
+    - pattern: "database|migration|sql|db"
+      capabilities: ["database-migration", "optimize-database-performance"]
+      droid_types: ["database-migration", "optimize-database-performance"]
+      priority: 5
+      
+    - pattern: "documentation|readme|docs|guide"
+      capabilities: ["documentation", "code-review", "create-docs"]
+      droid_types: ["create-docs", "add-documentation"]
+      priority: 6
+      
+    - pattern: "git|version control|branch|merge|commit"
+      capabilities: ["git-workflow", "version-control"]
+      droid_types: ["fix-git-issues"]
+      priority: 7
+      
+    - pattern: "debug|fix|error|issue|bug"
+      capabilities: ["debugging", "error-handling", "fix-issue"]
+      droid_types: ["debug-error", "debug-issue", "fix-issue"]
+      priority: 8
+      
+    - pattern: "setup|install|configure|bootstrap"
+      capabilities: ["setup", "configuration", "onboarding"]
+      droid_types: ["setup-new-feature", "onboard-new-developer"]
+      priority: 9
+      
+    - pattern: "performance|optimize|speed|latency"
+      capabilities: ["performance-optimization", "caching", "monitoring"]
+      droid_types: ["implement-caching-strategy", "optimize-database-performance", "performance-audit"]
+      priority: 10
+
+# Git workflow configuration
+git:
+  # Default branch strategy
+  default_branch: "main"
+  
+  # Branch naming conventions
+  branch_patterns:
+    feature: "feat/{task-id}-{description}"
+    bugfix: "fix/{task-id}-{description}"
+    refactor: "refactor/{task-id}-{description}"
+    
+  # Commit message format
+  commit_format: "{type}({scope}): {description}"
+  
+  # Auto-commit settings
+  auto_commit:
+    enabled: true
+    require_review: false
+
+# ai-dev-tasks integration
+ai_dev_tasks:
+  # GitHub repository for process files
+  process_repo: "factory-ai/ai-dev-tasks"
+  process_ref: "main"
+  
+  # Local directory for process files
+  local_dir: "ai-dev-tasks"
+  
+  # Task file format
+  task_file_format: "tasks-{prd-file-name}.md"
+
+# Logging configuration
+logging:
+  # Log directory (relative to project root)
+  directory: ".geonosis/logs"
+  
+  # Log format: ndjson or json
+  format: "ndjson"
+  
+  # Event types to log
+  events:
+    - task.scheduled
+    - task.started
+    - task.completed
+    - task.failed
+    - droid.started
+    - droid.completed
+    - git.commit
+    - audit.recorded
+
+# Performance settings
+performance:
+  # Maximum concurrent droid executions
+  max_concurrent_droids: 3
+  
+  # Task retry attempts
+  max_retries: 2
+  
+  # Retry delay in seconds
+  retry_delay: 5
+
+# Concurrency and file locking settings
+concurrency:
+  # File locking mechanism to prevent race conditions
+  file_locking:
+    enabled: true
+    # Lock file extension
+    lock_extension: ".lock"
+    # Lock timeout in seconds (removes stale locks)
+    lock_timeout: 300
+    # Retry interval for acquiring locks (seconds)
+    lock_retry_interval: 1
+    # Maximum lock acquisition attempts
+    max_lock_attempts: 60
+  
+  # State management
+  state_management:
+    # Atomic write operations (write to temp, then rename)
+    atomic_writes: true
+    # Backup strategy for critical files
+    backup_on_write: true
+    # State validation before operations
+    validate_state: true
+
+# Error handling and recovery
+error_handling:
+  # Human-in-the-loop triggers
+  human_intervention_triggers:
+    - "git_conflict"
+    - "critical_file_corruption"
+    - "dependency_resolution_failure"
+    - "authentication_failure"
+  
+  # Automatic recovery actions
+  auto_recovery:
+    # Clean stale locks on startup
+    clean_stale_locks: true
+    # Reset failed tasks to pending state
+    reset_failed_tasks: true
+    # Create fallback branches for git failures
+    create_fallback_branches: true
+  
+  # Notification settings
+  notifications:
+    # Notify on human intervention required
+    notify_on_intervention: true
+    # Notify on critical failures
+    notify_on_critical_failure: true
