@@ -1,0 +1,36 @@
+repos:
+  - repo: local
+    hooks:
+      - id: biome-check
+        name: Biome (lint + format)
+        entry: biome
+        language: system
+        args: [check, --apply, --files]
+        types_or: [javascript, jsx, ts, tsx, json, jsonc]
+
+      - id: biome-format
+        name: Biome (format)
+        entry: biome
+        language: system
+        args: [format, --write, --files]
+        types_or: [javascript, jsx, ts, tsx, json, jsonc]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+
+  - repo: local
+    hooks:
+      - id: unit-tests
+        name: Unit Tests
+        entry: npm
+        language: system
+        args: [test]
+        pass_filenames: false
+        always_run: true
