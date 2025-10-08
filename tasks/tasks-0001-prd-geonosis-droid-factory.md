@@ -31,8 +31,9 @@
   - [x] 1.4 Set up Factory.ai droid discovery and integration with personal droids
   - [x] 1.5 Configure geonosis.yaml with delegation rules and Git workflow settings
 - [ ] 2.0 Implement Kalani orchestrator core functionality
-  - [ ] 2.1 Enhance Kalani droid with PRD parsing and task breakdown capabilities
-  - [ ] 2.2 Implement rule-based task delegation logic in Kalani
+  - [x] 2.1 Enhance Kalani droid with PRD parsing and task breakdown capabilities
+  - [x] 2.2 Implement rule-based task delegation logic in Kalani
+  - [x] 3.1 Complete task manager droid with status tracking functionality
   - [ ] 2.3 Add task execution monitoring and result collection to Kalani
   - [ ] 2.4 Integrate audit logging system into Kalani's operations
   - [ ] 2.5 Create error handling and retry mechanisms in Kalani
