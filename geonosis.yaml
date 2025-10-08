@@ -1,6 +1,12 @@
 # Geonosis Droid Factory Configuration
 # This file defines the behavior and rules for the Kalani orchestrator
 
+# CRITICAL CONSTRAINT: Task System Usage
+# ALL droids MUST use ONLY the ai-dev-tasks task system
+# NEVER create or use built-in/native task management systems
+# SINGLE SOURCE OF TRUTH: /tasks/tasks-[prd-file-name].md files
+# FOLLOW EXCLUSIVELY: ai-dev-tasks process-task-list.md guidelines
+
 factory:
   name: "Geonosis"
   version: "0.1.0"
