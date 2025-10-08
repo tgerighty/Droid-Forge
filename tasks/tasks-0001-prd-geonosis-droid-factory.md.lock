@@ -1,0 +1,5 @@
+lock_timestamp: 2025-06-17T10:37:00Z
+process_id: task-manager-operation
+operation: update_task_status
+task_id: 1.1
+new_status: scheduled

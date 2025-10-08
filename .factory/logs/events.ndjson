@@ -1,0 +1,2 @@
+{"timestamp": "2025-10-08T16:21:50.463846+00:00", "event_type": "task.execution.started", "run_id": "r-20251008-1621", "task_id": "test-1", "droid_id": "test-droid", "execution_id": "exec-1759940510-test-1", "status": "executing", "details": {"description": "Test task"}}
+{"timestamp": "2025-10-08T16:21:50.464051+00:00", "event_type": "task.execution.completed", "run_id": "r-20251008-1621", "execution_id": "exec-1759940510-test-1", "status": "completed", "result": {"result": "success"}}
