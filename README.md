@@ -2,7 +2,9 @@
 
 > A comprehensive droid factory framework designed to host, manage, and orchestrate Factory.ai droids with an ST-series Super Tactical Droid "Kalani" orchestrator.
 
-Named after the planet where the Separatist Alliance created their droid armies, Geonosis serves as a centralized hub for developing, deploying, and managing various specialized droids through intelligent orchestration.
+**Disclaimer: Not affiliated with or endorsed by Lucasfilm/Disney.**
+
+Named after the planet where the Separatist Alliance created their droid armies, Geonosis serves as a centralized hub for developing, deploying, and managing various specialized droids through intelligent orchestration. The Star Wars-themed naming is used purely as a metaphor for automated, specialized task execution.
 
 ## 🎯 Overview
 
