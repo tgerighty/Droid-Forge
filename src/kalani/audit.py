@@ -1,5 +1,5 @@
 """
-Audit logging system for Corellian Droid Factory
+Audit logging system for Droid Forge
 Implements NDJSON logging as specified in the PRD
 """
 

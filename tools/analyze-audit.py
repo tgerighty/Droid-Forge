@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Simple audit log analysis tool for Corellian Droid Factory
+Simple audit log analysis tool for Droid Forge
 Analyzes NDJSON logs to provide insights on droid performance and usage
 """
 
@@ -92,7 +92,7 @@ def analyze_events(events):
 
 def print_summary(metrics):
     """Print analysis summary"""
-    print(f"\n📊 Corellian Droid Factory Audit Analysis")
+    print(f"\n📊 Droid Forge Audit Analysis")
     print("=" * 50)
     
     print(f"Total Events: {metrics['total_events']}")

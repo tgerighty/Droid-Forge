@@ -48,7 +48,7 @@ droid-forge/
 - Python analysis tools for log inspection
 
 ### ⚙️ Configuration-Driven
-- All behavior configurable via `corellian.yaml`
+- All behavior configurable via `droid-forge.yaml`
 - Delegation rules with pattern matching
 - Git workflow settings and conventions
 - Error handling and recovery options
@@ -89,8 +89,8 @@ cp .factory/droids/*.md ~/.factory/droids/
 
 #### Start Orchestration
 ```bash
-# Use Factory.ai CLI with Corellian Master Orchestrator
-droid corellian-orchestrator "Analyze tasks/0001-prd-corellian-droid-factory.md and orchestrate implementation"
+# Use Factory.ai CLI with BAAS Orchestrator
+droid baas-orchestrator "Analyze tasks/0001-prd-droid-forge.md and orchestrate implementation"
 ```
 
 #### Individual Droid Operations
@@ -116,7 +116,7 @@ python tools/analyze-audit.py --events
 
 ## 📋 Configuration
 
-The `corellian.yaml` file controls all factory behavior:
+The `droid-forge.yaml` file controls all factory behavior:
 
 ### Delegation Rules
 Pattern-based task routing to appropriate droids:
@@ -157,7 +157,7 @@ concurrency:
 
 1. Create droid specification in `.factory/droids/`
 2. Follow Factory.ai droid format (YAML frontmatter + markdown)
-3. Add delegation rules in `corellian.yaml`
+3. Add delegation rules in `droid-forge.yaml`
 4. Copy to personal droids directory
 
 ### Task Management
