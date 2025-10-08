@@ -14,7 +14,7 @@ Droid Forge is a declarative, droid-based framework that uses Factory.ai's own d
 
 ### Core Components
 
-- **🧠 BAAS Orchestrator** - Broker and Automation System for task management and coordination
+- **🧠 BAAS Orchestrator** - Broker and Automation System for task management and coordination (BAAS also means "Chief" or "Boss" in Dutch)
 - **📋 Task Manager** - Atomic task lifecycle management with file locking
 - **🔀 Git Workflow Orchestrator** - Branch management and commit coordination  
 - **🔗 AI-Dev-Tasks Integrator** - Process file synchronization and PRD integration
@@ -27,7 +27,7 @@ droid-forge/
 ├── .factory/droids/          # Factory.ai droids (our custom ones)
 ├── .droid-forge/            # Droid Forge-specific data
 │   └── logs/                # NDJSON audit and event logs
-├── ai-dev-tasks/            # Process files (linked, not copied)
+├── ai-dev-tasks/            # Process files from https://github.com/snarktank/ai-dev-tasks (linked, not copied)
 ├── tasks/                   # Generated task lists
 ├── tools/                   # Analysis utilities
 ├── droid-forge.yaml         # Configuration file
@@ -162,7 +162,7 @@ concurrency:
 
 ### Task Management
 
-Corellian Droid Factory integrates with [ai-dev-tasks](https://github.com/factory-ai/ai-dev-tasks) for PRD-driven development:
+Droid Forge integrates with [ai-dev-tasks](https://github.com/snarktank/ai-dev-tasks) for PRD-driven development:
 
 - PRD analysis and task breakdown
 - Structured task list generation
@@ -207,7 +207,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Special Thanks
 
 - **[Factory.ai](https://factory.ai/)** - For providing the incredible droid platform and CLI tools that make this meta-orchestration possible
-- **[ai-dev-tasks](https://github.com/factory-ai/ai-dev-tasks)** - For the excellent PRD-driven development framework and process documentation that guides our implementation approach
+- **[ai-dev-tasks](https://github.com/snarktank/ai-dev-tasks)** - For the excellent PRD-driven development framework and process documentation that guides our implementation approach
 - **Gemini 2.5 Pro** - For invaluable architecture review and recommendations that shaped the robust design of this system
 
 ### Inspiration
@@ -217,7 +217,7 @@ The "droid factory" concept is inspired by advanced manufacturing and orchestrat
 ## 🔗 Related Projects
 
 - [Factory.ai](https://factory.ai/) - AI-powered development platform
-- [ai-dev-tasks](https://github.com/factory-ai/ai-dev-tasks) - PRD-driven development framework
+- [ai-dev-tasks](https://github.com/snarktank/ai-dev-tasks) - PRD-driven development framework
 - [Gemini CLI](https://github.com/google-gemini/gemini-cli) - Command-line AI agent
 
 ---

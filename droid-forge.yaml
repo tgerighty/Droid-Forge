@@ -16,6 +16,7 @@ factory:
 orchestrator:
   name: "BAAS"
   series: "Broker and Automation System"
+  description: "BAAS (Broker and Automation System) - BAAS also means 'Chief' or 'Boss' in Dutch"
   personality: "analytical, efficient, methodical"
   
   # Task state machine configuration
