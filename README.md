@@ -220,6 +220,10 @@ The "droid factory" concept is inspired by advanced manufacturing and orchestrat
 - [ai-dev-tasks](https://github.com/snarktank/ai-dev-tasks) - PRD-driven development framework
 - [Gemini CLI](https://github.com/google-gemini/gemini-cli) - Command-line AI agent
 
+## 📄 License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
 ---
 
 **Built with ❤️ and a lot of droids**
