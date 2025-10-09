@@ -1,3 +1,5 @@
+# Tasks from 0001-prd-droid-forge
+
 ## Relevant Files
 
 - `.factory/droids/baas-orchestrator.md` - Main BAAS orchestrator droid specification with comprehensive tooling access
