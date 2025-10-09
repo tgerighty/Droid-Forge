@@ -79,6 +79,7 @@ droid unit-test-droid "Run tests in watch mode during development"
 ## Configuration
 
 Test configuration is handled through standard testing framework config files:
+
 - `jest.config.js` for Jest
 - `vitest.config.js` for Vitest
 - `test` scripts in `package.json`
@@ -88,6 +89,7 @@ Coverage thresholds and reporting are configured in the framework configs.
 ## Integration
 
 This droid integrates with:
+
 - `pre-commit-orchestrator` for automated test validation
 - `biome-droid` for test file formatting
 - `git-workflow-orchestrator` for commit blocking on test failures
@@ -96,6 +98,7 @@ This droid integrates with:
 ## Coverage Requirements
 
 Minimum coverage thresholds:
+
 - **Statements**: 80%
 - **Branches**: 75%
 - **Functions**: 80%
