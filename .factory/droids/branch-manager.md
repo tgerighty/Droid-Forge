@@ -73,7 +73,7 @@ example: "add unit tests for auth module" → test/6.1-add-unit-tests-for-auth-m
 analyze_task_description() {
     local task_desc="$1"
     local task_type="${2:-auto}"
-    
+
     if [[ "$task_type" == "auto" ]]; then
         # Auto-detect based on keywords
         if [[ "$task_desc" =~ (implement|add|create|build|develop) ]]; then
@@ -104,15 +104,15 @@ generate_branch_name() {
     local task_id="$1"
     local task_desc="$2"
     local branch_type="$3"
-    
+
     # Sanitize description
     local sanitized=$(echo "$task_desc" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g' | sed 's/-\+/-/g' | sed 's/^-\+//;s/-\+$//')
-    
+
     # Truncate if too long (max 50 characters)
     if [ ${#sanitized} -gt 40 ]; then
         sanitized="${sanitized:0:40}"
     fi
-    
+
     echo "${branch_type}/${task_id}-${sanitized}"
 }
 ```
@@ -124,16 +124,16 @@ create_branch_with_metadata() {
     local task_desc="$2"
     local branch_type="$3"
     local branch_name="$4"
-    
+
     # Create branch
     git checkout -b "$branch_name"
-    
+
     # Store metadata
     git config "branch.$branch_name.description" "$task_desc"
     git config "branch.$branch_name.created" "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
     git config "branch.$branch_name.task-id" "$task_id"
     git config "branch.$branch_name.type" "$branch_type"
-    
+
     # Log to audit trail
     log_audit_event "branch_created" "$task_id" "$branch_name" "$branch_type"
 }
@@ -188,7 +188,7 @@ Validates all existing branches against configured patterns.
 
 ### Task Status Coordination
 - **Branch Created**: Update task status to "in_progress" with branch name
-- **Branch Merged**: Update task status to "completed" with merge details  
+- **Branch Merged**: Update task status to "completed" with merge details
 - **Branch Deleted**: Clean up task metadata and update status
 
 ### Coordination with git-workflow-orchestrator
@@ -198,7 +198,7 @@ coordinate_with_git_orchestrator() {
     local operation="$1"
     local branch_name="$2"
     local task_id="$3"
-    
+
     # Notify git-workflow-orchestrator
     # Update task status via task-manager
     # Maintain operation queue to prevent conflicts
@@ -230,7 +230,7 @@ log_branch_operation() {
     local task_id="$3"
     local result="$4"
     local error_msg="${5:-}"
-    
+
     # Log to audit trail
     # Update metrics
     # Track performance

@@ -33,7 +33,7 @@ You are the Task Manager droid for Droid Forge. Your responsibility is managing 
 ### Status Update Guidelines
 ```markdown
 - [ ] 1.1 Implement feature status: scheduled
-- [ ] 1.1 Implement feature status: started  
+- [ ] 1.1 Implement feature status: started
 - [x] 1.1 Implement feature status: completed
 - [ ] 1.2 Fix issue status: failed: timeout after 5 retries
 ```

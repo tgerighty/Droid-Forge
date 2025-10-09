@@ -52,7 +52,7 @@ assign_reviewers() {
     local pr_id="$1"
     local change_type="$2"
     local affected_files="$3"
-    
+
     # Determine required review capabilities
     case "$change_type" in
         "security")
@@ -71,16 +71,16 @@ assign_reviewers() {
             reviewers+=("code-review")
             ;;
     esac
-    
+
     # Assign based on file types and expertise
     if [[ "$affected_files" =~ \.(js|ts|jsx|tsx)$ ]]; then
         reviewers+=("biome-droid" "unit-test-droid")
     fi
-    
+
     if [[ "$affected_files" =~ \.(sql|db)$ ]]; then
         reviewers+=("database-migration")
     fi
-    
+
     # Remove duplicates and return unique reviewers
     printf '%s\n' "${reviewers[@]}" | sort -u
 }
@@ -93,31 +93,31 @@ coordinate_review_process() {
     local pr_id="$1"
     local branch_name="$2"
     local task_ids="$3"
-    
+
     # Step 1: Automated quality checks
     log_review_stage "$pr_id" "quality_checks" "Starting automated quality checks"
-    
+
     # Run pre-commit checks
     Task tool with subagent_type="pre-commit-orchestrator" description="Run pre-commit checks" prompt="Run comprehensive pre-commit checks for PR $pr_id on branch $branch_name"
-    
+
     # Run biome validation
     Task tool with subagent_type="biome-droid" description="Run biome validation" prompt="Validate code quality with Biome for PR $pr_id"
-    
+
     # Run unit tests
     Task tool with subagent_type="unit-test-droid" description="Run unit tests" prompt="Execute unit tests for changes in PR $pr_id"
-    
+
     # Step 2: Assign and coordinate reviewers
     log_review_stage "$pr_id" "review_assignment" "Assigning code reviewers"
     assign_reviewers "$pr_id" "$change_type" "$affected_files"
-    
+
     # Step 3: Coordinate parallel reviews
     log_review_stage "$pr_id" "parallel_reviews" "Starting parallel code reviews"
     coordinate_parallel_reviews "$pr_id" "${reviewers[@]}"
-    
+
     # Step 4: Consolidate feedback
     log_review_stage "$pr_id" "feedback_consolidation" "Consolidating review feedback"
     consolidate_review_feedback "$pr_id"
-    
+
     # Step 5: Generate review summary
     log_review_stage "$pr_id" "review_summary" "Generating review summary"
     generate_review_summary "$pr_id"
@@ -172,21 +172,21 @@ Integrates with existing quality droids for comprehensive validation.
 integrate_quality_checks() {
     local pr_id="$1"
     local branch_name="$2"
-    
+
     # Pre-commit hooks
     Task tool with subagent_type="pre-commit-orchestrator" description="Run pre-commit checks" prompt="Run pre-commit checks for PR $pr_id"
-    
+
     # Code quality (Biome)
     Task tool with subagent_type="biome-droid" description="Validate code quality" prompt="Check code quality with Biome for PR $pr_id"
-    
+
     # Unit tests
     Task tool with subagent_type="unit-test-droid" description="Run unit tests" prompt="Execute unit tests for PR $pr_id"
-    
+
     # Security review (if security-related changes)
     if is_security_change "$branch_name"; then
         Task tool with subagent_type="security-review" description="Security review" prompt="Perform security review for PR $pr_id"
     fi
-    
+
     # Performance audit (if performance-related changes)
     if is_performance_change "$branch_name"; then
         Task tool with subagent_type="performance-audit" description="Performance audit" prompt="Audit performance impact for PR $pr_id"

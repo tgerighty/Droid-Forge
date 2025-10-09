@@ -5,15 +5,15 @@ repos:
         name: Biome (lint + format)
         entry: biome
         language: system
-        args: [check, --apply]
-        types_or: [javascript, jsx, ts, tsx, json, jsonc]
+        args: [check, --write]
+        types_or: [javascript, jsx, ts, tsx, json]
 
       - id: biome-format
         name: Biome (format)
         entry: biome
         language: system
         args: [format, --write]
-        types_or: [javascript, jsx, ts, tsx, json, jsonc]
+        types_or: [javascript, jsx, ts, tsx, json]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
