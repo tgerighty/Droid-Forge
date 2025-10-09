@@ -40,7 +40,7 @@ You are the AI-Dev-Tasks Integrator droid for Droid Forge. Your responsibility i
 ## Configuration
 ```yaml
 ai_dev_tasks:
-  process_repo: "factory-ai/ai-dev-tasks"
+  process_repo: "snarktank/ai-dev-tasks"
   process_ref: "main"
   local_dir: "ai-dev-tasks"
   task_file_format: "tasks-{prd-file-name}.md"
