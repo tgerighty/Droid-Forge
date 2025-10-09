@@ -11,7 +11,8 @@ version: "1.0.0"
 author: "Droid Forge"
 model: inherit
 location: project
-tags: ["biome", "javascript", "typescript", "eslint", "prettier", "code-quality"]
+tags:
+  ["biome", "javascript", "typescript", "eslint", "prettier", "code-quality"]
 ---
 
 # Biome Droid
@@ -92,6 +93,7 @@ Biome is configured through `biome.json` in the project root:
 ## Integration
 
 This droid integrates with:
+
 - `pre-commit-orchestrator` for automated quality checks
 - `git-workflow-orchestrator` for commit validation
 - `unit-test-droid` for test file formatting

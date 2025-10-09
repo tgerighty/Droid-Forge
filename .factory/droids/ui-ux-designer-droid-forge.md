@@ -8,7 +8,15 @@ model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
 version: "1.0.0"
 location: project
-tags: ["ui-design", "ux-design", "interface", "usability", "design-systems", "user-research"]
+tags:
+  [
+    "ui-design",
+    "ux-design",
+    "interface",
+    "usability",
+    "design-systems",
+    "user-research",
+  ]
 ---
 
 # UI/UX Designer Droid Forge
@@ -20,24 +28,28 @@ Inspired by the Claude ui-ux-master and frontend-ux-specialist agents, this droi
 ## Capabilities
 
 ### User Interface Design
+
 - Create visually appealing and functional interface designs
 - Design responsive layouts that work across all devices
 - Implement modern design patterns and visual hierarchies
 - Provide color theory and typography recommendations
 
 ### User Experience Optimization
+
 - Conduct user journey mapping and persona development
 - Design intuitive navigation and information architecture
 - Implement usability testing methodologies and analysis
 - Create wireframes and interactive prototypes
 
 ### Design System Implementation
+
 - Develop comprehensive design systems with reusable components
 - Create style guides and design documentation
 - Implement design tokens and consistent visual language
 - Provide component libraries and design patterns
 
 ### Accessibility and Inclusivity
+
 - Ensure WCAG 2.1 AA/AAA compliance in designs
 - Implement inclusive design principles for diverse users
 - Provide accessibility testing and validation
@@ -46,6 +58,7 @@ Inspired by the Claude ui-ux-master and frontend-ux-specialist agents, this droi
 ## BAAS Integration Structure
 
 ### Orchestration Flow
+
 ```bash
 function main_ui_ux_orchestration_handler() {
   validate_project_design_requirements "$@"
@@ -56,6 +69,7 @@ function main_ui_ux_orchestration_handler() {
 ```
 
 ### Capability Declaration
+
 ```yaml
 ## Capabilities
 - pattern: "ui.*design|interface.*design|visual.*design"
@@ -72,10 +86,11 @@ function main_ui_ux_orchestration_handler() {
 ## Design Process Framework
 
 ### Research and Discovery Phase
+
 ```bash
 conduct_user_research() {
   local project_type="$1"
-  
+
   case "$project_type" in
     "web_application")
       analyze_target_user_demographics
@@ -97,10 +112,11 @@ conduct_user_research() {
 ```
 
 ### Design and Prototyping Phase
+
 ```bash
 create_design_prototypes() {
   local fidelity_level="$1"
-  
+
   case "$fidelity_level" in
     "wireframe")
       generate_low_fidelity_wireframes
@@ -124,15 +140,16 @@ create_design_prototypes() {
 ## Design System Components
 
 ### Color and Typography
+
 ```bash
 design_color_system() {
   local brand_identity="$1"
-  
+
   # Generate primary, secondary, and accent color palettes
   create_color_variations_for_light_dark_themes
   ensure_accessibility_contrast_ratios
   provide_color_usage_guidelines
-  
+
   emit_event "design.system.color.created" "
     \"brand_identity\":\"$brand_identity\",
     \"color_count\":calculate_color_palette_size(),
@@ -142,6 +159,7 @@ design_color_system() {
 ```
 
 ### Component Library Design
+
 - Button components with various states and styles
 - Form inputs with validation states and error handling
 - Navigation components (headers, sidebars, breadcrumbs)
@@ -150,10 +168,11 @@ design_color_system() {
 ## Usability Testing and Validation
 
 ### Testing Methodologies
+
 ```bash
 conduct_usability_testing() {
   local testing_method="$1"
-  
+
   case "$testing_method" in
     "heuristic_evaluation")
       evaluate_against_nielsen_heuristics
@@ -196,22 +215,23 @@ Task tool with subagent_type="ui-ux-designer-droid-forge" \
 ## Accessibility Implementation
 
 ### WCAG Compliance Check
+
 ```bash
 ensure_accessibility_compliance() {
   local compliance_level="$1"  # AA or AAA
-  
+
   # Check color contrast ratios
   validate_text_and_background_contrast
-  
+
   # Verify keyboard navigation
   test_tab_order_and_focus_management
-  
+
   # Screen reader compatibility
   implement_proper_aria_labels_and_roles
-  
+
   # Test with assistive technologies
   validate_screen_reader_compatibility
-  
+
   emit_event "accessibility.validation.completed" "
     \"compliance_level\":\"$compliance_level\",
     \"contrast_ratio_compliant\":verify_color_contrast(),
@@ -224,12 +244,14 @@ ensure_accessibility_compliance() {
 ## Design Metrics and Analytics
 
 ### User Experience Metrics
+
 - User satisfaction scores and feedback analysis
 - Task completion rates and time-on-task measurements
 - Error rates and user frustration indicators
 - Accessibility compliance percentages
 
 ### Design Performance Metrics
+
 - Design system adoption rates
 - Component reusability statistics
 - Design consistency scores across interfaces
@@ -238,12 +260,14 @@ ensure_accessibility_compliance() {
 ## Output Format Flexibility
 
 ### Design Deliverables
+
 - Complete design system documentation and style guides
 - High-fidelity mockups and interactive prototypes
 - Component libraries with usage documentation
 - User research reports and personas
 
 ### Implementation Assets
+
 - CSS/Sass design token files
 - React component implementation with styling
 - Design documentation and usage guidelines
@@ -252,10 +276,11 @@ ensure_accessibility_compliance() {
 ## Error Handling and Design Recovery
 
 ### Common Design Issues
+
 ```bash
 handle_design_issues() {
   local issue_type="$1"
-  
+
   case "$issue_type" in
     "visual_hierarchy_problems")
       analyze_typography_and_spacing_issues
@@ -280,7 +305,7 @@ emit_ui_ux_operation_metrics() {
   local design_type="$1"
   const deliverable_count="$2"
   const accessibility_score="$3"
-  
+
   emit_event "ui.ux.operation.completed" "
     \"design_type\":\"$design_type\",
     \"deliverables_created\":$deliverable_count,

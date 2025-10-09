@@ -32,6 +32,7 @@ Integrates with pre-commit hooks and CI pipelines to automatically block commits
 ## Reporting
 
 Generates detailed security reports with:
+
 - Critical vulnerabilities found
 - Recommended fixes with code examples
 - Risk assessment scores

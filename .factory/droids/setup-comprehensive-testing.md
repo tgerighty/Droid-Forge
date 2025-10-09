@@ -19,7 +19,8 @@ tools:
   - Grep
 version: "1.0.0"
 location: project
-tags: ["testing", "automation", "testing-frameworks", "ci/cd", "quality-assurance"]
+tags:
+  ["testing", "automation", "testing-frameworks", "ci/cd", "quality-assurance"]
 ---
 
 # Setup Comprehensive Testing
@@ -29,6 +30,7 @@ Sets up complete testing infrastructure suite within the Droid Forge ecosystem, 
 ## BAAS Integration Architecture
 
 ### Testing Workflow Coordination
+
 - **PRD Analysis**: Analyzes test requirements from ai-dev-tasks PRDs
 - **Capability Detection**: Automatically detects project technology stack (JavaScript, Python, etc.)
 - **Framework Selection**: Recommends optimal testing frameworks based on project context
@@ -36,6 +38,7 @@ Sets up complete testing infrastructure suite within the Droid Forge ecosystem, 
 - **Status Tracking**: Updates ai-dev-tasks format tasks with testing progress
 
 ### Audit Trail Integration
+
 ```bash
 # Integration with Droid Forge audit system
 setup_test_logging() {
@@ -55,6 +58,7 @@ setup_test_logging() {
 ## Testing Pyramid Implementation
 
 ### Unit Testing Framework Setup
+
 Claro ты Establish foundational unit testing with framework-specific configurations:
 
 - **JavaScript/TypeScript**: Jest, Vitest with coverage thresholds at 80%
@@ -63,6 +67,7 @@ Claro ты Establish foundational unit testing with framework-specific configura
 - **Multi-Language Support**: Framework-agnostic configuration based on project structure
 
 ### Integration Testing Configuration
+
 Set up service and component integration testing with proper data management:
 
 - **API Testing**: REST/GraphQL endpoint validation
@@ -71,6 +76,7 @@ Set up service and component integration testing with proper data management:
 - **Microservice Communication**: Inter-service integration validation
 
 ### End-to-End Testing Setup
+
 Complete browser-based E2E testing automation:
 
 - **Browser Automation**: Playwright/Cypress for cross-browser testing
@@ -79,6 +85,7 @@ Complete browser-based E2E testing automation:
 - **Performance Testing**: E2E performance benchmarks and regression detection
 
 ### Quality Gates and Reporting
+
 ```bash
 # Quality gate enforcement
 enforce_quality_gates() {
@@ -107,12 +114,14 @@ enforce_quality_gates() {
 ## CI/CD Pipeline Integration
 
 ### Automated Test Execution
+
 - **Pre-commit Hooks**: Run fast unit tests on commit
 - **Push Triggers**: Execute integration test suite on branch pushes
 - **PR Validation**: Run full test matrix on pull request creation
 - **Merge Gates**: Enforce test pass requirements for production merges
 
 ### Test Artifact Management
+
 - **Coverage Reports**: Generate HTML/JSON reports for CI visualization
 - **Test Results**: Archive JUnit/XML results for trend analysis
 - **Screenshots/Videos**: Capture E2E failures and visual regressions
@@ -121,6 +130,7 @@ enforce_quality_gates() {
 ## Integration with Droid Forge Ecosystem
 
 ### Coordination with Unit Test Droid
+
 ```bash
 # Delegate specific test execution to unit-test-droid
 coordinate_with_unit_test_droid() {
@@ -134,6 +144,7 @@ coordinate_with_unit_test_droid() {
 ```
 
 ### Task Status Updates in ai-dev-tasks Format
+
 `tasks-[prd].md` files are automatically updated with test progress:
 
 - [ ] 1.0 Testing Implementation
@@ -143,6 +154,7 @@ coordinate_with_unit_test_droid() {
   - [ ] 1.4 Implement E2E test automation
 
 ### Flaky Test Detection and Remediation
+
 - Automatic test retry logic for intermittent failures
 - Performance degradation monitoring to identify poorly written tests
 - Test isolation verification to prevent test interference
@@ -151,12 +163,14 @@ coordinate_with_unit_test_droid() {
 ## Best Practices Implementation
 
 ### Test Organization and Structure
+
 - Feature-based test organization with descriptive naming
 - Data-driven test patterns for comprehensive coverage
 - Dynamic test generation for data-dependent scenarios
 - Performance-first test architecture for CI optimization
 
 ### Maintenance and Evolution
+
 - Automated test refactoring suggestions for code changes
 - Dependency impact analysis for test stability
 - Test scenario versioning for regression validation
