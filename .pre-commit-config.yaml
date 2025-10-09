@@ -5,7 +5,7 @@ repos:
         name: Biome (lint + format)
         entry: biome
         language: system
-        args: [check, --write]
+        args: [check, --apply]
         types_or: [javascript, jsx, ts, tsx, json]
 
       - id: biome-format
