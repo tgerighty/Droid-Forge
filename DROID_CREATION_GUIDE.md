@@ -103,7 +103,6 @@ version: "1.0.1"
 location: project
 tags: ["quality", "analysis", "security", "performance", "code"]
 ---
-
 # ❌ Avoid
 ---
 name: UndefinedName
@@ -428,11 +427,13 @@ test_baas_delegation() {
 ### Adding New Droid to Framework
 
 1. **Create Droid File**
-   ```
+
+   ```bash
    .factory/droids/new-droid-name-droid-forge.md
    ```
 
 2. **Register Capabilities in Config**
+
    ```yaml
    # droid-forge.yaml
    rules:
@@ -443,6 +444,7 @@ test_baas_delegation() {
    ```
 
 3. **Validate Integration**
+
    ```bash
    # Test BAAS delegation
    factory-cli "test delegation to new droid"
@@ -457,6 +459,7 @@ test_baas_delegation() {
    - Register in capability matrix
 
 5. **Version and Release**
+
    ```bash
    # Update version
    git tag v1.1.x -m "Add new droid capabilities"
@@ -468,6 +471,7 @@ test_baas_delegation() {
 ## Quick Reference
 
 ### Template Checklist
+
 - [ ] YAML frontmatter complete and valid
 - [ ] Description uses block format (|)
 - [ ] Tools array specific (not generic "all")
@@ -477,6 +481,7 @@ test_baas_delegation() {
 - [ ] Testing hooks included
 
 ### Common Patterns
+
 - **Event logging**: Always use NDJSON format with timestamp
 - **Status updates**: Use ai-dev-tasks markdown markers consistently
 - **Error conditions**: Implement retry/fallback mechanisms

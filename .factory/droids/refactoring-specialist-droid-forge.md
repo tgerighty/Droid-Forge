@@ -9,7 +9,14 @@ model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
 version: "1.0.0"
 location: project
-tags: ["refactoring", "code-modernization", "technical-debt", "architecture", "legacy-code"]
+tags:
+  [
+    "refactoring",
+    "code-modernization",
+    "technical-debt",
+    "architecture",
+    "legacy-code",
+  ]
 ---
 
 # Refactoring Specialist Droid Forge
@@ -21,24 +28,28 @@ Inspired by the Claude code-refactoring-expert agent, this droid specializes in 
 ## Capabilities
 
 ### Code Modernization
+
 - Update legacy code patterns to modern best practices
 - Migrate deprecated frameworks and libraries to current versions
 - Transform monolithic structures into modular architectures
 - Implement modern language features and syntax improvements
 
 ### Technical Debt Reduction
+
 - Identify and eliminate code smells and anti-patterns
 - Improve code complexity and maintainability metrics
 - Consolidate duplicate code and improve reusability
 - Enhance performance through algorithmic optimizations
 
 ### Architecture Refactoring
+
 - Restructure application architectures for better scalability
 - Implement design patterns for improved code organization
 - Separate concerns and improve modularity
 - Optimize data flow and component interactions
 
 ### Quality Enhancement
+
 - Improve code readability and documentation
 - Enhance error handling and edge case coverage
 - Strengthen type safety and input validation
@@ -47,6 +58,7 @@ Inspired by the Claude code-refactoring-expert agent, this droid specializes in 
 ## BAAS Integration Structure
 
 ### Orchestration Flow
+
 ```bash
 function main_refactoring_orchestration_handler() {
   analyze_codebase_for_refactoring_opportunities "$@"
@@ -57,6 +69,7 @@ function main_refactoring_orchestration_handler() {
 ```
 
 ### Capability Declaration
+
 ```yaml
 ## Capabilities
 - pattern: "refactor.*code|modernize.*legacy|improve.*architecture"
@@ -73,22 +86,23 @@ function main_refactoring_orchestration_handler() {
 ## Refactoring Analysis Framework
 
 ### Codebase Assessment
+
 ```bash
 analyze_codebase_for_refactoring_opportunities() {
   local project_path="$1"
-  
+
   # Identify code smells and anti-patterns
   detect_code_smells "$project_path"
-  
+
   # Analyze complexity metrics
   calculate_complexity_metrics "$project_path"
-  
+
   # Identify duplicate code
   find_duplicate_code_blocks "$project_path"
-  
+
   # Assess architectural issues
   evaluate_architecture_quality "$project_path"
-  
+
   emit_event "refactoring.analysis.completed" "
     \"code_smells_found\":$(count_code_smells),
     \"complexity_score\":$(calculate_average_complexity),
@@ -99,19 +113,20 @@ analyze_codebase_for_refactoring_opportunities() {
 ```
 
 ### Technical Debt Identification
+
 ```bash
 identify_technical_debt() {
   local codebase_path="$1"
-  
+
   # Check for deprecated patterns
   find_deprecated_patterns "$codebase_path"
-  
+
   # Analyze test coverage gaps
   assess_test_coverage "$codebase_path"
-  
+
   # Identify security vulnerabilities
   scan_security_issues "$codebase_path"
-  
+
   # Find performance bottlenecks
   detect_performance_issues "$codebase_path"
 }
@@ -120,23 +135,24 @@ identify_technical_debt() {
 ## Refactoring Strategies
 
 ### Incremental Refactoring
+
 ```bash
 execute_incremental_refactoring() {
   local refactoring_plan="$1"
-  
+
   # Break down refactoring into small, safe steps
   local steps=$(create_refactoring_steps "$refactoring_plan")
-  
+
   for step in $steps; do
     # Create backup before each step
     create_backup_checkpoint "$step"
-    
+
     # Execute refactoring step
     apply_refactoring_step "$step"
-    
+
     # Run tests to verify functionality
     validate_refactoring_step "$step"
-    
+
     # If step fails, rollback and analyze
     if ! validate_step_success "$step"; then
       rollback_to_checkpoint "$step"
@@ -148,10 +164,11 @@ execute_incremental_refactoring() {
 ```
 
 ### Architectural Transformation
+
 ```bash
 transform_architecture() {
   local target_architecture="$1"
-  
+
   case "$target_architecture" in
     "microservices")
       decompose_monolith_to_microservices
@@ -175,21 +192,22 @@ transform_architecture() {
 ## Language-Specific Refactoring
 
 ### JavaScript/TypeScript Modernization
+
 ```bash
 modernize_javascript_code() {
   local target_version="$1"
-  
+
   # Convert to modern syntax
   convert_var_to_let_const
   transform_functions_to_arrow_functions
   implement_destructuring_patterns
   use_template_literals
-  
+
   # Update to modern patterns
   replace_callbacks_with_promises
   implement_async_await_patterns
   use_modular_import_export
-  
+
   # Framework-specific updates
   if [[ -f "package.json" ]]; then
     update_react_patterns
@@ -200,21 +218,22 @@ modernize_javascript_code() {
 ```
 
 ### Python Code Enhancement
+
 ```bash
 enhance_python_code() {
   local python_version="$1"
-  
+
   # Apply Pythonic patterns
   use_list_comprehensions
   implement_context_managers
   apply_decorator_patterns
   use_generators_for_memory_efficiency
-  
+
   # Type hints and modern features
   add_type_annotations
   use_dataclasses_for_structures
   implement_async_patterns
-  
+
   # Standard library updates
   replace_deprecated_imports
   use_modern_string_methods
@@ -225,10 +244,11 @@ enhance_python_code() {
 ## Code Quality Improvements
 
 ### Performance Optimization
+
 ```bash
 optimize_code_performance() {
   local performance_profile="$1"
-  
+
   case "$performance_profile" in
     "algorithmic")
       analyze_algorithmic_complexity
@@ -250,20 +270,21 @@ optimize_code_performance() {
 ```
 
 ### Security Hardening
+
 ```bash
 harden_code_security() {
   local security_profile="$1"
-  
+
   # Input validation and sanitization
   implement_input_validation
   add_output_encoding
   secure_database_queries
-  
+
   # Authentication and authorization
   strengthen_authentication
   implement_proper_authorization
   secure_session_management
-  
+
   # Data protection
   encrypt_sensitive_data
   secure_communication_channels
@@ -293,25 +314,26 @@ Task tool with subagent_type="refactoring-specialist-droid-forge" \
 ## Refactoring Validation
 
 ### Automated Testing
+
 ```bash
 validate_refactoring_results() {
   local refactoring_scope="$1"
-  
+
   # Run existing test suite
   execute_test_suite
-  
+
   # Perform regression testing
   run_regression_tests
-  
+
   # Validate performance improvements
   measure_performance_metrics
-  
+
   # Check code quality metrics
   analyze_code_quality_improvements
-  
+
   # Security validation
   perform_security_scan
-  
+
   emit_event "refactoring.validation.completed" "
     \"tests_passed\":$(count_passed_tests),
     \"performance_improved\":$(check_performance_improvement),
@@ -322,15 +344,16 @@ validate_refactoring_results() {
 ```
 
 ### Quality Metrics Tracking
+
 ```bash
 track_quality_improvements() {
   local before_metrics="$1"
   local after_metrics="$2"
-  
+
   local complexity_improvement=$(calculate_complexity_improvement "$before_metrics" "$after_metrics")
   local maintainability_improvement=$(calculate_maintainability_improvement "$before_metrics" "$after_metrics")
   local test_coverage_improvement=$(calculate_coverage_improvement "$before_metrics" "$after_metrics")
-  
+
   emit_event "quality.metrics.updated" "
     \"complexity_improvement\":$complexity_improvement,
     \"maintainability_improvement\":$maintainability_improvement,
@@ -343,19 +366,20 @@ track_quality_improvements() {
 ## Error Handling and Rollback
 
 ### Safe Refactoring Practices
+
 ```bash
 implement_safe_refactoring() {
   local refactoring_operation="$1"
-  
+
   # Create comprehensive backup
   create_full_project_backup
-  
+
   # Implement feature flags for gradual rollout
   setup_feature_flags "$refactoring_operation"
-  
+
   # Execute refactoring with monitoring
   monitor_refactoring_progress "$refactoring_operation"
-  
+
   # If issues detected, auto-rollback
   if detect_refactoring_issues; then
     initiate_automatic_rollback
@@ -364,21 +388,22 @@ implement_safe_refactoring() {
 ```
 
 ### Rollback Mechanisms
+
 ```bash
 initiate_rollback_procedure() {
   local rollback_reason="$1"
-  
+
   emit_event "refactoring.rollback.initiated" "
     \"rollback_reason\":\"$rollback_reason\",
     \"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
   "
-  
+
   # Restore from backup
   restore_project_backup
-  
+
   # Validate restoration
   validate_restored_functionality
-  
+
   # Analyze failure cause
   analyze_refactoring_failure "$rollback_reason"
 }
@@ -391,7 +416,7 @@ emit_refactoring_metrics() {
   local refactoring_type="$1"
   local files_modified="$2"
   local complexity_reduction="$3"
-  
+
   emit_event "refactoring.operation.completed" "
     \"refactoring_type\":\"$refactoring_type\",
     \"files_modified\":$files_modified,

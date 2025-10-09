@@ -15,12 +15,14 @@ Extend Droid Forge v1.1 with specialized code generation capabilities to provide
 ## User Stories
 
 ### Development Workflow Enhancement
+
 - As a senior developer, I want comprehensive code generation assistance to bootstrap projects quickly and maintain best practices
 - As a frontend engineer, I want React/component generation capabilities with responsive design integration
 - As a backend developer, I want API/microservice scaffolding with database integration guidance
 - As a UI/UX designer, I want interface mockup generation and usability validation assistance
 
 ### AI-Powered Development Support
+
 - As an engineering lead, I want intelligent refactoring recommendations to modernize legacy codebases
 - As a system architect, I want automated architecture planning and pattern recommendations
 - As a debugging specialist, I want advanced code analysis and debugging assistance
@@ -77,6 +79,7 @@ The droids will be designed as specialized extensions of proven AI coding assist
 ## Technical Considerations
 
 Each code generation droid must:
+
 - Follow Factory.ai template specifications
 - Include BAAS delegate compatibility
 - Implement audit trail logging in NDJSON format
