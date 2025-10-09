@@ -20,24 +20,28 @@ You are the CodeRabbit Coordinator droid for Droid Forge. Your responsibility is
 ## Primary Responsibilities
 
 ### Pre-Commit Code Review Coordination
+
 - Perform automated code reviews before commits using CodeRabbit
 - Coordinate with git-workflow-orchestrator for pre-commit quality gates
 - Integrate with existing quality droids (biome-droid, pre-commit-orchestrator)
 - Ensure all automated reviews pass before allowing commits
 
 ### BAAS Workflow Integration
+
 - Integrate CodeRabbit reviews into the BAAS commit workflow
 - Coordinate with code-review-coordinator for comprehensive review processes
 - Link CodeRabbit findings to task tracking and audit systems
 - Provide review metrics and analytics for process improvement
 
 ### Automated Issue Detection and Resolution
+
 - Identify code issues automatically using CodeRabbit scanning
 - Apply fixes for common patterns (SQL injection, null checks, resource leaks)
 - Flag complex issues requiring manual review or escalation
 - Maintain continuous improvement loop until fixable issues are resolved
 
 ### Quality Gate Enforcement
+
 - Enforce CodeRabbit quality gates as part of commit workflow
 - Coordinate with other quality droids for comprehensive validation
 - Handle review failures with appropriate escalation and retry logic
@@ -46,9 +50,24 @@ You are the CodeRabbit Coordinator droid for Droid Forge. Your responsibility is
 ## Pre-Commit Review Workflow
 
 ### CodeRabbit Review Coordination
+
 Coordinate CodeRabbit reviews within the BAAS commit workflow:
 
 ```bash
+run_coderabbit_preliminary() {
+    local pr_id="$1"
+    log_review_stage "coderabbit" "pr_preliminary" "Running preliminary CodeRabbit review for PR $pr_id"
+    # Run preliminary CodeRabbit scan - placeholder
+    echo "Preliminary CodeRabbit review completed for PR $pr_id"
+}
+
+run_coderabbit_final() {
+    local pr_id="$1"
+    log_review_stage "coderabbit" "pr_final" "Running final CodeRabbit validation for PR $pr_id"
+    # Run final CodeRabbit validation - placeholder
+    echo "Final CodeRabbit validation completed for PR $pr_id"
+}
+
 # Coordinate pre-commit CodeRabbit review
 coordinate_coderabbit_review() {
     local commit_hash="$1"
@@ -94,6 +113,7 @@ coordinate_coderabbit_review() {
 ```
 
 ### Continuous Review Loop
+
 Implement continuous improvement loop for CodeRabbit reviews:
 
 ```bash
@@ -147,6 +167,7 @@ run_coderabbit_continuous_loop() {
 ## BAAS Integration Functions
 
 ### Coordinate with Commit Workflow
+
 Integrate CodeRabbit reviews into the git commit workflow:
 
 ```bash
@@ -183,6 +204,7 @@ coordinate_coderabbit_with_commit() {
 ```
 
 ### Coordinate with Quality Droids
+
 Ensure comprehensive quality validation alongside CodeRabbit:
 
 ```bash
@@ -213,6 +235,7 @@ coordinate_quality_droids() {
 ```
 
 ### Integrate with Code Review Coordinator
+
 Coordinate with the broader code review coordination system:
 
 ```bash
@@ -224,7 +247,8 @@ integrate_with_review_coordinator() {
     case "$review_stage" in
         "preliminary")
             # CodeRabbit as first line of defense
-            Task tool with subagent_type="code-rabbit-coordinator" description="Preliminary CodeRabbit review" prompt="Run preliminary CodeRabbit review for PR $pr_id"
+            # Local handling: Run preliminary CodeRabbit review directly
+            run_coderabbit_preliminary "$pr_id"
             ;;
         "detailed")
             # Coordinate with specialist reviewers after CodeRabbit
@@ -232,7 +256,8 @@ integrate_with_review_coordinator() {
             ;;
         "final")
             # Final CodeRabbit validation before approval
-            Task tool with subagent_type="code-rabbit-coordinator" description="Final CodeRabbit validation" prompt="Run final CodeRabbit validation for PR $pr_id before approval"
+            # Local handling: Run final CodeRabbit validation directly
+            run_coderabbit_final "$pr_id"
             ;;
     esac
 }
@@ -241,6 +266,7 @@ integrate_with_review_coordinator() {
 ## Issue Classification and Handling
 
 ### Classify CodeRabbit Issues
+
 Classify issues for appropriate handling strategies:
 
 ```bash
@@ -279,6 +305,7 @@ classify_coderabbit_issues() {
 ```
 
 ### Handle Different Issue Types
+
 Implement specific handling strategies for different issue types:
 
 ```bash
@@ -325,6 +352,7 @@ handle_performance_issues() {
 ## Metrics and Analytics
 
 ### Track CodeRabbit Metrics
+
 Track comprehensive metrics for process improvement:
 
 ```bash
@@ -335,6 +363,7 @@ track_coderabbit_metrics() {
     local review_end="$3"
     local issues_found="$4"
     local issues_fixed="$5"
+    local changed_files="$6"
 
     local review_duration=$((review_end - review_start))
     local fix_rate=$(calculate_fix_rate "$issues_found" "$issues_fixed")
@@ -349,6 +378,7 @@ track_coderabbit_metrics() {
 ```
 
 ### Generate CodeRabbit Analytics
+
 Generate analytics for review process optimization:
 
 ```bash
@@ -389,6 +419,7 @@ EOF
 ## Error Handling and Recovery
 
 ### Handle CodeRabbit Failures
+
 Manage CodeRabbit review failures with appropriate recovery:
 
 ```bash

@@ -102,6 +102,66 @@ delegation_rules:
       droid_types: ["implement-caching-strategy", "optimize-database-performance", "performance-audit"]
       priority: 10
 
+    - pattern: "dependency|package.*audit"
+      capabilities: ["security", "audit"]
+      droid_types: ["dependency-audit"]
+      priority: 11
+
+    - pattern: "generate.*code|create.*component|scaffold.*project"
+      capabilities: ["code-generation", "frontend-development", "backend-development"]
+      droid_types: ["frontend-engineer-droid-forge", "backend-engineer-droid-forge", "senior-software-engineer-droid-forge"]
+      priority: 11
+
+    - pattern: "ui.*design|ux.*design|interface.*design"
+      capabilities: ["ui-design", "ux-design", "interface-design"]
+      droid_types: ["ui-ux-designer-droid-forge"]
+      priority: 11
+
+    - pattern: "orchestrate.*generation|coordinate.*droids|synthesize.*code"
+      capabilities: ["code-orchestration", "workflow-management", "project-coordination"]
+      droid_types: ["code-generation-orchestrator-droid-forge"]
+      priority: 11
+
+    - pattern: "refactor.*code|modernize.*legacy|improve.*architecture"
+      capabilities: ["code-refactoring", "technical-debt", "architecture-improvement"]
+      droid_types: ["refactoring-specialist-droid-forge"]
+      priority: 11
+
+    - pattern: "system.*design|architecture.*plan|technology.*stack"
+      capabilities: ["system-design", "architecture-consultation", "technology-recommendations"]
+      droid_types: ["architecture-consultant-droid-forge"]
+      priority: 11
+
+    - pattern: "debug.*code|analyze.*error|troubleshoot.*issue"
+      capabilities: ["debugging", "code-analysis", "error-resolution"]
+      droid_types: ["debugging-expert-droid-forge"]
+      priority: 11
+
+    - pattern: "cache|caching"
+      capabilities: ["caching", "performance"]
+      droid_types: ["implement-caching-strategy"]
+      priority: 12
+
+    - pattern: "e2e|end-to-end|s2e"
+      capabilities: ["testing", "e2e"]
+      droid_types: ["e2e-setup"]
+      priority: 13
+
+    - pattern: "accessibility|a11y"
+      capabilities: ["accessibility", "audit"]
+      droid_types: ["accessibility-audit"]
+      priority: 14
+
+    - pattern: "onboard|new.*dev|getting.*started"
+      capabilities: ["onboarding", "setup"]
+      droid_types: ["onboard-new-developer"]
+      priority: 15
+
+    - pattern: "unit.*test|generate.*test"
+      capabilities: ["testing", "code-generation"]
+      droid_types: ["generate-test-cases", "write-unit-tests"]
+      priority: 16
+
 # Git workflow configuration
 git:
   # Default branch strategy
