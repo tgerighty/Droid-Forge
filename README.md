@@ -6,9 +6,297 @@
 
 Droid Forge serves as a centralized hub for developing, deploying, and managing various specialized droids through intelligent orchestration.
 
+## 📖 Methodology & Process
+
+### Conceptual Architecture
+
+Droid Forge operates on a **Factory.ai droid-as-service** model where every component is a self-documenting droid (markdown + YAML). The framework is **meta-orchestral** - using Factory.ai droids to orchestrate other droids.
+
+### Core Principles
+
+- **Declarative Definition**: All droids defined in markdown with embedded functionality
+- **Capability Matching**: Intelligent delegation based on tool analysis and pattern matching
+- **Audit Trail**: Comprehensive NDJSON logging for all operations
+- **ai-dev-tasks Compliance**: Strict adherence to ai-dev-tasks format for task management
+- **Parallel Execution**: Multi-droid coordination with synchronization
+
+### Process Flow
+
+#### BAAS Orchestration Cycle
+```
+USER REQUEST -----> BAAS ORCHESTRATOR -----> DROID DELEGATION -----> EXECUTION -----> MONITOR -----> RESULT
+     |                    |                        |                    |                 |
+     |           (Analyze & Plan)            (Capability Match)     (Execute)    (Track Status)   (Aggregate)
+     |                    |                        |                    |               |
+     +--------------------+------------------------+--------------------+---------------+
+                              |                                              |
+                       TASK SEQUENCING                               AUDIT LOGGING
+                             &                                               &
+                    SUB-DEPENDENCY RESOLUTION                   COMMIT/PUSH AUTOMATION
+```
+
+#### ai-dev-tasks Integration
+```
+PRD CREATION (Manual/User)
+    ↓
+AI-DEV-TASKS INTEGRATOR
+    ↓ (Validation)
+PARENTS + SUB-TASKSbed Generation
+    ↓ (Confirmation)
+Deferred Task File Creation (tasks-[prd].md)
+    ↓
+PROCESS-TASK-LIST EXECUTION
+    ↓ (Sub-task completion)
+COMMITS + STATUS UPDATES
+    ↓
+WORKFLOW COMPLETION
+```
+
+#### Droid Interaction Matrix
+```
+DROIDS        | DESCRIPT DEBUG | delegation | monitoring | operations | Support
+-------------|----------------|--------------|------------|------------|----------
+BAAS Orc      | Central Hub    | ✓ Core       | ✓ Status   | Coordination | All
+Task Mgr      | Status Control | ✓ Exec       | ✓ Locks    | Serialization| BAAS
+Git Workflow  | VCS Management | ✓ Branches   | ✓ History  | Commits/PRs| BAAS
+AI-DevTasks   | Process Engine | ✓ Tasks      | ✓ Files    | Format Comp | BAAS
+Code Review   | Quality Checks | ✓ Multi-D   | ✓ Progress | Review Mgmt| BAAS
+Biome         | Linting/Fmt    | ✓ Quality    | ✗         | Code Style  | PreCommit
+Unit Test     | Test Runner    | ✓ Validation | ✓ Coverage | Test Exec   | PreCommit
+Changelog     | Doc Mgmt       | ✓ History    | ✓ Runs     | Updates     | All
+Branch Mgr    | Branch Ctrl    | ✓ Creation   | ✓ Merge    | Lifecycle   | Git
+Merge Resolve | Conflict Fix   | ✓ Conflicts   | ✓ Status   | AutoResolve | Git
+CodeRabbit    | AI Review      | ✓ Analysis   | ✓ Metrics  | Suggestions | Code Review
+Pre-Commit    | Quality Gate   | ✓ Hooks      | ✓ Check    | Enforcement | Git
+```
+
+### ai-dev-tasks Format Compliance
+
+Droid Forge enforces strict compliance with ai-dev-tasks format for task management:
+
+```
+## Relevant Files
+- `file1.ts` - Component implementation
+- `file2.test.ts` - Unit tests
+
+## Tasks
+
+- [ ] 1.0 Major Category Name
+  - [ ] 1.1 Sub-task with details
+  - [ ] 1.2 Another sub-task
+```
+
+### Parallel Execution Safety
+
+- **Locking Mechanisms**: File-based locks for concurrent task operations
+- **Status Synchronization**: NDJSON events ensure consistent tracking across droids
+- **Rollback Protection**: Backup and restore on failed operations
+- **Dependency Resolution**: Sub-task sequencing with hierarchy validation
+
 ## 🎯 Overview
 
 Droid Forge is a declarative, droid-based framework that uses Factory.ai's own droid system to create a meta-orchestration layer. All functionality is implemented as Factory.ai droids (markdown with YAML frontmatter) and executed through the Factory.ai CLI.
+
+## 📚 Installation & Usage
+
+### For Framework Users (Installing in Projects)
+
+1. **Clone the Repository**
+   ```
+   git clone https://github.com/yourusername/droid-forge.git
+   cd droid-forge
+   ```
+
+2. **Install Factory.ai CLI**
+   ```
+   # Assuming Factory.ai provides installation
+   factory-cli install
+   ```
+
+3. **Install Core Droids**
+   ```
+   factory-cli droid install baas-orchestrator
+   factory-cli droid install task-manager
+   factory-cli droid install git-workflow-orchestrator
+   factory-cli droid install ai-dev-tasks-integrator
+   ```
+
+4. **Configure droid-forge.yaml**
+   ```yaml
+   # Basic configuration
+   orchestration:
+     debug: false
+     audit_dir: ".droid-forge/logs"
+     task_timeout: 3600  # 1 hour
+
+   # Droid capabilities
+   droids:
+     locations:
+       - ".factory/droids/"  # Project droids
+       - "~/droid-forge/"    # Personal droids
+
+   # Workflow rules
+   corellian_rules:
+     project_payments: "task-manager"
+     git_operations: "git-workflow-orchestrator"
+     code_reviews: "code-review-coordinator"
+   ```
+
+5. **Start BAAS Orchestrator**
+   ```
+   factory-cli droid start baas-orchestrator
+   ```
+
+### Basic Usage
+
+**Analyze a feature request and create tasks:**
+```
+factory-cli "Add dark mode toggle to settings page"
+```
+
+This triggers:
+1. BAAS analysis of the request
+2. Delegation to ai-dev-tasks-integrator for PRD processing
+3. Task generation with sub-tasks
+4. Status tracking through completion
+
+**Monitor task progress:**
+```
+factory-cli "Show current task status"
+```
+
+**View orchestrator logs:**
+```
+tail -f .droid-forge/logs/events.ndjson
+```
+
+## 🔧 Contributing (For Framework Development)
+
+### Adding New Droids
+
+1. Create `.factory/droids/your-droid.md`
+2. Include augmentation YAML frontmatter
+3. Implement functionality in markdown code blocks
+4. Add capability matching rules to orchestration logic
+5. Test integration with BAAS delegation
+
+### Example Droid Template
+
+```markdown
+---
+name: example-coordinator
+version: "1.0.0"
+model: inherit
+tools:
+  - Execute
+  - Read
+description: Example functionality
+---
+
+# Example Coordinator Droid
+
+```bash
+example_function() {
+  echo "Example droid functionality"
+}
+```
+```
+
+### Development Workflow
+
+1. Create feature branch: `git checkout -b feat/new-droid`
+2. Implement droid spec in markdown
+3. Update BAAS orchestration logic for delegation
+4. Add tests for integration
+5. Commit with conventional format: `feat: add new coordinator`
+6. Create PR for review
+
+### Testing Strategy
+
+- **Unit Tests**: Each droid's bash functions tested individually
+- **Integration Tests**: BAAS delegation sequences validated  
+- **End-to-End**: Complete workflows from request to completion
+- **Performance**: Orchestration efficiency monitored
+- **Audit**: All operations logged for traceability
+
+## 📋 Task Management Format
+
+Droid Forge uses ai-dev-tasks format for all task tracking:
+
+### Task File Structure (`tasks/tasks-000X-prd-title.md`)
+
+```markdown
+## Relevant Files
+
+- `src/component.tsx` - Main implementation
+- `tests/component.test.ts` - Unit tests
+- `docs/api.md` - Documentation
+
+## Tasks
+
+- [x] 1.0 Component Implementation
+  - [x] 1.1 Create component structure
+  - [x] 1.2 Add TypeScript interfaces
+  - [x] 1.3 Implement core logic
+- [ ] 2.0 Testing Implementation
+  - [x] 2.1 Create unit test suite
+  - [ ] 2.2 Add integration tests
+```
+
+### Status Transitions
+
+- `[ ]` - Scheduled/pending
+- `[in_progress]` or logged - In execution
+- `[x]` - Completed
+- `[cancelled]` - Aborted tasks
+
+### Commit Format
+
+```
+feat: implement dark mode toggle
+feat: add user authentication system
+fix: resolve login validation bug
+```
+
+## 🔄 Git Workflow Integration
+
+### Branch Strategy
+
+- `main`: Production branch
+- `develop`: Development integration
+- `feat/xxx`: Feature branches
+- `hotfix/xxx`: Emergency fixes
+
+### Automated Operations
+
+- **Commit Formatting**: Conventional commit enforcement
+- **Branch Cleanup**: Automatic merging and deletion
+- **Conflict Resolution**: Intelligent merge strategies
+- **PR Management**: Automated review coordination
+
+## 📊 Monitoring & Analytics
+
+### Event Logging
+
+All framework operations logged in NDJSON format:
+
+```json
+{"timestamp":"2024-10-09T08:00:00Z","event":"task_status_updated","project":"droid-forge","task_id":"1.1","new_status":"completed","run_id":"r-20241009-080000"}
+{"timestamp":"2024-10-09T08:15:00Z","event":"droid_delegated","subagent":"unit-test-droid","prompt":"run tests","run_id":"r-20241009-080000"}
+```
+
+### Metrics Dashboard
+
+- Task completion rates
+- Droid execution success rates
+- Error frequency and types
+- Performance benchmarks
+
+### Audit Trail
+
+- `.droid-forge/logs/audit.ndjson`: Comprehensive operation history
+- `.droid-forge/logs/events.ndjson`: Runtime event stream
+- `.droid-forge/branch-metadata/`: Branch-specific tracking data
 
 ## 🏗️ Architecture
 
