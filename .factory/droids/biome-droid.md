@@ -3,7 +3,7 @@ name: biome-droid
 description: |
   Biome droid for JavaScript/TypeScript code quality management combining
   ESLint, Prettier, and TypeScript functionality in a single unified tool.
-  
+
   Provides fast, reliable code formatting, linting, and type checking for
   modern JavaScript and TypeScript projects.
 

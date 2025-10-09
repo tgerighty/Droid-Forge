@@ -1,8 +1,6 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
+  "$schema": "https://biomejs.dev/schemas/2.2.5/schema.json",
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
     "rules": {
@@ -12,9 +10,8 @@
       },
       "complexity": {
         "noExtraBooleanCast": "error",
-        "noMultipleSpacesInRegularExpressionLiterals": "error",
         "noUselessCatch": "error",
-        "noWith": "error"
+        "noAdjacentSpacesInRegex": "error"
       },
       "correctness": {
         "noConstAssign": "error",
@@ -24,12 +21,12 @@
         "noGlobalObjectCalls": "error",
         "noInvalidConstructorSuper": "error",
         "noInvalidUseBeforeDeclaration": "error",
-        "noNewSymbol": "error",
         "noSelfAssign": "error",
         "noSetterReturn": "error",
         "noUndeclaredVariables": "error",
         "noUnreachable": "error",
-        "noUnreachableSuper": "error"
+        "noUnreachableSuper": "error",
+        "noInvalidBuiltinInstantiation": "error"
       },
       "performance": {
         "noAccumulatingSpread": "warn",
@@ -61,7 +58,8 @@
         "noPrototypeBuiltins": "error",
         "noRedeclare": "error",
         "noShadowRestrictedNames": "error",
-        "noUnsafeNegation": "error"
+        "noUnsafeNegation": "error",
+        "noWith": "error"
       }
     }
   },
@@ -71,13 +69,13 @@
     "indentStyle": "space",
     "indentWidth": 2,
     "lineWidth": 100,
-    "ignore": ["**/node_modules", "**/dist", "**/build"]
+    "includes": ["**", "!**/node_modules", "!**/dist", "!**/build"]
   },
   "javascript": {
     "formatter": {
       "jsxQuoteStyle": "double",
       "quoteProperties": "asNeeded",
-      "trailingComma": "es5",
+      "trailingCommas": "es5",
       "semicolons": "always",
       "arrowParentheses": "always",
       "bracketSpacing": true,
@@ -87,16 +85,10 @@
   },
   "json": {
     "formatter": {
-      "trailingComma": "none"
+      "trailingCommas": "none"
     }
   },
   "files": {
-    "ignore": [
-      "**/node_modules/**",
-      "**/dist/**",
-      "**/build/**",
-      "**/.git/**",
-      "**/coverage/**"
-    ]
+    "includes": ["**", "!**/node_modules", "!**/dist", "!**/build", "!**/.git", "!**/coverage"]
   }
 }

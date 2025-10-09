@@ -31,7 +31,7 @@ This document demonstrates the enhanced delegation capabilities of BAAS orchestr
    - Capabilities: ["security-audit", "comprehensive-security-review"]
    - Tools: all tools available
    - Priority: 3 (high priority for security tasks)
-   
+
 2. **Alternative Match**: security-review (Score: 85/100)
    - Capabilities: ["security-review", "vulnerability-assessment"]
    - Tools: specialized security tools
@@ -55,7 +55,7 @@ This document demonstrates the enhanced delegation capabilities of BAAS orchestr
    - Capabilities: ["setup-comprehensive-testing", "testing-infrastructure"]
    - Tools: all tools available
    - Priority: 2 (very high priority for testing setup)
-   
+
 2. **Alternative Match**: write-unit-tests (Score: 70/100)
    - Capabilities: ["unit-testing", "test-writing"]
    - Tools: testing-specific tools
@@ -79,7 +79,7 @@ This document demonstrates the enhanced delegation capabilities of BAAS orchestr
    - Capabilities: ["git-workflow", "branch-management", "commit-coordination"]
    - Tools: [Execute, Read, Grep, Create, LS]
    - Priority: 7 (medium priority for git operations)
-   
+
 2. **Alternative Match**: fix-git-issues (Score: 65/100)
    - Capabilities: ["git-issues", "problem-resolution"]
    - Tools: git-specific tools
@@ -103,7 +103,7 @@ This document demonstrates the enhanced delegation capabilities of BAAS orchestr
    - Capabilities: ["documentation", "create-docs", "api-documentation"]
    - Tools: [Read, Grep, Create, Edit, MultiEdit]
    - Priority: 6 (medium priority for documentation)
-   
+
 2. **Alternative Match**: add-documentation (Score: 78/100)
    - Capabilities: ["add-documentation", "incremental-docs"]
    - Tools: documentation-specific tools
