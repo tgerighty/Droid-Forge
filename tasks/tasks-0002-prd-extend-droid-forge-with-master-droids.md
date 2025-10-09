@@ -15,7 +15,7 @@
 - `.factory/droids/debug-issue.md` - Issue debugging assistance droid
 - `.factory/droids/performance-audit.md` - Performance auditing droid
 - `.factory/droids/setup-monitoring-observability.md` - Monitoring and observability setup droid
-- `.factory/droids/baas-orchestrator.md` - BAAS orchestrator (needs updates for new delegations)
+- `.factory/droids/baas-orchestrator.md` - Manager Droid orchestrator (needs updates for new delegations)
 - `droid-forge.yaml` - Configuration file (needs delegation rule updates)
 - `README.md` - Documentation (needs droid descriptions and diagrams updates)
 - `.droid-forge/logs/audit.ndjson` - Audit logging system
@@ -41,16 +41,16 @@
   - [ ] 2.8 Standardize all copied droids to Factory.ai template format
   - [ ] 2.9 Validate YAML frontmatter completeness for all integrated droids
   - [ ] 2.10 Resolve capability function overlaps by extracting reusable components
-- [ ] 3.0 BAAS Orchestration Updates
+- [ ] 3.0 Manager Droid Orchestration Updates
   - [ ] 3.1 Update droid-forge.yaml with new delegation rules for all integrated droids
-  - [ ] 3.2 Enhance BAAS orchestrator with category-based droid routing logic
+  - [ ] 3.2 Enhance Manager Droid orchestrator with category-based droid routing logic
   - [ ] 3.3 Add concurrent execution capabilities for parallel droid workflows
   - [ ] 3.4 Implement droid capability conflict resolution in delegation logic
   - [ ] 3.5 Add usage statistics tracking for droid selection optimization
-  - [ ] 3.6 Update BAAS error handling for expanded droid ecosystem
+  - [ ] 3.6 Update Manager Droid error handling for expanded droid ecosystem
   - [ ] 3.7 Enhance context passing between droid delegations
 - [ ] 4.0 Testing and Validation
-  - [ ] 4.1 Test BAAS delegation to each newly integrated droid category
+  - [ ] 4.1 Test Manager Droid delegation to each newly integrated droid category
   - [ ] 4.2 Validate droid execution compatibility with Factory.ai CLI
   - [ ] 4.3 Test concurrent droid operations using locking mechanisms
   - [ ] 4.4 Verify event logging for all new droid executions
@@ -69,7 +69,7 @@
 - Implement droids in phases: security first, then database, debugging, and workflow support
 - Maintain high standards for Factory.ai template compliance across all additions
 - Document any function consolidations from overlapping droids for future reference
-- Focus on ensuring BAAS can intelligently delegate across the expanded catalog
+- Focus on ensuring Manager Droid can intelligently delegate across the expanded catalog
 - Include statistical tracking to identify most valuable added capabilities
 - Keep v1.1 as focused extension rather than major architectural changes
 

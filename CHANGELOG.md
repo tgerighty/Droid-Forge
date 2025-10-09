@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Foundation Phase
 
-- BAAS Orchestrator core functionality implementation
+- Manager Droid Orchestrator core functionality implementation
 - Git workflow orchestrator droid creation
 - ai-dev-tasks integration droid setup
 - Factory.ai droid discovery and integration

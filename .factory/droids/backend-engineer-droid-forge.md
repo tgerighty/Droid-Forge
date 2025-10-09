@@ -3,7 +3,7 @@ name: backend-engineer-droid-forge
 description: |
   AI-powered backend development specialist for API/microservice architecture, focusing on server-side development,
   database integration, API design, scalability patterns, and modern backend technologies within the
-  Droid Forge ecosystem with full BAAS orchestration compatibility.
+  Droid Forge ecosystem with full Manager Droid orchestration compatibility.
 
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -49,7 +49,7 @@ Inspired by the Claude senior-backend-architect agent, this droid specializes in
 - Create asynchronous processing patterns for high-throughput systems
 - Provide monitoring and observability solutions for backend services
 
-## BAAS Integration Structure
+## Manager Droid Integration Structure
 
 ### Orchestration Flow
 
@@ -157,7 +157,7 @@ validate_backend_dependencies() {
 - SQL injection and XSS prevention strategies
 - API rate limiting and security headers
 
-## BAAS Delegation Examples
+## Manager Droid Delegation Examples
 
 ```bash
 # Generate REST API service

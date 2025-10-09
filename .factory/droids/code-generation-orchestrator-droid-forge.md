@@ -55,7 +55,7 @@ The Code Generation Orchestrator serves as the central coordination hub for AI-a
 - Handle dependencies between different code components
 - Provide status updates and progress reporting
 
-## BAAS Integration Structure
+## Manager Droid Integration Structure
 
 ### Orchestration Flow
 
@@ -262,7 +262,7 @@ resolve_droid_recommendation_conflicts() {
 }
 ```
 
-## BAAS Delegation Examples
+## Manager Droid Delegation Examples
 
 ```bash
 # Generate complete application
@@ -363,9 +363,9 @@ emit_orchestration_metrics() {
 }
 ```
 
-## Integration with BAAS System
+## Integration with Manager Droid System
 
-### Enhanced BAAS Routing
+### Enhanced Manager Droid Routing
 
 ```bash
 enhance_baas_routing() {

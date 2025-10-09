@@ -2,7 +2,7 @@
 name: debugging-expert-droid-forge
 description: |
   AI-powered debugging expert for advanced code analysis, error resolution, performance debugging,
-  and systematic troubleshooting methodologies within the Droid Forge ecosystem with full BAAS orchestration compatibility.
+  and systematic troubleshooting methodologies within the Droid Forge ecosystem with full Manager Droid orchestration compatibility.
 
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -54,7 +54,7 @@ Inspired by the Claude code-analyzer-debugger and debug-error agents, this droid
 - Troubleshoot database query performance and connection issues
 - Debug network and API communication problems
 
-## BAAS Integration Structure
+## Manager Droid Integration Structure
 
 ### Orchestration Flow
 
@@ -302,7 +302,7 @@ analyze_code_for_potential_bugs() {
 }
 ```
 
-## BAAS Delegation Examples
+## Manager Droid Delegation Examples
 
 ```bash
 # Debug complex runtime error

@@ -9,7 +9,7 @@ This guide provides comprehensive instructions for creating new droids within th
 1. [Fundamental Principles](#fundamental-principles)
 2. [Droid Template Structure](#droid-template-structure)
 3. [YAML Frontmatter Specifications](#yaml-frontmatter-specifications)
-4. [BAAS Integration Patterns](#baas-integration-patterns)
+4. [Manager Droid Integration Patterns](#baas-integration-patterns)
 5. [Audit Trail and Logging Standards](#audit-trail-and-logging-standards)
 6. [Task Status Management](#task-status-management)
 7. [Cross-Droid Coordination](#cross-droid-coordination)
@@ -27,7 +27,7 @@ Droid Forge droids are **self-documenting, declarative agents** that extend Fact
 ### Key Requirements
 
 - **Factory.ai Template Compliance**: Strict adherence to YAML frontmatter specifications
-- **BAAS Orchestration Compatibility**: All droids must be delegatable via BAAS system
+- **Manager Droid Orchestration Compatibility**: All droids must be delegatable via Manager Droid system
 - **Audit Trail Integration**: Every operation must log to .droid-forge/logs/events.ndjson
 - **ai-dev-tasks Support**: Compatible with task generation and status tracking workflows
 - **Error Resilience**: Robust failure handling with recovery mechanisms
@@ -56,8 +56,8 @@ What the droid does and why it exists.
 ## Capabilities
 Detailed list of functions and features.
 
-## BAAS Integration Examples
-How to invoke through BAAS delegation.
+## Manager Droid Integration Examples
+How to invoke through Manager Droid delegation.
 
 ## Audit Trail Recording
 What events are logged.
@@ -85,7 +85,7 @@ What events are logged.
 
 ### Optional but Recommended Fields
 
-- **tags**: Array of 3-5 strings for BAAS capability matching
+- **tags**: Array of 3-5 strings for Manager Droid capability matching
 
 ### Best Practices
 
@@ -114,7 +114,7 @@ location: anywhere
 ---
 ```
 
-## BAAS Integration Patterns
+## Manager Droid Integration Patterns
 
 ### Basic Delegation Structure
 
@@ -129,7 +129,7 @@ function main_delegation_handler() {
 
 ### Capability Declaration
 
-All droids must declare capabilities for BAAS pattern matching:
+All droids must declare capabilities for Manager Droid pattern matching:
 
 ```bash
 # In droid document
@@ -148,7 +148,7 @@ rules:
 
 ### Orchestration Response Formats
 
-Droids must provide BAAS-compatible status responses:
+Droids must provide Manager Droid-compatible status responses:
 
 ```bash
 return_baas_status() {
@@ -267,7 +267,7 @@ Droids can query available capabilities:
 discover_available_droids() {
   local capability_pattern="$1"
 
-  # Query BAAS for matching droids
+  # Query Manager Droid for matching droids
   find_droids_by_capability "$capability_pattern"
 }
 
@@ -397,16 +397,16 @@ test_droid_functions() {
   [[ $? -eq 0 ]] && echo "PASS: $test_function" || echo "FAIL: $test_function - $result"
 }
 
-# Integration testing with BAAS
+# Integration testing with Manager Droid
 test_baas_delegation() {
   local test_droid="$1"
   local test_prompt="$2"
 
   # Test delegation path
   if Task tool with subagent_type="$test_droid" description="Test invocation" prompt="$test_prompt"; then
-    echo "PASS: BAAS delegation to $test_droid"
+    echo "PASS: Manager Droid delegation to $test_droid"
   else
-    echo "FAIL: BAAS delegation failed for $test_droid"
+    echo "FAIL: Manager Droid delegation failed for $test_droid"
   fi
 }
 ```
@@ -415,7 +415,7 @@ test_baas_delegation() {
 
 - [ ] Frontmatter fields complete and compliant
 - [ ] Markdown structure follows template
-- [ ] BAAS delegation syntax correct
+- [ ] Manager Droid delegation syntax correct
 - [ ] Audit trail events properly formatted
 - [ ] Error handling patterns implemented
 - [ ] Cross-droid coordination capabilities included
@@ -446,7 +446,7 @@ test_baas_delegation() {
 3. **Validate Integration**
 
    ```bash
-   # Test BAAS delegation
+   # Test Manager Droid delegation
    factory-cli "test delegation to new droid"
 
    # Check audit trail
@@ -485,7 +485,7 @@ test_baas_delegation() {
 - **Event logging**: Always use NDJSON format with timestamp
 - **Status updates**: Use ai-dev-tasks markdown markers consistently
 - **Error conditions**: Implement retry/fallback mechanisms
-- **BAAS delegation**: Use Task tool syntax exactly
+- **Manager Droid delegation**: Use Task tool syntax exactly
 - **File paths**: Use relative paths from project root
 
 This guide ensures all Droid Forge droids maintain high quality, consistent interfaces, and reliable orchestration within the ecosystem.

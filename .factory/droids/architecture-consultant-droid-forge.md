@@ -3,7 +3,7 @@ name: architecture-consultant-droid-forge
 description: |
   AI-powered architecture consultant for system design guidance, technology stack recommendations,
   architectural pattern implementation, and scalable system design within the Droid Forge ecosystem
-  with full BAAS orchestration compatibility.
+  with full Manager Droid orchestration compatibility.
 
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -55,7 +55,7 @@ Inspired by the Claude architect and systems-architect agents, this droid specia
 - Design caching strategies and performance optimization
 - Consider capacity planning and resource optimization
 
-## BAAS Integration Structure
+## Manager Droid Integration Structure
 
 ### Orchestration Flow
 
@@ -274,7 +274,7 @@ recommend_architecture_patterns() {
 }
 ```
 
-## BAAS Delegation Examples
+## Manager Droid Delegation Examples
 
 ```bash
 # Design complete system architecture
