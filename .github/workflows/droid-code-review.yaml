@@ -132,7 +132,11 @@ jobs:
 
           # Run droid exec with the prompt
           echo "Running code review analysis..."
-          droid exec -f prompt.txt --skip-permissions-unsafe
+          droid exec -f prompt.txt --skip-permissions-unsafe || {
+            echo "❌ ERROR: droid exec failed"
+            echo "This could be due to missing FACTORY_API_KEY or other runtime issues."
+            exit 1
+          }
 
           # Check if comments.json was created
           if [ ! -f comments.json ]; then
