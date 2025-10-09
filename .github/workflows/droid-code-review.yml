@@ -113,11 +113,16 @@ jobs:
           - This is the line number in the diff, not the file
           - Comments must align with exact changed lines only
 
-          Output: 
+          Output:
           - Empty array [] if no issues found
           - Otherwise array of comment objects with path, position, body
           - Each comment should be actionable and clear about what needs to be fixed
           - Maximum 10 comments total; prioritize the most critical issues
+
+          Important: Ensure the comments.json file contains valid JSON that can be parsed by JSON.parse().
+          - Use \\n for newlines in body strings
+          - Use \\\" for quotes in strings
+          - No unescaped newlines or control characters in the JSON text
           EOF
 
           # Run droid exec with the prompt
