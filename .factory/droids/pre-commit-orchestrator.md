@@ -23,12 +23,14 @@ The pre-commit orchestrator manages code quality validation before commits by co
 ## Capabilities
 
 ### Pre-commit Hook Management
+
 - Executes pre-commit hooks across all modified files
 - Validates file types against appropriate tools
 - Provides detailed error reporting and suggestions
 - Manages hook configuration and execution order
 
 ### Tool Integration
+
 - **Biome**: JavaScript/TypeScript linting and formatting
 - **ESLint**: JavaScript/TypeScript code quality
 - **Prettier**: Code formatting validation
@@ -36,6 +38,7 @@ The pre-commit orchestrator manages code quality validation before commits by co
 - **Security tools**: Security vulnerability scanning
 
 ### Quality Checks
+
 - Syntax validation
 - Code style consistency
 - Type checking
@@ -45,6 +48,7 @@ The pre-commit orchestrator manages code quality validation before commits by co
 ## Usage
 
 Execute pre-commit checks:
+
 ```bash
 droid pre-commit-orchestrator "Run pre-commit quality checks on modified files"
 ```

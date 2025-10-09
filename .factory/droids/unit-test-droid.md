@@ -23,24 +23,28 @@ The unit test droid manages comprehensive testing workflows including test execu
 ## Capabilities
 
 ### Test Execution
+
 - **Unit Tests**: Execute unit tests across all test files
 - **Integration Tests**: Run integration test suites
 - **Watch Mode**: Continuous test execution during development
 - **Selective Testing**: Run tests for specific files or patterns
 
 ### Coverage Analysis
+
 - **Code Coverage**: Generate comprehensive coverage reports
 - **Threshold Validation**: Enforce minimum coverage requirements
 - **Branch Coverage**: Detailed branch and line coverage metrics
 - **Coverage Reports**: HTML, JSON, and text report formats
 
 ### Test Framework Integration
+
 - **Jest**: Full Jest testing framework support
 - **Vitest**: Modern Vitest testing framework
 - **Mocha**: Mocha test runner integration
 - **Node Assert**: Native Node.js testing utilities
 
 ### Quality Assurance
+
 - **Test Validation**: Ensure tests actually test the code
 - **Flaky Test Detection**: Identify unreliable tests
 - **Performance Testing**: Test execution time monitoring
@@ -49,21 +53,25 @@ The unit test droid manages comprehensive testing workflows including test execu
 ## Usage
 
 ### Run all tests
+
 ```bash
 droid unit-test-droid "Execute full test suite with coverage"
 ```
 
 ### Run tests for specific files
+
 ```bash
 droid unit-test-droid "Run tests for modified files only"
 ```
 
 ### Generate coverage report
+
 ```bash
 droid unit-test-droid "Generate detailed coverage report"
 ```
 
 ### Watch mode testing
+
 ```bash
 droid unit-test-droid "Run tests in watch mode during development"
 ```
