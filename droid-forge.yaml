@@ -1,5 +1,5 @@
 # Droid Forge Configuration
-# This file defines the behavior and rules for the BAAS Orchestrator
+# This file defines the behavior and rules for the Manager Droid Orchestrator
 
 # CRITICAL CONSTRAINT: Task System Usage
 # ALL droids MUST use ONLY the ai-dev-tasks task system
@@ -10,13 +10,13 @@
 factory:
   name: "Droid Forge"
   version: "0.1.0"
-  description: "BAAS for advanced task management and droid coordination"
+  description: "Manager Droid for advanced task management and droid coordination"
 
 # Orchestrator configuration
 orchestrator:
-  name: "BAAS"
-  series: "Broker and Automation System"
-  description: "BAAS (Broker and Automation System) - BAAS also means 'Chief' or 'Boss' in Dutch"
+  name: "Manager Droid"
+  series: "Manager and Automation System"
+  description: "Manager Droid (Manager and Automation System) - Central coordinator for task management and droid orchestration"
   personality: "analytical, efficient, methodical"
 
   # Task state machine configuration

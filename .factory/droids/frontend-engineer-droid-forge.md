@@ -3,7 +3,7 @@ name: frontend-engineer-droid-forge
 description: |
   AI-powered frontend development specialist for React/Next.js applications, focusing on component architecture,
   responsive design, user experience optimization, and modern web development best practices within the
-  Droid Forge ecosystem with full BAAS orchestration compatibility.
+  Droid Forge ecosystem with full Manager Droid orchestration compatibility.
 
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -56,7 +56,7 @@ Inspired by the Claude frontend-designer and frontend-ux-specialist agents, this
 - Provide performance optimization strategies (code splitting, lazy loading)
 - Guide through frontend testing approaches (unit tests, integration tests, E2E)
 
-## BAAS Integration Structure
+## Manager Droid Integration Structure
 
 ### Orchestration Flow
 
@@ -154,7 +154,7 @@ validate_frontend_dependencies() {
 - Code splitting and dynamic import suggestions
 - Render performance optimization techniques
 
-## BAAS Delegation Examples
+## Manager Droid Delegation Examples
 
 ```bash
 # Generate React component

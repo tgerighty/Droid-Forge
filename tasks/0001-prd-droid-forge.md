@@ -2,12 +2,12 @@
 
 ## Introduction/Overview
 
-Droid Forge is a comprehensive framework designed to host, manage, and orchestrate Factory.ai droids. This project serves as a centralized hub for developing, deploying, and managing various specialized droids. The centerpiece is the BAAS Orchestrator that intelligently delegates tasks to specialized droids based on project requirements and PRD analysis.
+Droid Forge is a comprehensive framework designed to host, manage, and orchestrate Factory.ai droids. This project serves as a centralized hub for developing, deploying, and managing various specialized droids. The centerpiece is the Manager Droid Orchestrator that intelligently delegates tasks to specialized droids based on project requirements and PRD analysis.
 
 ## Goals
 
 1. **Create a robust factory framework** that can host and manage multiple Factory.ai droids
-2. **Develop the BAAS orchestrator droid** that can analyze tasks and delegate them to appropriate specialized droids
+2. **Develop the Manager Droid orchestrator droid** that can analyze tasks and delegate them to appropriate specialized droids
 3. **Implement comprehensive droid management** including listing, execution, version control, and performance monitoring
 4. **Establish CLI-based interaction** for all factory operations
 5. **Integrate with ai-dev-tasks workflow** for PRD-driven development
@@ -18,7 +18,7 @@ Droid Forge is a comprehensive framework designed to host, manage, and orchestra
 ### As a developer, I want to:
 
 - Easily discover and list all available droids in the factory
-- Execute tasks through the BAAS orchestrator that automatically delegates to appropriate droids
+- Execute tasks through the Manager Droid orchestrator that automatically delegates to appropriate droids
 - Monitor droid performance and execution status
 - Update and manage droid versions across projects
 - Use the factory framework droids to plan, assess, improve, document, fix, clean, review etc in new and existing projects
@@ -47,9 +47,9 @@ Droid Forge is a comprehensive framework designed to host, manage, and orchestra
 1.4 The system shall implement proper code formatting and maintain consistency with target project standards
 1.5 The system shall be tech-stack agnostic, allowing droids to use whatever technology stack their target projects require
 
-### 2. BAAS Orchestrator Droid
+### 2. Manager Droid Orchestrator Droid
 
-2.1 The system shall implement a BAAS Orchestrator as the master coordinator
+2.1 The system shall implement a Manager Droid Orchestrator as the master coordinator
 2.2 The orchestrator shall analyze PRD documents using rule-based, structured parsing to understand project scope and requirements
 2.3 The orchestrator shall automatically break down tasks based on structured PRD analysis (rule-based initially, AI-based as future enhancement)
 2.4 The orchestrator shall delegate tasks to appropriate specialized droids based on:
@@ -113,7 +113,7 @@ Investigate the files referenced in the prompt for security issues:
 4.4 The orchestrator shall facilitate code review workflows by coordinating between droids (e.g., code changes → review droid → commit)
 4.5 The orchestrator shall maintain audit trails of all Git operations performed by droids
 4.6 The orchestrator shall handle branch creation, merging, and cleanup based on task requirements
-4.7 The BAAS Orchestrator shall maintain a project changelog at `CHANGELOG.md` (created if missing). Only the orchestrator writes to this file. For each orchestrated change, it appends an entry including the date, `run_id`, affected task IDs/titles, and commit SHAs.
+4.7 The Manager Droid Orchestrator shall maintain a project changelog at `CHANGELOG.md` (created if missing). Only the orchestrator writes to this file. For each orchestrated change, it appends an entry including the date, `run_id`, affected task IDs/titles, and commit SHAs.
 
 Example entry:
 
@@ -121,7 +121,7 @@ Example entry:
 ## 2025-10-08 — Run r-20251008-0955
 
 - Tasks: 1.1 Implement orchestrator bootstrap (completed)
-- Commits: abc1234 on feat/orchestrator — feat(orchestrator): bootstrap BAAS runner
+- Commits: abc1234 on feat/orchestrator — feat(orchestrator): bootstrap Manager Droid runner
 ```
 
 ### 5. Droid Discovery and Management
@@ -145,13 +145,13 @@ Example entry:
 7.2 The system shall use PRD documents for project understanding and task breakdown
 7.3 The system shall support task list generation and execution tracking
 7.4 The system shall maintain audit trails for all PRD-driven development activities
-7.5 The BAAS Orchestrator shall update the generated task list file (`/tasks/tasks-[prd-file-name].md`) to reflect task states using inline status markers:
+7.5 The Manager Droid Orchestrator shall update the generated task list file (`/tasks/tasks-[prd-file-name].md`) to reflect task states using inline status markers:
 
 - `status: scheduled` when a task is queued for execution
 - `status: started` when execution begins
 - Check the task's checkbox (`[x]`) when completed and optionally append `status: completed`
 - All updates shall preserve the existing Markdown structure
-  7.6 The BAAS Orchestrator shall ensure the ai-dev-tasks process files are available locally; if missing, it will pull them from a configured GitHub repository (pinned ref/commit recommended) into `ai-dev-tasks/`. Sync operations are captured in the audit log.
+  7.6 The Manager Droid Orchestrator shall ensure the ai-dev-tasks process files are available locally; if missing, it will pull them from a configured GitHub repository (pinned ref/commit recommended) into `ai-dev-tasks/`. Sync operations are captured in the audit log.
 
 Example task status (single line):
 
@@ -166,7 +166,7 @@ Additional examples:
 - [x] 1.1 Implement orchestrator bootstrap status: completed
 ```
 
-Default conventions: Use these task status markers unless the project specifies a different convention; BAAS adapts and preserves the existing Markdown structure.
+Default conventions: Use these task status markers unless the project specifies a different convention; Manager Droid adapts and preserves the existing Markdown structure.
 
 ### 8. Testing and Quality Assurance
 
@@ -201,7 +201,7 @@ Default conventions: Use these task status markers unless the project specifies 
 - **Target Project Integration**: Droids must be able to integrate with their target project's existing technology stack
 - **CLI Runtime**: The factory framework shall use Factory.ai's Droid CLI for command execution
 - **Storage**: Project-scoped, file-based JSON logs only (no database)
-- **Process Files (ai-dev-tasks)**: The BAAS Master Orchestrator ensures required ai-dev-tasks process files are present locally. If missing, it pulls them from a configured GitHub source (pinned ref/commit recommended) into the `ai-dev-tasks/` directory. Failures are recorded to the audit log and do not crash the orchestrator.
+- **Process Files (ai-dev-tasks)**: The Manager Droid Master Orchestrator ensures required ai-dev-tasks process files are present locally. If missing, it pulls them from a configured GitHub source (pinned ref/commit recommended) into the `ai-dev-tasks/` directory. Failures are recorded to the audit log and do not crash the orchestrator.
 
 ## Audit & Events
 
@@ -217,7 +217,7 @@ Default conventions: Use these task status markers unless the project specifies 
   - `.droid-forge/logs/events.ndjson` for runtime events
   - Optionally `.droid-forge/logs/run-<run_id>.ndjson` for per-run events
 - **Access**: Orchestrator appends; developers can inspect with standard CLI tools. No database.
-- **Creation**: On startup or first write, the BAAS Master Orchestrator ensures `.droid-forge/logs/` exists and creates `events.ndjson` and `audit.ndjson` if missing.
+- **Creation**: On startup or first write, the Manager Droid Master Orchestrator ensures `.droid-forge/logs/` exists and creates `events.ndjson` and `audit.ndjson` if missing.
   - When fetching ai-dev-tasks process files, it records an `audit.recorded` entry with `details.action = "process_files_sync"` and the source/ref.
 
 Example event (single-line NDJSON):
@@ -234,7 +234,7 @@ Additional examples:
 {"timestamp":"2025-10-08T10:07:44.002Z","event_type":"git.commit","run_id":"r-20251008-0955","git":{"sha":"abc1234","branch":"feat/orchestrator"}}
 ```
 
-Default conventions: Use these event shapes unless the project specifies a different convention; BAAS adapts to project-specific standards.
+Default conventions: Use these event shapes unless the project specifies a different convention; Manager Droid adapts to project-specific standards.
 
 ## Success Metrics
 
@@ -250,7 +250,7 @@ Default conventions: Use these event shapes unless the project specifies a diffe
 - Git workflow integration foundation
 - Basic branch management and commit coordination
 
-### Phase 2: BAAS Master Orchestrator Implementation
+### Phase 2: Manager Droid Master Orchestrator Implementation
 
 - Rule-based task analysis and breakdown system
 - Droid capability matching and delegation logic

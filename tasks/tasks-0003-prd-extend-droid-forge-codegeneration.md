@@ -20,7 +20,7 @@
 
 - [ ] 1.0 Master Code Generation Droid Template Creation
   - [x] 1.1 Analyze Claude agent patterns for development droid specialization
-  - [x] 1.2 Create standardized code generation template with BAAS integration
+  - [x] 1.2 Create standardized code generation template with Manager Droid integration
   - [x] 1.3 Implement ai-dev-tasks compatibility patterns for task-driven development
   - [x] 1.4 Establish audit trail logging standards for code generation activities
 
@@ -39,10 +39,10 @@
   - [x] 3.4 Implement debugging-expert-droid-forge for advanced code analysis (inspired by code-analyzer-debugger, debug-error agents)
   - [ ] 3.5 Configure AI assist levels with human oversight decision points (question 2)
 
-- [ ] 4.0 BAAS Integration and Workflow Orchestration
+- [ ] 4.0 Manager Droid Integration and Workflow Orchestration
   - [ ] 4.1 Update droid-forge.yaml with delegation rules for all 8 new code generation droids
-  - [ ] 4.2 Configure BAAS quality assurance triggering after code generation droid invocation (question 3)
-  - [ ] 4.3 Implement BAAS conflict resolution between conflicting droid recommendations (question 8)
+  - [ ] 4.2 Configure Manager Droid quality assurance triggering after code generation droid invocation (question 3)
+  - [ ] 4.3 Implement Manager Droid conflict resolution between conflicting droid recommendations (question 8)
   - [ ] 4.4 Ensure ai-dev-tasks-integrator priority in core conflicts (question 9)
   - [ ] 4.5 Add workflow orchestration for code generation sequence (project setup → arch planning → implementation → validation)
 
@@ -55,11 +55,11 @@
 - [ ] 6.0 Documentation and Ecosystem Integration
   - [ ] 6.1 Update README.md with all new code generation capabilities and examples
   - [ ] 6.2 Add usage examples for each specialized droid role in documentation
-  - [ ] 6.3 Create usage guidance for BAAS orchestration of code generation workflows
+  - [ ] 6.3 Create usage guidance for Manager Droid orchestration of code generation workflows
   - [ ] 6.4 Update ASCII diagrams to show code generation integration points
 
 - [ ] 7.0 Testing and Validation of Code Generation Features
-  - [ ] 7.1 Test BAAS delegation to each new code generation droid
+  - [ ] 7.1 Test Manager Droid delegation to each new code generation droid
   - [ ] 7.2 Validate quality assurance integration with code generation workflows
   - [ ] 7.3 Test stack compatibility verification mechanisms
   - [ ] 7.4 Demonstrate end-to-end code generation workflow (project skeleton → component → testing)
@@ -70,7 +70,7 @@
 - AI assist should maintain human control with decision checkpoints while providing significant productivity benefits (question 2)
 - Stack compatibility verification should be automatic and enforced before final code generation (question 6)
 - Success metrics focus on practical developer productivity rather than AI performance scores (question 10 removed)
-- Follow Claude agent patterns for domain specialization while adapting to Droid Forge BAAS orchestration requirements
+- Follow Claude agent patterns for domain specialization while adapting to Droid Forge Manager Droid orchestration requirements
 - Maintain clean separation between code generation (creation) and code quality/refactoring (improvement)
 
 ## General Guidelines

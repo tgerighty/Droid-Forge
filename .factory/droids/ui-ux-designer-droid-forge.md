@@ -2,7 +2,7 @@
 name: ui-ux-designer-droid-forge
 description: |
   AI-powered UI/UX design specialist for interface design, user experience optimization, usability validation,
-  and modern design system implementation within the Droid Forge ecosystem with full BAAS orchestration compatibility.
+  and modern design system implementation within the Droid Forge ecosystem with full Manager Droid orchestration compatibility.
 
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -55,7 +55,7 @@ Inspired by the Claude ui-ux-master and frontend-ux-specialist agents, this droi
 - Provide accessibility testing and validation
 - Design for screen readers and assistive technologies
 
-## BAAS Integration Structure
+## Manager Droid Integration Structure
 
 ### Orchestration Flow
 
@@ -193,7 +193,7 @@ conduct_usability_testing() {
 }
 ```
 
-## BAAS Delegation Examples
+## Manager Droid Delegation Examples
 
 ```bash
 # Create complete UI design system

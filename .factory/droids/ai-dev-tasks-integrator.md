@@ -365,24 +365,24 @@ validate_task_list_format() {
 }
 ```
 
-### Integration with BAAS System
+### Integration with Manager Droid System
 
 ```bash
-# Coordinate with BAAS orchestrator for task processing
+# Coordinate with Manager Droid orchestrator for task processing
 coordinate_with_baas_orchestrator() {
     local task_file="$1"
     local prd_file="$2"
     local generation_phase="$3"
 
-    log_coordination "Coordinating with BAAS orchestrator for task processing"
+    log_coordination "Coordinating with Manager Droid orchestrator for task processing"
 
-    # Notify BAAS about new task list
+    # Notify Manager Droid about new task list
     Task tool with subagent_type="baas-orchestrator" description="Process new task list" prompt="Process new task list $task_file generated from PRD $prd_file during phase $generation_phase"
 
     # Update task status tracking
     update_task_tracking "$task_file" "$prd_file" "$generation_phase"
 
-    log_coordination "BAAS coordination completed for task processing"
+    log_coordination "Manager Droid coordination completed for task processing"
 }
 ```
 
@@ -429,13 +429,13 @@ handle_prd_processing_error() {
 - [ ] 1.4 Set up Factory.ai droid discovery and integration with personal droids
 - [ ] 1.5 Configure droid-forge.yaml with delegation rules and Git workflow settings
 
-## 2.0 BAAS Orchestrator Core
+## 2.0 Manager Droid Orchestrator Core
 
-- [ ] 2.1 Enhance BAAS Orchestrator with PRD parsing and task breakdown capabilities
-- [ ] 2.2 Implement rule-based task delegation logic in BAAS Orchestrator
-- [ ] 2.3 Add task execution monitoring and result collection to BAAS Orchestrator
-- [ ] 2.4 Integrate audit logging system into BAAS Orchestrator's operations
-- [ ] 2.5 Create error handling and retry mechanisms in BAAS Orchestrator
+- [ ] 2.1 Enhance Manager Droid Orchestrator with PRD parsing and task breakdown capabilities
+- [ ] 2.2 Implement rule-based task delegation logic in Manager Droid Orchestrator
+- [ ] 2.3 Add task execution monitoring and result collection to Manager Droid Orchestrator
+- [ ] 2.4 Integrate audit logging system into Manager Droid Orchestrator's operations
+- [ ] 2.5 Create error handling and retry mechanisms in Manager Droid Orchestrator
 
 ## Implementation Notes
 
@@ -471,7 +471,7 @@ Execute ai-dev-tasks integration with enhanced PRD-to-task-list generation capab
 
 ## Integration Points
 
-- Work with BAAS orchestrator for task delegation
+- Work with Manager Droid orchestrator for task delegation
 - Coordinate with Task Manager for status updates
 - Integrate with Git Workflow for commit coordination
 - Maintain audit logs for all operations

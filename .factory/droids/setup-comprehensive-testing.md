@@ -2,7 +2,7 @@
 name: setup-comprehensive-testing
 description: |
   Set up comprehensive testing infrastructure with unit, integration and E2E tests,
-  integrated with BAAS orchestration, task management, and audit trail logging.
+  integrated with Manager Droid orchestration, task management, and audit trail logging.
 
   Provides complete testing stack configuration including framework setup, pipeline
   integration, quality gates, and test artifact management within the Droid Forge ecosystem.
@@ -25,16 +25,16 @@ tags:
 
 # Setup Comprehensive Testing
 
-Sets up complete testing infrastructure suite within the Droid Forge ecosystem, providing automated testing strategy analysis, framework configuration, and quality gate enforcement with full BAAS orchestration integration.
+Sets up complete testing infrastructure suite within the Droid Forge ecosystem, providing automated testing strategy analysis, framework configuration, and quality gate enforcement with full Manager Droid orchestration integration.
 
-## BAAS Integration Architecture
+## Manager Droid Integration Architecture
 
 ### Testing Workflow Coordination
 
 - **PRD Analysis**: Analyzes test requirements from ai-dev-tasks PRDs
 - **Capability Detection**: Automatically detects project technology stack (JavaScript, Python, etc.)
 - **Framework Selection**: Recommends optimal testing frameworks based on project context
-- **BAAS Delegation**: Orchestrates with unit-test-droid for execution coordination
+- **Manager Droid Delegation**: Orchestrates with unit-test-droid for execution coordination
 - **Status Tracking**: Updates ai-dev-tasks format tasks with testing progress
 
 ### Audit Trail Integration

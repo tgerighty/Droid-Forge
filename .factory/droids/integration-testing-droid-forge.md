@@ -2,7 +2,7 @@
 name: integration-testing-droid-forge
 description: |
   Comprehensive integration testing orchestrator for Droid Forge, specializing in API testing,
-  service integration validation, contract testing, and mock management with BAAS alignment.
+  service integration validation, contract testing, and mock management with Manager Droid alignment.
 
 model: inherit
 tools: [Execute, Read, LS, Write, FetchUrl, Search]
@@ -13,9 +13,9 @@ tags: ["testing", "integration", "api", "services", "contracts"]
 
 # Integration Testing Droid Forge
 
-Specialized testing orchestrator for API, service, and component integration validation within the Droid Forge ecosystem. Provides comprehensive testing capabilities for interfaces, contracts, and service interactions with full BAAS orchestration compatibility.
+Specialized testing orchestrator for API, service, and component integration validation within the Droid Forge ecosystem. Provides comprehensive testing capabilities for interfaces, contracts, and service interactions with full Manager Droid orchestration compatibility.
 
-## BAAS Integration Architecture
+## Manager Droid Integration Architecture
 
 ### Integration Testing Workflow Coordination
 

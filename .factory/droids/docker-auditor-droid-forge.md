@@ -3,7 +3,7 @@ name: docker-auditor-droid-forge
 description: |
   Droid Forge ecosystem-integrated Docker auditor for comprehensive container ecosystem validation,
   combining security vulnerability detection, performance optimization analysis, and deployment readiness assessment
-  with complete BAAS orchestration compatibility and audit trail logging.
+  with complete Manager Droid orchestration compatibility and audit trail logging.
 
 model: inherit
 tools: [Execute, Read, LS, Write, FetchUrl]
@@ -17,9 +17,9 @@ tags:
 
 ## Purpose
 
-The Docker Auditor Droid Forge is a specialized droid within the Droid Forge ecosystem designed to conduct comprehensive automated audits of Docker container environments. It assesses security vulnerabilities, performance optimization opportunities, configuration compliance, and deployment readiness while maintaining full integration with BAAS orchestration, ai-dev-tasks process workflows, and Droid Forge audit trail standards.
+The Docker Auditor Droid Forge is a specialized droid within the Droid Forge ecosystem designed to conduct comprehensive automated audits of Docker container environments. It assesses security vulnerabilities, performance optimization opportunities, configuration compliance, and deployment readiness while maintaining full integration with Manager Droid orchestration, ai-dev-tasks process workflows, and Droid Forge audit trail standards.
 
-## BAAS Orchestration Integration
+## Manager Droid Orchestration Integration
 
 ### Audit Workflow Coordination
 
@@ -28,7 +28,7 @@ docker_audit_orchestration() {
   local target_project="$1"
   local audit_depth="${2:-comprehensive}"
 
-  # BAAS delegation check
+  # Manager Droid delegation check
   if [[ "$SUBAGENT_TYPE" != "docker-auditor-droid-forge" ]]; then
     echo "Invalid delegation for Docker audit"
     exit 1
@@ -43,7 +43,7 @@ docker_audit_orchestration() {
   review_compose_configuration_integrity "$target_project"
   analyze_container_performance_metrics "$target_project"
 
-  # Generate BAAS-compliant audit report
+  # Generate Manager Droid-compliant audit report
   compile_audit_findings_report "$target_project" "$audit_depth"
 
   # Update ai-dev-tasks task status
@@ -187,7 +187,7 @@ calculate_docker_compliance_score() {
 
 ## Error Handling and Resilience
 
-### Recovery Mechanisms in BAAS Context
+### Recovery Mechanisms in Manager Droid Context
 
 ```bash
 handle_audit_execution_failure() {
@@ -218,7 +218,7 @@ handle_audit_execution_failure() {
 
 ## Output and Reporting Capabilities
 
-### Executive Audit Summary (BAAS Integration)
+### Executive Audit Summary (Manager Droid Integration)
 
 - High-level compliance status indicators
 - Risk-weighted actionable insights
@@ -241,7 +241,7 @@ handle_audit_execution_failure() {
 
 ## Activation and Usage
 
-### Direct BAAS Invocation
+### Direct Manager Droid Invocation
 
 ```
 factory-cli "Audit Docker setup in current project for security vulnerabilities and performance issues"
@@ -254,4 +254,4 @@ factory-cli "Audit Docker setup in current project for security vulnerabilities 
 - Release Process: Production deployment security validation
 - Monitoring: Continuous compliance drift detection
 
-This droid maintains full compatibility with Droid Forge ecosystem standards while delivering enterprise-grade Docker auditing capabilities through intelligent BAAS orchestration, comprehensive audit trail integration, and seamless cross-droid workflow coordination. All functionality designed from principles up, avoiding dependency on external template structures.
+This droid maintains full compatibility with Droid Forge ecosystem standards while delivering enterprise-grade Docker auditing capabilities through intelligent Manager Droid orchestration, comprehensive audit trail integration, and seamless cross-droid workflow coordination. All functionality designed from principles up, avoiding dependency on external template structures.

@@ -2,7 +2,7 @@
 
 ## Introduction/Overview
 
-Extend Droid Forge v1.1 with specialized code generation capabilities to provide AI-powered development assistance across major software engineering roles. This extension introduces 8 new development droids modeled after proven AI coding assistants, enabling intelligent code creation, refactoring, and architectural guidance while maintaining seamless BAAS integration and audit trail compliance.
+Extend Droid Forge v1.1 with specialized code generation capabilities to provide AI-powered development assistance across major software engineering roles. This extension introduces 8 new development droids modeled after proven AI coding assistants, enabling intelligent code creation, refactoring, and architectural guidance while maintaining seamless Manager Droid integration and audit trail compliance.
 
 ## Goals
 
@@ -40,8 +40,8 @@ Extend Droid Forge v1.1 with specialized code generation capabilities to provide
    - Focus on high-impact development workflows (refactoring, debugging, architecture planning)
    - Integrate sophisticated AI assistance with human oversight capabilities
 
-3. **BAAS Integration and Workflow Orchestration**
-   - Configure BAAS delegation rules for all new code generation capabilities
+3. **Manager Droid Integration and Workflow Orchestration**
+   - Configure Manager Droid delegation rules for all new code generation capabilities
    - Implement automatic quality assurance triggering after code generation operations
    - Enable conflict resolution between conflicting droid recommendations
    - Establish audit trail logging for all code generation activities
@@ -74,14 +74,14 @@ Extend Droid Forge v1.1 with specialized code generation capabilities to provide
 
 ## Design Considerations
 
-The droids will be designed as specialized extensions of proven AI coding assistant patterns (inspired by Claude agents), with each focusing on specific development roles while maintaining Droid Forge's orchestration philosophy. Development droids will leverage AI assistance capabilities while integrating seamlessly with existing BAAS workflows and quality assurance pipelines.
+The droids will be designed as specialized extensions of proven AI coding assistant patterns (inspired by Claude agents), with each focusing on specific development roles while maintaining Droid Forge's orchestration philosophy. Development droids will leverage AI assistance capabilities while integrating seamlessly with existing Manager Droid workflows and quality assurance pipelines.
 
 ## Technical Considerations
 
 Each code generation droid must:
 
 - Follow Factory.ai template specifications
-- Include BAAS delegate compatibility
+- Include Manager Droid delegate compatibility
 - Implement audit trail logging in NDJSON format
 - Support ai-dev-tasks process integration
 - Provide error handling and recovery mechanisms
@@ -89,7 +89,7 @@ Each code generation droid must:
 
 ## Success Metrics
 
-- Successful integration with BAAS orchestration (all droids delegatable)
+- Successful integration with Manager Droid orchestration (all droids delegatable)
 - 100% compatibility with Factory.ai template requirements
 - Positive developer feedback on code generation capabilities
 - Quality assurance integration verifies generated code quality

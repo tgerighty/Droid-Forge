@@ -2,7 +2,7 @@
 
 ## Relevant Files
 
-- `.factory/droids/baas-orchestrator.md` - Main BAAS orchestrator droid specification with comprehensive tooling access
+- `.factory/droids/baas-orchestrator.md` - Main Manager Droid orchestrator droid specification with comprehensive tooling access
 - `.factory/droids/task-manager.md` - Task lifecycle management droid for status tracking
 - `.factory/droids/git-workflow-orchestrator.md` - Git workflow and branch management droid
 - `.factory/droids/ai-dev-tasks-integrator.md` - Integration droid for ai-dev-tasks workflow
@@ -11,7 +11,7 @@
 - `tools/analyze-audit.py` - Python script for analyzing audit logs and performance metrics
 - `.droid-forge/logs/audit.ndjson` - Audit trail log file for Droid Forge operations
 - `.droid-forge/logs/events.ndjson` - Runtime events log file for task/droid execution
-- `CHANGELOG.md` - Project changelog maintained by BAAS (created if missing)
+- `CHANGELOG.md` - Project changelog maintained by Manager Droid (created if missing)
 - `tasks/tasks-0001-prd-droid-forge.md` - This task list file for tracking implementation
 
 ### Notes
@@ -32,12 +32,12 @@
   - [x] 1.3 Create changelog maintainer droid for automated changelog updates
   - [x] 1.4 Set up Factory.ai droid discovery and integration with personal droids
   - [x] 1.5 Configure droid-forge.yaml with delegation rules and Git workflow settings
-- [x] 2.0 Implement BAAS Orchestrator core functionality
-  - [x] 2.1 Enhance BAAS Orchestrator with PRD parsing and task breakdown capabilities
-  - [x] 2.2 Implement rule-based task delegation logic in BAAS Orchestrator
-  - [x] 2.3 Add task execution monitoring and result collection to BAAS Orchestrator
-  - [x] 2.4 Integrate audit logging system into BAAS Orchestrator's operations
-  - [x] 2.5 Create error handling and retry mechanisms in BAAS Orchestrator
+- [x] 2.0 Implement Manager Droid Orchestrator core functionality
+  - [x] 2.1 Enhance Manager Droid Orchestrator with PRD parsing and task breakdown capabilities
+  - [x] 2.2 Implement rule-based task delegation logic in Manager Droid Orchestrator
+  - [x] 2.3 Add task execution monitoring and result collection to Manager Droid Orchestrator
+  - [x] 2.4 Integrate audit logging system into Manager Droid Orchestrator's operations
+  - [x] 2.5 Create error handling and retry mechanisms in Manager Droid Orchestrator
 - [x] 3.0 Create supporting droids for specialized operations
   - [x] 3.1 Complete task manager droid with status tracking functionality
   - [x] 3.2 Create droid capability matching and discovery system
@@ -104,7 +104,7 @@
   - [ ] 5.1 Implement PRD-to-task-list generation using ai-dev-tasks format
     - [ ] 5.1.1 Analyze ai-dev-tasks process files and format specifications
     - [ ] 5.1.2 Assess existing codebase structure and patterns for task list files
-    - [ ] 5.1.3 Implement PRD parsing module in BAAS orchestrator to extract requirements
+    - [ ] 5.1.3 Implement PRD parsing module in Manager Droid orchestrator to extract requirements
     - [ ] 5.1.4 Create parent task generation with configurable high-level task breakdown
     - [ ] 5.1.5 Add phase 1 confirmation wait mechanism for parent task review
     - [ ] 5.1.6 Implement sub-task breakdown logic with relevant file identification

@@ -3,7 +3,7 @@ name: senior-software-engineer-droid-forge
 description: |
   AI-powered universal development assistant for comprehensive coding support across programming languages,
   implementing industry best practices, providing learning assistance, and offering expert problem-solving
-  capabilities within the Droid Forge ecosystem with full BAAS orchestration compatibility.
+  capabilities within the Droid Forge ecosystem with full Manager Droid orchestration compatibility.
 
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -56,7 +56,7 @@ Inspired by the Claude senior-software-engineer agent, this droid provides unive
 - Share industry best practices and modern development approaches
 - Mentor through debugging and problem-solving techniques
 
-## BAAS Integration Structure
+## Manager Droid Integration Structure
 
 ### Orchestration Flow
 
@@ -459,4 +459,4 @@ enhance_learning_deeper_comprehension() {
 }
 ```
 
-This droid provides the foundation of universal development assistance within the Droid Forge ecosystem, leveraging comprehensive problem-solving capabilities while ensuring full BAAS orchestration, audit trail compliance, and quality assurance integration. Inspired by senior software engineering expertise, it uniquely combines development acceleration with learning enhancement and quality enforcement.
+This droid provides the foundation of universal development assistance within the Droid Forge ecosystem, leveraging comprehensive problem-solving capabilities while ensuring full Manager Droid orchestration, audit trail compliance, and quality assurance integration. Inspired by senior software engineering expertise, it uniquely combines development acceleration with learning enhancement and quality enforcement.

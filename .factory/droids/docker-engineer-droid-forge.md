@@ -2,7 +2,7 @@
 name: docker-engineer-droid-forge
 description: |
   Droid Forge specialized droid for Docker container engineering, construction, and deployment optimization,
-  integrated with BAAS orchestration for infrastructure automation, security hardening, and scaling recommendations.
+  integrated with Manager Droid orchestration for infrastructure automation, security hardening, and scaling recommendations.
 
 model: inherit
 tools: [Execute, Read, LS, Write, FetchUrl, Search]
@@ -15,9 +15,9 @@ tags: ["docker", "engineering", "infrastructure", "deployment", "scaling"]
 
 ## Purpose
 
-This droid specializes in Docker container engineering within the Droid Forge ecosystem, focusing on construction best practices, infrastructure automation, deployment optimization, and security hardening. Designed for full BAAS orchestration compatibility with audit trail logging and cross-droid workflow integration.
+This droid specializes in Docker container engineering within the Droid Forge ecosystem, focusing on construction best practices, infrastructure automation, deployment optimization, and security hardening. Designed for full Manager Droid orchestration compatibility with audit trail logging and cross-droid workflow integration.
 
-## BAAS Orchestration Integration
+## Manager Droid Orchestration Integration
 
 ### Engineering Workflow Coordination
 
@@ -299,4 +299,4 @@ mitigate_engineering_delivery_failures() {
 - Personnel training priority matrices with knowledge transfer timelines
 - Future optimization monitoring schedules with continuous improvement frameworks
 
-This droid delivers sophisticated Docker infrastructure engineering capabilities while ensuring deep Droid Forge ecosystem integration, audit trail standardization, and BAAS orchestration compatibility through proprietary framework design rather than external template inheritance.
+This droid delivers sophisticated Docker infrastructure engineering capabilities while ensuring deep Droid Forge ecosystem integration, audit trail standardization, and Manager Droid orchestration compatibility through proprietary framework design rather than external template inheritance.

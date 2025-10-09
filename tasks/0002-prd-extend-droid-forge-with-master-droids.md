@@ -61,7 +61,7 @@ Expand Droid Forge v1.0 into a comprehensive development factory by integrating 
 6. **Quality Assurance**
    - Validate all droids follow Factory.ai template standards
    - Ensure compatible tool arrays and capability declarations
-   - Test BAAS orchestration integration for each droid
+   - Test Manager Droid orchestration integration for each droid
    - Verify documentation completeness and accuracy
 
 ## Non-Goals
@@ -73,7 +73,7 @@ Expand Droid Forge v1.0 into a comprehensive development factory by integrating 
 
 ## Design Considerations
 
-The droids will follow the established markdown-based architecture with YAML frontmatter and embedded bash functions. Integration points will leverage the existing BAAS orchestration system without requiring core platform changes.
+The droids will follow the established markdown-based architecture with YAML frontmatter and embedded bash functions. Integration points will leverage the existing Manager Droid orchestration system without requiring core platform changes.
 
 ## Technical Considerations
 
@@ -87,7 +87,7 @@ The droids will follow the established markdown-based architecture with YAML fro
 
 - Complete integration of all viable droids from master store
 - 100% adherence to Factory.ai template standards across integrated droids
-- Successful BAAS delegation to all new integrated droids
+- Successful Manager Droid delegation to all new integrated droids
 - Functional verification of major domain capabilities
 
 ## Open Questions

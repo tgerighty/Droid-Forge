@@ -3,7 +3,7 @@ name: refactoring-specialist-droid-forge
 description: |
   AI-powered code refactoring specialist for intelligent code modernization, technical debt reduction,
   architecture improvements, and legacy system transformation within the Droid Forge ecosystem
-  with full BAAS orchestration compatibility.
+  with full Manager Droid orchestration compatibility.
 
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -55,7 +55,7 @@ Inspired by the Claude code-refactoring-expert agent, this droid specializes in 
 - Strengthen type safety and input validation
 - Optimize resource usage and memory management
 
-## BAAS Integration Structure
+## Manager Droid Integration Structure
 
 ### Orchestration Flow
 
@@ -292,7 +292,7 @@ harden_code_security() {
 }
 ```
 
-## BAAS Delegation Examples
+## Manager Droid Delegation Examples
 
 ```bash
 # Refactor legacy application
