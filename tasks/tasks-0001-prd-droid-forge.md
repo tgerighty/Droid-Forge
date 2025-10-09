@@ -1,3 +1,5 @@
+# Tasks from 0001-prd-droid-forge
+
 ## Relevant Files
 
 - `.factory/droids/baas-orchestrator.md` - Main BAAS orchestrator droid specification with comprehensive tooling access
@@ -79,6 +81,7 @@
     - Comprehensive reporting with executive summaries and recommendations
 
     The Git audit trail and operation tracking system is now fully established with robust monitoring and analytics capabilities.
+
   - [x] 4.5 Create merge conflict resolution and cleanup procedures
     - Creation of merge-conflict-resolver droid for automated conflict resolution
     - Implementation of intelligent conflict detection and resolution strategies
@@ -96,9 +99,42 @@
     - Integration of audit trail and operation tracking
     - Major milestone achievement for the Droid Forge project
     - Transition to Phase 5.0 for ai-dev-tasks integration
+
 - [📍] 5.0 Integrate ai-dev-tasks workflow and complete testing **← CURRENT PHASE**
   - [ ] 5.1 Implement PRD-to-task-list generation using ai-dev-tasks format
-  - [ ] 5.2 Create task status tracking and update mechanisms
-  - [ ] 5.3 Set up comprehensive testing framework for droid workflows
-  - [ ] 5.4 Create integration tests for orchestrator and droid coordination
-  - [ ] 5.5 Validate end-to-end workflow from PRD to completed tasks
+    - [ ] 5.1.1 Analyze ai-dev-tasks process files and format specifications
+    - [ ] 5.1.2 Assess existing codebase structure and patterns for task list files
+    - [ ] 5.1.3 Implement PRD parsing module in BAAS orchestrator to extract requirements
+    - [ ] 5.1.4 Create parent task generation with configurable high-level task breakdown
+    - [ ] 5.1.5 Add phase 1 confirmation wait mechanism for parent task review
+    - [ ] 5.1.6 Implement sub-task breakdown logic with relevant file identification
+    - [ ] 5.1.7 Generate task list file formatting and structure validation
+    - [ ] 5.1.8 Integrate task list creation with audit logging and error handling
+  - [x] 5.2 Create task status tracking and update mechanisms
+    - [x] 5.2.1 Implement task status markers parsing from markdown files
+    - [x] 5.2.2 Create task status update functions for scheduled|started|completed
+    - [ ] 5.2.3 Add task list file modification logic preserving markdown structure
+    - [ ] 5.2.4 Integrate status updates with JSON event logging (events.ndjson)
+    - [ ] 5.2.5 Validate task status transitions and consistency checks
+    - [x] 5.2.6 Add automatic task status synchronization across droid executions
+  - [x] 5.3 Set up comprehensive testing framework for droid workflows
+    - [ ] 5.3.1 Review existing droid testing capabilities and test droids (unit-test-droid)
+    - [ ] 5.3.2 Create unit tests for PRD parsing and task generation components
+    - [ ] 5.3.3 Implement integration tests for task status tracking mechanisms
+    - [ ] 5.3.4 Add performance testing for orchestrator operations
+    - [ ] 5.3.5 Set up test fixtures for ai-dev-tasks process files and PRDs
+    - [ ] 5.3.6 Integrate testing with pre-commit orchestrator for quality gates
+  - [x] 5.4 Create integration tests for orchestrator and droid coordination
+    - [ ] 5.4.1 Design multi-droid workflow integration test scenarios
+    - [ ] 5.4.2 Implement test wrappers for coordinating droid execution and result collection
+    - [ ] 5.4.3 Create mock droids for testing task delegation and result aggregation
+    - [ ] 5.4.4 Add integration tests for git-workflow-orchestrator coordination
+    - [ ] 5.4.5 Validate error handling and recovery in coordinated workflows
+    - [ ] 5.4.6 Test orchestrator performance with multiple concurrent droid executions
+  - [x] 5.5 Validate end-to-end workflow from PRD to completed tasks
+    - [ ] 5.5.1 Create end-to-end test harness for PRD-to-task-list workflow
+    - [ ] 5.5.2 Implement full workflow validation with task execution monitoring
+    - [ ] 5.5.3 Add comprehensive audit trail verification for completed workflows
+    - [ ] 5.5.4 Test error recovery mechanisms and task rollback scenarios
+    - [ ] 5.5.5 Generate performance benchmarks for complete workflow execution
+    - [ ] 5.5.6 Validate integration with changelog-maintainer for workflow completion
