@@ -102,6 +102,36 @@ delegation_rules:
       droid_types: ["implement-caching-strategy", "optimize-database-performance", "performance-audit"]
       priority: 10
 
+    - pattern: "dependency|package.*audit"
+      capabilities: ["security", "audit"]
+      droid_types: ["dependency-audit"]
+      priority: 11
+
+    - pattern: "cache|caching"
+      capabilities: ["caching", "performance"]
+      droid_types: ["implement-caching-strategy"]
+      priority: 12
+
+    - pattern: "e2e|end-to-end|s2e"
+      capabilities: ["testing", "e2e"]
+      droid_types: ["e2e-setup"]
+      priority: 13
+
+    - pattern: "accessibility|a11y"
+      capabilities: ["accessibility", "audit"]
+      droid_types: ["accessibility-audit"]
+      priority: 14
+
+    - pattern: "onboard|new.*dev|getting.*started"
+      capabilities: ["onboarding", "setup"]
+      droid_types: ["onboard-new-developer"]
+      priority: 15
+
+    - pattern: "unit.*test|generate.*test"
+      capabilities: ["testing", "code-generation"]
+      droid_types: ["generate-test-cases", "write-unit-tests"]
+      priority: 16
+
 # Git workflow configuration
 git:
   # Default branch strategy
