@@ -52,25 +52,25 @@ detect_merge_conflicts() {
     local source_branch="$1"
     local target_branch="$2"
     local merge_strategy="$3"
-    
+
     log_conflict_detection "Starting conflict detection for $source_branch → $target_branch"
-    
+
     # Check for potential conflicts before attempting merge
     local conflict_indicators=$(identify_conflict_indicators "$source_branch" "$target_branch")
-    
+
     if [[ -n "$conflict_indicators" ]]; then
         log_conflict_detection "Conflict indicators detected: $conflict_indicators"
         return 1  # Conflicts likely
     fi
-    
+
     # Perform dry-run merge to detect actual conflicts
     local dry_run_result=$(perform_dry_run_merge "$source_branch" "$target_branch")
-    
+
     if [[ "$dry_run_result" == *"CONFLICT"* ]]; then
         log_conflict_detection "Merge conflicts detected in dry-run"
         return 2  # Actual conflicts detected
     fi
-    
+
     log_conflict_detection "No conflicts detected - merge can proceed safely"
     return 0  # No conflicts
 }
@@ -79,27 +79,27 @@ detect_merge_conflicts() {
 identify_conflict_indicators() {
     local source_branch="$1"
     local target_branch="$2"
-    
+
     local indicators=""
-    
+
     # Check for overlapping file modifications
     local overlapping_files=$(get_overlapping_files "$source_branch" "$target_branch")
     if [[ -n "$overlapping_files" ]]; then
         indicators="$indicators overlapping_files:$overlapping_files"
     fi
-    
+
     # Check for conflicting dependencies
     local conflicting_deps=$(get_conflicting_dependencies "$source_branch" "$target_branch")
     if [[ -n "$conflicting_deps" ]]; then
         indicators="$indicators conflicting_deps:$conflicting_deps"
     fi
-    
+
     # Check for schema/database conflicts
     local schema_conflicts=$(get_schema_conflicts "$source_branch" "$target_branch")
     if [[ -n "$schema_conflicts" ]]; then
         indicators="$indicators schema_conflicts:$schema_conflicts"
     fi
-    
+
     echo "$indicators"
 }
 ```
@@ -112,9 +112,9 @@ resolve_merge_conflicts() {
     local target_branch="$2"
     local conflict_type="$3"
     local resolution_strategy="$4"
-    
+
     log_conflict_resolution "Starting conflict resolution for $conflict_type conflict"
-    
+
     case "$conflict_type" in
         "simple_text")
             resolve_simple_text_conflicts "$source_branch" "$target_branch" "$resolution_strategy"
@@ -142,9 +142,9 @@ resolve_simple_text_conflicts() {
     local source_branch="$1"
     local target_branch="$2"
     local strategy="$3"
-    
+
     log_conflict_resolution "Resolving simple text conflicts with strategy: $strategy"
-    
+
     case "$strategy" in
         "ours")
             git checkout --ours -- .
@@ -160,7 +160,7 @@ resolve_simple_text_conflicts() {
             generate_conflict_suggestions "$source_branch" "$target_branch"
             ;;
     esac
-    
+
     # Validate resolution
     if git merge --continue; then
         log_conflict_resolution "Text conflicts resolved successfully"
@@ -175,15 +175,15 @@ resolve_simple_text_conflicts() {
 resolve_schema_migration_conflicts() {
     local source_branch="$1"
     local target_branch="$2"
-    
+
     log_conflict_resolution "Resolving schema migration conflicts"
-    
+
     # Coordinate with database-migration droid
     Task tool with subagent_type="database-migration" description="Resolve schema conflicts" prompt="Resolve schema migration conflicts between branches $source_branch and $target_branch"
-    
+
     # Generate migration resolution strategy
     local migration_strategy=$(generate_migration_strategy "$source_branch" "$target_branch")
-    
+
     # Apply migration strategy
     if apply_migration_strategy "$migration_strategy"; then
         log_conflict_resolution "Schema migration conflicts resolved successfully"
@@ -204,12 +204,12 @@ cleanup_failed_merge() {
     local failed_branch="$1"
     local original_branch="$2"
     local failure_reason="$3"
-    
+
     log_cleanup "Starting cleanup for failed merge: $failed_branch → $original_branch"
-    
+
     # Create backup of failed state
     create_failed_state_backup "$failed_branch" "$failure_reason"
-    
+
     # Reset to original state
     if git reset --hard "$original_branch"; then
         log_cleanup "Successfully reset to original branch state"
@@ -217,15 +217,15 @@ cleanup_failed_merge() {
         log_cleanup_error "Failed to reset to original branch state"
         return 1
     fi
-    
+
     # Clean up temporary merge state
     clean_merge_state "$failed_branch"
-    
+
     # Remove failed branch if appropriate
     if should_remove_failed_branch "$failed_branch" "$failure_reason"; then
         remove_failed_branch "$failed_branch"
     fi
-    
+
     log_cleanup "Failed merge cleanup completed successfully"
     return 0
 }
@@ -234,17 +234,17 @@ cleanup_failed_merge() {
 create_failed_state_backup() {
     local failed_branch="$1"
     local failure_reason="$2"
-    
+
     local backup_branch="failed-merge-$(date +%Y%m%d-%H%M%S)-$failed_branch"
-    
+
     if git branch "$backup_branch" "$failed_branch"; then
         log_cleanup "Created backup branch: $backup_branch"
-        
+
         # Store failure metadata
         git config "branch.$backup_branch.failure_reason" "$failure_reason"
         git config "branch.$backup_branch.backup_date" "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
         git config "branch.$backup_branch.original_branch" "$(git rev-parse --abbrev-ref HEAD)"
-        
+
         return 0
     else
         log_cleanup_error "Failed to create backup branch"
@@ -259,17 +259,17 @@ create_failed_state_backup() {
 cleanup_temporary_branches() {
     local cleanup_policy="$1"
     local dry_run="$2"
-    
+
     log_cleanup "Starting temporary branch cleanup with policy: $cleanup_policy"
-    
+
     # Find temporary branches based on policy
     local temp_branches=$(find_temporary_branches "$cleanup_policy")
-    
+
     if [[ -z "$temp_branches" ]]; then
         log_cleanup "No temporary branches found for cleanup"
         return 0
     fi
-    
+
     # Process each temporary branch
     for branch in $temp_branches; do
         if [[ "$dry_run" == "true" ]]; then
@@ -282,7 +282,7 @@ cleanup_temporary_branches() {
             fi
         fi
     done
-    
+
     log_cleanup "Temporary branch cleanup completed"
     return 0
 }
@@ -290,7 +290,7 @@ cleanup_temporary_branches() {
 # Find temporary branches based on cleanup policy
 find_temporary_branches() {
     local policy="$1"
-    
+
     case "$policy" in
         "failed_merges")
             git branch -r | grep "failed-merge-" | awk '{print $1}'
@@ -319,12 +319,12 @@ coordinate_with_git_orchestrator() {
     local conflict_operation="$1"
     local conflict_context="$2"
     local resolution_strategy="$3"
-    
+
     log_coordination "Coordinating with git-workflow-orchestrator for conflict resolution"
-    
+
     # Notify git-workflow-orchestrator about conflict
     Task tool with subagent_type="git-workflow-orchestrator" description="Coordinate conflict resolution" prompt="Coordinate merge conflict resolution for operation $conflict_operation with context $conflict_context and strategy $resolution_strategy"
-    
+
     # Update task status based on resolution outcome
     if [[ "$resolution_strategy" == "success" ]]; then
         update_task_status "$task_id" "conflict_resolved" "Merge conflict resolved successfully"
@@ -341,12 +341,12 @@ coordinate_with_review_coordinator() {
     local pr_id="$1"
     local conflict_details="$2"
     local complexity_level="$3"
-    
+
     log_coordination "Coordinating with code-review-coordinator for complex conflict"
-    
+
     # Delegate complex conflict review to code-review-coordinator
     Task tool with subagent_type="code-review-coordinator" description="Review complex conflict" prompt="Review complex merge conflict for PR $pr_id with details: $conflict_details and complexity level: $complexity_level"
-    
+
     # Wait for review completion and integrate feedback
     integrate_review_feedback "$pr_id" "$conflict_details"
 }
@@ -363,11 +363,11 @@ track_conflict_resolution_metrics() {
     local end_time="$3"
     local resolution_strategy="$4"
     local outcome="$5"
-    
+
     local duration=$((end_time - start_time))
     local success_rate=$(calculate_resolution_success_rate "$resolution_strategy")
     local complexity_score=$(calculate_conflict_complexity "$conflict_id")
-    
+
     # Create performance metrics entry
     local metrics_entry=$(cat << EOF
 {
@@ -381,10 +381,10 @@ track_conflict_resolution_metrics() {
 }
 EOF
 )
-    
+
     # Log to audit trail
     echo "$metrics_entry" >> .droid-forge/logs/audit.ndjson
-    
+
     # Update performance dashboard
     update_performance_dashboard "$metrics_entry"
 }
@@ -393,15 +393,15 @@ EOF
 generate_conflict_analytics() {
     local time_period="$1"
     local analysis_scope="$2"
-    
+
     # Extract conflict resolution data from audit trail
     local conflict_data=$(extract_conflict_data "$time_period" "$analysis_scope")
-    
+
     # Generate comprehensive analytics
     local resolution_stats=$(analyze_resolution_patterns "$conflict_data")
     local complexity_analysis=$(analyze_complexity_patterns "$conflict_data")
     local strategy_effectiveness=$(analyze_strategy_effectiveness "$conflict_data")
-    
+
     cat << EOF
 Conflict Resolution Analytics - $time_period
 =============================================
@@ -432,9 +432,9 @@ handle_resolution_failure() {
     local conflict_id="$1"
     local failure_reason="$2"
     local attempted_strategies="$3"
-    
+
     log_resolution_failure "Conflict resolution failed for $conflict_id: $failure_reason"
-    
+
     # Create failure analysis entry
     local failure_entry=$(cat << EOF
 {
@@ -446,13 +446,13 @@ handle_resolution_failure() {
 }
 EOF
 )
-    
+
     # Log failure for analysis
     echo "$failure_entry" >> .droid-forge/logs/audit.ndjson
-    
+
     # Escalate to human intervention
     escalate_to_human_review "$conflict_id" "$failure_reason"
-    
+
     # Create cleanup task for failed resolution
     create_cleanup_task "$conflict_id" "failed_resolution"
 }
