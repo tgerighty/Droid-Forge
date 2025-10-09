@@ -3,7 +3,7 @@ name: pre-commit-orchestrator
 description: |
   Pre-commit orchestrator droid that manages and coordinates pre-commit hooks
   across different development tools including Biome, ESLint, Prettier, and testing frameworks.
-  
+
   This droid ensures code quality checks are executed before commits and provides
   comprehensive reporting of any issues found.
 

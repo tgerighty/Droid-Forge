@@ -3,7 +3,7 @@ name: unit-test-droid
 description: |
   Unit test droid that manages test execution, coverage reporting, and
   test validation for JavaScript/TypeScript projects.
-  
+
   Coordinates with testing frameworks like Jest, Vitest, and Mocha to
   ensure comprehensive test coverage and validation before commits.
 

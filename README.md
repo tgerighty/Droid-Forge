@@ -16,7 +16,7 @@ Droid Forge is a declarative, droid-based framework that uses Factory.ai's own d
 
 - **🧠 BAAS Orchestrator** - Broker and Automation System for task management and coordination (BAAS also means "Chief" or "Boss" in Dutch)
 - **📋 Task Manager** - Atomic task lifecycle management with file locking
-- **🔀 Git Workflow Orchestrator** - Branch management and commit coordination  
+- **🔀 Git Workflow Orchestrator** - Branch management and commit coordination
 - **🔗 AI-Dev-Tasks Integrator** - Process file synchronization and PRD integration
 - **📊 Changelog Maintainer** - Run tracking and change documentation
 
