@@ -23,6 +23,7 @@ The Biome droid provides comprehensive JavaScript/TypeScript code quality manage
 ## Capabilities
 
 ### Code Quality
+
 - **Linting**: Fast JavaScript/TypeScript linting with modern rules
 - **Formatting**: Consistent code formatting with Prettier-compatible output
 - **Type Checking**: Built-in TypeScript type checking and validation
@@ -30,12 +31,14 @@ The Biome droid provides comprehensive JavaScript/TypeScript code quality manage
 - **JavaScript Transformations**: Modern JavaScript syntax updates
 
 ### Performance Features
+
 - **Rust-based**: Extremely fast performance compared to Node.js tools
 - **Parallel Processing**: Multi-core utilization for large codebases
 - **Incremental Processing**: Only processes changed files
 - **Smart Caching**: Avoids redundant processing
 
 ### Configuration
+
 - Unified `biome.json` configuration
 - Automatic project detection and setup
 - Extensible rule configuration
@@ -44,16 +47,19 @@ The Biome droid provides comprehensive JavaScript/TypeScript code quality manage
 ## Usage
 
 ### Run Biome checks
+
 ```bash
 droid biome-droid "Check and fix code quality issues"
 ```
 
 ### Format code
+
 ```bash
 droid biome-droid "Format all JavaScript/TypeScript files"
 ```
 
 ### Type checking
+
 ```bash
 droid biome-droid "Run TypeScript type checking"
 ```
@@ -61,6 +67,7 @@ droid biome-droid "Run TypeScript type checking"
 ## Configuration
 
 Biome is configured through `biome.json` in the project root:
+
 ```json
 {
   "formatter": {

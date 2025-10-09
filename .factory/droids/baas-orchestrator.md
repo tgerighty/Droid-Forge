@@ -44,6 +44,7 @@ Analyze Product Requirements Documents (PRDs) and intelligently delegate tasks t
 ## Core Capabilities
 
 ### 1. PRD Analysis and Task Breakdown
+
 - Read and analyze PRD documents using structured rule-based parsing
 - Extract key sections: Introduction, Goals, User Stories, Functional Requirements, Technical Considerations
 - Identify functional requirements, user stories, and technical specifications
@@ -210,6 +211,7 @@ Analyze Product Requirements Documents (PRDs) and intelligently delegate tasks t
 ## Task Delegation Implementation
 
 ### Delegation Rules Engine
+
 ```yaml
 # Example delegation rule from corellian.yaml
 - pattern: "security|audit|vulnerability|penetration"
