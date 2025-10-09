@@ -1,6 +1,6 @@
 # Droid Forge
 
-> A comprehensive droid factory framework designed to host, manage, and orchestrate Factory.ai droids with a BAAS orchestrator.
+> A comprehensive droid factory framework designed to host, manage, and orchestrate Factory.ai droids with a Manager Droid orchestrator.
 
 **Disclaimer: Not affiliated with or endorsed by Factory.ai.**
 
@@ -22,9 +22,9 @@ Droid Forge operates on a **Factory.ai droid-as-service** model where every comp
 
 ### Process Flow
 
-#### BAAS Orchestration Cycle
+#### Manager Droid Orchestration Cycle
 ```
-USER REQUEST -----> BAAS ORCHESTRATOR -----> DROID DELEGATION -----> EXECUTION -----> MONITOR -----> RESULT
+USER REQUEST -----> Manager Droid ORCHESTRATOR -----> DROID DELEGATION -----> EXECUTION -----> MONITOR -----> RESULT
      |                    |                        |                    |                 |
      |           (Analyze & Plan)            (Capability Match)     (Execute)    (Track Status)   (Aggregate)
      |                    |                        |                    |               |
@@ -56,11 +56,11 @@ WORKFLOW COMPLETION
 ```
 DROIDS        | DESCRIPT DEBUG | delegation | monitoring | operations | Support
 -------------|----------------|--------------|------------|------------|----------
-BAAS Orc      | Central Hub    | ✓ Core       | ✓ Status   | Coordination | All
-Task Mgr      | Status Control | ✓ Exec       | ✓ Locks    | Serialization| BAAS
-Git Workflow  | VCS Management | ✓ Branches   | ✓ History  | Commits/PRs| BAAS
-AI-DevTasks   | Process Engine | ✓ Tasks      | ✓ Files    | Format Comp | BAAS
-Code Review   | Quality Checks | ✓ Multi-D   | ✓ Progress | Review Mgmt| BAAS
+Manager Droid Orc      | Central Hub    | ✓ Core       | ✓ Status   | Coordination | All
+Task Mgr      | Status Control | ✓ Exec       | ✓ Locks    | Serialization| Manager Droid
+Git Workflow  | VCS Management | ✓ Branches   | ✓ History  | Commits/PRs| Manager Droid
+AI-DevTasks   | Process Engine | ✓ Tasks      | ✓ Files    | Format Comp | Manager Droid
+Code Review   | Quality Checks | ✓ Multi-D   | ✓ Progress | Review Mgmt| Manager Droid
 Biome         | Linting/Fmt    | ✓ Quality    | ✗         | Code Style  | PreCommit
 Unit Test     | Test Runner    | ✓ Validation | ✓ Coverage | Test Exec   | PreCommit
 Changelog     | Doc Mgmt       | ✓ History    | ✓ Runs     | Updates     | All
@@ -142,7 +142,7 @@ Droid Forge is a declarative, droid-based framework that uses Factory.ai's own d
      code_reviews: "code-review-coordinator"
    ```
 
-5. **Start BAAS Orchestrator**
+5. **Start Manager Droid Orchestrator**
    ```
    factory-cli droid start baas-orchestrator
    ```
@@ -155,7 +155,7 @@ factory-cli "Add dark mode toggle to settings page"
 ```
 
 This triggers:
-1. BAAS analysis of the request
+1. Manager Droid analysis of the request
 2. Delegation to ai-dev-tasks-integrator for PRD processing
 3. Task generation with sub-tasks
 4. Status tracking through completion
@@ -178,7 +178,7 @@ tail -f .droid-forge/logs/events.ndjson
 2. Include augmentation YAML frontmatter
 3. Implement functionality in markdown code blocks
 4. Add capability matching rules to orchestration logic
-5. Test integration with BAAS delegation
+5. Test integration with Manager Droid delegation
 
 ### Example Droid Template
 
@@ -206,7 +206,7 @@ example_function() {
 
 1. Create feature branch: `git checkout -b feat/new-droid`
 2. Implement droid spec in markdown
-3. Update BAAS orchestration logic for delegation
+3. Update Manager Droid orchestration logic for delegation
 4. Add tests for integration
 5. Commit with conventional format: `feat: add new coordinator`
 6. Create PR for review
@@ -214,7 +214,7 @@ example_function() {
 ### Testing Strategy
 
 - **Unit Tests**: Each droid's bash functions tested individually
-- **Integration Tests**: BAAS delegation sequences validated  
+- **Integration Tests**: Manager Droid delegation sequences validated  
 - **End-to-End**: Complete workflows from request to completion
 - **Performance**: Orchestration efficiency monitored
 - **Audit**: All operations logged for traceability
@@ -302,7 +302,7 @@ All framework operations logged in NDJSON format:
 
 ### Core Components
 
-- **🧠 BAAS Orchestrator** - Broker and Automation System for task management and coordination (BAAS also means "Chief" or "Boss" in Dutch)
+- **🧠 Manager Droid Orchestrator** - Broker and Automation System for task management and coordination (Manager Droid also means "Chief" or "Boss" in Dutch)
 - **📋 Task Manager** - Atomic task lifecycle management with file locking
 - **🔀 Git Workflow Orchestrator** - Branch management and commit coordination
 - **🔗 AI-Dev-Tasks Integrator** - Process file synchronization and PRD integration
@@ -376,7 +376,7 @@ cp .factory/droids/*.md ~/.factory/droids/
 
 #### Start Orchestration
 ```bash
-# Use Factory.ai CLI with BAAS Orchestrator
+# Use Factory.ai CLI with Manager Droid Orchestrator
 droid baas-orchestrator "Analyze tasks/0001-prd-droid-forge.md and orchestrate implementation"
 ```
 

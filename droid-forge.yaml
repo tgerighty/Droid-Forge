@@ -1,5 +1,5 @@
 # Droid Forge Configuration
-# This file defines the behavior and rules for the BAAS Orchestrator
+# This file defines the behavior and rules for the Manager Droid Orchestrator
 
 # CRITICAL CONSTRAINT: Task System Usage
 # ALL droids MUST use ONLY the ai-dev-tasks task system
@@ -10,13 +10,13 @@
 factory:
   name: "Droid Forge"
   version: "0.1.0"
-  description: "BAAS for advanced task management and droid coordination"
+  description: "Manager Droid for advanced task management and droid coordination"
 
 # Orchestrator configuration
 orchestrator:
-  name: "BAAS"
-  series: "Broker and Automation System"
-  description: "BAAS (Broker and Automation System) - BAAS also means 'Chief' or 'Boss' in Dutch"
+  name: "Manager Droid"
+  series: "Manager and Automation System"
+  description: "Manager Droid (Manager and Automation System) - Central coordinator for task management and droid orchestration"
   personality: "analytical, efficient, methodical"
 
   # Task state machine configuration
@@ -105,6 +105,36 @@ delegation_rules:
     - pattern: "dependency|package.*audit"
       capabilities: ["security", "audit"]
       droid_types: ["dependency-audit"]
+      priority: 11
+
+    - pattern: "generate.*code|create.*component|scaffold.*project"
+      capabilities: ["code-generation", "frontend-development", "backend-development"]
+      droid_types: ["frontend-engineer-droid-forge", "backend-engineer-droid-forge", "senior-software-engineer-droid-forge"]
+      priority: 11
+
+    - pattern: "ui.*design|ux.*design|interface.*design"
+      capabilities: ["ui-design", "ux-design", "interface-design"]
+      droid_types: ["ui-ux-designer-droid-forge"]
+      priority: 11
+
+    - pattern: "orchestrate.*generation|coordinate.*droids|synthesize.*code"
+      capabilities: ["code-orchestration", "workflow-management", "project-coordination"]
+      droid_types: ["code-generation-orchestrator-droid-forge"]
+      priority: 11
+
+    - pattern: "refactor.*code|modernize.*legacy|improve.*architecture"
+      capabilities: ["code-refactoring", "technical-debt", "architecture-improvement"]
+      droid_types: ["refactoring-specialist-droid-forge"]
+      priority: 11
+
+    - pattern: "system.*design|architecture.*plan|technology.*stack"
+      capabilities: ["system-design", "architecture-consultation", "technology-recommendations"]
+      droid_types: ["architecture-consultant-droid-forge"]
+      priority: 11
+
+    - pattern: "debug.*code|analyze.*error|troubleshoot.*issue"
+      capabilities: ["debugging", "code-analysis", "error-resolution"]
+      droid_types: ["debugging-expert-droid-forge"]
       priority: 11
 
     - pattern: "cache|caching"
