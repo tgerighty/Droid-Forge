@@ -16,7 +16,7 @@ Droid Forge operates on a **Factory.ai droid-as-service** model where every comp
 
 - **Declarative Definition**: All droids defined in markdown with embedded functionality
 - **Capability Matching**: Intelligent delegation based on tool analysis and pattern matching
-- **Audit Trail**: Comprehensive NDJSON logging for all operations
+- **Task Tracking**: Comprehensive task status tracking for all operations
 - **ai-dev-tasks Compliance**: Strict adherence to ai-dev-tasks format for task management
 - **Parallel Execution**: Multi-droid coordination with synchronization
 
@@ -30,7 +30,7 @@ USER REQUEST -----> Manager Droid ORCHESTRATOR -----> DROID DELEGATION -----> EX
      |                    |                        |                    |               |
      +--------------------+------------------------+--------------------+---------------+
                               |                                              |
-                       TASK SEQUENCING                               AUDIT LOGGING
+                       TASK SEQUENCING                               STATUS TRACKING
                              &                                               &
                     SUB-DEPENDENCY RESOLUTION                   COMMIT/PUSH AUTOMATION
 ```
@@ -89,7 +89,7 @@ Droid Forge enforces strict compliance with ai-dev-tasks format for task managem
 ### Parallel Execution Safety
 
 - **Locking Mechanisms**: File-based locks for concurrent task operations
-- **Status Synchronization**: NDJSON events ensure consistent tracking across droids
+- **Status Synchronization**: Task state ensures consistent tracking across droids
 - **Rollback Protection**: Backup and restore on failed operations
 - **Dependency Resolution**: Sub-task sequencing with hierarchy validation
 
@@ -115,7 +115,7 @@ Droid Forge is a declarative, droid-based framework that uses Factory.ai's own d
 
 3. **Install Core Droids**
    ```
-   factory-cli droid install baas-orchestrator
+   factory-cli droid install manager-orchestrator
    factory-cli droid install task-manager
    factory-cli droid install git-workflow-orchestrator
    factory-cli droid install ai-dev-tasks-integrator
@@ -126,7 +126,6 @@ Droid Forge is a declarative, droid-based framework that uses Factory.ai's own d
    # Basic configuration
    orchestration:
      debug: false
-     audit_dir: ".droid-forge/logs"
      task_timeout: 3600  # 1 hour
 
    # Droid capabilities
@@ -144,7 +143,7 @@ Droid Forge is a declarative, droid-based framework that uses Factory.ai's own d
 
 5. **Start Manager Droid Orchestrator**
    ```
-   factory-cli droid start baas-orchestrator
+   factory-cli droid start manager-orchestrator
    ```
 
 ### Basic Usage
@@ -165,9 +164,9 @@ This triggers:
 factory-cli "Show current task status"
 ```
 
-**View orchestrator logs:**
+**View task status:**
 ```
-tail -f .droid-forge/logs/events.ndjson
+factory-cli "Show current task status"
 ```
 
 ## 🔧 Contributing (For Framework Development)
@@ -217,7 +216,7 @@ example_function() {
 - **Integration Tests**: Manager Droid delegation sequences validated  
 - **End-to-End**: Complete workflows from request to completion
 - **Performance**: Orchestration efficiency monitored
-- **Audit**: All operations logged for traceability
+- **Tracking**: All operations tracked for traceability
 
 ## 📋 Task Management Format
 
@@ -246,7 +245,7 @@ Droid Forge uses ai-dev-tasks format for all task tracking:
 ### Status Transitions
 
 - `[ ]` - Scheduled/pending
-- `[in_progress]` or logged - In execution
+- `[in_progress]` - In execution
 - `[x]` - Completed
 - `[cancelled]` - Aborted tasks
 
@@ -276,27 +275,18 @@ fix: resolve login validation bug
 
 ## 📊 Monitoring & Analytics
 
-### Event Logging
-
-All framework operations logged in NDJSON format:
-
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"task_status_updated","project":"droid-forge","task_id":"1.1","new_status":"completed","run_id":"r-20241009-080000"}
-{"timestamp":"2024-10-09T08:15:00Z","event":"droid_delegated","subagent":"unit-test-droid","prompt":"run tests","run_id":"r-20241009-080000"}
-```
-
-### Metrics Dashboard
+### Task Tracking
 
 - Task completion rates
 - Droid execution success rates
 - Error frequency and types
 - Performance benchmarks
 
-### Audit Trail
+### Status Management
 
-- `.droid-forge/logs/audit.ndjson`: Comprehensive operation history
-- `.droid-forge/logs/events.ndjson`: Runtime event stream
-- `.droid-forge/branch-metadata/`: Branch-specific tracking data
+- Task status updates and progress tracking
+- Branch-specific tracking data
+- Performance metrics and execution monitoring
 
 ## 🏗️ Architecture
 
@@ -314,7 +304,7 @@ All framework operations logged in NDJSON format:
 droid-forge/
 ├── .factory/droids/          # Factory.ai droids (our custom ones)
 ├── .droid-forge/            # Droid Forge-specific data
-│   └── logs/                # NDJSON audit and event logs
+│   └── metadata/            # Branch and task metadata
 ├── ai-dev-tasks/            # Process files from https://github.com/snarktank/ai-dev-tasks (linked, not copied)
 ├── tasks/                   # Generated task lists
 ├── tools/                   # Analysis utilities
@@ -329,11 +319,11 @@ droid-forge/
 - Atomic write operations (temp file → rename)
 - Backup and rollback capabilities
 
-### 📊 Comprehensive Auditing
-- NDJSON structured logging
-- Complete audit trails with timestamps
+### 📊 Comprehensive Tracking
+- Task status monitoring
+- Complete execution history with timestamps
 - Performance metrics and execution tracking
-- Interactive HTML dashboard for log visualization
+- Progress visualization and reporting
 
 ### ⚙️ Configuration-Driven
 - All behavior configurable via `droid-forge.yaml`
@@ -369,7 +359,7 @@ cp .factory/droids/*.md ~/.factory/droids/
 
 3. Configure your project in `droid-forge.yaml`:
 ```yaml
-# Customize delegation rules, Git settings, logging etc.
+# Customize delegation rules, Git settings, task tracking etc.
 ```
 
 ### Usage
@@ -377,7 +367,7 @@ cp .factory/droids/*.md ~/.factory/droids/
 #### Start Orchestration
 ```bash
 # Use Factory.ai CLI with Manager Droid Orchestrator
-droid baas-orchestrator "Analyze tasks/0001-prd-droid-forge.md and orchestrate implementation"
+droid manager-orchestrator-droid-foundry "Analyze tasks/0001-prd-droid-forge.md and orchestrate implementation"
 ```
 
 #### Individual Droid Operations
@@ -392,14 +382,13 @@ droid git-workflow-orchestrator "Create feature branch for task 1.2"
 droid ai-dev-tasks-integrator "Sync latest process files"
 ```
 
-#### Analyze Logs
+#### Monitor Progress
 ```bash
-# Open interactive dashboard
-open baas-dashboard.html
+# View task status
+factory-cli "Show current task status"
 
-# View raw logs
-cat .droid-forge/logs/audit.ndjson
-cat .droid-forge/logs/events.ndjson
+# View project progress
+factory-cli "Show project overview"
 ```
 
 ## 📋 Configuration
@@ -459,20 +448,13 @@ Droid Forge integrates with [ai-dev-tasks](https://github.com/snarktank/ai-dev-t
 
 ## 📊 Monitoring
 
-### Log Analysis
+### Performance Analysis
 
-Comprehensive logging in `.droid-forge/logs/`:
-- `audit.ndjson` - High-level audit trail
-- `events.ndjson` - Detailed execution events
+Track droid utilization, completion rates, and execution duration through task status monitoring.
 
-Use the built-in analysis tool:
-```bash
-python tools/analyze-audit.py --project-dir . --all
-```
+### Progress Metrics
 
-### Performance Metrics
-
-Track droid utilization, completion rates, and execution duration through structured logs.
+Monitor task completion rates, droid execution success rates, and project milestone achievement.
 
 ## 🤝 Contributing
 
