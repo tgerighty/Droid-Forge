@@ -1,12 +1,12 @@
 ---
-name: task-manager
+name: task-manager-droid-foundry
 description: Atomic task lifecycle management with file locking and status tracking
 model: inherit
 tools: [Read, Edit, MultiEdit, LS, Create, Grep]
 version: "2.0.0"
 ---
 
-# Task Manager Droid
+# Task Manager Droid Foundry
 
 **Purpose**: Manages ai-dev-tasks task list lifecycle with file locking and atomic operations.
 
@@ -37,6 +37,6 @@ version: "2.0.0"
 - Handle lock conflicts gracefully
 - Validate task list format before changes
 - Rollback on failed operations
-- Log all operations to audit trail
+
 
 **Execution**: Maintain data integrity and precision at all times.

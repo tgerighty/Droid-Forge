@@ -1,12 +1,12 @@
 ---
-name: code-rabbit-coordinator
+name: code-rabbit-coordinator-droid-foundry
 description: Coordinate automated code reviews using CodeRabbit before commits
 model: inherit
 tools: [Execute, Read, Edit, MultiEdit, LS, Grep, Task]
 version: v2
 ---
 
-# CodeRabbit Coordinator
+# CodeRabbit Coordinator Droid Foundry
 
 **Purpose**: Manage automated CodeRabbit code reviews before commits and integrate with Manager Droid workflow.
 
@@ -47,7 +47,6 @@ function pre_commit_review() {
 function integrate_with_manager_droid() {
   report_review_metrics "$@"
   update_task_status "$@"
-  log_review_findings "$@"
 }
 ```
 
@@ -105,7 +104,7 @@ Task tool with subagent_type="code-rabbit-coordinator" \
 ### Integration Issues
 - Fallback to manual review process
 - Coordinate with Manager Droid for alternative workflows
-- Maintain audit trail of all issues
+
 - Implement graceful degradation
 
 ## Monitoring & Analytics
@@ -150,7 +149,7 @@ Task tool with subagent_type="code-rabbit-coordinator" \
 ### With Manager Droid
 ```bash
 # Manager Droid coordination
-Task tool with subagent_type="manager-droid-orchestrator" \
+Task tool with subagent_type="manager-orchestrator" \
   description="Coordinate code review workflow" \
   prompt "Coordinate CodeRabbit reviews for task: {task-id} with quality gates"
 ```
@@ -163,10 +162,4 @@ Task tool with subagent_type="biome-droid" \
   prompt "Execute Biome linting and coordinate with CodeRabbit review results"
 ```
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"coderabbit.review.started","files_scanned":15,"project":"my-project"}
-{"timestamp":"2024-10-09T08:01:00Z","event":"coderabbit.issues.found","issues":5,"critical":1,"file":"src/auth.js"}
-{"timestamp":"2024-10-09T08:02:00Z","event":"coderabbit.fixes.applied","automated_fixes":3,"remaining":2}
-{"timestamp":"2024-10-09T08:05:00Z","event":"coderabbit.review.completed","status":"passed","quality_score":85}

@@ -1,6 +1,6 @@
 ---
-name: setup-comprehensive-testing
-description: Comprehensive testing infrastructure setup with unit, integration, and E2E tests, integrated with Manager Droid orchestration and audit trail logging
+name: setup-comprehensive-testing-droid-foundry
+description: Comprehensive testing infrastructure setup with unit, integration, and E2E tests, integrated with Manager Droid orchestration
 model: inherit
 tools: [Execute, Read, Write, LS, Grep]
 version: "2.0.0"
@@ -8,7 +8,7 @@ location: project
 tags: ["testing", "automation", "testing-frameworks", "ci/cd", "quality-assurance"]
 ---
 
-# Setup Comprehensive Testing
+# Setup Comprehensive Testing Droid Foundry
 
 **Purpose**: Complete testing infrastructure setup with unit, integration, and E2E tests, Manager Droid orchestration, and quality gate enforcement.
 
@@ -35,15 +35,7 @@ tags: ["testing", "automation", "testing-frameworks", "ci/cd", "quality-assuranc
 ## Manager Droid Integration
 
 ```bash
-setup_test_logging() {
-  local test_run_id="t-$(date +%Y%m%d-%H%M%S)"
 
-  echo "{\"timestamp\":\"$(date --utc +%Y-%m-%dT%H:%M:%SZ)\",\"event\":\"test_setup_started\",\"test_run_id\":\"$test_run_id\",\"project\":\"$PROJECT_NAME\"}" >> .droid-forge/logs/events.ndjson
-  log_test_config "$test_run_id" "framework_selected" "$TEST_FRAMEWORK"
-  log_test_config "$test_run_id" "coverage_target" "$COVERAGE_THRESHOLD"
-
-  return $test_run_id
-}
 ```
 
 ## Testing Stack Detection
@@ -63,18 +55,16 @@ enforce_quality_gates() {
   local test_pass_rate=$(calculate_pass_rate)
 
   if [[ $coverage_percent -lt 80 ]]; then
-    log_error "Coverage below threshold: $coverage_percent%"
-    flag_for_human_review "coverage gates"
+    echo "Coverage below threshold: $coverage_percent%"
     return 1
   fi
 
   if [[ $test_pass_rate -lt 95 ]]; then
-    log_error "Test pass rate below threshold: $test_pass_rate%"
-    generate_failure_report
+    echo "Test pass rate below threshold: $test_pass_rate%"
     return 1
   fi
 
-  log_success "Quality gates passed: coverage=$coverage_percent%, pass_rate=$test_pass_rate%"
+  echo "Quality gates passed: coverage=$coverage_percent%, pass_rate=$test_pass_rate%"
   return 0
 }
 ```
@@ -160,7 +150,7 @@ test_matrix:
 - Historical trend analysis for test performance
 - Coverage regression detection and alerting
 - Test execution time optimization recommendations
-- Quality metrics dashboard integration
+
 
 ## Usage Examples
 
@@ -178,10 +168,4 @@ droid setup-comprehensive-testing "Auto-configure testing based on project struc
 droid setup-comprehensive-testing "Set up pytest with coverage and integration tests for Python API"
 ```
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"test-setup-started","project":"web-app","framework":"jest","session_id":"test-20241009-080000"}
-{"timestamp":"2024-10-09T08:05:00Z","event":"test-framework-configured","framework":"jest","coverage_threshold":80}
-{"timestamp":"2024-10-09T08:10:00Z","event":"test-setup-completed","test_types":["unit","integration","e2e"],"quality_gates_enabled":true}
-```

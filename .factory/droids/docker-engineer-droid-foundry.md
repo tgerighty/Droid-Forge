@@ -1,5 +1,5 @@
 ---
-name: docker-engineer-droid-forge
+name: docker-engineer-droid-foundry
 description: Docker container engineering for construction best practices, infrastructure automation, deployment optimization, and security hardening
 model: inherit
 tools: [Execute, Read, LS, Write, FetchUrl, Search]
@@ -8,7 +8,7 @@ location: project
 tags: ["docker", "engineering", "infrastructure", "deployment", "scaling"]
 ---
 
-# Docker Engineer Droid
+# Docker Engineer Droid Foundry
 
 **Purpose**: Docker container engineering with construction best practices, infrastructure automation, deployment optimization, and security hardening.
 
@@ -235,10 +235,5 @@ mitigate_engineering_delivery_failures() {
 - Infrastructure configuration benchmarking and optimization
 - Community best practice integration and automation
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"docker-engineering-initiated","project":"my-service","session_id":"eng-20241009-080000"}
-{"timestamp":"2024-10-09T08:05:00Z","event":"dockerfile-optimization-recommended","improvement":"multi-stage-build","performance_gain":35}
-{"timestamp":"2024-10-09T08:10:00Z","event":"docker-engineering-completed","project":"my-service","recommendations_count":8,"security_score":85}
 ```

@@ -1,5 +1,5 @@
 ---
-name: code-generation-orchestrator-droid-forge
+name: code-generation-orchestrator-droid-foundry
 description: AI-powered code generation orchestrator coordinating specialized development droids
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl, Task]
@@ -8,7 +8,7 @@ location: project
 tags: ["code-generation", "orchestration", "project-coordination", "quality-assurance", "workflow-management"]
 ---
 
-# Code Generation Orchestrator Droid Forge
+# Code Generation Orchestrator Droid Foundry
 
 **Purpose**: Central coordination hub for AI-assisted code generation, delegating to specialized droids and managing workflow quality.
 
@@ -43,7 +43,7 @@ analyze_project_stack() {
   local backend_frameworks=$(detect_backend_frameworks "$1")
   local database_systems=$(detect_database_systems "$1")
   local testing_frameworks=$(detect_testing_frameworks "$1")
-  emit_event "project.analysis.completed" "$(format_stack_analysis "$frontend_frameworks" "$backend_frameworks" "$database_systems" "$testing_frameworks")"
+
 }
 ```
 
@@ -87,14 +87,12 @@ delegate_to_specialist_droids() {
 
 ```bash
 execute_droid_delegation() {
-  emit_event "droid.delegation.started" "$(format_delegation_start "$1" "$2")"
-  
   if Task tool with subagent_type="$1" \
     description="Coordinated task from orchestrator" \
     prompt="Execute delegated task: $2 with full project context awareness"; then
-    emit_event "droid.delegation.completed" "$(format_delegation_success "$1")"
+    return 0
   else
-    emit_event "droid.delegation.failed" "$(format_delegation_failure "$1")"
+    return 1
   fi
 }
 ```
@@ -148,9 +146,7 @@ Task tool with subagent_type="code-generation-orchestrator-droid-forge" \
 ## Workflow Management
 
 ```bash
-track_workflow_progress() {
-  emit_event "workflow.progress.updated" "$(format_progress_update "$1" "$2" "$3")"
-}
+
 ```
 
 ## Dependency Management
@@ -172,8 +168,6 @@ manage_workflow_dependencies() {
 
 ```bash
 handle_delegation_failure() {
-  emit_event "delegation.failure.handled" "$(format_failure_handling "$1" "$2")"
-  
   # Fallback to senior software engineer
   if [[ "$1" == *"frontend"* ]] || [[ "$1" == *"backend"* ]]; then
     execute_droid_delegation "senior-software-engineer-droid-forge" "$2"
@@ -184,9 +178,7 @@ handle_delegation_failure() {
 ## Metrics
 
 ```bash
-emit_orchestration_metrics() {
-  emit_event "orchestration.workflow.completed" "$(format_orchestration_metrics "$1" "$2" "$3")"
-}
+
 ```
 
 ## Manager Droid Integration

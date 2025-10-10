@@ -1,5 +1,5 @@
 ---
-name: branch-manager
+name: branch-manager-droid-foundry
 description: Automated branch creation and lifecycle management with Git workflow orchestration
 model: inherit
 tools: [Execute, Read, Edit, MultiEdit, LS, Grep]
@@ -8,9 +8,9 @@ location: project
 tags: ["git", "branch-management", "automation", "workflow", "coordination"]
 ---
 
-# Branch Manager Droid
+# Branch Manager Droid Foundry
 
-**Purpose**: Automated branch creation, lifecycle management, and Git workflow orchestration with comprehensive audit trails.
+**Purpose**: Automated branch creation, lifecycle management, and Git workflow orchestration.
 
 ## Core Functions
 
@@ -29,7 +29,7 @@ tags: ["git", "branch-management", "automation", "workflow", "coordination"]
 ### Git Workflow Integration
 - Coordinate operations with git-workflow-orchestrator
 - Update task status on branch creation/merge/deletion
-- Maintain audit trail of all branch operations
+
 - Handle concurrent operation conflicts
 
 ## Branch Type Detection
@@ -97,7 +97,7 @@ create_branch_with_metadata() {
     git config "branch.$branch_name.task-id" "$task_id"
     git config "branch.$branch_name.type" "$branch_type"
 
-    log_audit_event "branch_created" "$task_id" "$branch_name" "$branch_type"
+
 }
 ```
 
@@ -188,10 +188,4 @@ validate_branch_patterns
 | **Merged** | "completed" | Update with merge details |
 | **Deleted** | Clean up | Remove metadata, update status |
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"branch-created","task_id":"4.2","branch_name":"feat/4.2-implement-user-dashboard","branch_type":"feat"}
-{"timestamp":"2024-10-09T08:05:00Z","event":"branch-merged","task_id":"4.2","branch_name":"feat/4.2-implement-user-dashboard","merge_commit":"abc123"}
-{"timestamp":"2024-10-09T08:10:00Z","event":"branch-cleanup-completed","cleaned_branches":3,"total_active":12}
-```

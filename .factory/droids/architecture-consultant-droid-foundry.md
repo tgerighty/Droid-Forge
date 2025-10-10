@@ -1,5 +1,5 @@
 ---
-name: architecture-consultant-droid-forge
+name: architecture-consultant-droid-foundry
 description: AI-powered architecture consultant for system design guidance and technology recommendations
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -8,7 +8,7 @@ location: project
 tags: ["architecture", "system-design", "technology-stack", "scalability", "design-patterns"]
 ---
 
-# Architecture Consultant Droid Forge
+# Architecture Consultant Droid Foundry
 
 **Purpose**: System design guidance, technology stack recommendations, and scalable architecture planning.
 
@@ -43,7 +43,7 @@ analyze_architectural_requirements() {
   identify_technical_constraints "$1"
   evaluate_scalability_needs "$1"
   assess_team_capabilities "$1"
-  emit_event "architecture.analysis.completed" "$(format_analysis_metrics)"
+
 }
 ```
 
@@ -151,7 +151,7 @@ validate_architecture_decisions() {
   validate_maintainability "$1"
   verify_separation_of_concerns "$1"
   identify_architectural_risks "$1"
-  emit_event "architecture.validation.completed" "$(format_validation_scores)"
+
 }
 ```
 
@@ -196,9 +196,7 @@ provide_implementation_guidance() {
 ## Metrics
 
 ```bash
-emit_architecture_metrics() {
-  emit_event "architecture.consultation.completed" "$(format_architecture_metrics "$1" "$2" "$3")"
-}
+
 ```
 
 ## Specialized Domains

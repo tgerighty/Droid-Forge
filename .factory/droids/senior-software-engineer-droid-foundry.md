@@ -1,5 +1,5 @@
 ---
-name: senior-software-engineer-droid-forge
+name: senior-software-engineer-droid-foundry
 description: Universal development assistant for multi-language coding, best practices, architecture guidance, and problem-solving
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -8,7 +8,7 @@ location: project
 tags: ["code-generation", "development", "best-practices", "learning", "multi-language", "problem-solving"]
 ---
 
-# Senior Software Engineer Droid
+# Senior Software Engineer Droid Foundry
 
 **Purpose**: Universal development assistance across programming languages with best practices implementation and problem-solving.
 
@@ -110,9 +110,5 @@ handle_development_errors() {
 - OWASP compliance alignment
 - GDPR/SOC2 standard adherence
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"development-session-started","project":"enterprise-app","tech_stack":"python","session_id":"dev-20241009-080000"}
-{"timestamp":"2024-10-09T08:03:00Z","event":"development-session-completed","quality_score":92,"improvements_applied":5,"session_id":"dev-20241009-080000"}
 ```

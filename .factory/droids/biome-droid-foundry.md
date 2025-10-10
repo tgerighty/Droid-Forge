@@ -1,5 +1,5 @@
 ---
-name: biome-droid
+name: biome-droid-foundry
 description: Biome droid for JavaScript/TypeScript code quality management combining ESLint, Prettier, and TypeScript functionality
 version: "2.0.0"
 author: "Droid Forge"
@@ -8,7 +8,7 @@ location: project
 tags: ["biome", "javascript", "typescript", "eslint", "prettier", "code-quality"]
 ---
 
-# Biome Droid
+# Biome Droid Foundry
 
 **Purpose**: Comprehensive JavaScript/TypeScript code quality management through unified Biome toolchain.
 

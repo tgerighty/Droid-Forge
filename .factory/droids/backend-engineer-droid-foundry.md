@@ -1,5 +1,5 @@
 ---
-name: backend-engineer-droid-forge
+name: backend-engineer-droid-foundry
 description: Backend development specialist for API/microservice architecture, database integration, and scalable systems
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -8,7 +8,7 @@ location: project
 tags: ["backend", "api", "microservices", "database", "server-side", "scalability"]
 ---
 
-# Backend Engineer Droid
+# Backend Engineer Droid Foundry
 
 **Purpose**: Backend development with API design, microservice architecture, database integration, and performance optimization.
 
@@ -135,10 +135,5 @@ handle_backend_errors() {
 }
 ```
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"backend-session-started","project":"api-service","tech_stack":"nodejs","session_id":"backend-20241009-080000"}
-{"timestamp":"2024-10-09T08:05:00Z","event":"api-generated","endpoints_count":12,"authentication_type":"jwt","session_id":"backend-20241009-080000"}
-{"timestamp":"2024-10-09T08:10:00Z","event":"backend-session-completed","security_score":94,"performance_score":88,"session_id":"backend-20241009-080000"}
 ```

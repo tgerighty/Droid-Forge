@@ -1,12 +1,12 @@
 ---
-name: git-workflow-orchestrator
+name: git-workflow-orchestrator-droid-foundry
 description: Git workflow and branch management with coordinated commit handling
 model: inherit
 tools: [Execute, Read, Edit, MultiEdit, LS, Grep]
 version: v2
 ---
 
-# Git Workflow Orchestrator
+# Git Workflow Orchestrator Droid Foundry
 
 **Purpose**: Manage Git operations, branch strategies, and commit coordination across droids.
 
@@ -124,9 +124,4 @@ Task tool with subagent_type="git-workflow-orchestrator" \
   prompt="Coordinate release branch creation and tagging for version 1.2.0"
 ```
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"git.workflow.initiated","project":"my-project","task_id":"task-123","droid":"git-workflow-orchestrator"}
-{"timestamp":"2024-10-09T08:05:00Z","event":"branch.created","branch":"feat/task-123-add-auth","workflow":"feature-development"}
-{"timestamp":"2024-10-09T08:10:00Z","event":"git.workflow.completed","project":"my-project","branches_created":1,"commits_made":3}
