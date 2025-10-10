@@ -115,10 +115,12 @@ Droid Forge is a declarative, droid-based framework that uses Factory.ai's own d
 
 3. **Install Core Droids**
    ```
-   factory-cli droid install manager-orchestrator
-   factory-cli droid install task-manager
-   factory-cli droid install git-workflow-orchestrator
-   factory-cli droid install ai-dev-tasks-integrator
+   # Option 1: Use the installation script to choose location
+   ./install.sh
+   
+   # Option 2: Manual installation (default to project directory)
+   mkdir -p .factory/droids
+   cp .factory/droids/*.md .factory/droids/
    ```
 
 4. **Configure droid-forge.yaml**
