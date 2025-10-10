@@ -133,8 +133,8 @@ Droid Forge is a declarative, droid-based framework that uses Factory.ai's own d
    # Droid capabilities
    droids:
      locations:
-       - ".factory/droids/"  # Project droids
-       - "~/droid-forge/"    # Personal droids
+       - ".factory/droids"          # Project-specific droids
+       - "~/.factory/droids"        # Personal/global droids
 
    # Workflow rules
    corellian_rules:
