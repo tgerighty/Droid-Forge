@@ -109,32 +109,32 @@ delegation_rules:
 
     - pattern: "generate.*code|create.*component|scaffold.*project"
       capabilities: ["code-generation", "frontend-development", "backend-development"]
-      droid_types: ["frontend-engineer-droid-forge", "backend-engineer-droid-forge", "senior-software-engineer-droid-forge"]
+      droid_types: ["frontend-engineer-droid-foundry", "backend-engineer-droid-foundry", "senior-software-engineer-droid-foundry"]
       priority: 11
 
     - pattern: "ui.*design|ux.*design|interface.*design"
       capabilities: ["ui-design", "ux-design", "interface-design"]
-      droid_types: ["ui-ux-designer-droid-forge"]
+      droid_types: ["ui-ux-designer-droid-foundry"]
       priority: 11
 
     - pattern: "orchestrate.*generation|coordinate.*droids|synthesize.*code"
       capabilities: ["code-orchestration", "workflow-management", "project-coordination"]
-      droid_types: ["code-generation-orchestrator-droid-forge"]
+      droid_types: ["code-generation-orchestrator-droid-foundry"]
       priority: 11
 
     - pattern: "refactor.*code|modernize.*legacy|improve.*architecture"
       capabilities: ["code-refactoring", "technical-debt", "architecture-improvement"]
-      droid_types: ["refactoring-specialist-droid-forge"]
+      droid_types: ["refactoring-specialist-droid-foundry"]
       priority: 11
 
     - pattern: "system.*design|architecture.*plan|technology.*stack"
       capabilities: ["system-design", "architecture-consultation", "technology-recommendations"]
-      droid_types: ["architecture-consultant-droid-forge"]
+      droid_types: ["architecture-consultant-droid-foundry"]
       priority: 11
 
     - pattern: "debug.*code|analyze.*error|troubleshoot.*issue"
       capabilities: ["debugging", "code-analysis", "error-resolution"]
-      droid_types: ["debugging-expert-droid-forge"]
+      droid_types: ["debugging-expert-droid-foundry"]
       priority: 11
 
     - pattern: "cache|caching"
@@ -193,31 +193,7 @@ ai_dev_tasks:
   # Task file format
   task_file_format: "tasks-{prd-file-name}.md"
 
-# Logging configuration
-logging:
-  # Log directory (relative to project root)
-  directory: ".droid-forge/logs"
 
-  # Log format: ndjson or json
-  format: "ndjson"
-
-  # Event types to log
-  events:
-    - task.scheduled
-    - task.started
-    - task.completed
-    - task.failed
-    - droid.started
-    - droid.completed
-    - git.commit
-    - audit.recorded
-    - task.execution.started
-    - task.execution.completed
-    - task.execution.abandoned
-    - droid.self_report
-    - performance.metrics
-    - task.result
-    - task.result.validated
 
 # Performance settings
 performance:
