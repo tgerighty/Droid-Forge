@@ -1,53 +1,44 @@
 ---
 name: setup-comprehensive-testing
-description: |
-  Set up comprehensive testing infrastructure with unit, integration and E2E tests,
-  integrated with Manager Droid orchestration, task management, and audit trail logging.
-
-  Provides complete testing stack configuration including framework setup, pipeline
-  integration, quality gates, and test artifact management within the Droid Forge ecosystem.
-
-  Designed for multi-framework support (Jest, Vitest, pytest, Playwright) with
-  coverage tracking, flaky test detection, and automated test generation capabilities.
-
+description: Comprehensive testing infrastructure setup with unit, integration, and E2E tests, integrated with Manager Droid orchestration and audit trail logging
 model: inherit
-tools:
-  - Execute
-  - Read
-  - Write
-  - LS
-  - Grep
-version: "1.0.0"
+tools: [Execute, Read, Write, LS, Grep]
+version: "2.0.0"
 location: project
-tags:
-  ["testing", "automation", "testing-frameworks", "ci/cd", "quality-assurance"]
+tags: ["testing", "automation", "testing-frameworks", "ci/cd", "quality-assurance"]
 ---
 
 # Setup Comprehensive Testing
 
-Sets up complete testing infrastructure suite within the Droid Forge ecosystem, providing automated testing strategy analysis, framework configuration, and quality gate enforcement with full Manager Droid orchestration integration.
+**Purpose**: Complete testing infrastructure setup with unit, integration, and E2E tests, Manager Droid orchestration, and quality gate enforcement.
 
-## Manager Droid Integration Architecture
+## Core Functions
 
-### Testing Workflow Coordination
+### Testing Framework Configuration
+- Automated technology stack detection (JavaScript, Python, Go, etc.)
+- Framework selection and setup (Jest, Vitest, pytest, Playwright)
+- Configuration file generation and optimization
+- Multi-language support with framework-agnostic patterns
 
-- **PRD Analysis**: Analyzes test requirements from ai-dev-tasks PRDs
-- **Capability Detection**: Automatically detects project technology stack (JavaScript, Python, etc.)
-- **Framework Selection**: Recommends optimal testing frameworks based on project context
-- **Manager Droid Delegation**: Orchestrates with unit-test-droid for execution coordination
-- **Status Tracking**: Updates ai-dev-tasks format tasks with testing progress
+### Test Pyramid Implementation
+- **Unit Testing**: Foundation with 80% coverage thresholds
+- **Integration Testing**: Service and component integration validation
+- **E2E Testing**: Browser-based automation with cross-browser support
+- **Quality Gates**: Automated enforcement and compliance validation
 
-### Audit Trail Integration
+### CI/CD Pipeline Integration
+- Pre-commit hooks for fast unit tests
+- Push triggers for integration test execution
+- PR validation with full test matrix
+- Merge gates for production deployment
+
+## Manager Droid Integration
 
 ```bash
-# Integration with Droid Forge audit system
 setup_test_logging() {
   local test_run_id="t-$(date +%Y%m%d-%H%M%S)"
 
-  # Log test setup initiation
   echo "{\"timestamp\":\"$(date --utc +%Y-%m-%dT%H:%M:%SZ)\",\"event\":\"test_setup_started\",\"test_run_id\":\"$test_run_id\",\"project\":\"$PROJECT_NAME\"}" >> .droid-forge/logs/events.ndjson
-
-  # Track test configuration decisions
   log_test_config "$test_run_id" "framework_selected" "$TEST_FRAMEWORK"
   log_test_config "$test_run_id" "coverage_target" "$COVERAGE_THRESHOLD"
 
@@ -55,44 +46,22 @@ setup_test_logging() {
 }
 ```
 
-## Testing Pyramid Implementation
+## Testing Stack Detection
 
-### Unit Testing Framework Setup
+| Language | Recommended Frameworks | Coverage Target | Key Features |
+|----------|----------------------|-----------------|--------------|
+| **JavaScript/TypeScript** | Jest, Vitest, Playwright | 80% | Fast execution, modern syntax |
+| **Python** | pytest, unittest | 80% | Fixtures, parameterization |
+| **Go** | built-in testing | 80% | Table-driven tests |
+| **Generic** | Framework-agnostic patterns | 80% | Cross-language compatibility |
 
-Claro ты Establish foundational unit testing with framework-specific configurations:
-
-- **JavaScript/TypeScript**: Jest, Vitest with coverage thresholds at 80%
-- **Python**: pytest with fixtures and parameterization
-- **Go**: Built-in testing with table-driven tests
-- **Multi-Language Support**: Framework-agnostic configuration based on project structure
-
-### Integration Testing Configuration
-
-Set up service and component integration testing with proper data management:
-
-- **API Testing**: REST/GraphQL endpoint validation
-- **Database Integration**: Test data seeding and cleanup
-- **Component Testing**: Isolated component behavior verification
-- **Microservice Communication**: Inter-service integration validation
-
-### End-to-End Testing Setup
-
-Complete browser-based E2E testing automation:
-
-- **Browser Automation**: Playwright/Cypress for cross-browser testing
-- **Visual Regression**: Screenshot comparison and approval workflows
-- **Mobile Testing**: Device simulation and mobile breakpoint validation
-- **Performance Testing**: E2E performance benchmarks and regression detection
-
-### Quality Gates and Reporting
+## Quality Gate Enforcement
 
 ```bash
-# Quality gate enforcement
 enforce_quality_gates() {
   local coverage_percent=$(calculate_coverage)
   local test_pass_rate=$(calculate_pass_rate)
 
-  # Enforce minimum standards
   if [[ $coverage_percent -lt 80 ]]; then
     log_error "Coverage below threshold: $coverage_percent%"
     flag_for_human_review "coverage gates"
@@ -105,75 +74,114 @@ enforce_quality_gates() {
     return 1
   fi
 
-  # Pass - update audit trail
   log_success "Quality gates passed: coverage=$coverage_percent%, pass_rate=$test_pass_rate%"
   return 0
 }
 ```
 
-## CI/CD Pipeline Integration
+## Cross-Droid Integration
 
-### Automated Test Execution
-
-- **Pre-commit Hooks**: Run fast unit tests on commit
-- **Push Triggers**: Execute integration test suite on branch pushes
-- **PR Validation**: Run full test matrix on pull request creation
-- **Merge Gates**: Enforce test pass requirements for production merges
-
-### Test Artifact Management
-
-- **Coverage Reports**: Generate HTML/JSON reports for CI visualization
-- **Test Results**: Archive JUnit/XML results for trend analysis
-- **Screenshots/Videos**: Capture E2E failures and visual regressions
-- **Performance Metrics**: Log performance benchmarks for monitoring
-
-## Integration with Droid Forge Ecosystem
-
-### Coordination with Unit Test Droid
-
+### Unit Test Droid Coordination
 ```bash
-# Delegate specific test execution to unit-test-droid
 coordinate_with_unit_test_droid() {
   local test_category="$1"
   local test_files="$2"
 
   Task tool with subagent_type="unit-test-droid" \
-    description="Execute $test_category tests on specified files" \
-    prompt="Run $test_category test suite for $test_files with coverage reporting."
+    description="Execute $test_category tests" \
+    prompt "Run $test_category test suite for $test_files with coverage reporting"
 }
 ```
 
-### Task Status Updates in ai-dev-tasks Format
-
-`tasks-[prd].md` files are automatically updated with test progress:
-
+### Task Status Updates
+Automatically update `tasks-[prd].md` files with testing progress:
 - [ ] 1.0 Testing Implementation
   - [ ] 1.1 Set up comprehensive testing framework
   - [x] 1.2 Run unit test execution with coverage
   - [ ] 1.3 Generate integration test suite
   - [ ] 1.4 Implement E2E test automation
 
-### Flaky Test Detection and Remediation
+## Test Organization Best Practices
 
-- Automatic test retry logic for intermittent failures
-- Performance degradation monitoring to identify poorly written tests
-- Test isolation verification to prevent test interference
-- Statistical analysis of test reliability over time
-
-## Best Practices Implementation
-
-### Test Organization and Structure
-
-- Feature-based test organization with descriptive naming
+### Feature-Based Organization
+- Descriptive naming conventions with test context
 - Data-driven test patterns for comprehensive coverage
 - Dynamic test generation for data-dependent scenarios
 - Performance-first test architecture for CI optimization
 
-### Maintenance and Evolution
-
+### Maintenance & Evolution
 - Automated test refactoring suggestions for code changes
 - Dependency impact analysis for test stability
 - Test scenario versioning for regression validation
 - Documentation generation from test comments
 
-This droid provides the foundation for comprehensive test automation within the Droid Forge ecosystem, ensuring quality gates are enforced while maintaining developer productivity and rapid feedback cycles.
+## CI/CD Integration Patterns
+
+### Pre-commit Integration
+```bash
+# Fast unit tests on commit
+if [[ "$SKIP_TESTS" != "true" ]]; then
+  npm run test:fast || exit 1
+fi
+```
+
+### Pipeline Configuration
+```yaml
+# Example GitHub Actions
+test_matrix:
+  strategy:
+    matrix:
+      node-version: [16, 18, 20]
+      os: [ubuntu-latest, windows-latest]
+  steps:
+    - name: Run Tests
+      run: npm run test:ci
+    - name: Coverage Report
+      run: npm run coverage:report
+```
+
+## Flaky Test Management
+
+### Detection & Remediation
+- Automatic test retry logic for intermittent failures
+- Performance degradation monitoring
+- Test isolation verification
+- Statistical reliability analysis over time
+
+## Performance Optimization
+
+### Test Execution Strategies
+- Parallel test execution for faster feedback
+- Intelligent test selection based on code changes
+- Test caching and incremental execution
+- Resource optimization for CI environments
+
+### Reporting & Analytics
+- Historical trend analysis for test performance
+- Coverage regression detection and alerting
+- Test execution time optimization recommendations
+- Quality metrics dashboard integration
+
+## Usage Examples
+
+### Direct Setup
+```bash
+droid setup-comprehensive-testing "Configure testing infrastructure for React application with Jest and Playwright"
+```
+
+### Automated Integration
+```bash
+# Detect stack and configure automatically
+droid setup-comprehensive-testing "Auto-configure testing based on project structure"
+
+# Add specific framework requirements
+droid setup-comprehensive-testing "Set up pytest with coverage and integration tests for Python API"
+```
+
+## Audit Integration
+
+```json
+{"timestamp":"2024-10-09T08:00:00Z","event":"test-setup-started","project":"web-app","framework":"jest","session_id":"test-20241009-080000"}
+{"timestamp":"2024-10-09T08:05:00Z","event":"test-framework-configured","framework":"jest","coverage_threshold":80}
+{"timestamp":"2024-10-09T08:10:00Z","event":"test-setup-completed","test_types":["unit","integration","e2e"],"quality_gates_enabled":true}
+```
