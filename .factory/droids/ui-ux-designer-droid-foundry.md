@@ -1,5 +1,5 @@
 ---
-name: ui-ux-designer-droid-forge
+name: ui-ux-designer-droid-foundry
 description: UI/UX design specialist for interface design, user experience optimization, usability validation, and design system implementation
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -8,7 +8,7 @@ location: project
 tags: ["ui-design", "ux-design", "interface", "usability", "design-systems", "user-research"]
 ---
 
-# UI/UX Designer Droid
+# UI/UX Designer Droid Foundry
 
 **Purpose**: User interface design, user experience optimization, usability research, and design system implementation with human-centered design principles.
 
@@ -112,11 +112,7 @@ design_color_system() {
   ensure_accessibility_contrast_ratios
   provide_color_usage_guidelines
 
-  emit_event "design.system.color.created" "
-    \"brand_identity\":\"$brand_identity\",
-    \"color_count\":calculate_color_palette_size(),
-    \"accessibility_compliant\":verify_contrast_ratios()
-  "
+
 }
 ```
 
@@ -185,12 +181,7 @@ ensure_accessibility_compliance() {
   implement_proper_aria_labels_and_roles
   validate_screen_reader_compatibility
 
-  emit_event "accessibility.validation.completed" "
-    \"compliance_level\":\"$compliance_level\",
-    \"contrast_ratio_compliant\":verify_color_contrast(),
-    \"keyboard_navigation_compliant\":test_keyboard_access(),
-    \"screen_reader_compliant\":validate_aria_implementation()
-  "
+
 }
 ```
 
@@ -248,24 +239,7 @@ handle_design_issues() {
 ## Usage Statistics
 
 ```bash
-emit_ui_ux_operation_metrics() {
-  local design_type="$1"
-  local deliverable_count="$2"
-  local accessibility_score="$3"
 
-  emit_event "ui.ux.operation.completed" "
-    \"design_type\":\"$design_type\",
-    \"deliverables_created\":$deliverable_count,
-    \"accessibility_score\":$accessibility_score,
-    \"user_experience_rating\":calculate_ux_rating()
-  "
-}
 ```
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"design-session-started","project":"saas-app","design_type":"design-system","session_id":"design-20241009-080000"}
-{"timestamp":"2024-10-09T08:05:00Z","event":"design-system-created","components_count":24,"accessibility_compliant":true}
-{"timestamp":"2024-10-09T08:10:00Z","event":"design-session-completed","deliverables_count":5,"accessibility_score":96,"ux_rating":94}
-```

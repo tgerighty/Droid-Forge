@@ -1,5 +1,5 @@
 ---
-name: unit-test-droid
+name: unit-test-droid-foundry
 description: Unit test droid managing test execution, coverage reporting, and validation for JavaScript/TypeScript projects
 version: "2.0.0"
 author: "Droid Forge"
@@ -8,7 +8,7 @@ location: project
 tags: ["testing", "unit-tests", "coverage", "jest", "vitest", "validation"]
 ---
 
-# Unit Test Droid
+# Unit Test Droid Foundry
 
 **Purpose**: Manages comprehensive testing workflows including test execution, coverage analysis, and validation.
 

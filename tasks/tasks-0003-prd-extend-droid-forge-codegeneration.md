@@ -2,14 +2,14 @@
 
 ## Relevant Files
 
-- `.factory/droids/senior-software-engineer-droid-forge.md`
-- `.factory/droids/frontend-engineer-droid-forge.md`
-- `.factory/droids/backend-engineer-droid-forge.md`
-- `.factory/droids/ui-ux-designer-droid-forge.md`
-- `.factory/droids/code-generation-orchestrator-droid-forge.md`
-- `.factory/droids/refactoring-specialist-droid-forge.md`
-- `.factory/droids/architecture-consultant-droid-forge.md`
-- `.factory/droids/debugging-expert-droid-forge.md`
+- `.factory/droids/senior-software-engineer-droid-foundry.md`
+- `.factory/droids/frontend-engineer-droid-foundry.md`
+- `.factory/droids/backend-engineer-droid-foundry.md`
+- `.factory/droids/ui-ux-designer-droid-foundry.md`
+- `.factory/droids/code-generation-orchestrator-droid-foundry.md`
+- `.factory/droids/refactoring-specialist-droid-foundry.md`
+- `.factory/droids/architecture-consultant-droid-foundry.md`
+- `.factory/droids/debugging-expert-droid-foundry.md`
 - `droid-forge.yaml` - Add delegation rules for new droids
 - `README.md` - Update documentation with new capabilities
 - `.factory/droids/baas-orchestrator.md` - Update orchestration logic

@@ -1,5 +1,5 @@
 ---
-name: frontend-engineer-droid-forge
+name: frontend-engineer-droid-foundry
 description: Frontend development specialist for React/Next.js applications with component architecture, responsive design, and UX optimization
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -8,7 +8,7 @@ location: project
 tags: ["frontend", "react", "nextjs", "responsive-design", "ui-components", "user-experience"]
 ---
 
-# Frontend Engineer Droid
+# Frontend Engineer Droid Foundry
 
 **Purpose**: Frontend development with React/Next.js applications, component architecture, responsive design, and user experience optimization.
 
@@ -150,24 +150,7 @@ handle_frontend_errors() {
 ## Usage Statistics
 
 ```bash
-emit_frontend_operation_metrics() {
-  local operation_type="$1"
-  local tech_stack="$2"
-  local output_size="$3"
 
-  emit_event "frontend.operation.completed" "
-    \"operation_type\":\"$operation_type\",
-    \"tech_stack\":\"$tech_stack\",
-    \"output_size_lines\":$output_size,
-    \"quality_score\":calculate_quality_score()
-  "
-}
 ```
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"frontend-session-started","project":"web-app","tech_stack":"react-nextjs","session_id":"frontend-20241009-080000"}
-{"timestamp":"2024-10-09T08:05:00Z","event":"component-generated","component_type":"profile-card","accessibility_score":95}
-{"timestamp":"2024-10-09T08:10:00Z","event":"frontend-session-completed","components_created":3,"performance_score":91,"accessibility_score":94}
-```

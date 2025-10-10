@@ -1,5 +1,5 @@
 ---
-name: refactoring-specialist-droid-forge
+name: refactoring-specialist-droid-foundry
 description: AI-powered code refactoring specialist for modernization, technical debt reduction, and architecture improvements
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -8,7 +8,7 @@ location: project
 tags: ["refactoring", "code-modernization", "technical-debt", "architecture", "legacy-code"]
 ---
 
-# Refactoring Specialist Droid
+# Refactoring Specialist Droid Foundry
 
 **Purpose**: Intelligent code modernization, technical debt reduction, and architectural improvements.
 
@@ -199,9 +199,4 @@ implement_recovery_strategies() {
 }
 ```
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"refactoring.initiated","project":"legacy-app","refactoring_scope":"full_codebase"}
-{"timestamp":"2024-10-09T08:05:00Z","event":"refactoring.patterns.applied","modernization_count":15,"complexity_improvement":25}
-{"timestamp":"2024-10-09T08:10:00Z","event":"refactoring.completed","project":"legacy-app","modernization_successful":true,"tests_passing":true}

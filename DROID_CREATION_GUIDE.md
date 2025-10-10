@@ -2,21 +2,20 @@
 
 ## Overview
 
-This guide provides comprehensive instructions for creating new droids within the Droid Forge framework. It codifies all established patterns, best practices, configuration standards, logging requirements, and orchestration rules developed through v1.0-v1.1 framework evolution.
+This guide provides comprehensive instructions for creating new droids within the Droid Forge framework. It codifies all established patterns, best practices, configuration standards, and orchestration rules developed through v1.0-v1.1 framework evolution.
 
 ## Table of Contents
 
 1. [Fundamental Principles](#fundamental-principles)
 2. [Droid Template Structure](#droid-template-structure)
 3. [YAML Frontmatter Specifications](#yaml-frontmatter-specifications)
-4. [Manager Droid Integration Patterns](#baas-integration-patterns)
-5. [Audit Trail and Logging Standards](#audit-trail-and-logging-standards)
-6. [Task Status Management](#task-status-management)
-7. [Cross-Droid Coordination](#cross-droid-coordination)
-8. [Error Handling Patterns](#error-handling-patterns)
-9. [Factory.ai Template Compliance](#factoryai-template-compliance)
-10. [Testing and Validation](#testing-and-validation)
-11. [Deployment and Registration](#deployment-and-registration)
+4. [Manager Droid Integration Patterns](#manager-droid-integration-patterns)
+5. [Task Status Management](#task-status-management)
+6. [Cross-Droid Coordination](#cross-droid-coordination)
+7. [Error Handling Patterns](#error-handling-patterns)
+8. [Factory.ai Template Compliance](#factoryai-template-compliance)
+9. [Testing and Validation](#testing-and-validation)
+10. [Deployment and Registration](#deployment-and-registration)
 
 ## Fundamental Principles
 
@@ -28,7 +27,6 @@ Droid Forge droids are **self-documenting, declarative agents** that extend Fact
 
 - **Factory.ai Template Compliance**: Strict adherence to YAML frontmatter specifications
 - **Manager Droid Orchestration Compatibility**: All droids must be delegatable via Manager Droid system
-- **Audit Trail Integration**: Every operation must log to .droid-forge/logs/events.ndjson
 - **ai-dev-tasks Support**: Compatible with task generation and status tracking workflows
 - **Error Resilience**: Robust failure handling with recovery mechanisms
 - **Self-Contained**: Portable functionality without external dependencies
@@ -58,18 +56,15 @@ Detailed list of functions and features.
 
 ## Manager Droid Integration Examples
 How to invoke through Manager Droid delegation.
-
-## Audit Trail Recording
-What events are logged.
 ```
 
 ### File Naming Convention
 
-`.factory/droids/{droid-name}-droid-forge.md`
+`.factory/droids/{droid-name}-droid-foundry.md`
 
 - Uses lowercase
 - Hyphen-separated words
-- Always ends with `-droid-forge.md`
+- Always ends with `-droid-foundry.md`
 - Maintains consistency across all extensions
 
 ## YAML Frontmatter Specifications
@@ -121,9 +116,7 @@ location: anywhere
 ```bash
 function main_delegation_handler() {
   validate_orchestration_requirements "$@"
-  initialize_audit_session "$@"
   execute_core_functionality "$@"
-  finalize_audit_session "$@"
 }
 ```
 
@@ -151,7 +144,7 @@ rules:
 Droids must provide Manager Droid-compatible status responses:
 
 ```bash
-return_baas_status() {
+return_status() {
   local status="$1"
   local details="$2"
   local next_action="$3"
@@ -166,50 +159,6 @@ return_baas_status() {
 }
 ```
 
-## Audit Trail and Logging Standards
-
-### Event Structure
-
-All droid operations must emit NDJSON events:
-
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"droid.operation.started","project":"my-project","task_id":"1.1","droid":"my-droid-name","session_id":"sess-123"}
-{"timestamp":"2024-10-09T08:01:00Z","event":"droid.operation.completed","project":"my-project","success":true,"output_summary":"analysis complete","session_id":"sess-123"}
-```
-
-### Standard Event Types
-
-```bash
-emit_droid_start() {
-  emit_event "droid.operation.started" '{"phase":"initialization","request_id":"'$REQUEST_ID'"}'
-}
-
-emit_droid_progress() {
-  emit_event "droid.operation.progress" '{"progress_percent":'$PROGRESS',"current_task":"'$CURRENT_TASK'"}'
-}
-
-emit_droid_completion() {
-  emit_event "droid.operation.completed" '{"success":'$SUCCESS',"results_count":'$RESULTS_COUNT'}'
-}
-
-emit_droid_error() {
-  emit_event "droid.operation.error" '{"error_type":"'$ERROR_TYPE'","error_message":"'$ERROR_MESSAGE'"}'
-}
-```
-
-### Utility Functions
-
-```bash
-emit_event() {
-  local event_type="$1"
-  local event_data="$2"
-  local session_id="${3:-${REQUEST_ID:-default}}"
-
-  cat << EVENT_EOF >> .droid-forge/logs/events.ndjson
-{"timestamp":"$(date --utc +%Y-%m-%dT%H:%M:%SZ)","event":"$event_type","project":"${PROJECT:-unknown}","session_id":"$session_id",${event_data:+$event_data}}
-EVENT_EOF
-}
-```
 
 ## Task Status Management
 
@@ -225,9 +174,6 @@ update_task_status() {
 
   # Safely update status marker in markdown
   sed -i.tmp "s|\- \[.\] \+$task_key|- [$new_status] $task_key|g" "$task_file"
-
-  # Log task status change
-  emit_event "task.status.updated" "\"task_key\":\"$task_key\",\"new_status\":\"$new_status\",\"task_file\":\"$task_file\""
 }
 ```
 
@@ -252,8 +198,6 @@ delegate_to_peer_droid() {
     prompt="Execute delegated task with parameters: $task_parameters"
 
   local result=$?
-
-  emit_event "droid.coordination.completed" "\"target_droid\":\"$target_droid\",\"result_code\":$result"
 
   return $result
 }
@@ -398,7 +342,7 @@ test_droid_functions() {
 }
 
 # Integration testing with Manager Droid
-test_baas_delegation() {
+test_manager_droid_delegation() {
   local test_droid="$1"
   local test_prompt="$2"
 
@@ -416,7 +360,6 @@ test_baas_delegation() {
 - [ ] Frontmatter fields complete and compliant
 - [ ] Markdown structure follows template
 - [ ] Manager Droid delegation syntax correct
-- [ ] Audit trail events properly formatted
 - [ ] Error handling patterns implemented
 - [ ] Cross-droid coordination capabilities included
 - [ ] Task status management integrated
@@ -429,7 +372,7 @@ test_baas_delegation() {
 1. **Create Droid File**
 
    ```bash
-   .factory/droids/new-droid-name-droid-forge.md
+   .factory/droids/new-droid-name-droid-foundry.md
    ```
 
 2. **Register Capabilities in Config**
@@ -439,7 +382,7 @@ test_baas_delegation() {
    rules:
      - pattern: "your|capability|matches"
        capabilities: ["your-capability"]
-       droid_types: ["new-droid-name-droid-forge"]
+       droid_types: ["new-droid-name-droid-foundry"]
        priority: 9
    ```
 
@@ -448,9 +391,6 @@ test_baas_delegation() {
    ```bash
    # Test Manager Droid delegation
    factory-cli "test delegation to new droid"
-
-   # Check audit trail
-   tail -f .droid-forge/logs/events.ndjson | grep "new-droid"
    ```
 
 4. **Update Documentation**
@@ -475,14 +415,12 @@ test_baas_delegation() {
 - [ ] YAML frontmatter complete and valid
 - [ ] Description uses block format (|)
 - [ ] Tools array specific (not generic "all")
-- [ ] Proper auditing implementation
 - [ ] Cross-droid coordination patterns
 - [ ] Error handling and recovery
 - [ ] Testing hooks included
 
 ### Common Patterns
 
-- **Event logging**: Always use NDJSON format with timestamp
 - **Status updates**: Use ai-dev-tasks markdown markers consistently
 - **Error conditions**: Implement retry/fallback mechanisms
 - **Manager Droid delegation**: Use Task tool syntax exactly

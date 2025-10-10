@@ -31,12 +31,12 @@ Extend Droid Forge v1.1 with specialized code generation capabilities to provide
 ## Functional Requirements
 
 1. **Core Development Droids Implementation**
-   - Implement 4 foundational development role droids (senior-software-engineer-droid-forge, frontend-engineer-droid-forge, backend-engineer-droid-forge, ui-ux-designer-droid-forge)
+   - Implement 4 foundational development role droids (senior-software-engineer-droid-foundry, frontend-engineer-droid-foundry, backend-engineer-droid-foundry, ui-ux-designer-droid-foundry)
    - Provide specialized capabilities for web-based development stack with extensible architecture
    - Include project stack compatibility verification and adjustment mechanisms
 
 2. **Advanced Code Processing Droids Implementation**
-   - Implement 4 specialized AI assistance droids (code-generation-orchestrator-droid-forge, refactoring-specialist-droid-forge, architecture-consultant-droid-forge, debugging-expert-droid-forge)
+   - Implement 4 specialized AI assistance droids (code-generation-orchestrator-droid-foundry, refactoring-specialist-droid-foundry, architecture-consultant-droid-foundry, debugging-expert-droid-foundry)
    - Focus on high-impact development workflows (refactoring, debugging, architecture planning)
    - Integrate sophisticated AI assistance with human oversight capabilities
 

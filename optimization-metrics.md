@@ -49,7 +49,7 @@
 ```bash
    23430 total
     3682 .factory/droids/git-workflow-orchestrator.md
-    2991 .factory/droids/manager-droid-orchestrator.md
+    2991 .factory/droids/manager-orchestrator-droid-foundry.md
     1563 .factory/droids/ai-dev-tasks-integrator.md
     1539 .factory/droids/code-rabbit-coordinator.md
     1360 .factory/droids/integration-testing-droid-forge.md
@@ -76,7 +76,7 @@
 ```bash
   233373 total
    34076 .factory/droids/git-workflow-orchestrator.md
-   24662 .factory/droids/manager-droid-orchestrator.md
+   24662 .factory/droids/manager-orchestrator-droid-foundry.md
    15534 .factory/droids/ai-dev-tasks-integrator.md
    15383 .factory/droids/senior-software-engineer-droid-forge.md
    15295 .factory/droids/code-rabbit-coordinator.md
@@ -112,7 +112,7 @@
 | Words | 3682 | 398 | 3284 | 89% |
 | Characters | 34076 | 4008 | 30068 | 88% |
 | Estimated Tokens | 8519 | 1002 | 7517 | 88% |
-### manager-droid-orchestrator Optimization Results
+### manager-orchestrator Optimization Results
 
 | Metric | Baseline | Optimized | Reduction | % Improvement |
 |-------|---------|-----------|----------|-------------|
@@ -147,7 +147,7 @@
 | Droid | Words Reduced | % Improvement | Status |
 |-------|---------------|--------------|--------|---------|
 | git-workflow-orchestrator | TBD | TBD | ✅ Optimized v2 |
-| manager-droid-orchestrator | TBD | TBD | ✅ Optimized v2 |
+| manager-orchestrator | TBD | TBD | ✅ Optimized v2 |
 | code-rabbit-coordinator | TBD | TBD | ✅ Optimized v2 |
 | debugging-expert-droid-forge | TBD | TBD | ✅ Optimized v2 |
 | refactoring-specialist-droid-forge | TBD | TBD | ✅ Optimized v2 |

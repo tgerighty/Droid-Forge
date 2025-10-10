@@ -1,5 +1,5 @@
 ---
-name: debugging-expert-droid-forge
+name: debugging-expert-droid-foundry
 description: AI-powered debugging expert for code analysis, error resolution, and troubleshooting
 model: inherit
 tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
@@ -8,7 +8,7 @@ location: project
 tags: ["debugging", "error-resolution", "code-analysis", "performance-debugging", "troubleshooting"]
 ---
 
-# Debugging Expert Droid
+# Debugging Expert Droid Foundry
 
 **Purpose**: Advanced debugging, error analysis, performance optimization, and systematic troubleshooting.
 
@@ -221,9 +221,4 @@ implement_error_recovery() {
 }
 ```
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"debugging.session.started","project":"my-project","session_id":"debug-20241009-080000"}
-{"timestamp":"2024-10-09T08:01:00Z","event":"debugging.analysis.completed","project":"my-project","root_cause_identified":true}
-{"timestamp":"2024-10-09T08:05:00Z","event":"debugging.resolution.completed","project":"my-project","solution_applied":true,"fixes_count":3}

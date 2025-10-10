@@ -1,5 +1,5 @@
 ---
-name: security-audit
+name: security-audit-droid-foundry
 description: Comprehensive security review to identify and fix vulnerabilities in codebase and dependencies
 model: inherit
 tools: all
@@ -7,7 +7,7 @@ version: "2.0.0"
 location: project
 ---
 
-# Security Audit
+# Security Audit Droid Foundry
 
 **Purpose**: Comprehensive security assessment for codebase and dependencies.
 

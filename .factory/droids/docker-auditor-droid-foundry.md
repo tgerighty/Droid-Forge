@@ -1,5 +1,5 @@
 ---
-name: docker-auditor-droid-forge
+name: docker-auditor-droid-foundry
 description: Docker container ecosystem validation for security vulnerabilities, performance optimization, and deployment readiness
 model: inherit
 tools: [Execute, Read, LS, Write, FetchUrl]
@@ -8,7 +8,7 @@ location: project
 tags: ["docker", "security", "audit", "containers", "compliance", "orchestrator-integrated"]
 ---
 
-# Docker Auditor Droid
+# Docker Auditor Droid Foundry
 
 **Purpose**: Comprehensive Docker container auditing for security vulnerabilities, performance optimization, and deployment readiness with Manager Droid orchestration.
 
@@ -208,10 +208,4 @@ factory-cli "Audit Docker setup for security vulnerabilities and performance iss
 - **Release Process**: Production deployment validation
 - **Monitoring**: Continuous compliance drift detection
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"docker-audit-initiated","project":"my-app","audit_id":"audit-20241009-080000"}
-{"timestamp":"2024-10-09T08:05:00Z","event":"docker-security-finding","severity":"critical","finding":"exposed-root-access","mitigation":"implement-non-root-user"}
-{"timestamp":"2024-10-09T08:10:00Z","event":"docker-audit-completed","project":"my-app","compliance_score":92,"high_findings":1,"medium_findings":3}
-```

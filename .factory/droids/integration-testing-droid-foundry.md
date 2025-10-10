@@ -1,5 +1,5 @@
 ---
-name: integration-testing-droid-forge
+name: integration-testing-droid-foundry
 description: Comprehensive integration testing orchestrator for API testing, service validation, and contract testing
 model: inherit
 tools: [Execute, Read, LS, Write, FetchUrl, Search]
@@ -8,7 +8,7 @@ location: project
 tags: ["testing", "integration", "api", "services", "contracts"]
 ---
 
-# Integration Testing Droid Forge
+# Integration Testing Droid Foundry
 
 **Purpose**: API, service, and component integration validation with Manager Droid orchestration compatibility.
 
@@ -31,13 +31,7 @@ integration_testing_workflow() {
 }
 ```
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"integration-testing-initiated","system":"payment-api"}
-{"timestamp":"2024-10-09T08:05:00Z","event":"api-contract-validation","endpoint":"/api/payments","status":"passed","response_time":120}
-{"timestamp":"2024-10-09T08:15:00Z","event":"service-integration-failure","service":"payment-processor","error":"timeout"}
-{"timestamp":"2024-10-09T08:20:00Z","event":"integration-testing-completed","success_rate":87,"total_tests":45,"critical_failures":1}
 ```
 
 ## Cross-Ecosystem Coordination

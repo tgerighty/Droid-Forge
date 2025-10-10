@@ -1,12 +1,12 @@
 ---
-name: manager-droid-orchestrator
+name: manager-orchestrator-droid-foundry
 description: Manager Droid orchestrator that analyzes PRDs and delegates tasks to specialized droids
 model: inherit
 tools: [Read, Grep, Glob, LS, Task, Execute, Edit, MultiEdit, Create, WebSearch, FetchUrl, TodoWrite, ExitSpecMode, GenerateDroid]
 version: v2
 ---
 
-# Manager Droid Orchestrator
+# Manager Orchestrator Droid Foundry
 
 **Purpose**: Central coordination system for Droid Forge. Analyzes PRDs and delegates tasks to specialized droids.
 
@@ -102,8 +102,7 @@ update_task_status() {
   # Update task marker in markdown
   sed -i.tmp "s|- \[.\] $task_id|- [$status] $task_id|g" "$task_file"
   
-  # Log status change
-  emit_event "task.status.updated" "\"task_id\":\"$task_id\",\"new_status\":\"$status\""
+
 }
 ```
 
@@ -131,29 +130,23 @@ update_task_status() {
 
 ### PRD Analysis
 ```bash
-Task tool with subagent_type="manager-droid-orchestrator" \
+Task tool with subagent_type="manager-orchestrator" \
   description="Analyze PRD and delegate tasks" \
   prompt="Analyze tasks-0001-prd-droid-forge.md and create task delegation plan"
 ```
 
 ### Feature Coordination
 ```bash
-Task tool with subagent_type="manager-droid-orchestrator" \
+Task tool with subagent_type="manager-orchestrator" \
   description="Coordinate feature development" \
   prompt "Coordinate multi-droid workflow for user authentication feature"
 ```
 
 ### Status Updates
 ```bash
-Task tool with subagent_type="manager-droid-orchestrator" \
+Task tool with subagent_type="manager-orchestrator" \
   description="Update task status" \
   prompt "Update task 1.2 to completed status in tasks-0001-prd-droid-forge.md"
 ```
 
-## Audit Integration
 
-```json
-{"timestamp":"2024-10-09T08:00:00Z","event":"orchestration.started","project":"my-project","task_file":"tasks-0001-prd-droid-forge.md"}
-{"timestamp":"2024-10-09T08:01:00Z","event":"task.delegated","target_droid":"frontend-engineer-droid-forge","task_id":"1.1"}
-{"timestamp":"2024-10-09T08:05:00Z","event":"task.completed","task_id":"1.1","droid":"frontend-engineer-droid-forge"}
-{"timestamp":"2024-10-09T08:10:00Z","event":"orchestration.completed","tasks_delegated":8,"tasks_completed":3}

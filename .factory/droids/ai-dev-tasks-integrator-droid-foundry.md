@@ -1,12 +1,12 @@
 ---
-name: ai-dev-tasks-integrator
+name: ai-dev-tasks-integrator-droid-foundry
 description: Integration droid for ai-dev-tasks workflow synchronization and PRD processing
 model: inherit
 tools: [FetchUrl, WebSearch, Read, Create, Edit, LS, Execute]
 version: "2.0.0"
 ---
 
-# AI-Dev-Tasks Integrator Droid
+# AI Dev Tasks Integrator Droid Foundry
 
 **Purpose**: ai-dev-tasks workflow synchronization and PRD processing integration.
 
@@ -121,7 +121,7 @@ validate_task_list_format() {
 
 ```bash
 coordinate_with_baas_orchestrator() {
-  Task tool with subagent_type="manager-droid-orchestrator" \
+  Task tool with subagent_type="manager-orchestrator" \
     description="Process new task list" \
     prompt="Process task list $1 from PRD $2 during phase $3"
 }
@@ -155,7 +155,7 @@ handle_prd_processing_error() {
 
 - Handle missing process files gracefully
 - Validate PRD format before processing
-- Maintain audit trail of operations
+
 - Create fallback task structures for malformed PRDs
 
 ## Integration Points
