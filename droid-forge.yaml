@@ -33,6 +33,7 @@ orchestrator:
 droids:
   # Directory where droids are stored (relative to project root)
   directory: ".factory/droids"
+  directory: "~/.factory/droids"
 
   # Default execution timeout in seconds
   default_timeout: 300
@@ -109,32 +110,42 @@ delegation_rules:
 
     - pattern: "generate.*code|create.*component|scaffold.*project"
       capabilities: ["code-generation", "frontend-development", "backend-development"]
-      droid_types: ["frontend-engineer-droid-foundry", "backend-engineer-droid-foundry", "senior-software-engineer-droid-foundry"]
+      droid_types: ["frontend-engineer-droid-forge", "backend-engineer-droid-forge", "senior-software-engineer-droid-forge"]
       priority: 11
 
     - pattern: "ui.*design|ux.*design|interface.*design"
       capabilities: ["ui-design", "ux-design", "interface-design"]
-      droid_types: ["ui-ux-designer-droid-foundry"]
+      droid_types: ["ui-ux-designer-droid-forge"]
       priority: 11
 
     - pattern: "orchestrate.*generation|coordinate.*droids|synthesize.*code"
       capabilities: ["code-orchestration", "workflow-management", "project-coordination"]
-      droid_types: ["code-generation-orchestrator-droid-foundry"]
+      droid_types: ["code-generation-orchestrator-droid-forge"]
       priority: 11
 
     - pattern: "refactor.*code|modernize.*legacy|improve.*architecture"
       capabilities: ["code-refactoring", "technical-debt", "architecture-improvement"]
-      droid_types: ["refactoring-specialist-droid-foundry"]
+      droid_types: ["refactoring-specialist-droid-forge"]
       priority: 11
 
     - pattern: "system.*design|architecture.*plan|technology.*stack"
       capabilities: ["system-design", "architecture-consultation", "technology-recommendations"]
-      droid_types: ["architecture-consultant-droid-foundry"]
+      droid_types: ["architecture-consultant-droid-forge"]
       priority: 11
 
     - pattern: "debug.*code|analyze.*error|troubleshoot.*issue"
       capabilities: ["debugging", "code-analysis", "error-resolution"]
-      droid_types: ["debugging-expert-droid-foundry"]
+      droid_types: ["debugging-expert-droid-forge"]
+      priority: 11
+
+    - pattern: "pull.*request|pr.*review|merge.*conflict|review.*fix"
+      capabilities: ["pr-automation", "code-review", "merge-conflict-resolution"]
+      droid_types: ["auto-pr-droid-forge"]
+      priority: 11
+
+    - pattern: "incident|outage|reliability|sla|slo|monitoring|on-call"
+      capabilities: ["incident-management", "system-reliability", "monitoring", "operational-excellence"]
+      droid_types: ["reliability-droid-forge"]
       priority: 11
 
     - pattern: "cache|caching"
