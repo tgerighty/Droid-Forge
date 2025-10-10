@@ -139,21 +139,21 @@ manage_refactoring_risks() {
 
 ### Legacy Code Modernization
 ```bash
-Task tool with subagent_type="refactoring-specialist-droid-forge" \
+Task tool with subagent_type="refactoring-specialist-droid-foundry" \
   description="Modernize legacy application" \
   prompt "Modernize Express.js application to use async/await patterns, TypeScript support, and improved code organization."
 ```
 
 ### Technical Debt Reduction
 ```bash
-Task tool with subagent_type="refactoring-specialist-droid-forge" \
+Task tool with subagent_type="refactoring-specialist-droid-foundry" \
   description="Reduce technical debt" \
   prompt "Analyze Python codebase and eliminate code smells, improve complexity, and consolidate duplicate code."
 ```
 
 ### Architecture Transformation
 ```bash
-Task tool with subagent_type="refactoring-specialist-droid-forge" \
+Task tool with subagent_type="refactoring-specialist-droid-foundry" \
   description="Transform architecture" \
   prompt "Transform monolithic application into microservice architecture with proper service boundaries and communication patterns."
 ```

@@ -62,7 +62,7 @@ Task tool with subagent_type="code-quality-orchestrator" \
   description="Validate generated code quality" \
   prompt="Assess code quality and standards compliance"
 
-Task tool with subagent_type="integration-testing-droid-forge" \
+Task tool with subagent_type="integration-testing-droid-foundry" \
   description="Test integration points" \
   prompt="Validate API contracts and interfaces"
 ```
@@ -71,22 +71,22 @@ Task tool with subagent_type="integration-testing-droid-forge" \
 
 ### Code Generation & Architecture
 ```bash
-Task tool with subagent_type="senior-software-engineer-droid-forge" \
+Task tool with subagent_type="senior-software-engineer-droid-foundry" \
   description="Generate solution architecture" \
   prompt="Design comprehensive system for {requirements} with scalability considerations"
 
-Task tool with subagent_type="senior-software-engineer-droid-forge" \
+Task tool with subagent_type="senior-software-engineer-droid-foundry" \
   description="Multi-language implementation" \
   prompt "Implement {feature} in {language} following best practices and security standards"
 ```
 
 ### Technology Consulting
 ```bash
-Task tool with subagent_type="senior-software-engineer-droid-forge" \
+Task tool with subagent_type="senior-software-engineer-droid-foundry" \
   description="Technology stack recommendation" \
   prompt "Analyze requirements and recommend optimal tech stack for {project-type}"
 
-Task tool with subagent_type="senior-software-engineer-droid-forge" \
+Task tool with subagent_type="senior-software-engineer-droid-foundry" \
   description="Architecture validation" \
   prompt "Review and optimize {architecture-type} for performance and maintainability"
 ```

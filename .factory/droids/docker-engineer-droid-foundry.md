@@ -96,7 +96,7 @@ docker_engineering_workflow() {
 ### Docker Auditor Coordination
 ```bash
 after_engineering_recommendations() {
-  Task tool with subagent_type="docker-auditor-droid-forge" \
+  Task tool with subagent_type="docker-auditor-droid-foundry" \
     description="Validate engineering recommendations" \
     prompt "Assess security implications of proposed Dockerfile optimizations"
 }
@@ -115,7 +115,7 @@ commit_engineering_updates() {
 ```bash
 validate_infrastructure_quality() {
   if detect_dockerfile_changes "$changed_files"; then
-    Task tool with subagent_type="docker-engineer-droid-forge" \
+    Task tool with subagent_type="docker-engineer-droid-foundry" \
       description="Infrastructure validation check" \
       prompt "Validate Dockerfile optimizations maintain build quality and security"
   fi

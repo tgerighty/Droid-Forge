@@ -170,17 +170,40 @@ Droids must support ai-dev-tasks format updates:
 update_task_status() {
   local task_file="$1"
   local task_key="$2"  # e.g., "1.1"
-  local new_status="${3:-completed}"  # pending, started, completed
+  local new_status="${3:-completed}"  # pending, in_progress, completed
 
-  # Safely update status marker in markdown
-  sed -i.tmp "s|\- \[.\] \+$task_key|- [$new_status] $task_key|g" "$task_file"
+  # Create backup and update atomically
+  local temp_file="${task_file}.tmp.$$"
+  cp "$task_file" "$temp_file" || {
+    rm -f "$temp_file"
+    error "Failed to create backup of $task_file"
+  }
+
+  # Escape task key for regex (handle dots and special chars)
+  local escaped_key
+  escaped_key="$(printf '%s\n' "$task_key" | sed 's/[.[\*^$()+?{|]/\\&/g')"
+
+  # Update status marker while preserving task description
+  sed "s|^\(- \)\[\([^]]*\)\] \+\($escaped_key\b.*\)$|\1[$new_status] \3|g" "$temp_file" > "${task_file}.new" || {
+    rm -f "$temp_file" "${task_file}.new"
+    error "Failed to update task status in $task_file"
+  }
+
+  # Atomic move
+  mv "${task_file}.new" "$task_file" || {
+    mv "$temp_file" "$task_file"  # Restore backup
+    error "Failed to atomically replace $task_file"
+  }
+  
+  # Cleanup
+  rm -f "$temp_file"
 }
 ```
 
 ### Status Marker Standards
 
 - `[ ]` - Task pending/scheduled
-- `[~]` or `[ ]` - Task in progress
+- `[in_progress]` - Task in progress  
 - `[x]` - Task completed
 - `[cancelled]` - Task aborted
 
@@ -313,9 +336,10 @@ validate_droid_structure() {
   # Check file extension
   [[ "$droid_file" == *.md ]] || error "Must use .md extension"
 
-  # Check frontmatter delimiters
-  grep -q "^---$" "$droid_file" || error "Missing frontmatter start delimiter"
-  grep -q "^---$" "$droid_file" || error "Missing frontmatter end delimiter"
+  # Check frontmatter delimiters (start and end)
+  local delim_count
+  delim_count="$(grep -n '^---$' "$droid_file" | wc -l | tr -d ' ')"
+  [ "$delim_count" -ge 2 ] || error "Missing frontmatter delimiters"
 
   # Validate markdown structure
   has_main_heading "$droid_file"

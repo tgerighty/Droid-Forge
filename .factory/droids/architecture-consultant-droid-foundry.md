@@ -126,17 +126,17 @@ recommend_architecture_patterns() {
 
 ```bash
 # System architecture design
-Task tool with subagent_type="architecture-consultant-droid-forge" \
+Task tool with subagent_type="architecture-consultant-droid-foundry" \
   description="Design system architecture" \
   prompt "Design comprehensive system architecture for social media platform with user management, content feed, messaging, analytics. Scale to 10M users."
 
 # Technology stack recommendation
-Task tool with subagent_type="architecture-consultant-droid-forge" \
+Task tool with subagent_type="architecture-consultant-droid-foundry" \
   description="Technology stack recommendation" \
   prompt "Analyze fintech requirements and recommend optimal tech stack considering security, compliance, performance, Node.js/Python team expertise."
 
 # Microservice architecture design
-Task tool with subagent_type="architecture-consultant-droid-forge" \
+Task tool with subagent_type="architecture-consultant-droid-foundry" \
   description="Microservice architecture planning" \
   prompt "Design microservice architecture for e-commerce platform with user, product, order, payment, inventory services and proper boundaries."
 ```

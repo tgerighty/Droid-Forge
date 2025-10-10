@@ -97,7 +97,7 @@ docker_audit_orchestration() {
 ### Pre-commit Orchestrator
 ```bash
 if detect_dockerfile_changes "$COMMIT_FILES"; then
-  Task tool with subagent_type="docker-auditor-droid-forge" \
+  Task tool with subagent_type="docker-auditor-droid-foundry" \
     description="Commit validation: Docker security audit" \
     prompt "Perform lightweight security scan on modified Docker files"
 fi
@@ -107,7 +107,7 @@ fi
 ```bash
 trigger_pr_docker_audit() {
   local pr_id="$1"
-  Task tool with subagent_type="docker-auditor-droid-forge" \
+  Task tool with subagent_type="docker-auditor-droid-foundry" \
     description="PR validation: Container security audit" \
     prompt "Audit Docker configurations in PR #$pr_id and post review findings"
 }
