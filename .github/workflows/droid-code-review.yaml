@@ -17,22 +17,28 @@ jobs:
   code-review:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # Skip automated code review for draft PRs
-    if: github.event.pull_request.draft == false
+    # Skip automated code review for draft PRs and very large PRs
+    if: |
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.changed_files < 100
 
     steps:
+      # OPTIMIZATION #3: Shallow checkout instead of full history
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Validate workflow configuration
+      # OPTIMIZATION #4: Combine validation and prerequisite installation
+      - name: Validate configuration and check prerequisites
         env:
           FACTORY_API_KEY: ${{ secrets.FACTORY_API_KEY }}
           DROID_INSTALLER_SHA256: ${{ vars.DROID_INSTALLER_SHA256 }}
         run: |
           set -euo pipefail
+          
+          # Validation
           if [ -z "$FACTORY_API_KEY" ]; then
             echo "❌ FACTORY_API_KEY secret is not configured."
             echo "Add FACTORY_API_KEY in repository settings → Secrets and variables → Actions."
@@ -44,6 +50,9 @@ jobs:
             echo "Set vars.DROID_INSTALLER_SHA256 to the expected sha256 digest of the Droid CLI installer."
             exit 1
           fi
+          
+          # OPTIMIZATION #7: Skip jq installation (pre-installed on GitHub runners)
+          echo "✅ Prerequisites validated (jq is pre-installed on GitHub runners)"
 
       - name: Restore Droid CLI cache
         id: cache-droid
@@ -53,14 +62,6 @@ jobs:
             ~/.local/bin/droid
             ~/.factory
           key: droid-cli-${{ vars.DROID_INSTALLER_SHA256 }}
-
-      - name: Install prerequisites
-        run: |
-          set -euo pipefail
-          if ! command -v jq >/dev/null 2>&1; then
-            sudo apt-get update
-            sudo apt-get install -y jq
-          fi
 
       - name: Install Droid CLI
         env:
@@ -76,12 +77,44 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           "$HOME/.local/bin/droid" --version
 
-      - name: Configure git identity
+      # OPTIMIZATION #10: Add early exit for no changes
+      - name: Check for code changes
+        id: changes
         run: |
-          git config user.name "Droid Agent"
-          git config user.email "droidagent@factory.ai"
+          set -euo pipefail
+          # Fetch only the base branch with shallow depth
+          git fetch --depth=1 origin ${{ github.event.pull_request.base.ref }}
+          
+          # Check if there are actual code changes
+          DIFF_SIZE=$(git diff origin/${{ github.event.pull_request.base.ref }}...${{ github.event.pull_request.head.sha }} | wc -l)
+          
+          if [ "$DIFF_SIZE" -eq 0 ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "⚠️ No code changes detected. Skipping review."
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "✅ Found $DIFF_SIZE lines of changes to review"
+          fi
 
+      # OPTIMIZATION #6: Check PR size and adjust review strategy
+      - name: Determine review strategy
+        id: pr-size
+        if: steps.changes.outputs.skip != 'true'
+        run: |
+          FILES=${{ github.event.pull_request.changed_files }}
+          if [ "$FILES" -gt 50 ]; then
+            echo "large=true" >> $GITHUB_OUTPUT
+            echo "max_comments=5" >> $GITHUB_OUTPUT
+            echo "⚠️ Large PR detected ($FILES files). Review will focus on critical issues only."
+          else
+            echo "large=false" >> $GITHUB_OUTPUT
+            echo "max_comments=10" >> $GITHUB_OUTPUT
+            echo "✅ Standard PR size ($FILES files). Full review will be performed."
+          fi
+
+      # OPTIMIZATION #2: Parallelize API calls for faster data gathering
       - name: Prepare review context
+        if: steps.changes.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -111,21 +144,31 @@ jobs:
           }
 
           # Get the PR diff
-          git fetch origin ${{ github.event.pull_request.base.ref }}
           git diff origin/${{ github.event.pull_request.base.ref }}...${{ github.event.pull_request.head.sha }} > diff.txt
 
-          # Gather issue and review comments for deduplication
-          fetch_paginated "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" "existing_issue_comments.json"
-          fetch_paginated "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments" "existing_review_comments.json"
+          # OPTIMIZATION #2: Run all API calls in parallel
+          echo "📡 Fetching PR data in parallel..."
+          (
+            fetch_paginated "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" "existing_issue_comments.json" &
+            
+            fetch_paginated "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments" "existing_review_comments.json" &
+            
+            curl -fsSL \
+                 -H "Authorization: token ${GH_TOKEN}" \
+                 -H "Accept: application/vnd.github.v3+json" \
+                 "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files?per_page=100" \
+                 > files_raw.json &
+            
+            # Wait for all parallel processes to complete
+            wait
+          )
+          
+          echo "✅ All API calls completed"
+
+          # Merge comments for deduplication
           jq -s '.[0] + .[1]' existing_issue_comments.json existing_review_comments.json > existing_comments.json
 
-          # Get changed files with patches for positioning
-          curl -fsSL \
-               -H "Authorization: token ${GH_TOKEN}" \
-               -H "Accept: application/vnd.github.v3+json" \
-               "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files?per_page=100" \
-               > files_raw.json
-
+          # Process files data
           jq '[.[] | select(.patch != null) | {filename: .filename, patch: .patch}]' files_raw.json > files.json
           jq '[.[] | select(.patch == null) | .filename]' files_raw.json > truncated_files.json
           if [ "$(jq 'length' truncated_files.json)" -eq 0 ]; then
@@ -133,12 +176,25 @@ jobs:
           fi
 
       - name: Perform automated code review
+        if: steps.changes.outputs.skip != 'true'
         env:
           FACTORY_API_KEY: ${{ secrets.FACTORY_API_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_COMMENTS: ${{ steps.pr-size.outputs.max_comments }}
+          IS_LARGE_PR: ${{ steps.pr-size.outputs.large }}
         run: |
-          cat > prompt.txt << 'EOF'
+          # OPTIMIZATION #6: Adjust prompt based on PR size
+          MAX_COMMENTS_TEXT="Maximum ${MAX_COMMENTS} comments total"
+          if [ "$IS_LARGE_PR" = "true" ]; then
+            PRIORITY_NOTE="⚠️ LARGE PR: Focus ONLY on the most critical bugs and security issues."
+          else
+            PRIORITY_NOTE=""
+          fi
+          
+          cat > prompt.txt << EOF
           You are an automated code review system. Review the PR diff and identify clear issues that need to be fixed.
+
+          ${PRIORITY_NOTE}
 
           Input files (already in current directory):
           - diff.txt: the code changes to review
@@ -172,9 +228,9 @@ jobs:
           - Clearly describe the issue: "This code block is unreachable due to the if (false) condition"
           - Provide a concrete fix: "Remove this entire if block as it will never execute"
           - When possible, suggest the exact code change:
-            ```suggestion
+            \`\`\`suggestion
             // Remove the unreachable code
-            ```
+            \`\`\`
           - Be specific about why it's a problem: "This will cause a TypeError if input is null"
           - No emojis, just clear technical language
 
@@ -194,7 +250,7 @@ jobs:
           - Empty array [] if no issues found
           - Otherwise array of comment objects with path, position, body
           - Each comment should be actionable and clear about what needs to be fixed
-          - Maximum 10 comments total; prioritize the most critical issues
+          - ${MAX_COMMENTS_TEXT}; prioritize the most critical issues
 
           CRITICAL: Ensure the comments.json file contains valid JSON that can be parsed by JSON.parse().
           - All strings in JSON must be properly escaped
@@ -238,59 +294,33 @@ jobs:
           fi
           echo "✅ JSON validation passed"
 
+      # OPTIMIZATION #9: Replace Python with faster jq for sanitization
       - name: Sanitize review comments
+        if: steps.changes.outputs.skip != 'true'
         run: |
           set -euo pipefail
           if [ ! -f comments.json ]; then
             exit 0
           fi
 
-          python3 <<'PY'
-          import json
-          import os
-          from pathlib import Path
-
-          path = Path("comments.json")
-          try:
-            data = json.loads(path.read_text())
-          except json.JSONDecodeError:
-            raise SystemExit("comments.json is not valid JSON after validation step.")
-
-          if not isinstance(data, list):
-            path.write_text("[]")
-            raise SystemExit("comments.json payload was not a list; cleared for safety.")
-
-          max_len = 65000
-          cleaned = []
-          seen = set()
-
-          for entry in data:
-            if not isinstance(entry, dict):
-              continue
-            file_path = entry.get("path")
-            position = entry.get("position")
-            body = entry.get("body")
-            if not file_path or position is None or body is None:
-              continue
-
-            body = str(body).replace("\r", "").strip()
-            if not body:
-              continue
-
-            if len(body) > max_len:
-              body = body[: max_len - 3] + "..."
-
-            key = (file_path, position, body)
-            if key in seen:
-              continue
-
-            seen.add(key)
-            cleaned.append({"path": file_path, "position": position, "body": body})
-
-          path.write_text(json.dumps(cleaned, separators=(",", ":")))
-          PY
+          # Use jq for faster JSON processing
+          echo "Sanitizing comments with jq..."
+          jq -c '
+            [.[] |
+             select(type == "object" and .path and .position and .body) |
+             {
+               path: .path,
+               position: .position,
+               body: (.body | tostring | if length > 65000 then .[0:64997] + "..." else . end)
+             }] |
+            unique_by({path, position, body})
+          ' comments.json > comments_clean.json
+          
+          mv comments_clean.json comments.json
+          echo "✅ Comments sanitized"
 
       - name: Submit inline review comments
+        if: steps.changes.outputs.skip != 'true'
         uses: actions/github-script@v7
         with:
           script: |
@@ -429,8 +459,8 @@ jobs:
           if [ -f comments.json ]; then
             echo "✅ comments.json created successfully"
             echo "File size: $(wc -c < comments.json) bytes"
-            echo "Number of comments: $(python3 -c "import json; print(len(json.load(open('comments.json'))))" 2>/dev/null || echo "Invalid JSON")"
+            echo "Number of comments: $(jq 'length' comments.json 2>/dev/null || echo "Invalid JSON")"
           else
-            echo "❌ comments.json was not created"
+            echo "⚠️ comments.json was not created (workflow may have been skipped)"
           fi
           echo "Workflow completed at $(date)"
