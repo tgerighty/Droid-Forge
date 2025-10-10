@@ -31,9 +31,10 @@ orchestrator:
 
 # Droid discovery and execution
 droids:
-  # Directory where droids are stored (relative to project root)
-  directory: ".factory/droids"
-  directory: "~/.factory/droids"
+  # Directories where droids are stored (searched in order)
+  locations:
+    - ".factory/droids"          # Project-specific droids
+    - "~/.factory/droids"        # Personal/global droids
 
   # Default execution timeout in seconds
   default_timeout: 300
