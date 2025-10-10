@@ -121,7 +121,7 @@ validate_task_list_format() {
 
 ```bash
 coordinate_with_baas_orchestrator() {
-  Task tool with subagent_type="manager-orchestrator" \
+  Task tool with subagent_type="manager-orchestrator-droid-foundry" \
     description="Process new task list" \
     prompt="Process task list $1 from PRD $2 during phase $3"
 }

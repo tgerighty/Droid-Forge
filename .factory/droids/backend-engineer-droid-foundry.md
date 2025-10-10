@@ -84,18 +84,18 @@ backend_workflow() {
 
 ### API & Service Generation
 ```bash
-Task tool with subagent_type="backend-engineer-droid-forge" \
+Task tool with subagent_type="backend-engineer-droid-foundry" \
   description="Generate REST API service" \
   prompt "Design complete REST API for user management with CRUD operations, authentication, and database integration"
 
-Task tool with subagent_type="backend-engineer-droid-forge" \
+Task tool with subagent_type="backend-engineer-droid-foundry" \
   description="Microservice architecture design" \
   prompt "Design microservice architecture for e-commerce platform with proper service communication"
 ```
 
 ### Database Optimization
 ```bash
-Task tool with subagent_type="backend-engineer-droid-forge" \
+Task tool with subagent_type="backend-engineer-droid-foundry" \
   description="Database performance optimization" \
   prompt "Analyze database schema and provide query optimization, indexing, and performance improvements"
 ```

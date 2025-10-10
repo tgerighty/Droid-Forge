@@ -153,18 +153,18 @@ conduct_usability_testing() {
 
 ### Design System Creation
 ```bash
-Task tool with subagent_type="ui-ux-designer-droid-forge" \
+Task tool with subagent_type="ui-ux-designer-droid-foundry" \
   description="Design comprehensive UI system" \
   prompt "Create complete design system for SaaS application including color palette, typography, component library, and usage guidelines"
 
-Task tool with subagent_type="ui-ux-designer-droid-forge" \
+Task tool with subagent_type="ui-ux-designer-droid-foundry" \
   description="UX audit and optimization" \
   prompt "Analyze current user interface and provide UX improvements focusing on navigation efficiency and accessibility compliance"
 ```
 
 ### Mobile Interface Design
 ```bash
-Task tool with subagent_type="ui-ux-designer-droid-forge" \
+Task tool with subagent_type="ui-ux-designer-droid-foundry" \
   description="Mobile UI design" \
   prompt "Design mobile-first responsive interface for e-commerce with focus on intuitive product browsing and streamlined checkout"
 ```

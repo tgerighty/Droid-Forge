@@ -161,14 +161,14 @@ debug_integration_issues() {
 
 ### Error Resolution
 ```bash
-Task tool with subagent_type="debugging-expert-droid-forge" \
+Task tool with subagent_type="debugging-expert-droid-foundry" \
   description="Debug runtime error" \
   prompt "Analyze error: 'TypeError: Cannot read property 'undefined' at line 42. Provide systematic debugging approach and solutions."
 ```
 
 ### Performance Optimization
 ```bash
-Task tool with subagent_type="debugging-expert-droid-forge" \
+Task tool with subagent_type="debugging-expert-droid-foundry" \
   description="Performance issue analysis" \
   prompt "Profile slow-loading React application and identify performance bottlenecks with specific optimization recommendations."
 ```

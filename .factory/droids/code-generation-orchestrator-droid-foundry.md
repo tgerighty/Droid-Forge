@@ -128,17 +128,17 @@ resolve_droid_recommendation_conflicts() {
 
 ```bash
 # Full application generation
-Task tool with subagent_type="code-generation-orchestrator-droid-forge" \
+Task tool with subagent_type="code-generation-orchestrator-droid-foundry" \
   description="Orchestrate full application generation" \
   prompt "Generate complete e-commerce application with authentication, catalog, cart, payment. Coordinate architecture, backend, frontend, UI/UX specialists."
 
 # Feature enhancement
-Task tool with subagent_type="code-generation-orchestrator-droid-forge" \
+Task tool with subagent_type="code-generation-orchestrator-droid-foundry" \
   description="Orchestrate feature enhancement" \
   prompt "Add real-time chat feature. Coordinate backend API, frontend UI, database updates while maintaining compatibility."
 
 # Code refactoring
-Task tool with subagent_type="code-generation-orchestrator-droid-forge" \
+Task tool with subagent_type="code-generation-orchestrator-droid-foundry" \
   description="Orchestrate code refactoring" \
   prompt "Coordinate authentication system refactoring from sessions to JWT tokens. Coordinate backend, frontend, security specialists."
 ```

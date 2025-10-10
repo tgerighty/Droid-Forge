@@ -110,18 +110,18 @@ detect_frontend_stack() {
 
 ### Component Generation
 ```bash
-Task tool with subagent_type="frontend-engineer-droid-forge" \
+Task tool with subagent_type="frontend-engineer-droid-foundry" \
   description="Create reusable React component" \
   prompt "Generate TypeScript React component for user profile card with avatar, name, email, and action buttons"
 
-Task tool with subagent_type="frontend-engineer-droid-forge" \
+Task tool with subagent_type="frontend-engineer-droid-foundry" \
   description="Create responsive layout system" \
   prompt "Design responsive dashboard layout using CSS Grid with sidebar, main content, and header"
 ```
 
 ### Performance Optimization
 ```bash
-Task tool with subagent_type="frontend-engineer-droid-forge" \
+Task tool with subagent_type="frontend-engineer-droid-foundry" \
   description="Performance optimization consultation" \
   prompt "Analyze React application and provide bundle size, render performance, and UX improvements"
 ```
