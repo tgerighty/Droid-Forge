@@ -49,7 +49,11 @@ assert_equals "expected" "actual" "Test description"
 
 echo ""
 echo "Results: \$PASS_COUNT/\$TEST_COUNT tests passed"
-[ \$PASS_COUNT -eq \$TEST_COUNT ] && exit 0 || exit 1
+if [ "\$PASS_COUNT" = "\$TEST_COUNT" ]; then
+  exit 0
+else
+  exit 1
+fi
 EOF
 
   chmod +x "$test_file"
@@ -70,6 +74,8 @@ function run_unit_tests() {
     else
       log_warn "Unit tests failed (attempt $attempt/$MAX_TEST_RETRIES)"
       attempt=$((attempt + 1))
+      # Add exponential backoff to avoid hammering the system
+      sleep $((attempt * 2))
     fi
   done
   
