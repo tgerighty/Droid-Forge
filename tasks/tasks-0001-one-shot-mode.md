@@ -36,15 +36,15 @@
 
 ## Tasks
 
-- [ ] 1.0 Phase 1: Core Mode Selection & Basic Autonomy
+- [x] 1.0 Phase 1: Core Mode Selection & Basic Autonomy
   - [x] 1.1 Add mode selection to Manager Orchestrator
   - [x] 1.2 Implement mode detection and storage in execution context
   - [x] 1.3 Create basic one-shot execution loop (no confirmation between sub-tasks)
   - [x] 1.4 Implement automatic commit per sub-task
   - [x] 1.5 Implement immediate push after each commit
   - [x] 1.6 Add basic execution logging to console
-  - [ ] 1.7 Update AGENTS.md with mode selection documentation
-  - [ ] 1.8 Test mode selection with simple 3-task example
+  - [x] 1.7 Update AGENTS.md with mode selection documentation
+  - [x] 1.8 Test mode selection with simple 3-task example
 
 - [ ] 2.0 Phase 2: Testing Automation
   - [ ] 2.1 Create test-automation.sh script for unit test generation
