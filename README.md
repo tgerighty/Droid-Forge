@@ -289,7 +289,7 @@ fix: resolve login validation bug
 
 ### Core Components
 
-- **🧠 Manager Droid Orchestrator** - Broker and Automation System for task management and coordination (Manager Droid also means "Chief" or "Boss" in Dutch)
+- **🧠 Manager Droid Orchestrator** - Broker and Automation System for task management and coordination
 - **📋 Task Manager** - Atomic task lifecycle management with file locking
 - **🔀 Git Workflow Orchestrator** - Branch management and commit coordination
 - **🔗 AI-Dev-Tasks Integrator** - Process file synchronization and PRD integration
