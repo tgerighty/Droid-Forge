@@ -408,7 +408,7 @@ jobs:
 
           # Run droid exec with the prompt using glm-4.6 model
           echo "Running code review analysis with glm-4.6 model..."
-          droid exec --auto high --skip-permissions-unsafe -f prompt.txt -m "glm-4.6" || {
+          droid exec --auto high -f prompt.txt -m "glm-4.6" || {
             echo "❌ ERROR: droid exec failed"
             echo "This could be due to missing FACTORY_API_KEY, MODEL_API_KEY, or other runtime issues."
             exit 1
