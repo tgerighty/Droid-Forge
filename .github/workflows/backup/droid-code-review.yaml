@@ -23,6 +23,71 @@ jobs:
       github.event.pull_request.changed_files < 100
 
     steps:
+      # Validate API keys first - fail fast to save GitHub Actions minutes
+      - name: Check API keys configuration
+        id: check-keys
+        env:
+          FACTORY_API_KEY: ${{ secrets.FACTORY_API_KEY }}
+          MODEL_API_KEY: ${{ secrets.MODEL_API_KEY }}
+        run: |
+          set -euo pipefail
+
+          MISSING_KEYS=""
+
+          if [ -z "$FACTORY_API_KEY" ]; then
+            MISSING_KEYS="${MISSING_KEYS}- \`FACTORY_API_KEY\`\n"
+          fi
+
+          if [ -z "$MODEL_API_KEY" ]; then
+            MISSING_KEYS="${MISSING_KEYS}- \`MODEL_API_KEY\`\n"
+          fi
+
+          if [ -n "$MISSING_KEYS" ]; then
+            echo "keys_missing=true" >> $GITHUB_OUTPUT
+            echo "missing_keys<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$MISSING_KEYS" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "keys_missing=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Post comment about missing API keys
+        if: steps.check-keys.outputs.keys_missing == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const missingKeys = `${{ steps.check-keys.outputs.missing_keys }}`;
+            const comment = `## ⚠️ Droid Code Review: Configuration Required
+
+            The automated code review cannot run because the following API keys are not configured:
+
+            ${missingKeys}
+
+            ### Setup Instructions
+
+            1. Go to repository **Settings** → **Secrets and variables** → **Actions**
+            2. Click **New repository secret** for each missing key:
+               - **FACTORY_API_KEY**: Your Factory.ai API key
+               - **MODEL_API_KEY**: Your Z.ai API key (for GLM-4.6 model)
+            3. Re-run this workflow or push a new commit to trigger the review
+
+            For more details, see the [workflow documentation](https://github.com/${{ github.repository }}/blob/main/README.md).
+
+            <!-- droid-review:missing-keys -->`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: comment
+            });
+
+      - name: Exit if API keys are missing
+        if: steps.check-keys.outputs.keys_missing == 'true'
+        run: |
+          echo "❌ API keys are missing. Posted comment on PR. Exiting gracefully."
+          exit 0
+
       # OPTIMIZATION #3: Shallow checkout instead of full history
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,27 +95,20 @@ jobs:
           fetch-depth: 1
           ref: ${{ github.event.pull_request.head.sha }}
 
-      # OPTIMIZATION #4: Combine validation and prerequisite installation
-      - name: Validate configuration and check prerequisites
+      # OPTIMIZATION #4: Validate prerequisites (API keys already checked)
+      - name: Validate prerequisites
         env:
-          FACTORY_API_KEY: ${{ secrets.FACTORY_API_KEY }}
           DROID_INSTALLER_SHA256: ${{ vars.DROID_INSTALLER_SHA256 }}
         run: |
           set -euo pipefail
-          
-          # Validation
-          if [ -z "$FACTORY_API_KEY" ]; then
-            echo "❌ FACTORY_API_KEY secret is not configured."
-            echo "Add FACTORY_API_KEY in repository settings → Secrets and variables → Actions."
-            exit 1
-          fi
 
+          # Validation (API keys already checked in first step)
           if [ -z "${DROID_INSTALLER_SHA256:-}" ]; then
             echo "❌ DROID_INSTALLER_SHA256 repository variable is not configured."
             echo "Set vars.DROID_INSTALLER_SHA256 to the expected sha256 digest of the Droid CLI installer."
             exit 1
           fi
-          
+
           # OPTIMIZATION #7: Skip jq installation (pre-installed on GitHub runners)
           echo "✅ Prerequisites validated (jq is pre-installed on GitHub runners)"
 
@@ -77,6 +135,39 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           "$HOME/.local/bin/droid" --version
 
+      - name: Configure custom model
+        env:
+          MODEL_API_KEY: ${{ secrets.MODEL_API_KEY }}
+        run: |
+          set -euo pipefail
+
+          # Create .factory directory if it doesn't exist
+          mkdir -p "$HOME/.factory"
+
+          # Create config.json with custom model configuration
+          cat > "$HOME/.factory/config.json" << 'EOF'
+          {
+            "custom_models": [
+              {
+                "model_display_name": "GLM-4.6 Coding Plan",
+                "model": "GLM-4.6",
+                "base_url": "https://api.z.ai/api/anthropic",
+                "api_key": "MODEL_API_KEY_PLACEHOLDER",
+                "provider": "zia"
+              }
+            ]
+          }
+          EOF
+
+          # Replace the API key placeholder with actual key using jq
+          jq --arg key "$MODEL_API_KEY" '.custom_models[0].api_key = $key' "$HOME/.factory/config.json" > "$HOME/.factory/config.json.tmp"
+          mv "$HOME/.factory/config.json.tmp" "$HOME/.factory/config.json"
+
+          echo "✅ Custom model configuration created at $HOME/.factory/config.json"
+
+          # Verify the config (without showing the API key)
+          jq '.custom_models[0] | {model_display_name, model, base_url, provider, api_key_set: (.api_key != "")}' "$HOME/.factory/config.json"
+
       # OPTIMIZATION #10: Add early exit for no changes
       - name: Check for code changes
         id: changes
@@ -84,10 +175,10 @@ jobs:
           set -euo pipefail
           # Fetch only the base branch with shallow depth
           git fetch --depth=1 origin ${{ github.event.pull_request.base.ref }}
-          
+
           # Check if there are actual code changes
           DIFF_SIZE=$(git diff origin/${{ github.event.pull_request.base.ref }}...${{ github.event.pull_request.head.sha }} | wc -l)
-          
+
           if [ "$DIFF_SIZE" -eq 0 ]; then
             echo "skip=true" >> $GITHUB_OUTPUT
             echo "⚠️ No code changes detected. Skipping review."
@@ -150,19 +241,19 @@ jobs:
           echo "📡 Fetching PR data in parallel..."
           (
             fetch_paginated "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" "existing_issue_comments.json" &
-            
+
             fetch_paginated "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments" "existing_review_comments.json" &
-            
+
             curl -fsSL \
                  -H "Authorization: token ${GH_TOKEN}" \
                  -H "Accept: application/vnd.github.v3+json" \
                  "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files?per_page=100" \
                  > files_raw.json &
-            
+
             # Wait for all parallel processes to complete
             wait
           )
-          
+
           echo "✅ All API calls completed"
 
           # Merge comments for deduplication
@@ -190,7 +281,7 @@ jobs:
           else
             PRIORITY_NOTE=""
           fi
-          
+
           cat > prompt.txt << EOF
           You are an automated code review system. Review the PR diff and identify clear issues that need to be fixed.
 
@@ -263,11 +354,11 @@ jobs:
           - The JSON must be a single line without line breaks within string values
           EOF
 
-          # Run droid exec with the prompt
-          echo "Running code review analysis..."
-          droid exec -f prompt.txt --skip-permissions-unsafe || {
+          # Run droid exec with the prompt using custom model
+          echo "Running code review analysis with GLM-4.6 model..."
+          droid exec -f prompt.txt -m "GLM-4.6" --skip-permissions-unsafe || {
             echo "❌ ERROR: droid exec failed"
-            echo "This could be due to missing FACTORY_API_KEY or other runtime issues."
+            echo "This could be due to missing FACTORY_API_KEY, MODEL_API_KEY, or other runtime issues."
             exit 1
           }
 
@@ -315,7 +406,7 @@ jobs:
              }] |
             unique_by({path, position, body})
           ' comments.json > comments_clean.json
-          
+
           mv comments_clean.json comments.json
           echo "✅ Comments sanitized"
 
