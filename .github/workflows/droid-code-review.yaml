@@ -3,9 +3,15 @@ name: Droid Code Review
 'on':
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to review'
+        required: true
+        type: number
 
 concurrency:
-  group: droid-review-${{ github.event.pull_request.number }}
+  group: droid-review-${{ github.event.pull_request.number || inputs.pr_number }}
   cancel-in-progress: true
 
 permissions:
@@ -17,12 +23,36 @@ jobs:
   code-review:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # Skip automated code review for draft PRs and very large PRs
-    if: |
-      github.event.pull_request.draft == false &&
-      github.event.pull_request.changed_files < 100
+    # Skip automated code review for draft PRs only (manual dispatch always runs)
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
 
     steps:
+      # Set PR number from either event or manual input
+      - name: Set PR number
+        id: pr-number
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "number=${{ inputs.pr_number }}" >> $GITHUB_OUTPUT
+            echo "Manual trigger for PR #${{ inputs.pr_number }}"
+          else
+            echo "number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+            echo "Automatic trigger for PR #${{ github.event.pull_request.number }}"
+          fi
+
+      # Fetch PR details for manual dispatch
+      - name: Fetch PR details
+        id: pr-details
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_DATA=$(gh api repos/${{ github.repository }}/pulls/${{ inputs.pr_number }})
+          echo "head_sha=$(echo "$PR_DATA" | jq -r '.head.sha')" >> $GITHUB_OUTPUT
+          echo "base_ref=$(echo "$PR_DATA" | jq -r '.base.ref')" >> $GITHUB_OUTPUT
+          echo "head_ref=$(echo "$PR_DATA" | jq -r '.head.ref')" >> $GITHUB_OUTPUT
+          echo "changed_files=$(echo "$PR_DATA" | jq -r '.changed_files')" >> $GITHUB_OUTPUT
+          echo "draft=$(echo "$PR_DATA" | jq -r '.draft')" >> $GITHUB_OUTPUT
+
       # Validate API keys first - fail fast to save GitHub Actions minutes
       - name: Check API keys configuration
         id: check-keys
@@ -75,10 +105,11 @@ jobs:
 
             <!-- droid-review:missing-keys -->`;
 
+            const prNumber = context.payload.pull_request?.number || ${{ steps.pr-number.outputs.number }};
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
+              issue_number: prNumber,
               body: comment
             });
 
@@ -93,7 +124,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || steps.pr-details.outputs.head_sha }}
 
       # OPTIMIZATION #4: Validate prerequisites (API keys already checked)
       - name: Validate prerequisites
@@ -187,11 +218,14 @@ jobs:
         id: changes
         run: |
           set -euo pipefail
+          BASE_REF="${{ github.event.pull_request.base.ref || steps.pr-details.outputs.base_ref }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha || steps.pr-details.outputs.head_sha }}"
+          
           # Fetch base branch (full history already available from checkout)
-          git fetch origin ${{ github.event.pull_request.base.ref }}
+          git fetch origin "$BASE_REF"
 
           # Check if there are actual code changes
-          DIFF_SIZE=$(git diff origin/${{ github.event.pull_request.base.ref }}...${{ github.event.pull_request.head.sha }} | wc -l)
+          DIFF_SIZE=$(git diff "origin/$BASE_REF...$HEAD_SHA" | wc -l)
 
           if [ "$DIFF_SIZE" -eq 0 ]; then
             echo "skip=true" >> $GITHUB_OUTPUT
@@ -206,7 +240,7 @@ jobs:
         id: pr-size
         if: steps.changes.outputs.skip != 'true'
         run: |
-          FILES=${{ github.event.pull_request.changed_files }}
+          FILES=${{ github.event.pull_request.changed_files || steps.pr-details.outputs.changed_files }}
           if [ "$FILES" -gt 50 ]; then
             echo "large=true" >> $GITHUB_OUTPUT
             echo "max_comments=5" >> $GITHUB_OUTPUT
@@ -222,8 +256,12 @@ jobs:
         if: steps.changes.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr-number.outputs.number }}
         run: |
           set -euo pipefail
+          
+          BASE_REF="${{ github.event.pull_request.base.ref || steps.pr-details.outputs.base_ref }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha || steps.pr-details.outputs.head_sha }}"
 
           fetch_paginated() {
             local url="$1"
@@ -249,19 +287,19 @@ jobs:
           }
 
           # Get the PR diff
-          git diff origin/${{ github.event.pull_request.base.ref }}...${{ github.event.pull_request.head.sha }} > diff.txt
+          git diff "origin/$BASE_REF...$HEAD_SHA" > diff.txt
 
           # OPTIMIZATION #2: Run all API calls in parallel
           echo "📡 Fetching PR data in parallel..."
           (
-            fetch_paginated "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" "existing_issue_comments.json" &
+            fetch_paginated "https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/comments" "existing_issue_comments.json" &
 
-            fetch_paginated "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments" "existing_review_comments.json" &
+            fetch_paginated "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}/comments" "existing_review_comments.json" &
 
             curl -fsSL \
                  -H "Authorization: token ${GH_TOKEN}" \
                  -H "Accept: application/vnd.github.v3+json" \
-                 "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files?per_page=100" \
+                 "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}/files?per_page=100" \
                  > files_raw.json &
 
             # Wait for all parallel processes to complete
@@ -431,7 +469,7 @@ jobs:
           script: |
             const fs = require('fs');
             const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-            const prNumber = context.payload.pull_request.number;
+            const prNumber = context.payload.pull_request?.number || ${{ steps.pr-number.outputs.number }};
             const NO_ISSUES_MARKER = '<!-- droid-review:no-issues -->';
 
             if (!fs.existsSync('comments.json')) {
