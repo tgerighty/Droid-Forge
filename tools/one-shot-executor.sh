@@ -3,8 +3,12 @@
 # Executes tasks autonomously without confirmation
 
 # Get script directory for reliable path resolution
+SCRIPT_DIR=
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/execution-context.sh"
+
+# Source dependencies
+source "$SCRIPT_DIR/execution-context.sh" 2>/dev/null || true
+source "$SCRIPT_DIR/execution-logger.sh" 2>/dev/null || true
 
 # Execute all sub-tasks of a major task
 function execute_major_task_one_shot() {
@@ -13,14 +17,27 @@ function execute_major_task_one_shot() {
   
   echo "🚀 Executing major task $major_task_id in ONE-SHOT MODE"
   
-  # Extract all sub-tasks for this major task
-  local sub_tasks=$(grep -E "^\s+- \[ \] $major_task_id\." "$task_file" | sed 's/.*\[ \] //')
+  # Extract all sub-tasks for this major task (fix regex and word-splitting)
+  # Use [[:space:]] instead of \s for POSIX compliance
+  local sub_task_lines
+  sub_task_lines=$(grep -E "^[[:space:]]+-[[:space:]]\[[[:space:]]\][[:space:]]${major_task_id}\." "$task_file")
   
-  for sub_task in $sub_tasks; do
-    echo ""
-    echo "▶️  Executing sub-task: $sub_task"
-    execute_sub_task_one_shot "$task_file" "$sub_task"
-  done
+  # Process each line safely without word-splitting
+  while IFS= read -r line; do
+    if [ -z "$line" ]; then
+      continue
+    fi
+    
+    # Extract task ID safely
+    local sub_task_id
+    sub_task_id=$(echo "$line" | sed -n 's/.*\[[[:space:]]\][[:space:]]*\([0-9]\+\.[0-9]\+\).*/\1/p' | tr -d '[:space:]')
+    
+    if [ -n "$sub_task_id" ]; then
+      echo ""
+      echo "▶️  Executing sub-task: $sub_task_id"
+      execute_sub_task_one_shot "$task_file" "$sub_task_id"
+    fi
+  done <<< "$sub_task_lines"
   
   echo ""
   echo "✅ Major task $major_task_id completed"
@@ -31,8 +48,9 @@ function execute_sub_task_one_shot() {
   local task_file="$1"
   local sub_task_id="$2"
   
-  # Get task description
-  local task_desc=$(grep "$sub_task_id" "$task_file" | sed "s/.*$sub_task_id //")
+  # Get task description (fix SC2155)
+  local task_desc
+  task_desc=$(grep "$sub_task_id" "$task_file" | sed "s/.*$sub_task_id //")
   
   echo "  📝 Task: $task_desc"
   echo "  ⏳ Status: Executing..."

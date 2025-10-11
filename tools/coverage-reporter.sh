@@ -1,9 +1,17 @@
 #!/bin/bash
 # Code coverage reporting (Tasks 2.10-2.11)
-source tools/test-automation.sh
+
+# Get script directory for reliable sourcing
+SCRIPT_DIR=
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Source dependencies
+source "$SCRIPT_DIR/test-automation.sh" 2>/dev/null || true
 
 function generate_coverage_report() {
-  local coverage=$(calculate_coverage "tools")
+  # Split declare/assign to avoid SC2155
+  local coverage
+  coverage=$(calculate_coverage "tools")
   
   echo "========================================" 
   echo "Code Coverage Report"
