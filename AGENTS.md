@@ -31,6 +31,28 @@ Droid Forge is a **meta-orchestration framework** that uses Factory.ai droids to
 - **Task delegation** happens automatically based on pattern matching
 - **ai-dev-tasks integration** provides structured task management
 
+### Execution Modes
+
+Droid Forge supports **two execution modes**:
+
+#### 1. **Iterative Mode** (Default)
+- Human confirmation between tasks
+- Step-by-step progression
+- Interactive decision-making
+- **Use when**: Architecture decisions needed, learning workflow, uncertain requirements
+
+#### 2. **One-Shot Mode** (NEW)
+- Autonomous execution without confirmation
+- Comprehensive automated testing
+- Quality gate enforcement
+- Iterative PR review and fixes
+- **Use when**: Well-defined tasks, routine features, high confidence in requirements
+
+**Mode Selection**: At workflow start, Manager Orchestrator will ask:
+> **"Do you want me to one-shot or follow the iterative process?"**
+
+Respond with **"one-shot"** or **"iterative"** to set the mode for this workflow session.
+
 ### Framework Architecture
 
 ```
@@ -158,26 +180,143 @@ Structure tasks hierarchically:
 
 ## Droid Directory
 
-### Available Droids
+### Droid Organization
+
+Droids are organized into three categories following **Separation of Concerns**:
+
+1. **Assessment Droids**: Analyze code and CREATE TASKS
+2. **Action Droids**: Execute tasks and UPDATE STATUS
+3. **Infrastructure Droids**: Orchestration and support
+
+### Assessment Droids (Analyze → Create Tasks)
+
+| Droid Name | Purpose | When to Use | Task File |
+|------------|---------|-------------|-----------|
+| **code-smell-assessment-droid-forge** | Detect anti-patterns and technical debt | Code quality issues, maintainability problems, design pattern violations | tasks/tasks-code-smells-[date].md |
+| **cognitive-complexity-assessment-droid-forge** | Measure code complexity and understandability | Functions hard to understand, excessive nesting, high cognitive load | tasks/tasks-complexity-[date].md |
+| **security-assessment-droid-forge** | Identify security vulnerabilities | SQL injection, XSS, CSRF, secrets, dependency vulnerabilities | tasks/tasks-security-[date].md |
+| **typescript-assessment-droid-forge** | Analyze TypeScript type safety | 'any' usage, weak types, missing null checks, strict mode issues | tasks/tasks-typescript-[date].md |
+| **debugging-assessment-droid-forge** | Root cause analysis and bug identification | Errors, bugs, performance issues, memory leaks, race conditions | tasks/tasks-bugs-[date].md |
+| **test-assessment-droid-forge** | Analyze test coverage and quality | Low coverage, untested code paths, flaky tests, test quality | tasks/tasks-testing-[date].md |
+
+### Action Droids (Execute Tasks → Update Status)
+
+| Droid Name | Purpose | When to Use | Processes Tasks From |
+|------------|---------|-------------|----------------------|
+| **code-refactoring-droid-forge** | Implement code refactoring | Extract methods, simplify conditionals, reduce duplication | tasks/tasks-code-smells-[date].md, tasks/tasks-complexity-[date].md |
+| **security-fix-droid-forge** | Remediate security vulnerabilities | Fix SQL injection, XSS, update dependencies, add security headers | tasks/tasks-security-[date].md |
+| **typescript-fix-droid-forge** | Improve TypeScript type safety | Replace 'any', add type guards, enable strict mode, fix null handling | tasks/tasks-typescript-[date].md |
+| **bug-fix-droid-forge** | Implement bug fixes | Fix logic errors, race conditions, memory leaks, null references | tasks/tasks-bugs-[date].md |
+| **unit-test-droid-forge** | Write tests and execute test suites | Write unit tests, run tests, achieve coverage targets | tasks/tasks-testing-[date].md |
+| **frontend-engineer-droid-forge** | Build React/Next.js components | UI components, responsive design, frontend architecture | Various task files |
+| **backend-engineer-droid-forge** | Build APIs and services | REST APIs, database integration, backend services | Various task files |
+
+### Infrastructure Droids (Orchestration & Support)
 
 | Droid Name | Purpose | When to Use |
 |------------|---------|-------------|
 | **manager-orchestrator-droid-forge** | Central coordination and task delegation | PRD analysis, workflow orchestration, multi-droid coordination |
-| **frontend-engineer-droid-forge** | React/Next.js development | UI components, responsive design, frontend architecture |
-| **backend-engineer-droid-forge** | API and microservice development | REST APIs, database integration, backend services |
-| **debugging-expert-droid-forge** | Bug fixing and troubleshooting | Error analysis, debugging complex issues, performance problems |
-| **reliability-droid-forge** | SRE and incident management | Monitoring setup, incident response, chaos engineering |
-| **auto-pr-droid-forge** | Automated PR creation and management | Issue-to-PR automation, iterative review fixes, CI/CD monitoring |
-| **security-audit-droid-forge** | Security auditing | Vulnerability assessment, security review, compliance checks |
-| **unit-test-droid-forge** | Test generation and execution | Unit tests, test coverage, test debugging |
+| **task-manager-droid-forge** | Task lifecycle management | Task status tracking, atomic task operations, file locking |
+| **ai-dev-tasks-integrator-droid-forge** | Task system integration | PRD processing, task file creation and synchronization |
+| **git-workflow-orchestrator-droid-forge** | Git operations | Branch management, commit coordination, merge strategies |
 | **biome-droid-forge** | Code linting and formatting | Code style checks, formatting enforcement |
-| **git-workflow-orchestrator-droid-forge** | Git operations | Branch management, commit coordination |
-| **ai-dev-tasks-integrator-droid-forge** | Task system integration | PRD processing, task file synchronization |
-| **task-manager-droid-forge** | Task lifecycle management | Task status tracking, atomic operations |
+| **auto-pr-droid-forge** | Automated PR creation and management | Issue-to-PR automation, iterative review fixes, CI/CD monitoring |
+| **reliability-droid-forge** | SRE and incident management | Monitoring setup, incident response, chaos engineering |
+| **typescript-professional-droid-forge** | Advanced TypeScript patterns | Complex type systems, generics, advanced patterns (Note: Consider using typescript-assessment + typescript-fix instead) |
 
 ### Droid Capabilities Matrix
 
-#### Development Droids
+#### Assessment Droids (Analyze → Create Tasks)
+
+**code-smell-assessment-droid-forge**
+- ✅ Detect bloaters (long methods, large classes, long parameter lists)
+- ✅ Identify OOP abusers (switch statements, refused bequest)
+- ✅ Find change preventers (divergent change, shotgun surgery)
+- ✅ Spot dispensables (dead code, duplicate code, lazy classes)
+- ✅ Detect couplers (feature envy, inappropriate intimacy)
+- ✅ Generate prioritized refactoring tasks
+
+**cognitive-complexity-assessment-droid-forge**
+- ✅ Calculate cognitive complexity scores
+- ✅ Identify high-complexity functions (> 10)
+- ✅ Analyze nesting levels and branching
+- ✅ Compare with industry thresholds
+- ✅ Generate complexity reduction tasks
+- ✅ Track complexity trends over time
+
+**security-assessment-droid-forge**
+- ✅ Scan dependency vulnerabilities (npm audit, Snyk)
+- ✅ Detect SQL injection, XSS, CSRF, command injection
+- ✅ Find hardcoded secrets and credentials
+- ✅ Check security headers and CORS configuration
+- ✅ Identify authentication/authorization issues
+- ✅ Generate CVSS-scored remediation tasks
+
+**typescript-assessment-droid-forge**
+- ✅ Analyze TypeScript configuration (strict mode)
+- ✅ Detect 'any' type usage and weak types
+- ✅ Find missing null/undefined checks
+- ✅ Identify unsafe type assertions
+- ✅ Calculate type coverage percentage
+- ✅ Generate type safety improvement tasks
+
+**debugging-assessment-droid-forge**
+- ✅ Root cause analysis from stack traces
+- ✅ Error pattern recognition
+- ✅ Performance profiling and bottleneck identification
+- ✅ Memory leak detection
+- ✅ Race condition analysis
+- ✅ Generate bug fix tasks with reproduction steps
+
+**test-assessment-droid-forge**
+- ✅ Analyze test coverage (statements, branches, functions)
+- ✅ Identify untested code paths
+- ✅ Detect flaky tests
+- ✅ Assess test quality (assertions, speed, duplication)
+- ✅ Find missing test cases
+- ✅ Generate test writing tasks
+
+#### Action Droids (Execute Tasks → Update Status)
+
+**code-refactoring-droid-forge**
+- ✅ Extract methods and classes
+- ✅ Simplify complex conditionals
+- ✅ Remove code duplication
+- ✅ Apply design patterns
+- ✅ Reduce cognitive complexity
+- ✅ Update task status throughout execution
+
+**security-fix-droid-forge**
+- ✅ Fix SQL injection (parameterized queries)
+- ✅ Fix XSS (output encoding, sanitization)
+- ✅ Fix command injection (whitelist, no shell)
+- ✅ Update vulnerable dependencies
+- ✅ Remove hardcoded secrets (environment variables)
+- ✅ Add security headers, CSRF protection
+
+**typescript-fix-droid-forge**
+- ✅ Replace 'any' with proper types
+- ✅ Enable strict mode flags
+- ✅ Add null/undefined handling
+- ✅ Convert type assertions to type guards
+- ✅ Add missing type definitions
+- ✅ Run tsc after each fix
+
+**bug-fix-droid-forge**
+- ✅ Fix logic errors and off-by-one errors
+- ✅ Fix race conditions (transaction isolation)
+- ✅ Fix memory leaks (cleanup handlers)
+- ✅ Fix null reference errors
+- ✅ Fix performance bottlenecks
+- ✅ Run tests after each fix
+
+**unit-test-droid-forge**
+- ✅ Write unit tests (Jest, Vitest, Mocha)
+- ✅ Write integration tests
+- ✅ Execute test suites
+- ✅ Generate coverage reports
+- ✅ Debug failing tests
+- ✅ Update task status for test tasks
 
 **frontend-engineer-droid-forge**
 - ✅ React/Next.js components with TypeScript
@@ -185,7 +324,7 @@ Structure tasks hierarchically:
 - ✅ Accessibility (WCAG compliance)
 - ✅ Performance optimization
 - ✅ State management (Context, Redux, Zustand)
-- ✅ Testing (React Testing Library)
+- ✅ Component testing (React Testing Library)
 
 **backend-engineer-droid-forge**
 - ✅ RESTful API design
@@ -195,15 +334,15 @@ Structure tasks hierarchically:
 - ✅ Caching strategies (Redis, Memcached)
 - ✅ Performance optimization
 
-**debugging-expert-droid-forge**
-- ✅ Root cause analysis
-- ✅ Error pattern recognition
-- ✅ Performance profiling
-- ✅ Memory leak detection
-- ✅ Stack trace analysis
-- ✅ Debugging strategy recommendations
+#### Infrastructure Droids (Orchestration & Support)
 
-#### Operations Droids
+**manager-orchestrator-droid-forge**
+- ✅ PRD analysis and task delegation
+- ✅ Multi-droid workflow coordination
+- ✅ Mode selection (one-shot vs iterative)
+- ✅ Status monitoring and aggregation
+- ✅ Error handling and recovery
+- ✅ Task dependency management
 
 **reliability-droid-forge**
 - ✅ Incident detection and classification
@@ -212,34 +351,28 @@ Structure tasks hierarchically:
 - ✅ Chaos engineering
 - ✅ SLA/SLO tracking
 - ✅ Runbook automation
-- ✅ On-call management
 
 **auto-pr-droid-forge**
 - ✅ GitHub issue analysis
 - ✅ Automated code generation
 - ✅ PR creation and management
-- ✅ **Iterative review and fix cycles**
+- ✅ Iterative review and fix cycles (up to 5)
 - ✅ CI/CD monitoring and fixing
 - ✅ Merge conflict resolution
 
-**security-audit-droid-forge**
-- ✅ Vulnerability scanning
-- ✅ Security best practices validation
-- ✅ Dependency auditing
-- ✅ Compliance checking
-
-#### Quality Droids
-
-**unit-test-droid-forge**
-- ✅ Test case generation
-- ✅ Test execution
-- ✅ Coverage analysis
-- ✅ Test debugging
+**task-manager-droid-forge**
+- ✅ Atomic task operations
+- ✅ File locking protocol
+- ✅ Status marker updates
+- ✅ Task validation
+- ✅ Rollback on failure
+- ✅ Concurrent access handling
 
 **biome-droid-forge**
 - ✅ Code linting
 - ✅ Formatting enforcement
 - ✅ Style consistency
+- ✅ Auto-fix capabilities
 
 ---
 
@@ -1236,3 +1369,21 @@ You'll build robust, secure, and maintainable software efficiently with the powe
 ---
 
 **Built with ❤️ and a lot of droids**
+
+## One-Shot Mode Advanced Usage
+
+### Error Recovery
+- Max 3 retries per sub-task
+- Automatic rollback on failure
+- Human escalation for critical issues
+
+### Quality Gates
+- Biome linting (auto-fix)
+- Security scanning
+- Type checking
+- 90% coverage threshold
+
+### PR Management
+- One PR per major task
+- Iterative review cycle (max 5 iterations)
+- CI/CD monitoring and auto-fix
