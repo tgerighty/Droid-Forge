@@ -50,29 +50,49 @@ function main_orchestration_handler() {
 }
 
 function ask_execution_mode() {
-  echo "🤖 Manager Orchestrator: Do you want me to one-shot or follow the iterative process?"
-  read -r mode_response
+  # Check environment variable first (for CI/CD and non-interactive contexts)
+  if [ -n "$ONE_SHOT_MODE" ]; then
+    echo "✅ Mode set via environment: ONE_SHOT_MODE=$ONE_SHOT_MODE"
+    return 0
+  fi
   
-  # Convert to lowercase for case-insensitive matching (macOS compatible)
-  mode_response_lower=$(echo "$mode_response" | tr '[:upper:]' '[:lower:]')
+  # Check existing context file
+  if [ -f .droid-forge/context/execution-mode.env ]; then
+    source .droid-forge/context/execution-mode.env
+    echo "✅ Mode restored from context: ONE_SHOT_MODE=$ONE_SHOT_MODE"
+    return 0
+  fi
   
-  case "$mode_response_lower" in
-    "one-shot"|"one shot"|"oneshot"|"yes"|"autonomous")
-      export ONE_SHOT_MODE=true
-      echo "✅ ONE-SHOT MODE ACTIVATED"
-      echo "I'll execute all tasks autonomously with comprehensive testing and quality gates."
-      ;;
-    "iterative"|"iterate"|"no"|"step-by-step"|"manual")
-      export ONE_SHOT_MODE=false
-      echo "✅ ITERATIVE MODE ACTIVATED"
-      echo "I'll ask for confirmation between tasks."
-      ;;
-    *)
-      export ONE_SHOT_MODE=false
-      echo "⚠️  Response unclear. Defaulting to ITERATIVE MODE for safety."
-      echo "I'll ask for confirmation between tasks."
-      ;;
-  esac
+  # Only prompt if in interactive terminal
+  if [ -t 0 ] && [ -t 1 ]; then
+    echo "🤖 Manager Orchestrator: Do you want me to one-shot or follow the iterative process?"
+    read -r mode_response
+    
+    # Convert to lowercase for case-insensitive matching (macOS compatible)
+    mode_response_lower=$(echo "$mode_response" | tr '[:upper:]' '[:lower:]')
+    
+    case "$mode_response_lower" in
+      "one-shot"|"one shot"|"oneshot"|"yes"|"autonomous")
+        export ONE_SHOT_MODE=true
+        echo "✅ ONE-SHOT MODE ACTIVATED"
+        echo "I'll execute all tasks autonomously with comprehensive testing and quality gates."
+        ;;
+      "iterative"|"iterate"|"no"|"step-by-step"|"manual")
+        export ONE_SHOT_MODE=false
+        echo "✅ ITERATIVE MODE ACTIVATED"
+        echo "I'll ask for confirmation between tasks."
+        ;;
+      *)
+        export ONE_SHOT_MODE=false
+        echo "⚠️  Response unclear. Defaulting to ITERATIVE MODE for safety."
+        echo "I'll ask for confirmation between tasks."
+        ;;
+    esac
+  else
+    # Non-interactive: default to iterative for safety
+    export ONE_SHOT_MODE=false
+    echo "✅ Non-interactive context detected. Defaulting to ITERATIVE MODE for safety."
+  fi
   
   # Store mode in execution context file
   mkdir -p .droid-forge/context
