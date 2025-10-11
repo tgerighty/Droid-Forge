@@ -284,8 +284,10 @@ error_handling:
     notify_on_critical_failure: true
 
 # One-Shot Mode Configuration (Phase 7: Tasks 7.1-7.12)
+# Note: One-shot mode is disabled by default to maintain backwards compatibility
+# Users must explicitly opt-in by responding "one-shot" to the mode selection prompt
 one_shot_mode:
-  enabled: true
+  enabled: false
   max_parallel: 3
   max_retries: 3
   coverage_threshold: 90
