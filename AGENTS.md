@@ -31,6 +31,28 @@ Droid Forge is a **meta-orchestration framework** that uses Factory.ai droids to
 - **Task delegation** happens automatically based on pattern matching
 - **ai-dev-tasks integration** provides structured task management
 
+### Execution Modes
+
+Droid Forge supports **two execution modes**:
+
+#### 1. **Iterative Mode** (Default)
+- Human confirmation between tasks
+- Step-by-step progression
+- Interactive decision-making
+- **Use when**: Architecture decisions needed, learning workflow, uncertain requirements
+
+#### 2. **One-Shot Mode** (NEW)
+- Autonomous execution without confirmation
+- Comprehensive automated testing
+- Quality gate enforcement
+- Iterative PR review and fixes
+- **Use when**: Well-defined tasks, routine features, high confidence in requirements
+
+**Mode Selection**: At workflow start, Manager Orchestrator will ask:
+> **"Do you want me to one-shot or follow the iterative process?"**
+
+Respond with **"one-shot"** or **"iterative"** to set the mode for this workflow session.
+
 ### Framework Architecture
 
 ```

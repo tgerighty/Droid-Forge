@@ -14,6 +14,12 @@ version: v2
 
 ## Core Functions
 
+### Mode Selection (NEW)
+- Ask user at workflow start: "Do you want me to one-shot or follow the iterative process?"
+- Parse response and set execution mode
+- Store mode in execution context for all droids
+- Adapt workflow behavior based on selected mode
+
 ### PRD Analysis
 - Parse PRD structure (Introduction, Goals, User Stories, Requirements)
 - Extract functional and non-functional requirements
@@ -34,10 +40,43 @@ version: v2
 
 ```bash
 function main_orchestration_handler() {
+  # NEW: Mode selection at workflow start
+  ask_execution_mode
+  
   validate_prd_requirements "$@"
   analyze_requirements_and_delegate "$@"
   coordinate_task_execution "$@"
   update_task_status "$@"
+}
+
+function ask_execution_mode() {
+  echo "🤖 Manager Orchestrator: Do you want me to one-shot or follow the iterative process?"
+  read -r mode_response
+  
+  # Convert to lowercase for case-insensitive matching (macOS compatible)
+  mode_response_lower=$(echo "$mode_response" | tr '[:upper:]' '[:lower:]')
+  
+  case "$mode_response_lower" in
+    "one-shot"|"one shot"|"oneshot"|"yes"|"autonomous")
+      export ONE_SHOT_MODE=true
+      echo "✅ ONE-SHOT MODE ACTIVATED"
+      echo "I'll execute all tasks autonomously with comprehensive testing and quality gates."
+      ;;
+    "iterative"|"iterate"|"no"|"step-by-step"|"manual")
+      export ONE_SHOT_MODE=false
+      echo "✅ ITERATIVE MODE ACTIVATED"
+      echo "I'll ask for confirmation between tasks."
+      ;;
+    *)
+      export ONE_SHOT_MODE=false
+      echo "⚠️  Response unclear. Defaulting to ITERATIVE MODE for safety."
+      echo "I'll ask for confirmation between tasks."
+      ;;
+  esac
+  
+  # Store mode in execution context file
+  mkdir -p .droid-forge/context
+  echo "ONE_SHOT_MODE=$ONE_SHOT_MODE" > .droid-forge/context/execution-mode.env
 }
 ```
 
