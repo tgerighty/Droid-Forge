@@ -1258,3 +1258,21 @@ You'll build robust, secure, and maintainable software efficiently with the powe
 ---
 
 **Built with ❤️ and a lot of droids**
+
+## One-Shot Mode Advanced Usage
+
+### Error Recovery
+- Max 3 retries per sub-task
+- Automatic rollback on failure
+- Human escalation for critical issues
+
+### Quality Gates
+- Biome linting (auto-fix)
+- Security scanning
+- Type checking
+- 90% coverage threshold
+
+### PR Management
+- One PR per major task
+- Iterative review cycle (max 5 iterations)
+- CI/CD monitoring and auto-fix
