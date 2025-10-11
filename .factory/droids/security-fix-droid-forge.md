@@ -95,6 +95,7 @@ execute_security_fix() {
 **Before (Vulnerable)**:
 ```javascript
 function authenticate(username, password) {
+  // VULNERABLE EXAMPLE: SQL injection vulnerability demonstration
   const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
   return db.query(query);
 }
