@@ -39,6 +39,22 @@ function execute_sub_task_one_shot() {
   # For now, simulate execution
   sleep 0.5
   
+  # NEW: Generate and run tests after task execution (Task 2.2-2.3)
+  if [ -f "tools/test-automation.sh" ]; then
+    source tools/test-automation.sh
+    
+    # Generate unit tests
+    local test_file=$(generate_unit_tests "tools/example.sh" 2>/dev/null || echo "")
+    
+    # Run unit tests with retry
+    if [ -n "$test_file" ] && [ -f "$test_file" ]; then
+      if ! run_unit_tests "$test_file"; then
+        echo "  ❌ Tests failed after retries"
+        return 1
+      fi
+    fi
+  fi
+  
   echo "  ✅ Status: Complete"
   
   # Update task status
