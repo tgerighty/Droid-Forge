@@ -323,7 +323,7 @@ app.delete('/api/users/:id', (req, res) => {
 
 ```javascript
 // VULNERABLE: Weak JWT
-const token = jwt.sign({ userId: user.id }, 'secret', {
+const token = jwt.sign({ userId: user.id }, 'YOUR_SECRET_KEY_HERE', {
   algorithm: 'HS256',
   expiresIn: '365d' // Too long
 });
