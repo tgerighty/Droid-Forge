@@ -407,8 +407,9 @@ jobs:
           EOF
 
           # Run droid exec with the prompt using glm-4.6 model
+          # Note: --skip-permissions-unsafe is required in CI/CD to avoid interactive prompts
           echo "Running code review analysis with glm-4.6 model..."
-          droid exec --auto high -f prompt.txt -m "glm-4.6" || {
+          droid exec --skip-permissions-unsafe -f prompt.txt -m "glm-4.6" || {
             echo "❌ ERROR: droid exec failed"
             echo "This could be due to missing FACTORY_API_KEY, MODEL_API_KEY, or other runtime issues."
             exit 1
