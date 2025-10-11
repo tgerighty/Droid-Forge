@@ -410,6 +410,7 @@ The `authenticate` method constructs SQL queries using string concatenation with
 ### Vulnerable Code
 ```javascript
 authenticate(username, password) {
+  // VULNERABLE EXAMPLE: SQL injection vulnerability demonstration
   const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
   return this.db.query(query);
 }
@@ -435,6 +436,7 @@ password: anything
 **Secure Implementation**:
 ```javascript
 authenticate(username, password) {
+  // SECURE EXAMPLE: Parameterized query prevents injection
   const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
   return this.db.query(query, [username, password]);
 }
