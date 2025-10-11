@@ -469,32 +469,58 @@ jobs:
           script: |
             const fs = require('fs');
             const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-            const prNumber = context.payload.pull_request?.number || ${{ steps.pr-number.outputs.number }};
             const NO_ISSUES_MARKER = '<!-- droid-review:no-issues -->';
 
+            // Safely get PR number with validation
+            const prNumber = context.payload.pull_request?.number || ${{ steps.pr-number.outputs.number }};
+            if (!prNumber) {
+              core.error('Unable to determine PR number from context');
+              throw new Error('PR number is undefined');
+            }
+            core.info(`Processing PR #${prNumber}`);
+
+            // Check if comments.json exists
             if (!fs.existsSync('comments.json')) {
               core.info('comments.json missing; skipping review submission');
               return;
             }
 
+            // Read and parse comments with error handling
             const commentsContent = fs.readFileSync('comments.json', 'utf8');
+            core.info(`Raw comments.json content (first 500 chars): ${commentsContent.substring(0, 500)}`);
+            
             let comments;
             try {
               comments = JSON.parse(commentsContent);
+              core.info(`Successfully parsed comments.json: ${comments.length} comments found`);
             } catch (error) {
               core.error('Failed to parse comments.json: ' + error.message);
               core.error('JSON content: ' + commentsContent);
               throw new Error('Invalid JSON in comments.json: ' + error.message);
             }
 
-            const existingReviews = await github.paginate(github.rest.pulls.listReviews, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-              per_page: 100
-            });
+            // Validate comments is an array
+            if (!Array.isArray(comments)) {
+              core.error(`Expected comments to be an array, got: ${typeof comments}`);
+              throw new Error('comments.json must contain an array');
+            }
 
-            if (!Array.isArray(comments) || comments.length === 0) {
+            // Get existing reviews with error handling
+            let existingReviews = [];
+            try {
+              existingReviews = await github.paginate(github.rest.pulls.listReviews, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                per_page: 100
+              });
+              core.info(`Found ${existingReviews.length} existing reviews`);
+            } catch (error) {
+              core.warning(`Failed to fetch existing reviews: ${error.message}`);
+            }
+
+            // Handle empty comments array
+            if (comments.length === 0) {
               const hasNoIssuesComment = existingReviews.some(review => (review.body || '').includes(NO_ISSUES_MARKER));
 
               if (!hasNoIssuesComment) {
@@ -509,9 +535,11 @@ jobs:
                 for (let attempt = 1; attempt <= 3; attempt++) {
                   try {
                     await github.rest.pulls.createReview(payload);
+                    core.info('Posted "no issues" comment');
                     break;
                   } catch (error) {
                     if (attempt === 3) {
+                      core.error(`Failed to post "no issues" comment after 3 attempts: ${error.message}`);
                       throw error;
                     }
                     core.warning(`createReview attempt ${attempt} failed: ${error.message}. Retrying...`);
@@ -522,12 +550,19 @@ jobs:
               return;
             }
 
-            const existingReviewComments = await github.paginate(github.rest.pulls.listReviewComments, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-              per_page: 100
-            });
+            // Get existing review comments with error handling
+            let existingReviewComments = [];
+            try {
+              existingReviewComments = await github.paginate(github.rest.pulls.listReviewComments, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                per_page: 100
+              });
+              core.info(`Found ${existingReviewComments.length} existing review comments`);
+            } catch (error) {
+              core.warning(`Failed to fetch existing review comments: ${error.message}`);
+            }
 
             const existingKeys = new Set(
               existingReviewComments.map(comment => {
@@ -538,45 +573,88 @@ jobs:
               })
             );
 
-            const filtered = comments
-              .map(entry => ({
-                path: entry.path,
-                position: entry.position,
-                body: typeof entry.body === 'string' ? entry.body.trim() : ''
-              }))
-              .filter(entry => {
-                if (!entry.path || typeof entry.position !== 'number' || !entry.body) {
-                  return false;
-                }
-                const key = `${entry.path}::${entry.position}::${entry.body}`;
-                return !existingKeys.has(key);
-              });
+            // Validate and filter comments with detailed logging
+            const filtered = [];
+            for (let i = 0; i < comments.length; i++) {
+              const entry = comments[i];
+              
+              // Validate comment structure
+              if (!entry || typeof entry !== 'object') {
+                core.warning(`Skipping comment ${i}: not an object`);
+                continue;
+              }
+
+              const path = entry.path;
+              const position = entry.position;
+              const body = typeof entry.body === 'string' ? entry.body.trim() : '';
+
+              // Validate required fields
+              if (!path) {
+                core.warning(`Skipping comment ${i}: missing path`);
+                continue;
+              }
+              if (typeof position !== 'number') {
+                core.warning(`Skipping comment ${i}: invalid position (${typeof position})`);
+                continue;
+              }
+              if (!body) {
+                core.warning(`Skipping comment ${i}: empty body`);
+                continue;
+              }
+
+              // Check for duplicates
+              const key = `${path}::${position}::${body}`;
+              if (existingKeys.has(key)) {
+                core.info(`Skipping comment ${i}: duplicate (${path}:${position})`);
+                continue;
+              }
+
+              filtered.push({ path, position, body });
+            }
+
+            core.info(`After filtering: ${filtered.length} new comments to post`);
 
             if (filtered.length === 0) {
               core.info('All proposed comments already exist; skipping new review submission.');
               return;
             }
 
+            // Log comments being posted for debugging
+            core.info('Comments to be posted:');
+            filtered.forEach((c, i) => {
+              core.info(`  ${i + 1}. ${c.path}:${c.position} (${c.body.substring(0, 50)}...)`);
+            });
+
             const summary = `Found ${filtered.length} potential issue${filtered.length === 1 ? '' : 's'} that should be addressed.`;
             const payload = {
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: prNumber,
+              commit_id: '${{ github.event.pull_request.head.sha || steps.pr-details.outputs.head_sha }}',
               event: 'COMMENT',
               body: `${summary}\n\n${NO_ISSUES_MARKER}`,
               comments: filtered
             };
 
+            core.info(`Creating review with commit_id: ${payload.commit_id}`);
+
             for (let attempt = 1; attempt <= 3; attempt++) {
               try {
-                await github.rest.pulls.createReview(payload);
-                core.info(`Submitted review with ${filtered.length} inline comments`);
+                const result = await github.rest.pulls.createReview(payload);
+                core.info(`✅ Successfully submitted review with ${filtered.length} inline comments`);
+                core.info(`Review ID: ${result.data.id}, URL: ${result.data.html_url}`);
                 break;
               } catch (error) {
+                core.error(`createReview attempt ${attempt} failed: ${error.message}`);
+                if (error.response) {
+                  core.error(`Status: ${error.response.status}`);
+                  core.error(`Response: ${JSON.stringify(error.response.data)}`);
+                }
                 if (attempt === 3) {
+                  core.error('Failed to post review after 3 attempts');
                   throw error;
                 }
-                core.warning(`createReview attempt ${attempt} failed: ${error.message}. Retrying...`);
+                core.warning(`Retrying in ${attempt * 2} seconds...`);
                 await sleep(attempt * 2000);
               }
             }
