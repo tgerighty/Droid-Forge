@@ -108,10 +108,9 @@ Droid Forge is a declarative, droid-based framework that uses Factory.ai's own d
    ```
 
 2. **Install Factory.ai CLI**
-   ```
-   # Assuming Factory.ai provides installation
-   factory-cli install
-   ```
+   
+   If you don't have the Factory.ai CLI installed, follow the quickstart guide:
+   https://docs.factory.ai/cli/getting-started/quickstart
 
 3. **Install Core Droids**
    ```
@@ -143,16 +142,16 @@ Droid Forge is a declarative, droid-based framework that uses Factory.ai's own d
      code_reviews: "code-review-coordinator"
    ```
 
-5. **Start Manager Droid Orchestrator**
-   ```
-   factory-cli droid start manager-orchestrator
-   ```
+5. **Start using Droid Forge**
+   
+   Simply invoke the droid CLI and ask the manager orchestrator to perform tasks.
 
 ### Basic Usage
 
 **Analyze a feature request and create tasks:**
 ```
-factory-cli "Add dark mode toggle to settings page"
+droid
+> Ask manager-orchestrator-droid-forge to add dark mode toggle to settings page
 ```
 
 This triggers:
@@ -163,12 +162,8 @@ This triggers:
 
 **Monitor task progress:**
 ```
-factory-cli "Show current task status"
-```
-
-**View task status:**
-```
-factory-cli "Show current task status"
+droid
+> Ask manager-orchestrator-droid-forge to show current task status
 ```
 
 ## 🔧 Contributing (For Framework Development)
@@ -343,7 +338,7 @@ droid-forge/
 
 ### Prerequisites
 
-- [Factory.ai CLI](https://github.com/google-gemini/gemini-cli) installed
+- [Factory.ai CLI](https://docs.factory.ai/cli/getting-started/quickstart) installed
 - Git repository initialized
 
 ### Installation
@@ -368,29 +363,29 @@ cp .factory/droids/*.md ~/.factory/droids/
 
 #### Start Orchestration
 ```bash
-# Use Factory.ai CLI with Manager Droid Orchestrator
-droid manager-orchestrator-droid-foundry "Analyze tasks/0001-prd-droid-forge.md and orchestrate implementation"
+droid
+> Ask manager-orchestrator-droid-forge to analyze tasks/0001-prd-droid-forge.md and orchestrate implementation
 ```
 
 #### Individual Droid Operations
 ```bash
-# Update task status
-droid task-manager "Update task 1.1 status to started"
+droid
+> Ask task-manager-droid-forge to update task 1.1 status to started
 
-# Git workflow management
-droid git-workflow-orchestrator "Create feature branch for task 1.2"
+droid
+> Ask git-workflow-orchestrator-droid-forge to create feature branch for task 1.2
 
-# Sync process files
-droid ai-dev-tasks-integrator "Sync latest process files"
+droid
+> Ask ai-dev-tasks-integrator-droid-forge to sync latest process files
 ```
 
 #### Monitor Progress
 ```bash
-# View task status
-factory-cli "Show current task status"
+droid
+> Ask manager-orchestrator-droid-forge to show current task status
 
-# View project progress
-factory-cli "Show project overview"
+droid
+> Ask manager-orchestrator-droid-forge to show project overview
 ```
 
 ## 📋 Configuration
@@ -490,7 +485,7 @@ The "droid factory" concept is inspired by advanced manufacturing and orchestrat
 
 - [Factory.ai](https://factory.ai/) - AI-powered development platform
 - [ai-dev-tasks](https://github.com/snarktank/ai-dev-tasks) - PRD-driven development framework
-- [Gemini CLI](https://github.com/google-gemini/gemini-cli) - Command-line AI agent
+- [Factory.ai CLI](https://docs.factory.ai/cli/getting-started/quickstart) - Command-line AI agent
 
 ## 📄 License
 
