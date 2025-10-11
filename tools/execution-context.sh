@@ -13,8 +13,10 @@ function init_context() {
 # Get current execution mode
 function get_execution_mode() {
   if [ -f "$MODE_FILE" ]; then
-    source "$MODE_FILE"
-    echo "$ONE_SHOT_MODE"
+    # Parse safely without executing arbitrary code
+    local mode_value
+    mode_value=$(grep '^ONE_SHOT_MODE=' "$MODE_FILE" | cut -d'=' -f2 | tr -d '"\047')
+    echo "${mode_value:-false}"
   else
     echo "false"  # Default to iterative
   fi
@@ -30,14 +32,18 @@ function set_execution_mode() {
 
 # Check if in one-shot mode
 function is_one_shot_mode() {
-  local mode=$(get_execution_mode)
-  [ "$mode" == "true" ]
+  local mode
+  mode=$(get_execution_mode)
+  [ "$mode" = "true" ]
 }
 
 # Load execution context for droids
 function load_execution_context() {
   if [ -f "$MODE_FILE" ]; then
-    source "$MODE_FILE"
+    # Parse safely without executing arbitrary code
+    local mode_value
+    mode_value=$(grep '^ONE_SHOT_MODE=' "$MODE_FILE" | cut -d'=' -f2 | tr -d '"\047')
+    export ONE_SHOT_MODE="${mode_value:-false}"
   else
     export ONE_SHOT_MODE=false
   fi
