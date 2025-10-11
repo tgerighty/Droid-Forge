@@ -270,21 +270,6 @@ fix: resolve login validation bug
 - **Conflict Resolution**: Intelligent merge strategies
 - **PR Management**: Automated review coordination
 
-## 📊 Monitoring & Analytics
-
-### Task Tracking
-
-- Task completion rates
-- Droid execution success rates
-- Error frequency and types
-- Performance benchmarks
-
-### Status Management
-
-- Task status updates and progress tracking
-- Branch-specific tracking data
-- Performance metrics and execution monitoring
-
 ## 🏗️ Architecture
 
 ### Core Components
@@ -442,16 +427,6 @@ Droid Forge integrates with [ai-dev-tasks](https://github.com/snarktank/ai-dev-t
 - Structured task list generation
 - Status tracking with inline markers
 - Progress monitoring and reporting
-
-## 📊 Monitoring
-
-### Performance Analysis
-
-Track droid utilization, completion rates, and execution duration through task status monitoring.
-
-### Progress Metrics
-
-Monitor task completion rates, droid execution success rates, and project milestone achievement.
 
 ## 🤝 Contributing
 
