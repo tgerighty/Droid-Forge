@@ -88,11 +88,11 @@ jobs:
           echo "❌ API keys are missing. Posted comment on PR. Exiting gracefully."
           exit 0
 
-      # OPTIMIZATION #3: Shallow checkout instead of full history
+      # OPTIMIZATION #3: Shallow checkout with enough depth for merge base
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
 
       # OPTIMIZATION #4: Validate prerequisites (API keys already checked)
@@ -173,8 +173,8 @@ jobs:
         id: changes
         run: |
           set -euo pipefail
-          # Fetch only the base branch with shallow depth
-          git fetch --depth=1 origin ${{ github.event.pull_request.base.ref }}
+          # Fetch base branch (full history already available from checkout)
+          git fetch origin ${{ github.event.pull_request.base.ref }}
 
           # Check if there are actual code changes
           DIFF_SIZE=$(git diff origin/${{ github.event.pull_request.base.ref }}...${{ github.event.pull_request.head.sha }} | wc -l)
@@ -354,9 +354,9 @@ jobs:
           - The JSON must be a single line without line breaks within string values
           EOF
 
-          # Run droid exec with the prompt using custom model
-          echo "Running code review analysis with GLM-4.6 model..."
-          droid exec -f prompt.txt -m "GLM-4.6" --skip-permissions-unsafe || {
+          # Run droid exec with the prompt using glm-4.6 model
+          echo "Running code review analysis with glm-4.6 model..."
+          droid exec -f prompt.txt -m "glm-4.6" --skip-permissions-unsafe || {
             echo "❌ ERROR: droid exec failed"
             echo "This could be due to missing FACTORY_API_KEY, MODEL_API_KEY, or other runtime issues."
             exit 1
