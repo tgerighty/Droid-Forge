@@ -54,9 +54,14 @@ droids:
 delegation_rules:
   # Pattern matching for task types to droid capabilities
   rules:
-    - pattern: "refactor|cleanup|optimize|improve"
+    - pattern: "refactor|cleanup|code-smell|technical-debt|improve-code|maintainability"
       capabilities: ["code-refactoring", "code-analysis", "performance-audit"]
-      droid_types: ["fix-issue", "code-review", "performance-audit"]
+      droid_types: ["code-refactoring-droid-forge", "fix-issue", "code-review"]
+      priority: 1
+    
+    - pattern: "typescript|type-safe|generics|strict-mode|type-coverage"
+      capabilities: ["typescript", "type-safety", "advanced-types"]
+      droid_types: ["typescript-professional-droid-forge"]
       priority: 1
 
     - pattern: "test|spec|coverage|testing"
