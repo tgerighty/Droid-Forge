@@ -240,16 +240,137 @@ List<String> names = users.stream()
 **Problem**: Adding unnecessary abstraction layers  
 **Solution**: Apply YAGNI principle - refactor when actually needed
 
-## Manager Droid Integration
+## Task Management Integration
+
+### CRITICAL: Task Status Updates During Refactoring
+
+This droid **MUST** update task status in the ai-dev-tasks system as it completes refactoring work.
 
 ```bash
 refactoring_workflow() {
   analyze_code_quality "$@"
   identify_refactoring_candidates "$@"
   create_refactoring_plan "$@"
-  execute_incremental_refactoring "$@"
+  execute_incremental_refactoring "$@"  # Updates tasks during execution
   validate_functionality_preserved "$@"
   update_documentation "$@"
+  mark_tasks_completed "$@"  # NEW: Mark tasks as completed
+}
+
+execute_incremental_refactoring() {
+  local task_file="$1"
+  local task_id="$2"
+  
+  # Mark task as in progress
+  Task tool with subagent_type="task-manager-droid-forge" \
+    description="Update task status to in progress" \
+    prompt "Update task $task_id in $task_file to status: started"
+  
+  # Perform refactoring work here
+  # ... refactoring code ...
+  
+  # After successful refactoring and tests pass
+  if [ $? -eq 0 ]; then
+    Task tool with subagent_type="task-manager-droid-forge" \
+      description="Mark refactoring task as completed" \
+      prompt "Update task $task_id in $task_file to status: completed. Add note about changes made and tests verified."
+  else
+    Task tool with subagent_type="task-manager-droid-forge" \
+      description="Mark refactoring task as failed" \
+      prompt "Update task $task_id in $task_file to status: failed. Add note about error encountered."
+  fi
+}
+
+mark_tasks_completed() {
+  local task_file="$1"
+  local completed_tasks="$2"
+  
+  # Update status markers from [ ] to [x]
+  Task tool with subagent_type="task-manager-droid-forge" \
+    description="Mark completed tasks" \
+    prompt "In $task_file, update the following tasks to completed status [x]: $completed_tasks"
+}
+```
+
+### Refactoring Workflow with Task Updates
+
+```markdown
+## Example Workflow: God Object Refactoring
+
+1. **Start Task** (status: scheduled → started)
+   - [ ] 1.1 Refactor UserManager.ts God Object
+   
+2. **During Refactoring** (status: started)
+   - [~] 1.1 Refactor UserManager.ts God Object - Extracting UserRepository class
+   
+3. **After Completion** (status: completed)
+   - [x] 1.1 Refactor UserManager.ts God Object - Extracted 5 classes, all tests pass, complexity reduced from 28 to 6 per class
+```
+
+### Task-Driven Refactoring
+
+```bash
+process_refactoring_task_list() {
+  local task_file="$1"
+  
+  # Read all pending refactoring tasks
+  local tasks=$(grep "^\s*- \[ \]" "$task_file")
+  
+  while IFS= read -r task; do
+    # Extract task ID (e.g., "1.1" from "- [ ] 1.1 ...")
+    local task_id=$(echo "$task" | grep -oP "\d+\.\d+")
+    
+    # Mark as started
+    update_task_status "$task_file" "$task_id" "started"
+    
+    # Execute refactoring
+    if execute_refactoring_for_task "$task"; then
+      # Validate with tests
+      if run_tests_for_refactored_code; then
+        # Mark as completed
+        update_task_status "$task_file" "$task_id" "completed"
+      else
+        # Mark as failed - tests didn't pass
+        update_task_status "$task_file" "$task_id" "failed" "Tests failed after refactoring"
+      fi
+    else
+      # Mark as failed - refactoring error
+      update_task_status "$task_file" "$task_id" "failed" "Refactoring execution failed"
+    fi
+  done
+}
+
+update_task_status() {
+  local task_file="$1"
+  local task_id="$2"
+  local status="$3"
+  local note="${4:-}"
+  
+  Task tool with subagent_type="task-manager-droid-forge" \
+    description="Update task $task_id status to $status" \
+    prompt "Update task $task_id in $task_file to status: $status. ${note:+Add note: $note}"
+}
+```
+
+## Manager Droid Integration
+
+```bash
+# Coordinated refactoring workflow
+coordinate_assessment_and_refactoring() {
+  # Phase 1: Assessment creates tasks
+  Task tool with subagent_type="code-smell-assessment-droid-forge" \
+    description="Assess code smells" \
+    prompt "Analyze codebase and create tasks in tasks/tasks-code-smells-$(date +%Y%m%d).md"
+  
+  # Phase 2: This droid processes tasks
+  Task tool with subagent_type="code-refactoring-droid-forge" \
+    description="Execute refactoring tasks" \
+    prompt "Process tasks from tasks/tasks-code-smells-$(date +%Y%m%d).md. For each task:
+    1. Update status to 'started'
+    2. Execute refactoring
+    3. Run tests to verify functionality preserved
+    4. Update status to 'completed' or 'failed'
+    5. Add notes about changes made"
 }
 ```
 
