@@ -2,7 +2,9 @@
 # One-Shot Execution Engine
 # Executes tasks autonomously without confirmation
 
-source "$(dirname "$0")/execution-context.sh"
+# Get script directory for reliable path resolution
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/execution-context.sh"
 
 # Execute all sub-tasks of a major task
 function execute_major_task_one_shot() {
@@ -38,6 +40,22 @@ function execute_sub_task_one_shot() {
   # Actual execution would delegate to appropriate droid here
   # For now, simulate execution
   sleep 0.5
+  
+  # NEW: Generate and run tests after task execution (Task 2.2-2.3)
+  if [ -f "tools/test-automation.sh" ]; then
+    source tools/test-automation.sh
+    
+    # Generate unit tests
+    local test_file=$(generate_unit_tests "tools/example.sh" 2>/dev/null || echo "")
+    
+    # Run unit tests with retry
+    if [ -n "$test_file" ] && [ -f "$test_file" ]; then
+      if ! run_unit_tests "$test_file"; then
+        echo "  ❌ Tests failed after retries"
+        return 1
+      fi
+    fi
+  fi
   
   echo "  ✅ Status: Complete"
   
