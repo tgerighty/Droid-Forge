@@ -126,14 +126,28 @@ jobs:
           DROID_INSTALLER_SHA256: ${{ vars.DROID_INSTALLER_SHA256 }}
         run: |
           set -euo pipefail
-          if ! command -v droid >/dev/null 2>&1; then
+          
+          # Check if droid exists and is executable
+          if [ -f "$HOME/.local/bin/droid" ] && [ -x "$HOME/.local/bin/droid" ]; then
+            echo "✅ Droid CLI found in cache"
+          else
+            echo "📥 Installing Droid CLI..."
             curl -fsSL --compressed https://app.factory.ai/cli -o droid-cli-installer.sh
             echo "${DROID_INSTALLER_SHA256}  droid-cli-installer.sh" | sha256sum --check --status
             sh droid-cli-installer.sh
             rm -f droid-cli-installer.sh
           fi
+          
+          # Add to PATH for subsequent steps
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          "$HOME/.local/bin/droid" --version
+          
+          # Verify installation
+          if [ -f "$HOME/.local/bin/droid" ]; then
+            "$HOME/.local/bin/droid" --version
+          else
+            echo "❌ ERROR: Droid CLI installation failed - binary not found at $HOME/.local/bin/droid"
+            exit 1
+          fi
 
       - name: Configure custom model
         env:
