@@ -397,10 +397,10 @@ jobs:
 
           CRITICAL: Ensure the comments.json file contains valid JSON that can be parsed by JSON.parse().
           - All strings in JSON must be properly escaped
-          - Use \\n for newlines in body strings
-          - Use \\\" for quotes in strings
+          - Use \n for newlines in body strings
+          - Use \" for quotes in strings
           - Use \\\\ for backslashes
-          - Use \\t for tabs
+          - Use \t for tabs
           - No unescaped newlines, quotes, backslashes, or control characters in the JSON text
           - Test your JSON by running: python3 -m json.tool comments.json
           - The JSON must be a single line without line breaks within string values
