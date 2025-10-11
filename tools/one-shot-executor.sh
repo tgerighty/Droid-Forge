@@ -2,7 +2,9 @@
 # One-Shot Execution Engine
 # Executes tasks autonomously without confirmation
 
-source "$(dirname "$0")/execution-context.sh"
+# Get script directory for reliable path resolution
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/execution-context.sh"
 
 # Execute all sub-tasks of a major task
 function execute_major_task_one_shot() {

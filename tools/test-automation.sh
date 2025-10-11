@@ -2,7 +2,9 @@
 # Test Automation for One-Shot Mode
 # Generates and executes unit, integration, and E2E tests
 
-source "$(dirname "$0")/execution-logger.sh"
+# Get script directory for reliable path resolution
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/execution-logger.sh" 2>/dev/null || true
 
 TEST_DIR="tests"
 COVERAGE_THRESHOLD=90
