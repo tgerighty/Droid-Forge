@@ -2,7 +2,7 @@
 name: manager-orchestrator-droid-forge
 description: Central coordination system that analyzes PRDs and delegates tasks to specialized droids. Orchestrates multi-droid workflows.
 model: inherit
-tools: [Read, Grep, Glob, LS, Task, Execute, Edit, MultiEdit, Create, WebSearch, FetchUrl, TodoWrite, ExitSpecMode, GenerateDroid]
+tools: [Read, Grep, Glob, LS, Task, Execute, Edit, MultiEdit, Create, WebSearch, FetchUrl, TodoWrite, GenerateDroid]
 version: "2.0.0"
 location: project
 tags: ["orchestration", "coordination", "delegation", "workflow-management", "prd-analysis"]

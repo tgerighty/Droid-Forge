@@ -135,8 +135,10 @@ install_core_droids() {
     if [ -d ".factory/droids" ]; then
         for droid_file in .factory/droids/*-droid-forge.md; do
             if [ -f "$droid_file" ]; then
-                local droid_name=$(basename "$droid_file" .md)
-                local TARGET_FILE="$TARGET_DIR/$(basename "$droid_file")"
+                local droid_name
+                droid_name=$(basename "$droid_file" .md)
+                local TARGET_FILE
+                TARGET_FILE="$TARGET_DIR/$(basename "$droid_file")"
                 
                 print_info "Setting up $droid_name..."
                 
@@ -217,14 +219,16 @@ run_tests() {
     # Test droid installation based on where they were installed
     if [ "$INSTALL_LOCATION" = "user" ]; then
         if [ -d "$HOME/.factory/droids" ] && [ "$(ls -A "$HOME/.factory/droids" 2>/dev/null)" ]; then
-            local droid_count=$(find "$HOME/.factory/droids" -name "*-droid-forge.md" 2>/dev/null | wc -l | tr -d ' ')
+            local droid_count
+            droid_count=$(find "$HOME/.factory/droids" -name "*-droid-forge.md" 2>/dev/null | wc -l | tr -d ' ')
             print_success "Droids installed successfully: $droid_count droids in $HOME/.factory/droids/"
         else
             print_error "No droids found in $HOME/.factory/droids/"
         fi
     else
         if [ -d ".factory/droids" ] && [ "$(ls -A ".factory/droids" 2>/dev/null)" ]; then
-            local droid_count=$(find ".factory/droids" -name "*-droid-forge.md" 2>/dev/null | wc -l | tr -d ' ')
+            local droid_count
+            droid_count=$(find ".factory/droids" -name "*-droid-forge.md" 2>/dev/null | wc -l | tr -d ' ')
             print_success "Droids installed successfully: $droid_count droids in .factory/droids/"
         else
             print_error "No droids found in .factory/droids/"

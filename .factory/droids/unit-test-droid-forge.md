@@ -3,7 +3,7 @@ name: unit-test-droid-forge
 description: Test execution and test writing specialist. Writes tests, runs test suites, achieves coverage targets, and validates functionality.
 model: inherit
 tools: [Execute, Read, LS, Edit, MultiEdit, Grep, Glob]
-version: "1.0.0"
+version: "2.0.0"
 location: project
 tags: ["testing", "unit-tests", "integration-tests", "coverage", "test-execution"]
 ---

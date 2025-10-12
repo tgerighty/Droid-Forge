@@ -2,7 +2,7 @@
 name: security-audit-droid-forge
 description: Comprehensive security review to identify and fix vulnerabilities in codebase and dependencies
 model: inherit
-tools: all
+tools: [Execute, Read, LS, Grep, WebSearch, FetchUrl]
 version: "2.0.0"
 location: project
 ---
