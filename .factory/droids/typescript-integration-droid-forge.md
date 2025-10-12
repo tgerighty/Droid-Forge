@@ -3,7 +3,7 @@ name: typescript-integration-droid-forge
 description: Full-stack TypeScript integration specialist for end-to-end type safety, advanced type patterns, and modern TypeScript development practices.
 model: inherit
 tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
-version: "2.0.0"
+version: "2.1.0"
 location: project
 tags: ["typescript", "full-stack", "type-safety", "integration", "advanced-types", "generics", "type-inference"]
 ---
@@ -41,7 +41,7 @@ tags: ["typescript", "full-stack", "type-safety", "integration", "advanced-types
 - ✅ **Incremental Compilation**: Optimizing TypeScript build performance
 - ✅ **Type Inference**: Leveraging type inference for cleaner code
 
-## Implementation Examples
+## Implementation Patterns
 
 ### Database-to-UI Type Flow
 ```typescript
@@ -62,28 +62,13 @@ export type UpdateUserInput = Partial<z.input<typeof UserSchema>>;
 
 // types/api.ts
 export const UserRouter = {
-  profile: {
-    input: z.string().optional(),
-    output: UserSchema.nullable(),
-  },
-  update: {
-    input: UpdateUserSchema,
-    output: UserSchema,
-  },
+  profile: { input: z.string().optional(), output: UserSchema.nullable() },
+  update: { input: UpdateUserSchema, output: UserSchema },
   list: {
-    input: z.object({
-      page: z.number().min(1),
-      limit: z.number().min(1).max(100),
-      filter: z.string().optional(),
-    }),
+    input: z.object({ page: z.number().min(1), limit: z.number().min(1).max(100), filter: z.string().optional() }),
     output: z.object({
       users: z.array(UserSchema),
-      pagination: z.object({
-        page: z.number(),
-        limit: z.number(),
-        total: z.number(),
-        totalPages: z.number(),
-      }),
+      pagination: z.object({ page: z.number(), limit: z.number(), total: z.number(), totalPages: z.number() }),
     }),
   },
 };
@@ -98,36 +83,26 @@ export type UserRouterOutput = RouterOutput<UserRouter>;
 // Repository pattern with generics
 export interface Repository<T, ID = string | number> {
   findById(id: ID): Promise<T | null>;
-  create(data: CreateInput<T>): Promise<T>;
-  update(id: ID, data: UpdateInput<T>): Promise<T>;
-  delete(id: ID): Promise<void>;
-  findMany(filter?: FilterInput<T>): Promise<T[]>;
+  create(data: Omit<T, 'id'>): Promise<T>;
+  update(id: ID, data: Partial<T>): Promise<T>;
+  delete(id: ID): Promise<boolean>;
+  findMany(filter?: Partial<T>): Promise<T[]>;
 }
 
-// Generic service pattern
-export abstract class BaseService<T, ID = string | number> {
-  constructor(protected repository: Repository<T, ID>) {}
-
-  async findById(id: ID): Promise<T | null> {
-    return this.repository.findById(id);
-  }
-
-  async create(data: CreateInput<T>): Promise<T> {
-    return this.repository.create(data);
-  }
-
-  async update(id: ID, data: UpdateInput<T>): Promise<T> {
-    return this.repository.update(id, data);
-  }
+// Generic API response wrapper
+export interface ApiResponse<T, E = Error> {
+  success: boolean;
+  data?: T;
+  error?: E;
+  meta?: {
+    timestamp: string;
+    requestId: string;
+    version: string;
+  };
 }
-
-// Generic API response type
-export type ApiResponse<T, E = Error> = 
-  | { success: true; data: T }
-  | { success: false; error: E };
 
 // Generic paginated response
-export type PaginatedResponse<T> = {
+export interface PaginatedResponse<T> {
   items: T[];
   pagination: {
     page: number;
@@ -137,13 +112,41 @@ export type PaginatedResponse<T> = {
     hasNext: boolean;
     hasPrev: boolean;
   };
-};
+}
+
+// Generic service pattern
+export abstract class BaseService<T, ID = string | number> {
+  constructor(protected repository: Repository<T, ID>) {}
+
+  async findById(id: ID): Promise<ApiResponse<T>> {
+    try {
+      const entity = await this.repository.findById(id);
+      return { success: true, data: entity || undefined };
+    } catch (error) {
+      return { success: false, error: error as Error };
+    }
+  }
+
+  async create(data: Omit<T, 'id'>): Promise<ApiResponse<T>> {
+    try {
+      const entity = await this.repository.create(data);
+      return { success: true, data: entity };
+    } catch (error) {
+      return { success: false, error: error as Error };
+    }
+  }
+}
 ```
 
-### Advanced Utility Types
+### Utility Types & Transformations
 ```typescript
 // types/utilities.ts
-// Deep partial type
+// Deep readonly
+export type DeepReadonly<T> = {
+  readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
+};
+
+// Deep partial
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
@@ -154,515 +157,262 @@ export type RequiredFields<T, K extends keyof T> = T & Required<Pick<T, K>>;
 // Optional fields
 export type OptionalFields<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
-// Branded types for type-safe IDs
+// Branded types for type safety
 export type Brand<T, B> = T & { __brand: B };
 
-export type UserId = Brand<number, 'UserId'>;
-export type PostId = Brand<number, 'PostId'>;
+export type UserId = Brand<string, 'UserId'>;
 export type Email = Brand<string, 'Email'>;
+export type Timestamp = Brand<number, 'Timestamp'>;
 
-// Type constructors
-export const UserId = (id: number): UserId => id as UserId;
-export const PostId = (id: number): PostId => id as PostId;
-export const Email = (email: string): Email => {
-  if (!email.includes('@')) throw new Error('Invalid email');
-  return email as Email;
-};
+// Type guards for branded types
+export const isUserId = (value: unknown): value is UserId =>
+  typeof value === 'string' && value.startsWith('user_');
 
-// Smart constructors with validation
-export type Validated<T> = T & { __validated: true };
+export const isEmail = (value: unknown): value is Email =>
+  typeof value === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-export function createValidated<T>(
-  schema: z.ZodSchema<T>,
-  data: unknown
-): Validated<T> {
-  return schema.parse(data) as Validated<T>;
-}
+// Template literal types
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+export type ApiPath<T extends string> = `/api/${T}`;
+export type ApiEndpoint<P extends string, M extends HttpMethod> = `${P} (${M})`;
 
-// Type-safe event system
-export type EventHandler<T = unknown> = (data: T) => void | Promise<void>;
+// Conditional types
+export type NonNullableFields<T> = {
+  [K in keyof T]: null extends T[K] ? never : K;
+}[keyof T];
 
-export type EventMap<T extends Record<string, any>> = {
-  [K in keyof T]: EventHandler<T[K]>;
-};
+export type RequiredKeys<T> = Exclude<NonNullableFields<T>, undefined>;
 
-export interface EventEmitter<T extends Record<string, any>> {
-  on<K extends keyof T>(event: K, handler: EventHandler<T[K]>): void;
-  off<K extends keyof T>(event: K, handler: EventHandler<T[K]>): void;
-  emit<K extends keyof T>(event: K, data: T[K]): void;
+// Type-safe event emitter
+export interface TypedEventEmitter<T extends Record<string, any[]>> {
+  on<K extends keyof T>(event: K, listener: (...args: T[K]) => void): void;
+  emit<K extends keyof T>(event: K, ...args: T[K]): void;
+  off<K extends keyof T>(event: K, listener: (...args: T[K]) => void): void;
 }
 ```
 
-### Conditional Types and Template Literals
+### React Integration Patterns
 ```typescript
-// types/advanced.ts
-// Conditional types for API responses
-export type SuccessResponse<T> = {
-  success: true;
-  data: T;
-};
-
-export type ErrorResponse<E = string> = {
-  success: false;
-  error: E;
-};
-
-export type ApiResponse<T, E = string> = SuccessResponse<T> | ErrorResponse<E>;
-
-// Template literal types for route paths
-export type RouteParams<T extends string> = T extends `${infer _}:${infer Param}/${infer Rest}`
-  ? { [K in Param]: string } & RouteParams<Rest>
-  : T extends `${infer _}:${infer Param}`
-  ? { [K in Param]: string }
-  : {};
-
-export type RoutePath = 
-  | '/users'
-  | '/users/:id'
-  | '/users/:id/posts'
-  | '/posts/:postId/comments/:commentId';
-
-export type UserParams = RouteParams<'/users/:id'>; // { id: string }
-export type PostCommentParams = RouteParams<'/posts/:postId/comments/:commentId'>; // { postId: string, commentId: string }
-
-// Type-safe form validation
-export type FormErrors<T extends Record<string, any>> = {
-  [K in keyof T]?: string[];
-};
-
-export type FormState<T> = {
-  data: T;
-  errors: FormErrors<T>;
-  isSubmitting: boolean;
-  isValid: boolean;
-};
-
-// Type-safe action creators
-export type ActionPayload<T extends string, P = unknown> = {
-  type: T;
-  payload?: P;
-};
-
-export type Action<T extends string, P = unknown> = ActionPayload<T, P>;
-
-export type ActionCreator<T extends string, P = unknown> = (payload?: P) => Action<T, P>;
-```
-
-### React Component Typing
-```typescript
-// components/types.ts
+// types/react.ts
 // Generic component props
 export interface BaseComponentProps {
   className?: string;
-  children?: React.ReactNode;
   'data-testid'?: string;
 }
 
-// Generic list component
-export interface ListProps<T> extends BaseComponentProps {
-  items: T[];
-  renderItem: (item: T, index: number) => React.ReactNode;
-  emptyState?: React.ReactNode;
+// Generic form component
+export interface FormComponentProps<T> extends BaseComponentProps {
+  initialValues: T;
+  onSubmit: (values: T) => Promise<void>;
+  validation?: Schema<T>;
   loading?: boolean;
-  error?: string;
 }
 
-// Generic form component
-export interface FormProps<T extends Record<string, any>> extends BaseComponentProps {
-  data: T;
-  onChange: (data: Partial<T>) => void;
-  onSubmit: (data: T) => void | Promise<void>;
-  errors?: FormErrors<T>;
-  isSubmitting?: boolean;
-  disabled?: boolean;
+// Generic list component
+export interface ListComponentProps<T> extends BaseComponentProps {
+  items: T[];
+  renderItem: (item: T, index: number) => React.ReactNode;
+  loading?: boolean;
+  emptyMessage?: string;
+  onItemClick?: (item: T) => void;
 }
 
 // Type-safe hooks
-export function useTypedForm<T extends Record<string, any>>(
-  initialData: T
-): FormState<T> & {
-  setData: (data: Partial<T>) => void;
-  setError: (field: keyof T, error: string[]) => void;
-  clearErrors: () => void;
-  submit: () => Promise<void>;
-} {
-  // Implementation with full type safety
+export function useTypedQuery<T>(key: string[], fetcher: () => Promise<T>) {
+  return useQuery({ queryKey: key, queryFn: fetcher });
 }
 
-// Type-safe API hook
-export function useTypedQuery<T, E = Error>(
-  key: string[],
-  queryFn: () => Promise<T>
-) {
-  return useQuery<T, E>({
-    queryKey: key,
-    queryFn,
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
-export function useTypedMutation<T, V, E = Error>(
+export function useTypedMutation<T, V>(
   mutationFn: (variables: V) => Promise<T>
 ) {
-  return useMutation<T, E, V>({
-    mutationFn,
+  return useMutation({ mutationFn });
+}
+
+// Type-safe context
+export interface TypedContextValue<T> {
+  value: T;
+  setValue: (value: T) => void;
+}
+
+export function createTypedContext<T>(defaultValue: T) {
+  return createContext<TypedContextValue<T>>({
+    value: defaultValue,
+    setValue: () => {},
   });
 }
 ```
 
-### tRPC Type Integration
+### API Type Safety
 ```typescript
-// trpc/types.ts
-// Type-safe tRPC integration
-export type inferRouterInputs<Router> = Router extends {
-  [key: string]: any;
-}
-  ? {
-      [key in keyof Router]: Router[key] extends {
-        input: any;
-      }
-        ? Router[key]['input']
-        : never;
-    }
-  : never;
-
-export type inferRouterOutputs<Router> = Router extends {
-  [key: string]: any;
-}
-  ? {
-      [key in keyof Router]: Router[key] extends {
-        output: any;
-      }
-        ? Router[key]['output']
-        : never;
-    }
-  : never;
-
-// Type-safe client hooks
-export function useTypedQuery<
-  Router extends any,
-  Path extends keyof Router,
-  Input extends inferRouterInputs<Router>[Path]
->(
-  router: Router,
-  path: Path,
-  input: Input
-) {
-  return trpc.useQuery({
-    [path]: input,
-  } as any);
+// types/api.ts
+// Type-safe API client
+export interface TypedApiClient<TRouter extends Record<string, any>> {
+  call<TPath extends keyof TRouter>(
+    path: TPath,
+    input?: TRouter[TPath] extends { input: infer I } ? I : never
+  ): Promise<TRouter[TPath] extends { output: infer O } ? O : never>;
 }
 
-export function useTypedMutation<
-  Router extends any,
-  Path extends keyof Router,
-  Input extends inferRouterInputs<Router>[Path]
->(
-  router: Router,
-  path: Path
-) {
-  return trpc.useMutation({
-    [path]: undefined,
-  } as any);
-}
-```
+// Router output type helper
+export type RouterOutput<TRouter extends Record<string, any>> = {
+  [TPath in keyof TRouter]: TRouter[TPath] extends { output: infer O } ? O : never;
+};
 
-### Environment Configuration
-```typescript
-// types/env.ts
-// Type-safe environment configuration
-export const EnvSchema = z.object({
-  NODE_ENV: z.enum(['development', 'production', 'test']),
-  DATABASE_URL: z.string().url(),
-  NEXTAUTH_URL: z.string().url(),
-  NEXTAUTH_SECRET: z.string().min(32),
-  REDIS_URL: z.string().url(),
-  API_RATE_LIMIT: z.string().transform(Number).pipe(z.number().min(1)),
-  CORS_ORIGIN: z.string().url(),
-});
-
-export type Env = z.infer<typeof EnvSchema>;
-
-// Type-safe environment access
-export const env = EnvSchema.parse(process.env) as Env;
-
-// Development-only environment variables
-export const DevEnvSchema = EnvSchema.extend({
-  DEBUG: z.boolean().default(false),
-  LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default('info'),
-});
-
-export type DevEnv = z.infer<typeof DevEnvSchema>;
-```
-
-### Code Generation Patterns
-```typescript
-// scripts/generateTypes.ts
-// Automated type generation script
-import { generate } from '@genql/cli';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import * as schema from '../src/db/schema';
-
-// Generate types from database schema
-async function generateDatabaseTypes() {
-  const db = drizzle(process.env.DATABASE_URL!);
-  
-  // Extract schema information
-  const tables = Object.keys(schema);
-  
-  // Generate TypeScript types
-  const types = tables.map(table => {
-    const tableSchema = schema[table as keyof typeof schema];
-    return generateTableTypes(table, tableSchema);
-  }).join('\n');
-
-  // Write to file
-  await writeFile('src/types/generated.ts', types);
+// Type-safe fetch wrapper
+export async function typedFetch<T>(url: string, options?: RequestInit): Promise<T> {
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return response.json() as Promise<T>;
 }
 
-// Generate tRPC types
-async function generateTRPCTypes() {
-  // Extract router information
-  const router = await import('../src/server/router');
-  
-  // Generate client types
-  const clientTypes = generateClientTypes(router.appRouter);
-  
-  // Write to file
-  await writeFile('src/types/trpc.ts', clientTypes);
+// API error types
+export interface ApiError {
+  code: string;
+  message: string;
+  details?: Record<string, any>;
+  timestamp: string;
 }
 
-// Main generation function
-async function main() {
-  console.log('Generating types...');
-  
-  await Promise.all([
-    generateDatabaseTypes(),
-    generateTRPCTypes(),
-  ]);
-  
-  console.log('Types generated successfully');
-}
-
-main().catch(console.error);
-```
-
-### Validation Integration
-```typescript
-// validation/types.ts
-// Runtime validation from TypeScript types
-export function createValidator<T>(schema: z.ZodSchema<T>) {
-  return {
-    validate: (data: unknown): data is T => {
-      return schema.safeParse(data).success;
-    },
-    parse: (data: unknown): T => {
-      return schema.parse(data);
-    },
-    safeParse: (data: unknown): { success: true; data: T } | { success: false; error: z.ZodError } => {
-      return schema.safeParse(data);
-    },
-  };
+export interface ValidationError extends ApiError {
+  field: string;
+  value: any;
 }
 
 // Type-safe API middleware
-export function validateInput<T>(schema: z.ZodSchema<T>) {
-  return (req: Request, res: Response, next: NextFunction) => {
+export interface ApiMiddleware<T = any> {
+  (req: Request, res: Response, next: () => void): T | void;
+}
+
+export function validateBody<T>(schema: Schema<T>): ApiMiddleware<T> {
+  return (req, res, next) => {
     try {
-      const validated = schema.parse(req.body);
-      req.body = validated;
+      const data = schema.parse(req.body);
+      (req as any).validatedBody = data;
       next();
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        res.status(400).json({
-          success: false,
-          error: error.errors,
-        });
-      } else {
-        next(error);
-      }
-    }
-  };
-}
-
-// Type-safe form validation
-export function createFormValidator<T extends Record<string, any>>(
-  schema: z.ZodSchema<T>
-) {
-  return (data: unknown): FormState<T> => {
-    const result = schema.safeParse(data);
-    
-    if (result.success) {
-      return {
-        data: result.data,
-        errors: {},
-        isSubmitting: false,
-        isValid: true,
-      };
-    } else {
-      const errors = result.error.errors.reduce((acc, error) => {
-        const field = error.path.join('.') as keyof T;
-        acc[field] = acc[field] || [];
-        acc[field]!.push(error.message);
-        return acc;
-      }, {} as FormErrors<T>);
-      
-      return {
-        data: {} as T,
-        errors,
-        isSubmitting: false,
-        isValid: false,
-      };
+      res.status(400).json({ error: 'Validation failed', details: error });
     }
   };
 }
 ```
 
-## Testing Strategies
-
-### Type Testing
+### Environment & Configuration Types
 ```typescript
-// tests/types.test.ts
-import { describe, it, expect } from 'vitest';
-import { UserSchema, type User } from '../types/database';
+// types/env.ts
+// Type-safe environment configuration
+export interface EnvConfig {
+  NODE_ENV: 'development' | 'production' | 'test';
+  PORT: number;
+  DATABASE_URL: string;
+  JWT_SECRET: string;
+  CORS_ORIGIN: string;
+  REDIS_URL?: string;
+  LOG_LEVEL: 'debug' | 'info' | 'warn' | 'error';
+}
 
-describe('Type Safety', () => {
-  it('should validate user type', () => {
-    const user: User = {
-      id: 1,
-      email: 'test@example.com',
-      username: 'testuser',
-      role: 'user',
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    
-    expect(() => UserSchema.parse(user)).not.toThrow();
-  });
+// Environment validator
+export function validateEnv(): EnvConfig {
+  const required = ['NODE_ENV', 'PORT', 'DATABASE_URL', 'JWT_SECRET', 'CORS_ORIGIN'];
+  
+  for (const key of required) {
+    if (!process.env[key]) {
+      throw new Error(`Missing required environment variable: ${key}`);
+    }
+  }
 
-  it('should catch type errors', () => {
-    // @ts-expect-error - Invalid email
-    const invalidUser = {
-      id: 1,
-      email: 'invalid-email',
-      username: 'testuser',
-      role: 'user',
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    
-    expect(() => UserSchema.parse(invalidUser)).toThrow();
-  });
-});
+  return {
+    NODE_ENV: process.env.NODE_ENV as EnvConfig['NODE_ENV'],
+    PORT: parseInt(process.env.PORT!, 10),
+    DATABASE_URL: process.env.DATABASE_URL!,
+    JWT_SECRET: process.env.JWT_SECRET!,
+    CORS_ORIGIN: process.env.CORS_ORIGIN!,
+    REDIS_URL: process.env.REDIS_URL,
+    LOG_LEVEL: (process.env.LOG_LEVEL as EnvConfig['LOG_LEVEL']) || 'info',
+  };
+}
+
+// Configuration types
+export interface DatabaseConfig {
+  url: string;
+  ssl?: boolean;
+  maxConnections?: number;
+  timeout?: number;
+}
+
+export interface ServerConfig {
+  port: number;
+  cors: {
+    origin: string;
+    credentials: boolean;
+  };
+  rateLimit?: {
+    windowMs: number;
+    max: number;
+  };
+}
 ```
 
-### Component Type Testing
+### Performance & Optimization
 ```typescript
-// tests/components.test.tsx
-import { render, screen } from '@testing-library/react';
-import { List } from '../components/List';
+// types/performance.ts
+// Type-safe memoization
+export function memoize<T extends (...args: any[]) => any>(fn: T): T {
+  const cache = new Map();
+  return ((...args: any[]) => {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    const result = fn(...args);
+    cache.set(key, result);
+    return result;
+  }) as T;
+}
 
-describe('Component Types', () => {
-  it('should render typed list correctly', () => {
-    const items = [
-      { id: 1, name: 'Item 1' },
-      { id: 2, name: 'Item 2' },
-    ];
-    
-    render(
-      <List
-        items={items}
-        renderItem={(item) => <div>{item.name}</div>}
-        data-testid="list"
-      />
-    );
-    
-    expect(screen.getByTestId('list')).toBeInTheDocument();
-    expect(screen.getByText('Item 1')).toBeInTheDocument();
-  });
-});
+// Lazy initialization
+export function lazy<T>(factory: () => T): () => T {
+  let instance: T | null = null;
+  return () => {
+    if (instance === null) {
+      instance = factory();
+    }
+    return instance;
+  };
+}
+
+// Type-safe debouncing
+export function debounce<T extends (...args: any[]) => any>(
+  fn: T,
+  delay: number
+): (...args: Parameters<T>) => void {
+  let timeoutId: NodeJS.Timeout;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
+  };
+}
+
+// Performance monitoring types
+export interface PerformanceMetrics {
+  operation: string;
+  duration: number;
+  timestamp: number;
+  memoryUsage?: NodeJS.MemoryUsage;
+}
+
+export interface PerformanceMonitor {
+  startTiming(operation: string): () => PerformanceMetrics;
+  recordMetrics(metrics: PerformanceMetrics): void;
+  getMetrics(operation?: string): PerformanceMetrics[];
+}
 ```
 
-## Best Practices
-
-### Type Organization
-- Keep types close to their usage
-- Use barrel exports for clean imports
-- Separate domain types from implementation types
-- Maintain consistent naming conventions
-
-### Type Safety
-- Enable strict TypeScript mode
-- Avoid 'any' and 'unknown' types
-- Use proper type inference
-- Implement runtime validation
-
-### Performance
-- Use type inference for better performance
-- Avoid excessive type complexity
-- Leverage generics for reusability
-- Optimize compilation times
-
-### Integration
-- Share types across client and server
-- Generate types from schemas
-- Use type-safe APIs
-- Implement proper error types
-
-
----
-
-## Tool Usage Guidelines
-
-### Execute Tool
-**Purpose**: Full execution rights for validation, testing, building, and git operations
-
-#### Allowed Commands
-**All assessment commands plus**:
-- `npm run build`, `npm run dev` - Build and development
-- `npm install`, `pnpm install` - Dependency management
-- `git add`, `git commit`, `git checkout` - Git operations
-- Build tools, compilers, and package managers
-
-#### Caution Commands (Ask User First)
-- `git push` - Push to remote repository
-- `npm publish` - Publish to package registry
-- `docker push` - Push to container registry
-
----
-
-### Edit & MultiEdit Tools
-**Purpose**: Modify source code to implement fixes and features
-
-**Best Practices**:
-1. **Read before editing** - Always read files first to understand context
-2. **Preserve formatting** - Match existing code style
-3. **Atomic changes** - Each edit should be a complete, working change
-4. **Test after editing** - Run tests to verify changes work
-
----
-
-### Create Tool
-**Purpose**: Generate new files including source code
-
-#### Allowed Paths (Full Access)
-- `/src/**` - All source code directories
-- `/tests/**` - Test files
-- `/docs/**` - Documentation
-
-#### Prohibited Paths
-- `.env` - Actual secrets (only `.env.example`)
-- `.git/**` - Git internals (use git commands)
-
-**Security**: Action droids have full modification rights to implement fixes and features.
-
----
 ## Task File Integration
 
 ### Input Format
-**Reads**: `/tasks/tasks-[prd-id]-[domain].md` from assessment droid
+**Reads**: `/tasks/tasks-[prd-id]-typescript-integration.md` from assessment droid
 
 ### Output Format
 **Updates**: Same file with status markers
@@ -675,30 +425,109 @@ describe('Component Types', () => {
 
 **Example Update**:
 ```markdown
-- [x] 1.1 Fix authentication bug
+- [x] 3.1 Implement end-to-end type safety
   - **Status**: ✅ Completed
-  - **Completed**: 2025-01-12 11:45
-  - **Changes**: Added input validation, error handling
-  - **Tests**: ✅ All tests passing (12/12)
+  - **Completed**: 2025-01-12 16:30
+  - **Files**: types/database.ts, types/api.ts, types/react.ts
+  - **Coverage**: 95% type safety across full stack
+  
+- [~] 3.2 Add type-safe API client
+  - **In Progress**: Started 2025-01-12 16:45
+  - **Status**: Implementing TypedApiClient with full type inference
+  - **ETA**: 20 minutes
 ```
 
----
+## Tool Usage Guidelines
 
-## Integration with Other Droids
+### Execute Tool
+**Purpose**: TypeScript compilation, type checking, and build operations
 
-### Works Best With:
-- **Next.js 15 Specialist**: Component and API typing
-- **tRPC Integration Droid**: Type-safe API development
-- **Drizzle ORM Droid**: Database type generation
-- **Auth Integration Droid**: Type-safe authentication
+**Allowed Commands**:
+- `npx tsc --noEmit` - Type checking without compilation
+- `npx tsc --build` - Incremental compilation
+- `npm run type-check` - Custom type checking scripts
+- `npm run build` - Build with type checking
+- `npm run dev` - Development with type checking
 
-### Type Flow:
-1. **Database Schema**: Drizzle ORM generates base types
-2. **API Layer**: tRPC adds API-specific types
-3. **Frontend**: Components consume type-safe data
-4. **Validation**: Runtime validation from types
+### Grep Tool
+**Purpose**: Find type-related issues and patterns
 
----
+**Usage Examples**:
+```bash
+# Find any types
+rg -n ": any" --type ts --type tsx
 
-**Version**: 2.0.0 (Optimized for AI token efficiency)
-**Specialization**: Full-stack TypeScript integration and advanced type patterns
+# Find missing type annotations
+rg -n "function.*\(" --type ts | rg -v ":"
+
+# Find type assertion usage
+rg -n "as " --type ts --type tsx
+```
+
+### Read & Edit Tools
+**Purpose**: Implement type-safe code and fix type issues
+
+**Best Practices**:
+- Use explicit type annotations for public APIs
+- Leverage type inference for internal code
+- Implement proper error handling with typed errors
+- Use utility types to avoid repetition
+
+## Integration Examples
+
+```bash
+# Full-stack type safety implementation
+Task tool subagent_type="typescript-integration-droid-forge" \
+  description="Implement end-to-end type safety" \
+  prompt "Implement tasks from /tasks/tasks-typescript-integration.md: Create database-to-UI type flow, type-safe API definitions, React component typing, and state management types. Update task file with progress."
+
+# Generic patterns implementation
+Task tool subagent_type="typescript-integration-droid-forge" \
+  description="Create generic type patterns" \
+  prompt "Create advanced generic patterns for repository pattern, API responses, and service classes with full type safety and reusability."
+
+# Type generation automation
+Task tool subagent_type="typescript-integration-droid-forge" \
+  description="Set up type generation" \
+  prompt "Set up automated type generation from database schemas and API definitions with synchronization mechanisms."
+```
+
+## Best Practices
+
+### Type Safety Principles
+- **Explicit over Implicit**: Use explicit types for public APIs
+- **Fail Fast**: Catch type errors at compile time, not runtime
+- **Consistency**: Maintain consistent typing patterns across the codebase
+- **Documentation**: Use JSDoc comments for complex types
+
+### Performance Considerations
+- Use type inference for internal code
+- Avoid overly complex conditional types
+- Leverage TypeScript's incremental compilation
+- Optimize generics for better inference
+
+### Code Organization
+```
+src/
+├── types/
+│   ├── database.ts     # Database schema types
+│   ├── api.ts         # API contract types
+│   ├── react.ts       # React component types
+│   ├── utilities.ts   # Utility and helper types
+│   └── env.ts         # Environment configuration types
+├── lib/
+│   ├── types.ts       # Type generation utilities
+│   └── validation.ts  # Runtime validation from types
+└── components/
+    └── ui/            # Type-safe UI components
+```
+
+### Type Safety Checklist
+- [ ] Database schemas generate TypeScript types
+- [ ] API contracts are typed on client and server
+- [ ] React components use proper prop typing
+- [ ] State management is fully typed
+- [ ] Environment variables are validated and typed
+- [ ] Error types are comprehensive and specific
+- [ ] Utility types are reusable and documented
+- [ ] Performance optimizations maintain type safety

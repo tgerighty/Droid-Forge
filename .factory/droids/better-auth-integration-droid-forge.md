@@ -323,10 +323,10 @@ export async function requireAdmin() {
 ```bash
 # .env.example
 GOOGLE_CLIENT_ID=your-client-id
-GOOGLE_CLIENT_SECRET=your-secret
-BETTER_AUTH_SECRET=your-32-char-secret
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+BETTER_AUTH_SECRET=your-better-auth-secret
 BETTER_AUTH_URL=https://yourapp.com
-DATABASE_URL=postgresql://...
+DATABASE_URL=postgresql://user:password@localhost:5432/db
 ```
 
 ---
