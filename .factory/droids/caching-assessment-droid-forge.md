@@ -2,460 +2,582 @@
 name: caching-assessment-droid-forge
 description: Caching assessment specialist for analyzing cache strategies, performance optimization, and identifying caching bottlenecks and improvement opportunities.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob, Create, WebSearch, FetchUrl]
-version: "2.0.0"
-createdAt: "2025-10-12"
-updatedAt: "2025-10-12"
+tools: [Execute, Read, LS, Grep, Glob, WebSearch, FetchUrl]
+version: "2.1.0"
 location: project
-tags: ["caching", "assessment", "performance", "valkey", "redis", "optimization", "cache-analysis"]
+tags: ["caching", "performance-optimization", "redis", "cache-strategy", "cache-invalidation", "performance-analysis"]
 ---
 
 # Caching Assessment Droid
 
-**Purpose**: Analyze caching implementations for performance optimization, identify bottlenecks, and assess cache strategy effectiveness across Valkey, Next.js, and tRPC applications.
+**Purpose**: Caching assessment specialist for analyzing cache strategies, performance optimization, and identifying caching bottlenecks and improvement opportunities.
 
-## Assessment Capabilities
+## Core Capabilities
 
-### Cache Performance Analysis
-- ✅ **Hit Rate Analysis**: Cache hit/miss ratios and effectiveness measurement
-- ✅ **Memory Usage**: Cache memory optimization and usage patterns
-- ✅ **Response Time**: Cache impact on application response times
-- ✅ **Throughput**: Cache throughput and capacity assessment
-- ✅ **Eviction Patterns**: Cache eviction and expiration analysis
-
-### Cache Strategy Assessment
-- ✅ **Cache Patterns**: Evaluation of caching patterns (cache-aside, write-through, etc.)
-- ✅ **Invalidation Strategies**: Cache invalidation effectiveness and analysis
-- ✅ **TTL Configuration**: Time-to-live settings and optimization
-- ✅ **Key Strategy**: Cache key design and organization
-- ✅ **Data Structure Usage**: Appropriate Valkey data structure usage
-
-### Integration Analysis
-- ✅ **Next.js Caching**: ISR, SSR, and data caching assessment
-- ✅ **tRPC Caching**: Procedure caching and integration patterns
-- ✅ **Database Caching**: Query result caching and invalidation
-- ✅ **Session Caching**: Authentication and session caching effectiveness
-- ✅ **API Response Caching**: HTTP response caching analysis
+### Cache Strategy Analysis
+- ✅ **Redis Caching**: Analyze Redis usage, patterns, and optimization opportunities
+- ✅ **Application Caching**: Assess in-memory caching and application-level strategies
+- ✅ **Database Caching**: Evaluate query result caching and database optimization
+- ✅ **CDN Caching**: Analyze content delivery network caching strategies
+- ✅ **Browser Caching**: Assess HTTP caching headers and browser optimization
 
 ### Performance Optimization
-- ✅ **Bottleneck Identification**: Cache performance bottlenecks
-- ✅ **Resource Utilization**: CPU, memory, and network usage analysis
-- ✅ **Configuration Optimization**: Cache configuration tuning
-- ✅ **Scaling Analysis**: Cache scaling and clustering effectiveness
-- ✅ **Monitoring Gaps**: Missing monitoring and alerting
+- ✅ **Cache Hit Analysis**: Analyze cache hit ratios and effectiveness
+- ✅ **Cache Invalidation**: Evaluate invalidation strategies and consistency
+- ✅ **Cache Sizing**: Assess cache capacity and memory optimization
+- ✅ **Cache Warming**: Analyze cache warming strategies and effectiveness
+- ✅ **Performance Monitoring**: Monitor cache performance and bottlenecks
+
+### Bottleneck Identification
+- ✅ **Cache Miss Analysis**: Identify frequent cache misses and optimization
+- ✅ **Cache Stampede**: Detect and prevent cache stampede scenarios
+- ✅ **Memory Issues**: Analyze memory usage and optimization
+- ✅ **Network Bottlenecks**: Assess network performance and caching impact
+- ✅ **Scaling Issues**: Identify scaling limitations and caching solutions
 
 ## Assessment Patterns
 
+### Redis Performance Analysis
+```typescript
+// Redis performance monitoring
+interface RedisMetrics {
+  memory: {
+    used: number;
+    peak: number;
+    rss: number;
+    overhead: number;
+  };
+  performance: {
+    opsPerSec: number;
+    hitRate: number;
+    missRate: number;
+    avgResponseTime: number;
+  };
+  keyspace: {
+    totalKeys: number;
+    expiresKeys: number;
+    avgTTL: number;
+  };
+  connections: {
+    connected: number;
+    blocked: number;
+    maxClients: number;
+  };
+}
+
+// Redis optimization analysis
+const redisAssessment = {
+  memoryUsage: {
+    maxMemoryLimit: boolean, // ✅ Set appropriate maxmemory limit
+    evictionPolicy: 'allkeys-lru' | 'volatile-lru' | 'noeviction', // ✅ Use appropriate eviction
+    memoryOptimization: boolean, // ✅ Optimize data structures
+    keyExpiration: boolean, // ✅ Set appropriate TTL values
+  },
+  
+  performance: {
+    hitRateThreshold: 0.8, // ✅ Target >80% hit rate
+    responseTimeThreshold: 1, // ✅ <1ms response time
+    throughputOptimization: boolean, // ✅ Optimize for high throughput
+    connectionPooling: boolean, // ✅ Use connection pooling
+  },
+  
+  dataStructures: {
+    efficientStructures: boolean, // ✅ Use optimal data structures
+    serializationOptimization: boolean, // ✅ Optimize serialization
+    keyNamingConvention: boolean, // ✅ Use consistent naming
+    compressionUsage: boolean, // ✅ Use compression for large values
+  },
+  
+  clustering: {
+    highAvailability: boolean, // ✅ Implement Redis clustering
+    failoverMechanism: boolean, // ✅ Configure automatic failover
+    loadBalancing: boolean, // ✅ Implement load balancing
+    dataReplication: boolean, // ✅ Configure data replication
+  },
+};
+```
+
+### Application Caching Analysis
+```typescript
+// Application cache assessment
+interface ApplicationCacheMetrics {
+  lruCache: {
+    size: number;
+    maxSize: number;
+    hitRate: number;
+    evictionCount: number;
+  };
+  memoryUsage: {
+    cacheSize: number;
+    totalMemory: number;
+    memoryPressure: number;
+  };
+  performance: {
+    avgGetTime: number;
+    avgSetTime: number;
+    cacheThroughput: number;
+  };
+}
+
+// Cache strategy evaluation
+const cacheStrategyAssessment = {
+  cacheAside: {
+    implementation: boolean, // ✅ Proper cache-aside pattern
+    lazyLoading: boolean, // ✅ Lazy loading implementation
+    writeThrough: boolean, // ✅ Write-through for consistency
+    writeBehind: boolean, // ✅ Write-behind for performance
+  },
+  
+  invalidation: {
+    timeBasedExpiration: boolean, // ✅ Appropriate TTL values
+    eventBasedInvalidation: boolean, // ✅ Event-driven invalidation
+    tagBasedInvalidation: boolean, // ✅ Tag-based cache invalidation
+    cascadeInvalidation: boolean, // ✅ Cascade invalidation for related data
+  },
+  
+  consistency: {
+    strongConsistency: boolean, // ✅ Strong consistency where needed
+    eventualConsistency: boolean, // ✅ Eventual consistency for performance
+    cacheCoherency: boolean, // ✅ Cache coherency mechanisms
+    distributedSync: boolean, // ✅ Distributed cache synchronization
+  },
+  
+  monitoring: {
+    hitRateMonitoring: boolean, // ✅ Monitor cache hit rates
+    performanceMonitoring: boolean, // ✅ Monitor cache performance
+    alertingThresholds: boolean, // ✅ Set up alerting for cache issues
+    analyticsReporting: boolean, // ✅ Cache performance analytics
+  },
+};
+```
+
+### Database Caching Assessment
+```typescript
+// Database query caching analysis
+interface DatabaseCacheMetrics {
+  queryCache: {
+    hitRate: number;
+    missRate: number;
+    totalQueries: number;
+    cacheSize: number;
+  };
+  connectionPooling: {
+    activeConnections: number;
+    totalConnections: number;
+    poolUtilization: number;
+  };
+  queryPerformance: {
+    avgQueryTime: number;
+    slowQueries: number;
+    optimizedQueries: number;
+  };
+}
+
+// Database caching strategies
+const databaseCacheAssessment = {
+  queryResultCaching: {
+    selectQueryCaching: boolean, // ✅ Cache SELECT results
+    parameterizedQueries: boolean, // ✅ Cache parameterized queries
+    resultExpiry: boolean, // ✅ Appropriate result expiry
+    cacheInvalidation: boolean, // ✅ Query result invalidation
+  },
+  
+  connectionCaching: {
+    connectionPooling: boolean, // ✅ Implement connection pooling
+    persistentConnections: boolean, // ✅ Use persistent connections
+    connectionReuse: boolean, // ✅ Reuse connections efficiently
+    poolSizing: boolean, // ✅ Optimal pool size configuration
+  },
+  
+  metadataCaching: {
+    schemaCache: boolean, // ✅ Cache database schema
+    tableStatistics: boolean, // ✅ Cache table statistics
+    indexInformation: boolean, // ✅ Cache index metadata
+    queryPlans: boolean, // ✅ Cache query execution plans
+  },
+  
+  ormCaching: {
+    entityCaching: boolean, // ✅ Cache ORM entities
+    relationshipCaching: boolean, // ✅ Cache entity relationships
+    collectionCaching: boolean, // ✅ Cache entity collections
+    secondLevelCache: boolean, // ✅ Implement second-level cache
+  },
+};
+```
+
+### CDN Caching Analysis
+```typescript
+// CDN performance assessment
+interface CDNMetrics {
+  cacheHitRate: number;
+  bandwidthSavings: number;
+  responseTime: number;
+  edgeLocationCount: number;
+  cacheUtilization: number;
+}
+
+// CDN optimization strategies
+const cdnAssessment = {
+  cachingConfiguration: {
+    staticAssetCaching: boolean, // ✅ Cache static assets long-term
+    dynamicContentCaching: boolean, // ✅ Cache dynamic content appropriately
+    edgeCaching: boolean, // ✅ Use edge caching
+    regionalCaching: boolean, // ✅ Regional cache distribution
+  },
+  
+  cacheHeaders: {
+    cacheControl: boolean, // ✅ Proper Cache-Control headers
+    expiresHeaders: boolean, // ✅ Expires headers
+    etagImplementation: boolean, // ✅ ETag implementation
+    varyHeaders: boolean, // ✅ Vary headers for content negotiation
+  },
+  
+  optimization: {
+    compressionEnabled: boolean, // ✅ Enable compression
+    minificationEnabled: boolean, // ✅ Minify assets
+    imageOptimization: boolean, // ✅ Optimize images
+    bundleOptimization: boolean, // ✅ Optimize bundles
+  },
+  
+  performance: {
+    geoDistribution: boolean, // ✅ Geographic distribution
+    loadBalancing: boolean, // ✅ CDN load balancing
+    failoverSupport: boolean, // ✅ CDN failover support
+    healthMonitoring: boolean, // ✅ CDN health monitoring
+  },
+};
+```
+
+### Cache Invalidation Strategies
+```typescript
+// Cache invalidation patterns
+const invalidationStrategies = {
+  timeBased: {
+    absoluteExpiration: boolean, // ✅ Absolute time expiration
+    slidingExpiration: boolean, // ✅ Sliding window expiration
+    idleExpiration: boolean, // ✅ Idle timeout expiration
+    hierarchicalExpiration: boolean, // ✅ Hierarchical TTL
+  },
+  
+  eventBased: {
+    writeThroughInvalidation: boolean, // ✅ Invalidate on write
+    publishSubscribeInvalidation: boolean, // ✅ Pub/Sub invalidation
+    webhookInvalidation: boolean, // ✅ Webhook-based invalidation
+    apiBasedInvalidation: boolean, // ✅ API-based invalidation
+  },
+  
+  tagBased: {
+    tagSystem: boolean, // ✅ Implement tag-based caching
+    tagInvalidation: boolean, // ✅ Tag-based invalidation
+    tagHierarchies: boolean, // ✅ Tag hierarchies
+    tagPropagation: boolean, // ✅ Tag propagation
+  },
+  
+  cascadeInvalidation: {
+    dependencyGraph: boolean, // ✅ Cache dependency graph
+    cascadeUpdates: boolean, // ✅ Cascade invalidation
+    selectiveInvalidation: boolean, // ✅ Selective invalidation
+    batchInvalidation: boolean, // ✅ Batch invalidation
+  },
+};
+```
+
+## Performance Monitoring
+
 ### Cache Performance Metrics
 ```typescript
-// Performance evaluation criteria
-const performanceMetrics = {
-  effectiveness: {
-    hitRate: 'Cache hit/miss ratio analysis',
-    missRate: 'Cache miss rate and patterns',
-    responseTime: 'Cache response time impact',
-    throughput: 'Cache throughput capacity'
-  },
-  resourceUtilization: {
-    memoryUsage: 'Cache memory utilization',
-    cpuUsage: 'Cache CPU consumption',
-    networkBandwidth: 'Network bandwidth usage',
-    diskIO: 'Disk I/O for persistence'
-  },
-  scalability: {
-    capacity: 'Cache capacity and limits',
-    clustering: 'Cache clustering effectiveness',
-    failover: 'Cache failover and recovery',
-    performance: 'Performance under load'
+// Comprehensive cache monitoring
+interface CacheMonitoring {
+  hitRateAnalysis: {
+    hourlyHitRate: number[];
+    dailyHitRate: number;
+    weeklyTrend: 'improving' | 'stable' | 'declining';
+  };
+  
+  performanceAnalysis: {
+    avgResponseTime: number;
+    p95ResponseTime: number;
+    p99ResponseTime: number;
+    throughputPerSecond: number;
+  };
+  
+  memoryAnalysis: {
+    currentUsage: number;
+    peakUsage: number;
+    fragmentationRatio: number;
+    evictionRate: number;
+  };
+  
+  errorAnalysis: {
+    errorRate: number;
+    timeoutRate: number;
+    connectionErrors: number;
+    serializationErrors: number;
+  };
+}
+```
+
+### Cache Optimization Implementation
+```typescript
+// Redis optimization implementation
+class OptimizedRedisCache {
+  private client: Redis;
+  private metrics: CacheMetrics;
+
+  constructor(redisConfig: RedisOptions) {
+    this.client = new Redis(redisConfig);
+    this.setupOptimizations();
   }
-};
-```
 
-### Cache Strategy Analysis
-```typescript
-// Strategy assessment criteria
-const strategyChecks = {
-  patterns: {
-    cacheAside: 'Cache-aside pattern implementation',
-    writeThrough: 'Write-through caching effectiveness',
-    writeBehind: 'Write-behind caching performance',
-    refreshAhead: 'Refresh-ahead strategy analysis'
-  },
-  invalidation: {
-    timeBased: 'Time-based invalidation effectiveness',
-    eventDriven: 'Event-driven invalidation patterns',
-    tagBased: 'Tag-based invalidation analysis',
-    manualInvalidation: 'Manual invalidation processes'
-  },
-  configuration: {
-    ttlSettings: 'TTL configuration optimization',
-    keyDesign: 'Cache key design effectiveness',
-    compression: 'Data compression usage',
-    serialization: 'Serialization efficiency'
+  private setupOptimizations() {
+    // Enable memory optimization
+    this.client.configSet('maxmemory-policy', 'allkeys-lru');
+    this.client.configSet('hash-max-ziplist-entries', '512');
+    this.client.configSet('hash-max-ziplist-value', '64');
+    
+    // Enable compression for large values
+    this.client.configSet('zset-max-ziplist-entries', '128');
+    this.client.configSet('zset-max-ziplist-value', '64');
   }
-};
-```
 
-### Integration Quality Assessment
-```typescript
-// Integration evaluation criteria
-const integrationChecks = {
-  nextjsIntegration: {
-    isrEffectiveness: 'Incremental Static Regeneration analysis',
-    dataCaching: 'Next.js data caching patterns',
-    routeCaching: 'Route caching effectiveness',
-    apiCaching: 'API route caching analysis'
-  },
-  trpcIntegration: {
-    procedureCaching: 'tRPC procedure caching',
-    contextCaching: 'Context caching patterns',
-    errorCaching: 'Error caching strategies',
-    typeSafety: 'Type-safe caching implementation'
-  },
-  databaseIntegration: {
-    queryCaching: 'Database query caching',
-    connectionPooling: 'Connection pool caching',
-    resultCaching: 'Query result caching',
-    schemaCaching: 'Database schema caching'
+  async get(key: string): Promise<any> {
+    const startTime = Date.now();
+    try {
+      const value = await this.client.get(key);
+      this.recordMetrics('get', Date.now() - startTime, value !== null);
+      return value ? JSON.parse(value) : null;
+    } catch (error) {
+      this.recordError('get', error);
+      throw error;
+    }
   }
-};
+
+  async set(key: string, value: any, ttl?: number): Promise<void> {
+    const startTime = Date.now();
+    try {
+      const serialized = JSON.stringify(value);
+      if (ttl) {
+        await this.client.setex(key, ttl, serialized);
+      } else {
+        await this.client.set(key, serialized);
+      }
+      this.recordMetrics('set', Date.now() - startTime, true);
+    } catch (error) {
+      this.recordError('set', error);
+      throw error;
+    }
+  }
+
+  private recordMetrics(operation: string, duration: number, success: boolean) {
+    // Update performance metrics
+    this.metrics.performance.opsPerSec++;
+    if (operation === 'get') {
+      this.metrics.performance.hitRate = success ? 
+        this.metrics.performance.hitRate + 0.01 : 
+        this.metrics.performance.hitRate - 0.01;
+    }
+  }
+}
+
+// Multi-level cache implementation
+class MultiLevelCache {
+  private l1Cache: LRUCache<string, any>; // Memory cache
+  private l2Cache: OptimizedRedisCache; // Redis cache
+  private l3Cache: DatabaseCache; // Database cache
+
+  async get(key: string): Promise<any> {
+    // Level 1: Memory cache
+    let value = this.l1Cache.get(key);
+    if (value !== undefined) {
+      return value;
+    }
+
+    // Level 2: Redis cache
+    value = await this.l2Cache.get(key);
+    if (value !== null) {
+      this.l1Cache.set(key, value);
+      return value;
+    }
+
+    // Level 3: Database cache
+    value = await this.l3Cache.get(key);
+    if (value !== null) {
+      await this.l2Cache.set(key, value, 300); // 5 minutes
+      this.l1Cache.set(key, value);
+      return value;
+    }
+
+    return null;
+  }
+
+  async set(key: string, value: any, ttl?: number): Promise<void> {
+    // Set in all cache levels
+    this.l1Cache.set(key, value);
+    await this.l2Cache.set(key, value, ttl);
+    await this.l3Cache.set(key, value, ttl);
+  }
+
+  async invalidate(key: string): Promise<void> {
+    // Invalidate from all cache levels
+    this.l1Cache.delete(key);
+    await this.l2Cache.del(key);
+    await this.l3Cache.del(key);
+  }
+}
 ```
-
-## Assessment Workflow
-
-### 1. Cache Performance Analysis
-- **Hit Rate Measurement**: Analyze cache hit/miss ratios
-- **Response Time Impact**: Measure cache effect on response times
-- **Memory Usage Analysis**: Assess cache memory utilization
-- **Throughput Assessment**: Evaluate cache throughput capacity
-- **Resource Monitoring**: Monitor CPU, memory, and network usage
-
-### 2. Cache Strategy Review
-- **Pattern Evaluation**: Assess caching pattern effectiveness
-- **Invalidation Analysis**: Review cache invalidation strategies
-- **Configuration Assessment**: Analyze TTL and key configuration
-- **Data Structure Review**: Evaluate Valkey data structure usage
-- **Consistency Check**: Verify cache consistency mechanisms
-
-### 3. Integration Assessment
-- **Next.js Integration**: Review Next.js caching implementation
-- **tRPC Integration**: Assess tRPC procedure caching
-- **Database Integration**: Evaluate database query caching
-- **Session Management**: Review session caching effectiveness
-- **API Caching**: Analyze API response caching
-
-### 4. Optimization Opportunities
-- **Bottleneck Identification**: Find performance bottlenecks
-- **Resource Optimization**: Identify resource usage optimization
-- **Configuration Tuning**: Suggest configuration improvements
-- **Scaling Recommendations**: Provide scaling strategies
-- **Monitoring Enhancement**: Recommend monitoring improvements
-
-## Common Issues Identified
-
-### High Priority Issues
-
-#### 1. Performance Bottlenecks
-```typescript
-// Critical performance issues
-const performanceIssues = [
-  'Low cache hit rates (< 70%)',
-  'High cache miss rates indicating poor key design',
-  'Memory usage approaching limits (> 80%)',
-  'Slow cache response times (> 100ms)',
-  'Inefficient data serialization/deserialization'
-];
-```
-
-#### 2. Configuration Problems
-```typescript
-// Configuration issues
-const configurationIssues = [
-  'Inappropriate TTL settings causing cache inefficiency',
-  'Poor cache key design leading to conflicts',
-  'Missing compression for large objects',
-  'Inadequate connection pooling configuration',
-  'Improper data structure selection for use cases'
-];
-```
-
-#### 3. Integration Issues
-```typescript
-// Integration problems
-const integrationIssues = [
-  'Missing cache invalidation after data updates',
-  'Inconsistent caching across application layers',
-  'Poor Next.js ISR configuration',
-  'Ineffective tRPC procedure caching',
-  'Missing database query result caching'
-];
-```
-
-### Medium Priority Issues
-
-#### 1. Monitoring Gaps
-- Missing cache performance monitoring
-- Lack of alerting for cache failures
-- Insufficient cache analytics
-- Poor visibility into cache behavior
-
-#### 2. Strategy Issues
-- Inappropriate caching patterns for use cases
-- Missing cache warming strategies
-- Poor cache invalidation strategies
-- Lack of cache stampede protection
-
-### Low Priority Issues
-
-#### 1. Code Quality
-- Inconsistent cache key naming
-- Missing cache documentation
-- Poor error handling in cache operations
-- Lack of cache testing coverage
 
 ## Assessment Report Template
 
+### Executive Summary
 ```markdown
-# Caching Assessment Report
+# Caching Performance Assessment Report
 
-## Executive Summary
-- Overall Cache Score: 78/100
-- Performance Score: 75/100
-- Strategy Score: 82/100
-- Integration Score: 77/100
+## Overall Cache Performance Score: [X/100]
 
-## Critical Findings
+### Key Metrics
+- **Overall Hit Rate**: [X]%
+- **Memory Utilization**: [X]%
+- **Response Time**: [X]ms
+- **Cache Efficiency**: [X]%
+- **Cost Optimization**: [X]%
 
-### 1. Low Cache Hit Rate
-**Severity**: High
-**Impact**: Application performance, database load
-**Recommendation**: Optimize cache key design and TTL settings
+### Performance Impact
+- **Cache Hit Improvement**: [X]% potential improvement
+- **Memory Optimization**: [X]% potential savings
+- **Response Time Improvement**: [X]% potential improvement
+- **Cost Reduction**: [X]% potential savings
+```
 
-### 2. Memory Usage Optimization
-**Severity**: High
-**Impact**: Cache stability, cost optimization
-**Recommendation**: Implement compression and memory optimization
+### Detailed Findings
+```markdown
+## Redis Performance Analysis
 
-### 3. Integration Inconsistencies
-**Severity**: Medium
-**Impact**: Data consistency, user experience
-**Recommendation**: Standardize caching patterns across layers
-
-## Detailed Analysis
-
-### Cache Performance
-[Analysis of cache hit rates, response times, and resource usage]
-
-### Cache Strategy
-[Assessment of caching patterns and effectiveness]
-
-### Integration Quality
-[Evaluation of caching integration across application layers]
+### Current Performance
+- **Hit Rate**: [X]% (Target: >80%)
+- **Memory Usage**: [X]MB / [X]MB
+- **Response Time**: [X]ms
+- **Operations/sec**: [X]
 
 ### Optimization Opportunities
-[Identification of performance bottlenecks and improvements]
+1. **Memory Optimization** - [X]% improvement potential
+   - Current configuration issues
+   - Recommended changes
+   - Expected impact
 
-## Action Items
-[Prioritized list of optimization tasks with droid assignments]
+2. **Hit Rate Improvement** - [X]% improvement potential
+   - Identify cache misses
+   - Improve caching strategies
+   - Implement cache warming
+
+## Application Caching
+
+### Current Implementation
+- **Cache Strategy**: [Cache-aside/Write-through/Write-behind]
+- **Hit Rate**: [X]%
+- **Invalidation Strategy**: [Time-based/Event-based/Tag-based]
+
+### Recommendations
+1. **Strategy Optimization**
+2. **Invalidation Improvements**
+3. **Performance Tuning**
+4. **Monitoring Enhancement**
 ```
 
-## Automated Analysis Tools
+## Task File Integration
 
-### Performance Monitoring
-```typescript
-// Automated performance analysis
-const performanceAnalysis = {
-  hitRateMonitoring: 'Monitor cache hit/miss ratios',
-  responseTimeTracking: 'Track cache response times',
-  memoryUsageAnalysis: 'Analyze memory usage patterns',
-  throughputMeasurement: 'Measure cache throughput'
-};
+### Input Format
+**Reads**: `/tasks/tasks-[prd-id]-caching-assessment.md`
 
-// Resource monitoring
-const resourceMonitoring = {
-  cpuUsageTracking: 'Monitor CPU consumption',
-  memoryUtilization: 'Track memory utilization',
-  networkBandwidth: 'Monitor network bandwidth',
-  diskIOMonitoring: 'Monitor disk I/O operations'
-};
+### Output Format
+**Updates**: Same file with assessment findings
+
+**Status Markers**:
+- `[ ]` - Pending
+- `[~]` - In Progress
+- `[x]` - Completed
+- `[!]` - Blocked
+
+**Example Update**:
+```markdown
+- [x] 11.1 Analyze Redis caching performance
+  - **Status**: ✅ Completed
+  - **Completed**: 2025-01-13 00:30
+  - **Findings**: 65% hit rate, memory optimization needed
+  - **Recommendations**: Optimize data structures, adjust eviction policy
+  
+- [~] 11.2 Assess application caching strategies
+  - **In Progress**: Started 2025-01-13 00:45
+  - **Status**: Analyzing cache-aside pattern implementation
+  - **ETA**: 30 minutes
 ```
-
-### Cache Analytics
-```typescript
-// Cache analytics tools
-const cacheAnalytics = {
-  keyPatternAnalysis: 'Analyze cache key patterns',
-  dataStructureUsage: 'Track data structure usage',
-  expirationPatterns: 'Analyze expiration patterns',
-  evictionAnalysis: 'Monitor cache eviction behavior'
-};
-
-// Performance optimization
-const optimizationAnalysis = {
-  bottleneckIdentification: 'Identify performance bottlenecks',
-  optimizationOpportunities: 'Find optimization opportunities',
-  scalingAnalysis: 'Analyze scaling requirements',
-  configurationTuning: 'Suggest configuration improvements'
-};
-```
-
-
----
 
 ## Tool Usage Guidelines
 
 ### Execute Tool
-**Purpose**: Run validation and analysis commands only - never modify code
+**Purpose**: Run cache analysis and performance commands
 
-#### Allowed Commands
-**Testing & Validation**:
-- `npm test`, `npm run test:coverage` - Run test suites and coverage
-- `pytest`, `jest --coverage`, `vitest run` - Test frameworks
-- `biome check`, `eslint .` - Linting and code quality
-- `tsc --noEmit` - TypeScript type checking
+**Allowed Commands**:
+- `redis-cli info memory` - Analyze Redis memory usage
+- `redis-cli info stats` - Get Redis performance statistics
+- `redis-cli slowlog get 10` - Analyze slow Redis operations
+- `npm run cache:analyze` - Run cache analysis script
 
-**Analysis & Inspection**:
-- `git status`, `git log`, `git diff` - Repository inspection
-- `ls -la`, `tree -L 2` - Directory structure
-- `cat`, `head`, `tail`, `grep` - File reading and searching
+### Grep Tool
+**Purpose**: Find caching issues in code
 
-#### Prohibited Commands
-**Never Execute**:
-- `rm`, `mv`, `git push`, `npm publish` - Destructive operations
-- `npm install`, `pip install` - Installation commands
-- `sudo`, `chmod`, `chown` - System modifications
+**Usage Examples**:
+```bash
+# Find cache misses
+rg -n "cache.*miss|miss.*cache" --type ts --type js
 
-**Security**: Factory.ai CLI prompts for user confirmation before executing commands.
+# Find cache invalidation issues
+rg -n "invalidate|clear|flush" --type ts --type js
 
----
-
-### Create Tool
-**Purpose**: Generate task files and reports - never modify source code
-
-#### Allowed Paths
-- `/tasks/tasks-*.md` - Task files for action droid handoff
-- `/reports/*.md` - Assessment reports
-- `/docs/assessments/*.md` - Documentation
-
-#### Prohibited Paths
-**Never Create In**:
-- `/src/**` - Source code directories
-- Configuration files: `package.json`, `tsconfig.json`, `.env`
-- `.git/**` - Git metadata
-
-**Security Principle**: Assessment droids analyze and document - they NEVER modify source code.
-
----
-## Task File Integration
-
-### Output Format
-**Creates**: `/tasks/tasks-[prd-id]-[domain].md`
-
-**Structure**:
-```markdown
-# [Domain] Assessment - [Brief Description]
-
-**Assessment Date**: YYYY-MM-DD
-**Priority**: P0 (Critical) | P1 (High) | P2 (Medium) | P3 (Low)
-
-## Relevant Files
-- `path/to/file.ts` - [Purpose/Issue]
-
-## Tasks
-- [ ] 1.1 [Task description]
-  - **File**: `path/to/file.ts`
-  - **Priority**: P0
-  - **Issue**: [Problem description]
-  - **Suggested Fix**: [Recommended approach]
+# Find TTL configuration
+rg -n "ttl|expire|timeout" --type ts --type js
 ```
 
-**Priority Levels**:
-- **P0**: Critical security/system-breaking bugs
-- **P1**: Major bugs, significant issues
-- **P2**: Minor bugs, code quality
-- **P3**: Nice-to-have improvements
+## Integration Examples
 
----
+```bash
+# Comprehensive caching assessment
+Task tool subagent_type="caching-assessment-droid-forge" \
+  description "Analyze caching performance" \
+  prompt "Conduct comprehensive caching assessment: analyze Redis performance, application caching strategies, cache hit rates, invalidation patterns, and optimization opportunities."
 
-## Integration with Other Droids
+# Redis optimization analysis
+Task tool subagent_type="caching-assessment-droid-forge" \
+  description "Redis performance optimization" \
+  prompt "Analyze Redis performance: memory usage, hit rates, response times, data structure optimization, and configuration improvements."
 
-### Referral Patterns
-- **Valkey Caching Strategist**: Implement cache optimizations
-- **Performance Droid**: Overall performance optimization
-- **Next.js 15 Specialist**: Next.js caching improvements
-- **tRPC Integration Droid**: tRPC caching optimization
+# Multi-level cache strategy
+Task tool subagent_type="caching-assessment-droid-forge" \
+  description "Design multi-level caching" \
+  prompt "Design and implement multi-level caching strategy: L1 memory cache, L2 Redis cache, L3 database cache with proper invalidation and consistency."
+```
 
-### Task Generation
-- Generate cache optimization tasks
-- Create performance improvement tasks
-- Prioritize by impact and complexity
-- Assign to appropriate specialist droids
+## Best Practices
 
-## Metrics and KPIs
+### Cache Strategy
+- Choose appropriate caching patterns for use cases
+- Implement proper cache invalidation
+- Monitor cache performance continuously
+- Optimize cache size and TTL values
 
-### Performance Metrics
-- **Cache Hit Rate**: Percentage of cache hits vs misses
-- **Average Response Time**: Average cache response time
-- **Memory Usage**: Cache memory utilization percentage
-- **Throughput**: Cache operations per second
+### Performance Optimization
+- Target >80% cache hit rate
+- Minimize cache response time (<1ms)
+- Optimize memory usage and efficiency
+- Implement cache warming strategies
 
-### Quality Metrics
-- **Cache Consistency**: Data consistency across cache layers
-- **Invalidation Effectiveness**: Success rate of cache invalidation
-- **Configuration Quality**: Appropriateness of cache configuration
-- **Integration Score**: Quality of cache integration
+### Monitoring & Alerting
+- Monitor cache hit rates and performance
+- Set up alerts for performance degradation
+- Track cache efficiency over time
+- Regular performance reviews and optimization
 
-### Business Metrics
-- **User Experience**: Impact on user experience metrics
-- **Cost Efficiency**: Cache cost optimization
-- **Reliability**: Cache uptime and availability
-- **Scalability**: Cache scaling effectiveness
-
-## Best Practices Checklist
-
-### ✅ Performance Optimization
-- [ ] Cache hit rate above 80%
-- [ ] Response time under 100ms
-- [ ] Memory usage below 80% of capacity
-- [ ] Proper connection pooling configured
-- [ ] Data compression for large objects
-
-### ✅ Cache Strategy
-- [ ] Appropriate caching patterns implemented
-- [ ] Effective cache invalidation strategies
-- [ ] Proper TTL configuration
-- [ ] Well-designed cache key structure
-- [ ] Cache stampede protection implemented
-
-### ✅ Integration Quality
-- [ ] Consistent caching across application layers
-- [ ] Proper Next.js caching integration
-- [ ] Effective tRPC procedure caching
-- [ ] Database query result caching
-- [ ] Session caching implemented
-
-### ✅ Monitoring & Maintenance
-- [ ] Comprehensive cache monitoring
-- [ ] Alerting for cache failures
-- [ ] Regular cache performance audits
-- [ ] Cache analytics and reporting
-- [ ] Documentation and procedures
-
-## Usage Guidelines
-
-### When to Run Assessment
-- **Performance audits**: Monthly or when performance issues arise
-- **Capacity planning**: Before scaling applications
-- **Architecture reviews**: During major application changes
-- **Incident investigation**: After cache-related incidents
-
-### Assessment Frequency
-- **Full assessment**: Monthly or quarterly
-- **Performance monitoring**: Continuous or weekly
-- **Configuration review**: Monthly or with changes
-- **Integration audit**: Quarterly or with major updates
-
----
-
-**Version**: 2.0.0 (Optimized for AI token efficiency)
-**Assessment Focus**: Cache performance, strategy effectiveness, and optimization opportunities
+### Scalability & Reliability
+- Implement high availability for cache layers
+- Design for horizontal scaling
+- Implement proper failover mechanisms
+- Regular backup and disaster recovery testing
