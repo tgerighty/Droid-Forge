@@ -212,6 +212,42 @@ configure_droid_forge() {
     fi
 }
 
+# Update .gitignore for .factory directory
+update_gitignore() {
+    print_info "Updating .gitignore to exclude .factory directory..."
+    
+    local gitignore_file=".gitignore"
+    
+    # Check if .gitignore exists
+    if [ ! -f "$gitignore_file" ]; then
+        print_info "Creating .gitignore file"
+        cat > "$gitignore_file" << 'EOF'
+# Droid Forge - Custom droids directory (personal overrides)
+.factory/
+EOF
+        print_success "Created .gitignore with .factory/ entry"
+        return
+    fi
+    
+    # Check if .factory is already in .gitignore
+    if grep -q "^\.factory/" "$gitignore_file" 2>/dev/null; then
+        print_info ".gitignore already contains .factory/ entry"
+        return
+    fi
+    
+    # Check if there's a Droid Forge section
+    if grep -q "# Droid Forge" "$gitignore_file" 2>/dev/null; then
+        print_info ".gitignore already has Droid Forge section"
+        return
+    fi
+    
+    # Add .factory entry to .gitignore
+    echo "" >> "$gitignore_file"
+    echo "# Droid Forge - Custom droids directory (personal overrides)" >> "$gitignore_file"
+    echo ".factory/" >> "$gitignore_file"
+    print_success "Added .factory/ to .gitignore"
+}
+
 # Run initial tests
 run_tests() {
     print_info "Running initial tests..."
@@ -285,6 +321,7 @@ main() {
     setup_directories
     install_core_droids
     configure_droid_forge
+    update_gitignore
     run_tests
     show_next_steps
 }
