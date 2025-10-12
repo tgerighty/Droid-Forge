@@ -285,6 +285,8 @@ Task tool subagent_type="reliability-droid-forge" \
 
 **Env:** `FACTORY_API_KEY` • `DROID_FORGE_CONFIG` • `DROID_FORGE_TASKS_DIR`
 
+**IMPORTANT:** Add `.factory/` to `.gitignore` to prevent committing personal droids to project repos
+
 ---
 
 ## Troubleshoot
