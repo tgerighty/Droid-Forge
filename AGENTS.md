@@ -145,11 +145,13 @@ Structure hierarchically:
 
 | Droid | Purpose | Creates Tasks For |
 |-------|---------|-------------------|
+| plan-review | Pre-implementation validation | Go/no-go decisions with GREEN/YELLOW/RED confidence scores |
 | code-smell-assessment | Detect anti-patterns, tech debt | Bloaters, OOP abusers, change preventers, dispensables, couplers |
 | cognitive-complexity-assessment | Measure complexity | High-complexity functions, excessive nesting |
 | security-assessment | Identify vulnerabilities | SQL injection, XSS, CSRF, secrets, dependencies |
 | typescript-assessment | Analyze type safety | 'any' usage, weak types, missing null checks |
 | debugging-assessment | Root cause analysis | Bugs, performance issues, memory leaks, race conditions |
+| impact-analyzer | Bug impact mapping | All affected files (direct, indirect, cascading, tests, configs) |
 | test-assessment | Analyze test quality | Low coverage, flaky tests, missing test cases |
 
 ### Action Droids (Execute → Update Status)
@@ -180,11 +182,13 @@ Structure hierarchically:
 ### Capabilities Summary
 
 **Assessment Droids:**
+- plan-review: Pre-implementation validation, codebase alignment, go/no-go decisions (GREEN/YELLOW/RED)
 - code-smell: Detect bloaters, OOP abuse, change preventers, dispensables, couplers → tasks
 - cognitive-complexity: Calculate scores, identify high complexity (>10), analyze nesting → tasks
 - security: Scan dependencies, detect injections, find secrets, check headers → tasks
 - typescript: Analyze config, detect 'any', find missing null checks, calculate coverage → tasks
 - debugging: Root cause analysis, error patterns, profiling, memory leaks → tasks
+- impact-analyzer: Map all affected files (direct, indirect, cascading), trace propagation, propose fixes
 - test: Analyze coverage, identify untested paths, detect flaky tests → tasks
 
 **Action Droids:**
@@ -210,9 +214,11 @@ Structure hierarchically:
 
 | Task Type | Use Droid | Example Prompt |
 |-----------|-----------|----------------|
+| Plan validation | plan-review | "Review plan at tasks/plan-X.md. Check alignment, assess risks, provide go/no-go" |
 | PRD analysis | manager-orchestrator | "Analyze tasks/tasks-0001.md and create plan with delegation" |
 | React component | frontend-engineer | "Create TypeScript user profile component with avatar upload, responsive" |
 | REST API | backend-engineer | "Implement auth API with JWT: register, login, logout, refresh" |
+| Bug impact | impact-analyzer | "Map all affected files for API error, trace propagation, propose fix" |
 | Bug investigation | debugging-assessment | "Analyze memory leak in logs/profile.txt, identify source" |
 | GitHub issue → PR | auto-pr | "Create PR for issue #123, monitor reviews, iterate 5x, fix CI/CD" |
 | Production incident | reliability | "Respond to incident: 50% error rate, classify, notify, execute playbook" |
@@ -447,10 +453,12 @@ Task tool with subagent_type="reliability-droid-forge" \
 
 | Task | Primary | Secondary |
 |------|---------|-----------|
+| Plan review | plan-review | - |
 | Complex feature | manager-orchestrator | (delegates) |
 | React component | frontend-engineer | unit-test |
 | REST API | backend-engineer | security-assessment |
-| Bug investigation | debugging-assessment | domain specialist |
+| Bug impact | impact-analyzer | bug-fix |
+| Bug investigation | debugging-assessment | impact-analyzer |
 | GitHub issue → PR | auto-pr | multiple via iteration |
 | Production incident | reliability | debugging-assessment |
 | Security review | security-assessment | - |
