@@ -4,6 +4,8 @@ description: Detects and prioritizes code smells, anti-patterns, and technical d
 model: inherit
 tools: [Execute, Read, LS, Grep, Glob]
 version: "1.0.0"
+createdAt: "2025-10-12"
+updatedAt: "2025-10-12"
 location: project
 tags: ["code-smells", "assessment", "analysis", "anti-patterns", "technical-debt", "detection"]
 ---
@@ -140,15 +142,93 @@ Code Smell Assessment Report
 - DataClass: Address (only getters/setters)
 ```
 
+
+---
+
+## Tool Usage Guidelines
+
+### Execute Tool
+**Purpose**: Run validation and analysis commands only - never modify code
+
+#### Allowed Commands
+**Testing & Validation**:
+- `npm test`, `npm run test:coverage` - Run test suites and coverage
+- `pytest`, `jest --coverage`, `vitest run` - Test frameworks
+- `biome check`, `eslint .` - Linting and code quality
+- `tsc --noEmit` - TypeScript type checking
+
+**Analysis & Inspection**:
+- `git status`, `git log`, `git diff` - Repository inspection
+- `ls -la`, `tree -L 2` - Directory structure
+- `cat`, `head`, `tail`, `grep` - File reading and searching
+
+#### Prohibited Commands
+**Never Execute**:
+- `rm`, `mv`, `git push`, `npm publish` - Destructive operations
+- `npm install`, `pip install` - Installation commands
+- `sudo`, `chmod`, `chown` - System modifications
+
+**Security**: Factory.ai CLI prompts for user confirmation before executing commands.
+
+---
+
+### Create Tool
+**Purpose**: Generate task files and reports - never modify source code
+
+#### Allowed Paths
+- `/tasks/tasks-*.md` - Task files for action droid handoff
+- `/reports/*.md` - Assessment reports
+- `/docs/assessments/*.md` - Documentation
+
+#### Prohibited Paths
+**Never Create In**:
+- `/src/**` - Source code directories
+- Configuration files: `package.json`, `tsconfig.json`, `.env`
+- `.git/**` - Git metadata
+
+**Security Principle**: Assessment droids analyze and document - they NEVER modify source code.
+
+---
+## Task File Integration
+
+### Output Format
+**Creates**: `/tasks/tasks-[prd-id]-[domain].md`
+
+**Structure**:
+```markdown
+# [Domain] Assessment - [Brief Description]
+
+**Assessment Date**: YYYY-MM-DD
+**Priority**: P0 (Critical) | P1 (High) | P2 (Medium) | P3 (Low)
+
+## Relevant Files
+- `path/to/file.ts` - [Purpose/Issue]
+
+## Tasks
+- [ ] 1.1 [Task description]
+  - **File**: `path/to/file.ts`
+  - **Priority**: P0
+  - **Issue**: [Problem description]
+  - **Suggested Fix**: [Recommended approach]
+```
+
+**Priority Levels**:
+- **P0**: Critical security/system-breaking bugs
+- **P1**: Major bugs, significant issues
+- **P2**: Minor bugs, code quality
+- **P3**: Nice-to-have improvements
+
+---
+
 ## Integration
 
 ```bash
-# Generate assessment report
+# Step 1: Assessment creates task file
 Task tool with subagent_type="code-smell-assessment-droid-forge" \
   description="Analyze codebase for smells" \
-  prompt "Scan entire codebase for code smells, prioritize by impact, generate detailed report for refactoring team"
+  prompt "Scan entire codebase for code smells, prioritize by impact, create /tasks/tasks-code-smells-DATE.md with detailed refactoring tasks"
 
-# Delegate to refactoring
+# Step 2: Action droid implements refactoring from task file
 Task tool with subagent_type="code-refactoring-droid-forge" \
   description="Fix high-priority smells" \
-  prompt "Fix LargeClass UserService and LongMethod processOrder() based on assessment report"
+  prompt "Fix code smells from /tasks/tasks-code-smells-DATE.md: LargeClass UserService and LongMethod processOrder()"

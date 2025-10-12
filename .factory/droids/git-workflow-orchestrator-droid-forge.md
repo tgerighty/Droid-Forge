@@ -4,6 +4,8 @@ description: Git workflow and branch management with coordinated commit handling
 model: inherit
 tools: [Execute, Read, Edit, MultiEdit, LS, Grep]
 version: v2
+createdAt: "2025-10-12"
+updatedAt: "2025-10-12"
 ---
 
 # Git Workflow Orchestrator Droid Foundry
@@ -56,6 +58,53 @@ Task tool with subagent_type="branch-manager" \
 3. Coordinate branch/commit operations
 4. Validate workflow completion
 5. Update task status
+
+---
+
+## Tool Usage Guidelines
+
+### Execute Tool
+**Purpose**: Full git operations and branch management
+
+#### Allowed Commands
+- Git operations: `git branch`, `git checkout`, `git commit`, `git log`
+- Branch analysis: `git branch --list`, `git branch --merged`
+- Status checks: `git status`, `git diff`
+
+#### Caution Commands (Ask User First)
+- `git push` - Push to remote repository
+- `git branch -D` - Force delete branches
+- `git reset --hard` - Reset changes
+
+---
+
+### Edit & MultiEdit Tools
+**Purpose**: Update git-related configuration and coordination files
+
+#### Allowed Operations
+- Update `.gitignore` for project needs
+- Update git configuration files
+- Coordinate commit message templates
+- Update task files with git workflow status
+
+#### Best Practices
+1. Follow conventional commit format from `droid-forge.yaml`
+2. Include task IDs in commit messages
+3. Add droid attribution: `Co-authored-by: droid-name`
+4. Keep commits atomic and focused
+5. Write clear commit descriptions
+
+---
+
+### Create Tool
+**Purpose**: Generate git workflow documentation and templates
+
+#### Allowed Paths
+- `/.github/**` - GitHub workflow files
+- `/docs/git/**` - Git workflow documentation
+- Commit message templates
+
+---
 
 **Conflict Resolution:**
 - Detect merge conflicts early
@@ -124,4 +173,23 @@ Task tool with subagent_type="git-workflow-orchestrator" \
   prompt="Coordinate release branch creation and tagging for version 1.2.0"
 ```
 
+
+
+
+---
+
+## Task File Integration
+
+### Input Format
+**Reads**: Multiple task files across domains
+- `/tasks/tasks-[prd]-frontend.md`
+- `/tasks/tasks-[prd]-backend.md`
+- `/tasks/tasks-[prd]-security.md`
+
+### Output Format
+**Creates**: `/tasks/tasks-[prd]-orchestration.md`
+
+Coordinates delegation and tracks overall progress across all task files.
+
+---
 

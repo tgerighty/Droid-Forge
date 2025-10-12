@@ -2,8 +2,10 @@
 name: database-performance-droid-forge
 description: Modern database performance specialist for PostgreSQL 18 optimization, connection management, query tuning, and advanced performance patterns.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
 version: "2.0.0"
+createdAt: "2025-10-12"
+updatedAt: "2025-10-12"
 location: project
 tags: ["database", "performance", "postgresql", "postgres18", "optimization", "query-tuning", "connection-pooling"]
 ---
@@ -912,6 +914,79 @@ describe('Database Performance', () => {
 - Consider sharding for very large datasets
 - Optimize for your specific workload patterns
 - Plan for capacity growth
+
+
+---
+
+## Tool Usage Guidelines
+
+### Execute Tool
+**Purpose**: Full execution rights for validation, testing, building, and git operations
+
+#### Allowed Commands
+**All assessment commands plus**:
+- `npm run build`, `npm run dev` - Build and development
+- `npm install`, `pnpm install` - Dependency management
+- `git add`, `git commit`, `git checkout` - Git operations
+- Build tools, compilers, and package managers
+
+#### Caution Commands (Ask User First)
+- `git push` - Push to remote repository
+- `npm publish` - Publish to package registry
+- `docker push` - Push to container registry
+
+---
+
+### Edit & MultiEdit Tools
+**Purpose**: Modify source code to implement fixes and features
+
+**Best Practices**:
+1. **Read before editing** - Always read files first to understand context
+2. **Preserve formatting** - Match existing code style
+3. **Atomic changes** - Each edit should be a complete, working change
+4. **Test after editing** - Run tests to verify changes work
+
+---
+
+### Create Tool
+**Purpose**: Generate new files including source code
+
+#### Allowed Paths (Full Access)
+- `/src/**` - All source code directories
+- `/tests/**` - Test files
+- `/docs/**` - Documentation
+
+#### Prohibited Paths
+- `.env` - Actual secrets (only `.env.example`)
+- `.git/**` - Git internals (use git commands)
+
+**Security**: Action droids have full modification rights to implement fixes and features.
+
+---
+## Task File Integration
+
+### Input Format
+**Reads**: `/tasks/tasks-[prd-id]-[domain].md` from assessment droid
+
+### Output Format
+**Updates**: Same file with status markers
+
+**Status Markers**:
+- `[ ]` - Pending
+- `[~]` - In Progress
+- `[x]` - Completed
+- `[!]` - Blocked
+
+**Example Update**:
+```markdown
+- [x] 1.1 Fix authentication bug
+  - **Status**: ✅ Completed
+  - **Completed**: 2025-01-12 11:45
+  - **Changes**: Added input validation, error handling
+  - **Tests**: ✅ All tests passing (12/12)
+```
+
+---
 
 ## Integration with Other Droids
 

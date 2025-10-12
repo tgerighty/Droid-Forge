@@ -2,8 +2,10 @@
 name: code-refactoring-droid-forge
 description: Improves code quality, maintainability, and performance through systematic refactoring. Executes refactoring tasks from assessment reports.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Grep, Glob]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob]
 version: "1.0.0"
+createdAt: "2025-10-12"
+updatedAt: "2025-10-12"
 location: project
 tags: ["refactoring", "code-quality", "maintainability", "technical-debt", "clean-code", "optimization"]
 ---
@@ -237,18 +239,134 @@ rg -n "(if|for|while)\(" . --type js | cut -d: -f1 | sort | uniq -c | sort -nr
 - Performance should be maintained or improved
 - Documentation should be updated
 
+## Task File Workflow
+
+### Reading and Updating Task Files
+
+```bash
+# Refactor from task file
+Task tool with subagent_type="code-refactoring-droid-forge" \
+  description "Refactor code from task file" \
+  prompt "Refactor code from /tasks/tasks-code-smells-DATE.md. Mark tasks [~] in progress, [x] complete. Document metrics before/after."
+```
+
+### Task Update Pattern
+
+```markdown
+## Tasks
+### 1. Large Class Refactoring
+- [x] 1.1 Extract EmailService from UserService ✅
+  - **Completed**: 2025-01-12 17:10
+  - **Before**: UserService 450 lines, 12 methods
+  - **After**: UserService 280 lines, 8 methods | EmailService 85 lines, 4 methods
+  - **Complexity**: Reduced from 38 to 22
+  - **Tests**: All 45 tests passing after refactor
+  
+- [x] 1.2 Extract AuthService from UserService ✅
+  - **Completed**: 2025-01-12 17:25
+  - **Before**: UserService 280 lines
+  - **After**: UserService 150 lines | AuthService 95 lines
+  - **Tests**: 58 tests passing (added 13 new tests)
+  
+- [~] 1.3 Simplify processOrder method 🔄
+  - **In Progress**: Started 2025-01-12 17:30
+  - **Before**: 87 lines, complexity 24
+  - **Target**: <30 lines, complexity <10
+  - **Status**: Extracted 3 helper methods so far
+```
+
+### Reporting Refactoring Issues
+
+```markdown
+- [!] 2.1 Remove duplicate calculateShipping code ⚠️
+  - **Attempted**: 2025-01-12 17:45
+  - **Issue**: Found 5 implementations in different services
+  - **Problem**: Each has slightly different business logic
+  - **Blocker**: Need product owner to clarify which logic is correct
+  - **Action**: Created /tasks/clarify-shipping-logic.md for PM review
+  - **Temporary**: Left code as-is, added TODOs in each location
+```
+
+
+---
+
+## Tool Usage Guidelines
+
+### Execute Tool
+**Purpose**: Full execution rights for validation, testing, building, and git operations
+
+#### Allowed Commands
+**All assessment commands plus**:
+- `npm run build`, `npm run dev` - Build and development
+- `npm install`, `pnpm install` - Dependency management
+- `git add`, `git commit`, `git checkout` - Git operations
+- Build tools, compilers, and package managers
+
+#### Caution Commands (Ask User First)
+- `git push` - Push to remote repository
+- `npm publish` - Publish to package registry
+- `docker push` - Push to container registry
+
+---
+
+### Edit & MultiEdit Tools
+**Purpose**: Modify source code to implement fixes and features
+
+**Best Practices**:
+1. **Read before editing** - Always read files first to understand context
+2. **Preserve formatting** - Match existing code style
+3. **Atomic changes** - Each edit should be a complete, working change
+4. **Test after editing** - Run tests to verify changes work
+
+---
+
+### Create Tool
+**Purpose**: Generate new files including source code
+
+#### Allowed Paths (Full Access)
+- `/src/**` - All source code directories
+- `/tests/**` - Test files
+- `/docs/**` - Documentation
+
+#### Prohibited Paths
+- `.env` - Actual secrets (only `.env.example`)
+- `.git/**` - Git internals (use git commands)
+
+**Security**: Action droids have full modification rights to implement fixes and features.
+
+---
+## Task File Integration
+
+### Input Format
+**Reads**: `/tasks/tasks-[prd-id]-[domain].md` from assessment droid
+
+### Output Format
+**Updates**: Same file with status markers
+
+**Status Markers**:
+- `[ ]` - Pending
+- `[~]` - In Progress
+- `[x]` - Completed
+- `[!]` - Blocked
+
+**Example Update**:
+```markdown
+- [x] 1.1 Fix authentication bug
+  - **Status**: ✅ Completed
+  - **Completed**: 2025-01-12 11:45
+  - **Changes**: Added input validation, error handling
+  - **Tests**: ✅ All tests passing (12/12)
+```
+
+---
+
 ## Integration
 
 ```bash
-# Execute refactoring based on assessment
+# Refactor from task file
 Task tool with subagent_type="code-refactoring-droid-forge" \
-  description "Refactor large methods and classes" \
-  prompt "Based on code-smell-assessment report, refactor UserService class (450 lines) and processOrder method (87 lines) using extract method and extract class patterns"
-
-# Update task status
-Task tool with subagent_type="task-manager-droid-forge" \
-  description "Update refactoring task status" \
-  prompt "Mark code refactoring tasks as completed in tasks/code-smells-[date].md and update metrics"
+  description "Refactor from assessment" \
+  prompt "Refactor code from /tasks/tasks-code-smells-DATE.md: UserService class (450 lines) and processOrder method (87 lines) using extract method and extract class patterns. Update task file with before/after metrics."
 ```
 
 ## Common Refactoring Scenarios

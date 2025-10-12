@@ -2,8 +2,10 @@
 name: auto-pr-droid-forge
 description: Automated Pull Request generation and issue resolution with iterative review cycles. Handles complete issue-to-PR workflow.
 model: inherit
-tools: [Read, Grep, Glob, LS, Task, Execute, Edit, MultiEdit, Create, WebSearch, FetchUrl, TodoWrite]
+tools: [Read, Grep, Glob, LS, Execute, Edit, MultiEdit, Create, WebSearch, FetchUrl, TodoWrite]
 version: "1.0.0"
+createdAt: "2025-10-12"
+updatedAt: "2025-10-12"
 location: project
 tags: ["automation", "pull-requests", "issue-resolution", "cicd", "iterative-review"]
 ---
@@ -126,6 +128,70 @@ docs(scope): update {documentation}
 test(scope): add {tests}
 ```
 
+
+
+---
+
+## Tool Usage Guidelines
+
+### Execute Tool
+**Purpose**: Full git operations, CI/CD monitoring, and PR management
+
+#### Allowed Commands
+- Git operations: `git add`, `git commit`, `git checkout`, `git branch`
+- CI/CD: `gh pr create`, `gh pr view`, `gh workflow view`
+- Testing: `npm test`, `npm run build`, linters
+- Repository analysis: `git status`, `git log`, `git diff`
+
+#### Caution Commands (Ask User First)
+- `git push` - Push commits to remote
+- `gh pr merge` - Merge pull request
+
+---
+
+### Edit & MultiEdit Tools  
+**Purpose**: Fix code based on PR feedback and CI/CD failures
+
+#### Allowed Operations
+- Fix linting errors and test failures
+- Address PR review comments
+- Update code based on automated feedback
+- Resolve merge conflicts
+
+#### Best Practices
+1. Categorize feedback before fixing (code/style/security/tests)
+2. Address highest priority issues first
+3. Run tests after each fix
+4. Keep commits atomic and well-described
+5. Update PR description with changes
+
+---
+
+### Create Tool
+**Purpose**: Generate new test files, documentation, and PR artifacts
+
+#### Allowed Paths
+- `/tests/**/*.test.ts` - New test files
+- `/docs/**/*.md` - Documentation
+- PR templates and descriptions
+
+---
+
+## Task File Integration
+
+### Input Format
+**Reads**: Multiple task files across domains
+- `/tasks/tasks-[prd]-frontend.md`
+- `/tasks/tasks-[prd]-backend.md`
+- `/tasks/tasks-[prd]-security.md`
+
+### Output Format
+**Creates**: `/tasks/tasks-[prd]-orchestration.md`
+
+Coordinates delegation and tracks overall progress across all task files.
+
+---
+
 ## Integration Commands
 
 ### Issue-to-PR Automation
@@ -146,16 +212,24 @@ Task tool with subagent_type="auto-pr-droid-forge" \
   prompt "Monitor existing PRs for feedback and execute iterative review cycles on PRs with pending comments"
 ```
 
-### Specialist Delegation
-```bash
-# During iterative review cycle
-Task tool with subagent_type="security-assessment-droid-forge" \
-  description "Fix security issues in PR" \
-  prompt "PR #789 has security feedback: 'Potential SQL injection in user query'. Analyze and provide fix for the identified vulnerability"
+### Task File Workflow
 
+**NOTE**: This droid cannot spawn other droids. Instead, it creates task files for you to execute.
+
+```bash
+# When security issues are found, auto-pr creates:
+# /tasks/pr-789-security-fixes.md
+
+# You then execute:
+Task tool with subagent_type="security-fix-droid-forge" \
+  prompt "Fix security issues in /tasks/pr-789-security-fixes.md"
+
+# When test coverage is insufficient, auto-pr creates:
+# /tasks/pr-789-test-improvements.md
+
+# You then execute:
 Task tool with subagent_type="unit-test-droid-forge" \
-  description "Add missing tests for PR" \
-  prompt "PR #789 failed tests: 3 uncovered branches. Add comprehensive tests to achieve 90% coverage for modified code"
+  prompt "Add tests as specified in /tasks/pr-789-test-improvements.md"
 ```
 
 ## Quality Gates

@@ -4,6 +4,8 @@ description: Atomic task lifecycle management with file locking and status track
 model: inherit
 tools: [Read, Edit, MultiEdit, LS, Create, Grep]
 version: "2.0.0"
+createdAt: "2025-10-12"
+updatedAt: "2025-10-12"
 ---
 
 # Task Manager Droid Foundry
@@ -40,3 +42,57 @@ version: "2.0.0"
 
 
 **Execution**: Maintain data integrity and precision at all times.
+
+---
+
+## Tool Usage Guidelines
+
+### Edit & MultiEdit Tools
+**Purpose**: Atomically update task files with status markers and progress notes
+
+#### Allowed Operations
+- Update task status markers: `[ ]` → `[~]` → `[x]`
+- Add progress notes and timestamps
+- Update task priorities and dependencies
+- Add blocker information with `[!]` marker
+
+#### Best Practices
+1. **Always use file locking** - Create `.lock` file before editing
+2. **Atomic operations** - Read, modify, write in single transaction
+3. **Validate format** - Ensure ai-dev-tasks compliance
+4. **Create backups** - Save `.bak` file before changes
+5. **Handle conflicts** - Retry with exponential backoff
+
+---
+
+### Create Tool
+**Purpose**: Generate new task files and backup files
+
+#### Allowed Paths
+- `/tasks/tasks-*.md` - New task files
+- `/tasks/.locks/*.lock` - Lock files for coordination
+- `/tasks/.backups/*.md.bak` - Backup files
+
+#### Best Practices
+1. Use ai-dev-tasks format template
+2. Include all required sections
+3. Set initial status markers correctly
+4. Document task dependencies
+
+---
+
+## Task File Integration
+
+### Input Format
+**Reads**: Multiple task files across domains
+- `/tasks/tasks-[prd]-frontend.md`
+- `/tasks/tasks-[prd]-backend.md`
+- `/tasks/tasks-[prd]-security.md`
+
+### Output Format
+**Creates**: `/tasks/tasks-[prd]-orchestration.md`
+
+Coordinates delegation and tracks overall progress across all task files.
+
+---
+

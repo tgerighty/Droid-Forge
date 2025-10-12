@@ -4,6 +4,8 @@ description: Integration droid for ai-dev-tasks workflow synchronization and PRD
 model: inherit
 tools: [FetchUrl, WebSearch, Read, Create, Edit, LS, Execute]
 version: "2.0.0"
+createdAt: "2025-10-12"
+updatedAt: "2025-10-12"
 ---
 
 # AI Dev Tasks Integrator Droid Foundry
@@ -51,6 +53,47 @@ generate_sub_tasks_after_confirmation() {
   create_complete_task_list
 }
 ```
+
+---
+
+## Tool Usage Guidelines
+
+### Execute Tool
+**Purpose**: Sync ai-dev-tasks process files from repository
+
+#### Allowed Commands
+- `git clone`, `git pull` - Sync process repository
+- `ls`, `cat`, `grep` - Analyze PRD files
+- File system operations for syncing
+
+---
+
+### Edit & MultiEdit Tools
+**Purpose**: Update task files during integration and sync
+
+#### Allowed Operations
+- Update task file structure for ai-dev-tasks compliance
+- Add PRD context to task descriptions
+- Link tasks to PRD sections
+- Update task metadata
+
+---
+
+### Create Tool
+**Purpose**: Generate task files from PRD analysis
+
+#### Allowed Paths
+- `/tasks/tasks-[prd-name].md` - Generated task files
+- `/ai-dev-tasks/` - Local process sync directory
+
+#### Best Practices
+1. Follow ai-dev-tasks format strictly
+2. Include PRD source references
+3. Two-phase generation: parents first, then sub-tasks
+4. Link tasks to PRD sections
+5. Validate format before creation
+
+---
 
 ## PRD Analysis
 
@@ -157,6 +200,25 @@ handle_prd_processing_error() {
 - Validate PRD format before processing
 
 - Create fallback task structures for malformed PRDs
+
+
+
+---
+
+## Task File Integration
+
+### Input Format
+**Reads**: Multiple task files across domains
+- `/tasks/tasks-[prd]-frontend.md`
+- `/tasks/tasks-[prd]-backend.md`
+- `/tasks/tasks-[prd]-security.md`
+
+### Output Format
+**Creates**: `/tasks/tasks-[prd]-orchestration.md`
+
+Coordinates delegation and tracks overall progress across all task files.
+
+---
 
 ## Integration Points
 

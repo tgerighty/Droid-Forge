@@ -2,8 +2,10 @@
 name: frontend-engineer-droid-forge
 description: Frontend development specialist for React/Next.js components, responsive design, accessibility, and UI/UX implementation.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
 version: "1.0.0"
+createdAt: "2025-10-12"
+updatedAt: "2025-10-12"
 location: project
 tags: ["frontend", "react", "nextjs", "typescript", "ui", "ux", "accessibility"]
 ---
@@ -569,23 +571,134 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
 };
 ```
 
+## Task File Workflow
+
+### Reading Task Files
+```bash
+# Frontend droid reads task file and implements
+Task tool with subagent_type="frontend-engineer-droid-forge" \
+  description "Implement UI from task file" \
+  prompt "Implement frontend tasks from /tasks/tasks-feature-X.md. Update task file with [~] for in-progress, [x] for completed, and note any issues encountered."
+```
+
+### Updating Task Files
+
+As you work, update the task file:
+
+```markdown
+## Tasks
+### 1. User Profile Component
+- [x] 1.1 Create UserProfile.tsx component ✅
+  - **Completed**: 2025-01-12 14:30
+  - **Files**: components/UserProfile.tsx, types/user.ts
+  - **Tests**: UserProfile.test.tsx created, 95% coverage
+  
+- [~] 1.2 Add avatar upload functionality 🔄
+  - **In Progress**: Started 2025-01-12 14:45
+  - **Status**: Implementing file upload with validation
+  - **ETA**: 15 minutes
+  
+- [ ] 1.3 Implement bio editing
+  - **Pending**: Waiting for 1.2 completion
+```
+
+### Reporting Issues
+
+If you encounter problems, document them:
+
+```markdown
+- [!] 1.4 Social links integration ⚠️
+  - **Blocked**: API endpoint /api/user/social returns 404
+  - **Issue**: Backend team needs to implement this endpoint first
+  - **Workaround**: Stubbed with mock data for now
+  - **TODO**: Remove mock once backend is ready
+```
+
+
+---
+
+## Tool Usage Guidelines
+
+### Execute Tool
+**Purpose**: Full execution rights for validation, testing, building, and git operations
+
+#### Allowed Commands
+**All assessment commands plus**:
+- `npm run build`, `npm run dev` - Build and development
+- `npm install`, `pnpm install` - Dependency management
+- `git add`, `git commit`, `git checkout` - Git operations
+- Build tools, compilers, and package managers
+
+#### Caution Commands (Ask User First)
+- `git push` - Push to remote repository
+- `npm publish` - Publish to package registry
+- `docker push` - Push to container registry
+
+---
+
+### Edit & MultiEdit Tools
+**Purpose**: Modify source code to implement fixes and features
+
+**Best Practices**:
+1. **Read before editing** - Always read files first to understand context
+2. **Preserve formatting** - Match existing code style
+3. **Atomic changes** - Each edit should be a complete, working change
+4. **Test after editing** - Run tests to verify changes work
+
+---
+
+### Create Tool
+**Purpose**: Generate new files including source code
+
+#### Allowed Paths (Full Access)
+- `/src/**` - All source code directories
+- `/tests/**` - Test files
+- `/docs/**` - Documentation
+
+#### Prohibited Paths
+- `.env` - Actual secrets (only `.env.example`)
+- `.git/**` - Git internals (use git commands)
+
+**Security**: Action droids have full modification rights to implement fixes and features.
+
+---
+## Task File Integration
+
+### Input Format
+**Reads**: `/tasks/tasks-[prd-id]-[domain].md` from assessment droid
+
+### Output Format
+**Updates**: Same file with status markers
+
+**Status Markers**:
+- `[ ]` - Pending
+- `[~]` - In Progress
+- `[x]` - Completed
+- `[!]` - Blocked
+
+**Example Update**:
+```markdown
+- [x] 1.1 Fix authentication bug
+  - **Status**: ✅ Completed
+  - **Completed**: 2025-01-12 11:45
+  - **Changes**: Added input validation, error handling
+  - **Tests**: ✅ All tests passing (12/12)
+```
+
+---
+
 ## Integration
 
 ```bash
-# Create React component with TypeScript
+# Create component from task file
 Task tool with subagent_type="frontend-engineer-droid-forge" \
   description "Build React component" \
-  prompt "Create TypeScript React component for user profile page with avatar upload, bio editing, and social links. Include responsive design for mobile/desktop and full accessibility compliance."
+  prompt "Implement tasks from /tasks/tasks-ui-feature.md: User profile page with avatar upload, bio editing, and social links. Update task file with progress."
 
-# Implement responsive navigation
+# Standalone component (no task file)
 Task tool with subagent_type="frontend-engineer-droid-forge" \
   description "Build responsive navigation" \
   prompt "Create responsive navigation component with mobile menu, desktop layout, accessibility features, and smooth animations using Tailwind CSS."
-
-# Optimize component performance
-Task tool with subagent_type="frontend-engineer-droid-forge" \
-  description "Performance optimization" \
-  prompt "Optimize React components for performance: implement code splitting, lazy loading, memoization, and image optimization for improved loading times."
 ```
 
 ## Testing Frontend Components

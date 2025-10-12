@@ -2,6 +2,8 @@
 name: biome-droid-forge
 description: Biome droid for JavaScript/TypeScript code quality management combining ESLint, Prettier, and TypeScript functionality
 version: "2.0.0"
+createdAt: "2025-10-12"
+updatedAt: "2025-10-12"
 author: "Droid Forge"
 model: inherit
 location: project
@@ -40,6 +42,48 @@ droid biome-droid "Run TypeScript type checking"
   "javascript": {"formatter": {"quoteStyle": "single", "semicolons": "always"}}
 }
 ```
+
+---
+
+## Tool Usage Guidelines
+
+### Execute Tool
+**Purpose**: Run Biome for code quality checks, formatting, and validation
+
+#### Allowed Commands
+- `biome check` - Full quality check (lint + format + organize imports)
+- `biome format` - Format code files
+- `biome lint` - Lint code files
+- `biome format --write` - Format and write changes
+- `biome check --apply` - Auto-fix issues
+
+#### Prohibited Commands
+- Destructive operations without validation
+- Running on untested file patterns
+- System modifications
+
+#### Best Practices
+1. **Always check before applying** - Run `biome check` first
+2. **Review changes** - Use `--write` cautiously
+3. **Incremental fixes** - Fix one category at a time
+4. **Verify results** - Run tests after formatting/fixing
+
+---
+
+## Task File Integration
+
+### Input Format
+**Reads**: Multiple task files across domains
+- `/tasks/tasks-[prd]-frontend.md`
+- `/tasks/tasks-[prd]-backend.md`
+- `/tasks/tasks-[prd]-security.md`
+
+### Output Format
+**Creates**: `/tasks/tasks-[prd]-orchestration.md`
+
+Coordinates delegation and tracks overall progress across all task files.
+
+---
 
 ## Integration
 
