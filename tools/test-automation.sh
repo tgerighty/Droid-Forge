@@ -180,10 +180,12 @@ function calculate_coverage() {
   log_info "Calculating code coverage"
   
   # Simple coverage calculation (count test files vs source files)
-  local source_count=$(find "$source_dir" -name "*.sh" ! -name "*.test.sh" | wc -l)
-  local test_count=$(find "$TEST_DIR" -name "*.test.sh" | wc -l)
+  local source_count
+  source_count=$(find "$source_dir" -name "*.sh" ! -name "*.test.sh" | wc -l)
+  local test_count
+  test_count=$(find "$TEST_DIR" -name "*.test.sh" | wc -l)
   
-  if [ $source_count -eq 0 ]; then
+  if [ "$source_count" -eq 0 ]; then
     echo "100"
     return
   fi

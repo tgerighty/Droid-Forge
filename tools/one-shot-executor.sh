@@ -64,7 +64,8 @@ function execute_sub_task_one_shot() {
     source tools/test-automation.sh
     
     # Generate unit tests
-    local test_file=$(generate_unit_tests "tools/example.sh" 2>/dev/null || echo "")
+    local test_file
+    test_file=$(generate_unit_tests "tools/example.sh" 2>/dev/null || echo "")
     
     # Run unit tests with retry
     if [ -n "$test_file" ] && [ -f "$test_file" ]; then
@@ -116,7 +117,8 @@ function run_one_shot_workflow() {
   echo ""
   
   # Get all major tasks
-  local major_tasks=$(grep -E "^- \[ \] [0-9]+\.0 " "$task_file" | sed 's/.*\[ \] //' | awk '{print $1}')
+  local major_tasks
+  major_tasks=$(grep -E "^- \[ \] [0-9]+\.0 " "$task_file" | sed 's/.*\[ \] //' | awk '{print $1}')
   
   for major_task in $major_tasks; do
     execute_major_task_one_shot "$task_file" "$major_task"
