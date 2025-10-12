@@ -4,6 +4,8 @@ description: Backend development specialist for API/microservice architecture, d
 model: inherit
 tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, WebSearch, FetchUrl]
 version: "2.0.0"
+createdAt: "2025-10-12"
+updatedAt: "2025-10-12"
 location: project
 tags: ["backend", "api", "microservices", "database", "server-side", "scalability"]
 ---
@@ -80,24 +82,144 @@ backend_workflow() {
 }
 ```
 
-## Delegation Patterns
+## Task File Workflow
 
-### API & Service Generation
+### Reading & Updating Task Files
+
+```bash
+# Backend droid implements from task file
+Task tool with subagent_type="backend-engineer-droid-forge" \
+  description="Implement API from task file" \
+  prompt "Implement backend tasks from /tasks/tasks-api-feature.md. Mark tasks [~] when starting, [x] when complete, and document any blockers."
+```
+
+### Task Update Pattern
+
+```markdown
+## Tasks
+### 1. User Authentication API
+- [x] 1.1 Create /api/auth/register endpoint ✅
+  - **Completed**: 2025-01-12 15:20
+  - **Files**: api/auth/register.ts, middleware/validate.ts
+  - **Tests**: register.test.ts - 12 tests passing
+  - **Performance**: <50ms average response time
+  
+- [x] 1.2 Add JWT token generation ✅
+  - **Completed**: 2025-01-12 15:35
+  - **Implementation**: Using jose library, RS256 algorithm
+  - **Tests**: token.test.ts - 8 tests passing
+  
+- [~] 1.3 Implement token refresh logic 🔄
+  - **In Progress**: Started 2025-01-12 15:40
+  - **Status**: Writing refresh endpoint logic
+  - **Challenge**: Handling concurrent refresh requests - implementing mutex
+  
+- [!] 1.4 Add rate limiting ⚠️
+  - **Issue**: redis-rate-limit package has TypeScript errors
+  - **Workaround**: Temporarily using in-memory rate limiting
+  - **Action Required**: Need to fix TypeScript types or switch libraries
+```
+
+### Reporting Failures
+
+If tests fail or implementation is blocked:
+
+```markdown
+- [x] 2.1 Database migration for users table ❌ FAILED
+  - **Attempted**: 2025-01-12 16:00
+  - **Error**: Constraint violation - email column conflicts with existing data
+  - **Root Cause**: Production DB has 3 users with NULL emails
+  - **Solution Needed**: Data cleanup script required before migration
+  - **Status**: Created /tasks/data-cleanup-users.md for DBA review
+```
+
+
+---
+
+## Tool Usage Guidelines
+
+### Execute Tool
+**Purpose**: Full execution rights for validation, testing, building, and git operations
+
+#### Allowed Commands
+**All assessment commands plus**:
+- `npm run build`, `npm run dev` - Build and development
+- `npm install`, `pnpm install` - Dependency management
+- `git add`, `git commit`, `git checkout` - Git operations
+- Build tools, compilers, and package managers
+
+#### Caution Commands (Ask User First)
+- `git push` - Push to remote repository
+- `npm publish` - Publish to package registry
+- `docker push` - Push to container registry
+
+---
+
+### Edit & MultiEdit Tools
+**Purpose**: Modify source code to implement fixes and features
+
+**Best Practices**:
+1. **Read before editing** - Always read files first to understand context
+2. **Preserve formatting** - Match existing code style
+3. **Atomic changes** - Each edit should be a complete, working change
+4. **Test after editing** - Run tests to verify changes work
+
+---
+
+### Create Tool
+**Purpose**: Generate new files including source code
+
+#### Allowed Paths (Full Access)
+- `/src/**` - All source code directories
+- `/tests/**` - Test files
+- `/docs/**` - Documentation
+
+#### Prohibited Paths
+- `.env` - Actual secrets (only `.env.example`)
+- `.git/**` - Git internals (use git commands)
+
+**Security**: Action droids have full modification rights to implement fixes and features.
+
+---
+## Task File Integration
+
+### Input Format
+**Reads**: `/tasks/tasks-[prd-id]-[domain].md` from assessment droid
+
+### Output Format
+**Updates**: Same file with status markers
+
+**Status Markers**:
+- `[ ]` - Pending
+- `[~]` - In Progress
+- `[x]` - Completed
+- `[!]` - Blocked
+
+**Example Update**:
+```markdown
+- [x] 1.1 Fix authentication bug
+  - **Status**: ✅ Completed
+  - **Completed**: 2025-01-12 11:45
+  - **Changes**: Added input validation, error handling
+  - **Tests**: ✅ All tests passing (12/12)
+```
+
+---
+
+## Integration Examples
+
+### With Task File
 ```bash
 Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="Generate REST API service" \
-  prompt "Design complete REST API for user management with CRUD operations, authentication, and database integration"
+  description="Implement API from tasks" \
+  prompt "Implement backend from /tasks/tasks-auth-api.md: Complete REST API for user management with CRUD operations, authentication, and database integration. Update task file with progress."
+```
 
+### Standalone Implementation
+```bash
 Task tool with subagent_type="backend-engineer-droid-forge" \
   description="Microservice architecture design" \
   prompt "Design microservice architecture for e-commerce platform with proper service communication"
-```
-
-### Database Optimization
-```bash
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="Database performance optimization" \
-  prompt "Analyze database schema and provide query optimization, indexing, and performance improvements"
 ```
 
 ## Quality Assurance

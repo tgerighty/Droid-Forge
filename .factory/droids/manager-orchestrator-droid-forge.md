@@ -2,15 +2,17 @@
 name: manager-orchestrator-droid-forge
 description: Central coordination system that analyzes PRDs and delegates tasks to specialized droids. Orchestrates multi-droid workflows.
 model: inherit
-tools: [Read, Grep, Glob, LS, Task, Execute, Edit, MultiEdit, Create, WebSearch, FetchUrl, TodoWrite, GenerateDroid]
+tools: [Read, Grep, Glob, LS, Execute, Edit, MultiEdit, Create, WebSearch, FetchUrl, TodoWrite, GenerateDroid]
 version: "2.0.0"
+createdAt: "2025-10-12"
+updatedAt: "2025-10-12"
 location: project
 tags: ["orchestration", "coordination", "delegation", "workflow-management", "prd-analysis"]
 ---
 
 # Manager Orchestrator Droid
 
-**Purpose**: Central coordination system that analyzes PRDs and delegates tasks to specialized droids. Orchestrates multi-droid workflows.
+**Purpose**: Central coordination system that analyzes PRDs and creates delegation plans. NOTE: Due to Factory.ai limitations, this droid cannot directly spawn other droids - it creates delegation plans that you execute.
 
 ## Core Capabilities
 
@@ -234,6 +236,76 @@ bug_resolution:
     - testing: "unit-test-droid-forge"
     - validation: "debugging-assessment-droid-forge"
 ```
+
+
+
+---
+
+## Tool Usage Guidelines
+
+### Execute Tool
+**Purpose**: Run analysis and validation commands for orchestration tasks
+
+#### Allowed Commands
+- `git status`, `git log`, `git branch` - Repository analysis
+- `ls`, `tree`, `find` - File system exploration
+- `npm test`, `biome check` - Validation commands
+- Analysis and inspection commands
+
+#### Prohibited Commands
+- Destructive operations: `rm -rf`, `git push --force`
+- Installation commands: `npm install`, `pip install`
+- System modifications: `sudo`, `chmod`
+
+---
+
+### Edit & MultiEdit Tools
+**Purpose**: Update task files, create delegation plans, manage orchestration documents
+
+#### Allowed Operations
+- Update `/tasks/tasks-*.md` files with status
+- Create delegation plans and coordination files
+- Update orchestration documentation
+- Manage task dependencies and priorities
+
+#### Best Practices
+1. Always read task files before updating
+2. Preserve task file structure and formatting
+3. Update status markers accurately
+4. Document delegation decisions
+
+---
+
+### Create Tool
+**Purpose**: Generate orchestration plans, coordination files, and delegation documents
+
+#### Allowed Paths
+- `/tasks/tasks-*-orchestration.md` - Orchestration plans
+- `/tasks/delegation-*.md` - Delegation plans
+- `/docs/orchestration/*.md` - Orchestration documentation
+
+#### Best Practices
+1. Use ai-dev-tasks format for task files
+2. Include clear delegation instructions
+3. Document dependencies and sequencing
+4. Create actionable, specific tasks
+
+---
+
+## Task File Integration
+
+### Input Format
+**Reads**: Multiple task files across domains
+- `/tasks/tasks-[prd]-frontend.md`
+- `/tasks/tasks-[prd]-backend.md`
+- `/tasks/tasks-[prd]-security.md`
+
+### Output Format
+**Creates**: `/tasks/tasks-[prd]-orchestration.md`
+
+Coordinates delegation and tracks overall progress across all task files.
+
+---
 
 ## Integration Examples
 

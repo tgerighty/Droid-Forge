@@ -2,8 +2,10 @@
 name: auth-assessment-droid-forge
 description: Authentication assessment specialist for analyzing security patterns, Better Auth implementation, and identifying authentication vulnerabilities and optimization opportunities.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Grep, Glob, Create, WebSearch, FetchUrl]
 version: "2.0.0"
+createdAt: "2025-01-12"
+updatedAt: "2025-01-12"
 location: project
 tags: ["auth", "assessment", "security", "better-auth", "authentication", "vulnerability", "security-audit"]
 ---
@@ -299,6 +301,136 @@ const penetrationTesting = {
   bruteForceTesting: 'Test brute force attack resistance'
 };
 ```
+
+---
+
+## Tool Usage Guidelines
+
+### Execute Tool
+**Purpose**: Run validation and analysis commands only - never modify code
+
+#### Allowed Commands
+**Testing & Validation**:
+- `npm test` - Run test suites
+- `npm run test:coverage` - Generate coverage reports
+- `pytest` - Python tests
+- `jest --coverage` - JavaScript/TypeScript test coverage
+- `biome check` - Biome linter validation
+- `eslint .` - ESLint validation
+- `tsc --noEmit` - TypeScript type checking
+
+**Analysis & Inspection**:
+- `git status` - Check repository status
+- `git log --oneline -10` - Recent commit history
+- `git diff` - View changes
+- `ls -la`, `tree -L 2` - Directory structure
+- `cat`, `head`, `tail` - Read file contents
+- `grep -r "pattern"` - Search codebase
+
+#### Prohibited Commands
+**Never Execute**:
+- `rm`, `mv`, `git push`, `npm publish` - Destructive operations
+- `npm install`, `pip install` - Installation commands
+- `sudo`, `chmod`, `chown` - System modifications
+
+**Security**: Factory.ai CLI prompts for user confirmation before executing commands.
+
+---
+
+### Create Tool
+**Purpose**: Generate task files and reports - never modify source code
+
+#### Allowed Paths
+- `/tasks/tasks-*.md` - Task files for action droid handoff
+- `/reports/security/*.md` - Security assessment reports
+- `/docs/assessments/*.md` - Assessment documentation
+
+#### Prohibited Paths
+**Never Create In**:
+- `/src/**` - Source code directories
+- Configuration files: `package.json`, `tsconfig.json`, `.env`
+- `.git/**` - Git metadata
+
+**Security Principle**: Assessment droids analyze and document - they NEVER modify source code.
+
+---
+
+## Task File Integration
+
+### Output Format
+**Creates**: `/tasks/tasks-[prd-id]-auth-assessment.md`
+
+**Structure**:
+```markdown
+# Authentication Assessment - [Project Name]
+
+**Assessment Date**: YYYY-MM-DD
+**Priority**: P0 (Critical) | P1 (High) | P2 (Medium) | P3 (Low)
+**Status**: Assessment Complete
+
+## Executive Summary
+[Brief overview of authentication security findings]
+
+## Relevant Files
+- `src/auth/config.ts` - Better Auth configuration
+- `src/middleware.ts` - Authentication middleware
+- `src/server/api/trpc.ts` - tRPC authentication context
+- `src/app/api/auth/[...all]/route.ts` - Auth API routes
+
+## Tasks
+
+### 1.0 Security Vulnerabilities
+- [ ] 1.1 Fix weak password policy
+  - **File**: `src/auth/config.ts`
+  - **Priority**: P0
+  - **Issue**: Passwords allow weak combinations (min 6 chars, no complexity)
+  - **Impact**: Users vulnerable to brute force attacks
+  - **Suggested Fix**: Implement strong password policy (min 12 chars, complexity requirements)
+  
+- [ ] 1.2 Add rate limiting to auth endpoints
+  - **File**: `src/app/api/auth/[...all]/route.ts`
+  - **Priority**: P0
+  - **Issue**: No rate limiting on login attempts
+  - **Impact**: Vulnerable to brute force attacks
+  - **Suggested Fix**: Add rate limiting middleware (5 attempts per 15 minutes)
+
+### 2.0 Session Security
+- [ ] 2.1 Enable secure cookie configuration
+  - **File**: `src/auth/config.ts`
+  - **Priority**: P1
+  - **Issue**: Cookies missing httpOnly and secure flags
+  - **Impact**: Vulnerable to XSS and man-in-the-middle attacks
+  - **Suggested Fix**: Set httpOnly: true, secure: true, sameSite: 'lax'
+
+## Findings Details
+
+### Security Vulnerabilities
+[Detailed analysis with code examples, metrics, and recommendations]
+
+### Better Auth Configuration
+[Configuration review findings]
+
+## Recommendations
+1. Implement strong password policy (P0)
+2. Add rate limiting to prevent brute force (P0)
+3. Enable secure cookie configuration (P1)
+4. Implement MFA for sensitive operations (P2)
+
+## Metrics
+- **Vulnerabilities Found**: 8 (3 P0, 3 P1, 2 P2)
+- **Security Score**: 62/100
+- **Compliance Score**: 78/100 (OWASP)
+```
+
+**Priority Levels**:
+- **P0 (Critical)**: Security vulnerabilities, authentication bypasses, data exposure
+- **P1 (High)**: Session security, weak configurations, missing protections
+- **P2 (Medium)**: Code quality, type safety, optimization opportunities
+- **P3 (Low)**: Documentation, user experience improvements
+
+**Handoff**: Action droids (security-fix, better-auth-integration) read this file and implement fixes.
+
+---
 
 ## Integration with Other Droids
 

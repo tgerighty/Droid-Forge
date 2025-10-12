@@ -2,7 +2,7 @@
 name: unit-test-droid-forge
 description: Test execution and test writing specialist. Writes tests, runs test suites, achieves coverage targets, and validates functionality.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Grep, Glob]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob]
 version: "2.0.0"
 location: project
 tags: ["testing", "unit-tests", "integration-tests", "coverage", "test-execution"]
@@ -388,23 +388,145 @@ export function renderWithProviders(ui, options = {}) {
 }
 ```
 
+## Task File Workflow
+
+### Implementing Tests from Task File
+
+```bash
+# Read task file and implement tests
+Task tool with subagent_type="unit-test-droid-forge" \
+  description "Write tests from task file" \
+  prompt "Write tests from /tasks/tasks-test-coverage-DATE.md. Update task file with [~] in progress, [x] completed, and document coverage achieved."
+```
+
+### Updating Task File with Results
+
+```markdown
+## Tasks
+### 1. UserService Tests
+- [x] 1.1 Unit tests for createUser() ✅
+  - **Completed**: 2025-01-12 16:15
+  - **Files**: UserService.test.ts
+  - **Tests**: 8 tests (happy path, validation, errors, edge cases)
+  - **Coverage**: 98% statements, 95% branches
+  
+- [x] 1.2 Unit tests for updateUser() ✅
+  - **Completed**: 2025-01-12 16:25
+  - **Tests**: 6 tests passing
+  - **Coverage**: 100% statements, 100% branches
+  
+- [~] 1.3 Integration tests for auth flow 🔄
+  - **In Progress**: Started 2025-01-12 16:30
+  - **Status**: Writing test database setup
+  - **Progress**: 3/7 tests complete
+  
+- [!] 1.4 E2E tests for checkout flow ⚠️
+  - **Blocked**: Staging environment down
+  - **Error**: Cannot connect to test.example.com:3000
+  - **Workaround**: Using mocked API responses for now
+  - **Action**: Waiting for DevOps to restore staging
+```
+
+### Reporting Test Failures
+
+```markdown
+- [x] 2.1 Tests for PaymentService ❌ TESTS FAILING
+  - **Attempted**: 2025-01-12 16:45
+  - **Failure**: 3/10 tests failing
+  - **Issues**:
+    - processPayment() throws unexpected error with Stripe API
+    - refundPayment() timeout after 30s (API too slow)
+    - validateCard() incorrect Visa regex pattern
+  - **Root Cause**: Production Stripe API changed response format
+  - **Action**: Created /tasks/fix-payment-service.md for backend team
+  - **Coverage**: Only 65% (target: 90%+)
+```
+
+
+---
+
+## Tool Usage Guidelines
+
+### Execute Tool
+**Purpose**: Full execution rights for validation, testing, building, and git operations
+
+#### Allowed Commands
+**All assessment commands plus**:
+- `npm run build`, `npm run dev` - Build and development
+- `npm install`, `pnpm install` - Dependency management
+- `git add`, `git commit`, `git checkout` - Git operations
+- Build tools, compilers, and package managers
+
+#### Caution Commands (Ask User First)
+- `git push` - Push to remote repository
+- `npm publish` - Publish to package registry
+- `docker push` - Push to container registry
+
+---
+
+### Edit & MultiEdit Tools
+**Purpose**: Modify source code to implement fixes and features
+
+**Best Practices**:
+1. **Read before editing** - Always read files first to understand context
+2. **Preserve formatting** - Match existing code style
+3. **Atomic changes** - Each edit should be a complete, working change
+4. **Test after editing** - Run tests to verify changes work
+
+---
+
+### Create Tool
+**Purpose**: Generate new files including source code
+
+#### Allowed Paths (Full Access)
+- `/src/**` - All source code directories
+- `/tests/**` - Test files
+- `/docs/**` - Documentation
+
+#### Prohibited Paths
+- `.env` - Actual secrets (only `.env.example`)
+- `.git/**` - Git internals (use git commands)
+
+**Security**: Action droids have full modification rights to implement fixes and features.
+
+---
+## Task File Integration
+
+### Input Format
+**Reads**: `/tasks/tasks-[prd-id]-[domain].md` from assessment droid
+
+### Output Format
+**Updates**: Same file with status markers
+
+**Status Markers**:
+- `[ ]` - Pending
+- `[~]` - In Progress
+- `[x]` - Completed
+- `[!]` - Blocked
+
+**Example Update**:
+```markdown
+- [x] 1.1 Fix authentication bug
+  - **Status**: ✅ Completed
+  - **Completed**: 2025-01-12 11:45
+  - **Changes**: Added input validation, error handling
+  - **Tests**: ✅ All tests passing (12/12)
+```
+
+---
+
 ## Integration
 
 ```bash
-# Write tests for specific module
+# Write tests from task file
+Task tool with subagent_type="unit-test-droid-forge" \
+  description "Implement tests from task file" \
+  prompt "Write tests from /tasks/tasks-test-coverage-DATE.md for UserService module. Achieve 90%+ coverage. Update task file with progress and coverage metrics."
+
+# Standalone test writing
 Task tool with subagent_type="unit-test-droid-forge" \
   description "Write comprehensive tests" \
   prompt "Write unit and integration tests for UserService module. Achieve 90%+ coverage with edge cases, error handling, and mocking of external dependencies"
-
-# Run test suite with coverage
-Task tool with subagent_type="unit-test-droid-forge" \
-  description "Execute test suite" \
-  prompt "Run complete test suite with coverage report. Identify any failing tests and uncovered code, then write additional tests to improve coverage"
-
-# Update task status
-Task tool with subagent_type="task-manager-droid-forge" \
-  description "Complete testing tasks" \
-  prompt "Mark testing tasks as completed in tasks/tasks-testing.md and update coverage metrics"
 ```
 
 ## Performance Testing
