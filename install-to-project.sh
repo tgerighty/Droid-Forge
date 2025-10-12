@@ -109,24 +109,27 @@ get_target_directory() {
     local target="$1"
     
     if [ -z "$target" ]; then
-        print_step "Select target project directory"
-        echo ""
-        echo "Enter the full path to your project directory:"
-        echo "(e.g., /Users/you/projects/my-app or ~/projects/my-app)"
-        echo ""
+        print_step "Select target project directory" >&2
+        echo "" >&2
+        echo "Enter the full path to your project directory:" >&2
+        echo "(e.g., /Users/you/projects/my-app or ~/projects/my-app)" >&2
+        echo "" >&2
         read -p "Target directory: " target
         
         # Expand tilde
         target="${target/#\~/$HOME}"
         
         if [ -z "$target" ]; then
-            print_error "No target directory specified"
+            print_error "No target directory specified" >&2
             exit 1
         fi
     fi
     
     # Expand tilde if present
     target="${target/#\~/$HOME}"
+    
+    # Remove trailing slash if present
+    target="${target%/}"
     
     # Convert to absolute path
     if [[ "$target" != /* ]]; then
