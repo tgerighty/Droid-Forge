@@ -2,7 +2,7 @@
 name: backend-engineer-droid-forge
 description: Backend development specialist for API/microservice architecture, database integration, and scalable systems
 model: inherit
-tools: [Execute, Read, LS, Write, Grep, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, WebSearch, FetchUrl]
 version: "2.0.0"
 location: project
 tags: ["backend", "api", "microservices", "database", "server-side", "scalability"]

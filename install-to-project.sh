@@ -109,24 +109,27 @@ get_target_directory() {
     local target="$1"
     
     if [ -z "$target" ]; then
-        print_step "Select target project directory"
-        echo ""
-        echo "Enter the full path to your project directory:"
-        echo "(e.g., /Users/you/projects/my-app or ~/projects/my-app)"
-        echo ""
-        read -p "Target directory: " target
+        print_step "Select target project directory" >&2
+        echo "" >&2
+        echo "Enter the full path to your project directory:" >&2
+        echo "(e.g., /Users/you/projects/my-app or ~/projects/my-app)" >&2
+        echo "" >&2
+        read -r -p "Target directory: " target
         
         # Expand tilde
         target="${target/#\~/$HOME}"
         
         if [ -z "$target" ]; then
-            print_error "No target directory specified"
+            print_error "No target directory specified" >&2
             exit 1
         fi
     fi
     
     # Expand tilde if present
     target="${target/#\~/$HOME}"
+    
+    # Remove trailing slash if present
+    target="${target%/}"
     
     # Convert to absolute path
     if [[ "$target" != /* ]]; then
@@ -199,7 +202,8 @@ install_droids() {
     if [ -d "$SOURCE_DIR/.factory/droids" ]; then
         for droid_file in "$SOURCE_DIR/.factory/droids"/*.md; do
             if [ -f "$droid_file" ]; then
-                local droid_name=$(basename "$droid_file")
+                local droid_name
+                droid_name=$(basename "$droid_file")
                 cp "$droid_file" "$target/.factory/droids/"
                 print_success "Installed: $droid_name"
                 droid_count=$((droid_count + 1))
@@ -229,7 +233,8 @@ install_tools() {
     if [ -d "$SOURCE_DIR/tools" ]; then
         for tool_file in "$SOURCE_DIR/tools"/*.sh; do
             if [ -f "$tool_file" ]; then
-                local tool_name=$(basename "$tool_file")
+                local tool_name
+                tool_name=$(basename "$tool_file")
                 cp "$tool_file" "$target/tools/"
                 chmod +x "$target/tools/$tool_name"
                 print_success "Installed: $tool_name"
@@ -255,7 +260,8 @@ install_tests() {
     if [ -d "$SOURCE_DIR/tests" ]; then
         for test_file in "$SOURCE_DIR/tests"/*.sh; do
             if [ -f "$test_file" ]; then
-                local test_name=$(basename "$test_file")
+                local test_name
+                test_name=$(basename "$test_file")
                 cp "$test_file" "$target/tests/"
                 chmod +x "$target/tests/$test_name"
                 test_count=$((test_count + 1))
@@ -266,7 +272,8 @@ install_tests() {
         if [ -d "$SOURCE_DIR/tests/integration" ]; then
             for test_file in "$SOURCE_DIR/tests/integration"/*.sh; do
                 if [ -f "$test_file" ]; then
-                    local test_name=$(basename "$test_file")
+                    local test_name
+                    test_name=$(basename "$test_file")
                     cp "$test_file" "$target/tests/integration/"
                     chmod +x "$target/tests/integration/$test_name"
                     test_count=$((test_count + 1))
@@ -292,22 +299,9 @@ install_configuration() {
         print_warning "droid-forge.yaml not found in source"
     fi
     
-    # Create tasks directory with template
+    # Create tasks directory for ai-dev-tools PRDs
     mkdir -p "$target/tasks"
-    
-    # Create a simple task template
-    cat > "$target/tasks/template.md" << 'EOF'
-## Relevant Files
-
-- `path/to/file.ext` - Description
-
-## Tasks
-
-- [ ] 1.0 Major Task Category
-  - [ ] 1.1 Sub-task description
-  - [ ] 1.2 Another sub-task
-EOF
-    print_success "Created: tasks/template.md"
+    print_success "Created: tasks/ directory for PRDs"
 }
 
 # Install documentation
@@ -360,16 +354,32 @@ Review and customize `droid-forge.yaml` for your project:
 - Set quality gate thresholds
 - Customize one-shot mode settings
 
-### 4. Creating Tasks
+### 4. Getting Started with Your First Feature
 
-1. Copy the template:
-   ```bash
-   cp tasks/template.md tasks/my-feature.md
-   ```
+The **manager-orchestrator-droid-forge** will guide you through the entire process:
 
-2. Edit your task file with specific requirements
+```bash
+droid
+> Ask manager-orchestrator-droid-forge to help me create a new feature
+```
 
-3. Run the manager orchestrator to execute tasks
+**The manager orchestrator will:**
+
+1. **Guide PRD Creation**: Help you install ai-dev-tools and create a structured PRD
+2. **Task Breakdown**: Analyze your PRD and break it into actionable tasks
+3. **Mode Selection**: Ask if you want one-shot (autonomous) or iterative (with confirmations)
+4. **Execute**: Coordinate specialist droids to implement your feature
+5. **Quality Gates**: Run tests, security checks, and linting automatically
+6. **PR Creation**: Generate pull request with all changes (if configured)
+
+**Example Prompts:**
+- "Help me create a new authentication feature"
+- "Analyze tasks/my-feature.md and execute in one-shot mode"
+- "I need to add a dark mode toggle - guide me through it"
+
+**ai-dev-tools Integration:**
+This project uses [ai-dev-tools](https://github.com/nxio-ai/ai-dev-tools) for PRD management.
+The manager will handle installation and setup automatically when needed.
 
 ## Files Installed
 
@@ -466,13 +476,15 @@ show_summary() {
     echo "3. Customize configuration:"
     echo "   nano droid-forge.yaml"
     echo ""
-    echo "4. Create your first task:"
-    echo "   cp tasks/template.md tasks/my-first-feature.md"
-    echo "   nano tasks/my-first-feature.md"
-    echo ""
-    echo "5. Start using one-shot mode:"
+    echo "4. Start with the manager orchestrator:"
     echo "   droid"
-    echo "   > Ask manager-orchestrator-droid-forge to analyze and execute my tasks"
+    echo "   > Ask manager-orchestrator-droid-forge to help me create a new feature"
+    echo ""
+    echo "   The manager will guide you through:"
+    echo "   - Installing ai-dev-tools (if needed)"
+    echo "   - Creating a structured PRD"
+    echo "   - Breaking down tasks"
+    echo "   - Executing in one-shot or iterative mode"
     echo ""
     
     print_success "Happy autonomous developing! 🚀"
