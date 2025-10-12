@@ -1,10 +1,8 @@
 # AGENTS.md - Droid Forge Coding Guidelines
 
-> **Comprehensive guide for AI agents working with Droid Forge droids (v2.0 - Optimized)**
+> **Comprehensive guide for AI agents working with Droid Forge droids (v2.1 - Token Optimized)**
 
-This document provides essential guidelines for AI coding agents to effectively use the Droid Forge framework and its specialized droids for software development tasks.
-
-**🚀 Recent Optimization**: All 21 droids have been optimized for AI token efficiency with 60% reduction in verbose content while preserving 100% functionality.
+AI coding agents: Use this guide to effectively leverage the Droid Forge framework and specialized droids for software development.
 
 ---
 
@@ -12,13 +10,14 @@ This document provides essential guidelines for AI coding agents to effectively 
 
 - [Overview](#overview)
 - [Core Principles](#core-principles)
-- [Task Management System](#task-management-system)
+- [Task Management](#task-management)
 - [Droid Directory](#droid-directory)
 - [Usage Guidelines](#usage-guidelines)
 - [Decision Trees](#decision-trees)
-- [Practical Examples](#practical-examples)
+- [Examples](#examples)
 - [Best Practices](#best-practices)
 - [Common Pitfalls](#common-pitfalls)
+- [Quick Reference](#quick-reference)
 
 ---
 
@@ -26,378 +25,182 @@ This document provides essential guidelines for AI coding agents to effectively 
 
 ### What is Droid Forge?
 
-Droid Forge is a **meta-orchestration framework** that uses Factory.ai droids to manage and coordinate specialized droids for complex software development workflows. Think of it as a "droid factory" where:
+**Meta-orchestration framework** using Factory.ai droids to coordinate specialized droids for complex software workflows.
 
-- **Manager Orchestrator** acts as the central coordinator
-- **Specialized droids** handle specific domains (frontend, backend, testing, security, etc.)
-- **Task delegation** happens automatically based on pattern matching
-- **ai-dev-tasks integration** provides structured task management
+**Components:**
+- **Manager Orchestrator**: Central coordinator
+- **Specialized droids**: Domain-specific handlers (frontend, backend, testing, security)
+- **Task delegation**: Automatic pattern matching
+- **ai-dev-tasks**: Structured task management
 
 ### Execution Modes
 
-Droid Forge supports **two execution modes**:
-
-#### 1. **Iterative Mode** (Default)
+**1. Iterative Mode (Default)**
 - Human confirmation between tasks
-- Step-by-step progression
-- Interactive decision-making
-- **Use when**: Architecture decisions needed, learning workflow, uncertain requirements
+- Use when: Architecture decisions needed, uncertain requirements
 
-#### 2. **One-Shot Mode** (Enhanced)
-- Autonomous execution without confirmation
-- Comprehensive automated testing with quality gates
-- Iterative PR review and fixes (up to 5 cycles)
-- **Enhanced AI-optimized droids** for faster processing
-- **Use when**: Well-defined tasks, routine features, high confidence in requirements
-- **Performance**: 60% token reduction improves AI response times
+**2. One-Shot Mode**
+- Autonomous execution, no confirmation
+- Automated testing + quality gates
+- Iterative PR review (max 5 cycles)
+- Use when: Well-defined tasks, routine features
 
-**Mode Selection**: At workflow start, Manager Orchestrator will ask:
-> **"Do you want me to one-shot or follow the iterative process?"**
+**Mode Selection**: Manager asks at start: *"Do you want me to one-shot or follow the iterative process?"*
 
-Respond with **"one-shot"** or **"iterative"** to set the mode for this workflow session.
-
-### Framework Architecture
+### Architecture
 
 ```
-USER REQUEST
-    ↓
-Manager Orchestrator Droid
-    ↓
-Capability Analysis & Pattern Matching
-    ↓
-Task Delegation to Specialist Droids
-    ↓
-Execution & Monitoring
-    ↓
-Status Updates & Result Aggregation
+USER REQUEST → Manager Orchestrator → Pattern Matching → Delegate to Specialists → Execute → Monitor → Results
 ```
 
 ---
 
 ## Core Principles
 
-### 1. **Single Source of Truth: ai-dev-tasks**
+### 1. Single Source of Truth: ai-dev-tasks
 
-🚨 **CRITICAL**: ALL task management MUST use the ai-dev-tasks system.
+**CRITICAL**: ALL task management uses ai-dev-tasks system.
 
-- **NEVER** create built-in task management systems
-- **ALWAYS** use `/tasks/tasks-[prd-name].md` files
-- **FOLLOW** ai-dev-tasks format exclusively
+- NEVER create custom task systems
+- ALWAYS use `/tasks/tasks-[prd-name].md`
+- FOLLOW ai-dev-tasks format exclusively
 
-**Task File Format:**
+**Format:**
 ```markdown
 ## Relevant Files
-
 - `src/component.tsx` - Main implementation
-- `tests/component.test.ts` - Unit tests
 
 ## Tasks
-
-- [ ] 1.0 Major Category Name
-  - [ ] 1.1 Sub-task with details
-  - [ ] 1.2 Another sub-task
-  - [x] 1.3 Completed sub-task
+- [ ] 1.0 Major Category
+  - [ ] 1.1 Sub-task details
+  - [x] 1.2 Completed sub-task
 ```
 
-**Status Markers:**
-- `[ ]` - Pending/scheduled
-- `[~]` - In progress
-- `[x]` - Completed
-- `[cancelled]` - Aborted
+**Status**: `[ ]` pending | `[~]` in progress | `[x]` completed | `[cancelled]` aborted
 
-### 2. **Intelligent Delegation**
+### 2. Intelligent Delegation
 
-Use the **Task tool** to delegate work to specialized droids:
-
+Use Task tool to delegate:
 ```bash
 Task tool with subagent_type="[droid-name]" \
-  description="Brief task description" \
-  prompt "Detailed task instructions with context and requirements"
+  description="Brief task" \
+  prompt "Detailed instructions with context"
 ```
 
-### 3. **Configuration-Driven Behavior**
+### 3. Configuration-Driven
 
-All orchestration rules are defined in `droid-forge.yaml`:
+All rules in `droid-forge.yaml`: delegation patterns, git workflows, timeouts, error handling.
 
-- **Delegation patterns**: Automatic routing based on keywords
-- **Git workflows**: Branch naming and commit conventions
-- **Performance settings**: Timeouts and concurrency limits
-- **Error handling**: Recovery strategies and notifications
+### 4. Code Quality Standards
 
-### 4. **Code Quality Standards**
-
-Follow the Biome configuration (`biome.json`):
-
-- **Indentation**: 2 spaces
-- **Line width**: 100 characters
-- **Quotes**: Single quotes for JS/TS, double for JSX
-- **Semicolons**: Always required
-- **Trailing commas**: ES5 style
-
-### 5. **AI-Optimized Droids** 🚀
-
-**Recent Optimization (v2.0)**: All 21 droids optimized for AI token efficiency:
-
-**Token Efficiency Improvements:**
-- **60% reduction** in verbose content across all droids
-- **Eliminated redundancy** and consolidated overlapping capabilities
-- **Standardized AI-optimized format** with concise bullet points
-- **Direct instruction format** replacing conversational language
-- **100% functionality preservation** while improving AI readability
-
-**Benefits:**
-- **Faster AI processing** due to reduced token usage
-- **Improved consistency** across all droids
-- **Better maintainability** with standardized structure
-- **Enhanced performance** for one-shot mode execution
-
-**Optimized Categories:**
-- **Assessment Droids** (6): Code smells, complexity, security, TypeScript, testing, debugging
-- **Action Droids** (6): Refactoring, security fixes, bug fixes, unit testing, frontend, backend
-- **Infrastructure Droids** (9): Auto-PR, orchestration, task management, git workflows, reliability
+Biome config (`biome.json`): 2-space indent, 100-char lines, single quotes, semicolons, ES5 commas.
 
 ---
 
-## Task Management System
+## Task Management
 
-### ai-dev-tasks Integration
+### Creating Tasks
 
-#### Creating Task Files
+1. Analyze PRD
+2. Generate structured tasks (ai-dev-tasks format)
+3. Save to `/tasks/tasks-[prd-name].md`
+4. Link relevant files
 
-1. **Analyze PRD** (Product Requirements Document)
-2. **Generate structured tasks** following ai-dev-tasks format
-3. **Save to** `/tasks/tasks-[prd-name].md`
-4. **Link relevant files** in the header
+### Updating Status
 
-#### Updating Task Status
-
-**Manual Update:**
+**Manual:**
 ```bash
-# Mark task 1.2 as in progress
-sed -i 's/- \[ \] 1.2/- [~] 1.2/' tasks/tasks-0001-feature.md
-
-# Mark task 1.2 as completed
-sed -i 's/- \[~\] 1.2/- [x] 1.2/' tasks/tasks-0001-feature.md
+sed -i 's/- \[ \] 1.2/- [~] 1.2/' tasks/tasks-0001-feature.md  # In progress
+sed -i 's/- \[~\] 1.2/- [x] 1.2/' tasks/tasks-0001-feature.md  # Completed
 ```
 
-**Via Manager Orchestrator:**
+**Via Manager:**
 ```bash
 Task tool with subagent_type="manager-orchestrator-droid-forge" \
   description="Update task status" \
-  prompt "Update task 1.2 to completed in tasks-0001-feature.md"
+  prompt "Mark task 1.2 completed in tasks-0001-feature.md"
 ```
 
-#### Task Dependencies
+### Dependencies
 
-Structure tasks hierarchically:
-
+Structure hierarchically:
 ```markdown
 - [ ] 1.0 Database Setup
   - [ ] 1.1 Design schema
-  - [ ] 1.2 Create migrations (depends on 1.1)
-  - [ ] 1.3 Seed data (depends on 1.2)
+  - [ ] 1.2 Migrations (depends on 1.1)
 - [ ] 2.0 API Development (depends on 1.0)
-  - [ ] 2.1 Create endpoints
-  - [ ] 2.2 Add authentication
 ```
 
 ---
 
 ## Droid Directory
 
-### Droid Organization
+### Organization
 
-Droids are organized into three categories following **Separation of Concerns**:
+**Assessment Droids**: Analyze code → CREATE TASKS  
+**Action Droids**: Execute tasks → UPDATE STATUS  
+**Infrastructure Droids**: Orchestration & support
 
-1. **Assessment Droids**: Analyze code and CREATE TASKS
-2. **Action Droids**: Execute tasks and UPDATE STATUS
-3. **Infrastructure Droids**: Orchestration and support
+### Assessment Droids (Analyze → Create Tasks)
 
-### Assessment Droids (Analyze → Create Tasks) 🚀 *Optimized*
+| Droid | Purpose | Creates Tasks For |
+|-------|---------|-------------------|
+| code-smell-assessment | Detect anti-patterns, tech debt | Bloaters, OOP abusers, change preventers, dispensables, couplers |
+| cognitive-complexity-assessment | Measure complexity | High-complexity functions, excessive nesting |
+| security-assessment | Identify vulnerabilities | SQL injection, XSS, CSRF, secrets, dependencies |
+| typescript-assessment | Analyze type safety | 'any' usage, weak types, missing null checks |
+| debugging-assessment | Root cause analysis | Bugs, performance issues, memory leaks, race conditions |
+| test-assessment | Analyze test quality | Low coverage, flaky tests, missing test cases |
 
-| Droid Name | Purpose | When to Use | Token Efficiency |
-|------------|---------|-------------|------------------|
-| **code-smell-assessment-droid-forge** | Detect anti-patterns and technical debt | Code quality issues, maintainability problems, design pattern violations | 65% reduction |
-| **cognitive-complexity-assessment-droid-forge** | Measure code complexity and understandability | Functions hard to understand, excessive nesting, high cognitive load | 70% reduction |
-| **security-assessment-droid-forge** | Identify security vulnerabilities | SQL injection, XSS, CSRF, secrets, dependency vulnerabilities | 55% reduction |
-| **typescript-assessment-droid-forge** | Analyze TypeScript type safety | 'any' usage, weak types, missing null checks, strict mode issues | 60% reduction |
-| **debugging-assessment-droid-forge** | Root cause analysis and bug identification | Errors, bugs, performance issues, memory leaks, race conditions | 58% reduction |
-| **test-assessment-droid-forge** | Analyze test coverage and quality | Low coverage, untested code paths, flaky tests, test quality | 62% reduction |
+### Action Droids (Execute → Update Status)
 
-### Action Droids (Execute Tasks → Update Status) 🚀 *Optimized*
+| Droid | Purpose | Processes Tasks From |
+|-------|---------|----------------------|
+| code-refactoring | Implement refactoring | Code smells, complexity tasks |
+| security-fix | Remediate vulnerabilities | Security tasks |
+| typescript-fix | Improve type safety | TypeScript tasks |
+| bug-fix | Fix bugs | Bug tasks |
+| unit-test | Write/run tests | Test tasks |
+| frontend-engineer | Build React/Next.js components | Frontend tasks |
+| backend-engineer | Build APIs/services | Backend tasks |
 
-| Droid Name | Purpose | When to Use | Token Efficiency |
-|------------|---------|-------------|------------------|
-| **code-refactoring-droid-forge** | Implement code refactoring | Extract methods, simplify conditionals, reduce duplication | 68% reduction |
-| **security-fix-droid-forge** | Remediate security vulnerabilities | Fix SQL injection, XSS, update dependencies, add security headers | 64% reduction |
-| **typescript-fix-droid-forge** | Improve TypeScript type safety | Replace 'any', add type guards, enable strict mode, fix null handling | 59% reduction |
-| **bug-fix-droid-forge** | Implement bug fixes | Fix logic errors, race conditions, memory leaks, null references | 61% reduction |
-| **unit-test-droid-forge** | Write tests and execute test suites | Write unit tests, run tests, achieve coverage targets | 57% reduction |
-| **frontend-engineer-droid-forge** | Build React/Next.js components | UI components, responsive design, accessibility, state management | 63% reduction |
-| **backend-engineer-droid-forge** | Build APIs and services | REST APIs, database integration, backend services | 60% reduction |
+### Infrastructure Droids
 
-### Infrastructure Droids (Orchestration & Support) 🚀 *Optimized*
+| Droid | Purpose |
+|-------|---------|
+| manager-orchestrator | Central coordination, task delegation, mode selection |
+| auto-pr | PR creation, iterative review (max 5 cycles), CI/CD monitoring |
+| task-manager | Task lifecycle, atomic operations, file locking |
+| ai-dev-tasks-integrator | PRD processing, task file creation |
+| git-workflow-orchestrator | Branch management, commits, merge strategies |
+| biome | Linting, formatting |
+| reliability | SRE, incident management, chaos engineering |
+| typescript-professional | Advanced TypeScript patterns (prefer assessment + fix) |
 
-| Droid Name | Purpose | When to Use | Token Efficiency |
-|------------|---------|-------------|------------------|
-| **manager-orchestrator-droid-forge** | Central coordination and task delegation | PRD analysis, workflow orchestration, multi-droid coordination | 65% reduction |
-| **auto-pr-droid-forge** | Automated PR creation and iterative review | Issue-to-PR automation, iterative review cycles (up to 5), CI/CD monitoring | 72% reduction |
-| **task-manager-droid-forge** | Task lifecycle management | Task status tracking, atomic task operations, file locking | 50% reduction |
-| **ai-dev-tasks-integrator-droid-forge** | Task system integration | PRD processing, task file creation and synchronization | 58% reduction |
-| **git-workflow-orchestrator-droid-forge** | Git operations | Branch management, commit coordination, merge strategies | 55% reduction |
-| **biome-droid-forge** | Code linting and formatting | Code style checks, formatting enforcement | 45% reduction |
-| **reliability-droid-forge** | SRE and incident management | Monitoring setup, incident response, chaos engineering | 68% reduction |
-| **typescript-professional-droid-forge** | Advanced TypeScript patterns | Complex type systems, generics, advanced patterns | 62% reduction |
+### Capabilities Summary
 
-### Droid Capabilities Matrix
+**Assessment Droids:**
+- code-smell: Detect bloaters, OOP abuse, change preventers, dispensables, couplers → tasks
+- cognitive-complexity: Calculate scores, identify high complexity (>10), analyze nesting → tasks
+- security: Scan dependencies, detect injections, find secrets, check headers → tasks
+- typescript: Analyze config, detect 'any', find missing null checks, calculate coverage → tasks
+- debugging: Root cause analysis, error patterns, profiling, memory leaks → tasks
+- test: Analyze coverage, identify untested paths, detect flaky tests → tasks
 
-#### Assessment Droids (Analyze → Create Tasks)
+**Action Droids:**
+- code-refactoring: Extract methods/classes, simplify conditionals, remove duplication
+- security-fix: Fix injections, update dependencies, remove secrets, add headers
+- typescript-fix: Replace 'any', enable strict mode, add null handling, type guards
+- bug-fix: Fix logic errors, race conditions, memory leaks, null references
+- unit-test: Write unit/integration tests, execute suites, generate coverage
+- frontend-engineer: React/Next.js, responsive CSS, accessibility, state management
+- backend-engineer: REST/GraphQL APIs, database design, microservices, caching
 
-**code-smell-assessment-droid-forge**
-- ✅ Detect bloaters (long methods, large classes, long parameter lists)
-- ✅ Identify OOP abusers (switch statements, refused bequest)
-- ✅ Find change preventers (divergent change, shotgun surgery)
-- ✅ Spot dispensables (dead code, duplicate code, lazy classes)
-- ✅ Detect couplers (feature envy, inappropriate intimacy)
-- ✅ Generate prioritized refactoring tasks
-
-**cognitive-complexity-assessment-droid-forge**
-- ✅ Calculate cognitive complexity scores
-- ✅ Identify high-complexity functions (> 10)
-- ✅ Analyze nesting levels and branching
-- ✅ Compare with industry thresholds
-- ✅ Generate complexity reduction tasks
-- ✅ Track complexity trends over time
-
-**security-assessment-droid-forge**
-- ✅ Scan dependency vulnerabilities (npm audit, Snyk)
-- ✅ Detect SQL injection, XSS, CSRF, command injection
-- ✅ Find hardcoded secrets and credentials
-- ✅ Check security headers and CORS configuration
-- ✅ Identify authentication/authorization issues
-- ✅ Generate CVSS-scored remediation tasks
-
-**typescript-assessment-droid-forge**
-- ✅ Analyze TypeScript configuration (strict mode)
-- ✅ Detect 'any' type usage and weak types
-- ✅ Find missing null/undefined checks
-- ✅ Identify unsafe type assertions
-- ✅ Calculate type coverage percentage
-- ✅ Generate type safety improvement tasks
-
-**debugging-assessment-droid-forge**
-- ✅ Root cause analysis from stack traces
-- ✅ Error pattern recognition
-- ✅ Performance profiling and bottleneck identification
-- ✅ Memory leak detection
-- ✅ Race condition analysis
-- ✅ Generate bug fix tasks with reproduction steps
-
-**test-assessment-droid-forge**
-- ✅ Analyze test coverage (statements, branches, functions)
-- ✅ Identify untested code paths
-- ✅ Detect flaky tests
-- ✅ Assess test quality (assertions, speed, duplication)
-- ✅ Find missing test cases
-- ✅ Generate test writing tasks
-
-#### Action Droids (Execute Tasks → Update Status)
-
-**code-refactoring-droid-forge**
-- ✅ Extract methods and classes
-- ✅ Simplify complex conditionals
-- ✅ Remove code duplication
-- ✅ Apply design patterns
-- ✅ Reduce cognitive complexity
-- ✅ Update task status throughout execution
-
-**security-fix-droid-forge**
-- ✅ Fix SQL injection (parameterized queries)
-- ✅ Fix XSS (output encoding, sanitization)
-- ✅ Fix command injection (whitelist, no shell)
-- ✅ Update vulnerable dependencies
-- ✅ Remove hardcoded secrets (environment variables)
-- ✅ Add security headers, CSRF protection
-
-**typescript-fix-droid-forge**
-- ✅ Replace 'any' with proper types
-- ✅ Enable strict mode flags
-- ✅ Add null/undefined handling
-- ✅ Convert type assertions to type guards
-- ✅ Add missing type definitions
-- ✅ Run tsc after each fix
-
-**bug-fix-droid-forge**
-- ✅ Fix logic errors and off-by-one errors
-- ✅ Fix race conditions (transaction isolation)
-- ✅ Fix memory leaks (cleanup handlers)
-- ✅ Fix null reference errors
-- ✅ Fix performance bottlenecks
-- ✅ Run tests after each fix
-
-**unit-test-droid-forge**
-- ✅ Write unit tests (Jest, Vitest, Mocha)
-- ✅ Write integration tests
-- ✅ Execute test suites
-- ✅ Generate coverage reports
-- ✅ Debug failing tests
-- ✅ Update task status for test tasks
-
-**frontend-engineer-droid-forge**
-- ✅ React/Next.js components with TypeScript
-- ✅ Responsive CSS (Grid, Flexbox)
-- ✅ Accessibility (WCAG compliance)
-- ✅ Performance optimization
-- ✅ State management (Context, Redux, Zustand)
-- ✅ Component testing (React Testing Library)
-
-**backend-engineer-droid-forge**
-- ✅ RESTful API design
-- ✅ GraphQL schemas and resolvers
-- ✅ Database schema design (SQL/NoSQL)
-- ✅ Microservice architecture
-- ✅ Caching strategies (Redis, Memcached)
-- ✅ Performance optimization
-
-#### Infrastructure Droids (Orchestration & Support)
-
-**manager-orchestrator-droid-forge**
-- ✅ PRD analysis and task delegation
-- ✅ Multi-droid workflow coordination
-- ✅ Mode selection (one-shot vs iterative)
-- ✅ Status monitoring and aggregation
-- ✅ Error handling and recovery
-- ✅ Task dependency management
-
-**reliability-droid-forge**
-- ✅ Incident detection and classification
-- ✅ Automated incident response
-- ✅ Root cause analysis
-- ✅ Chaos engineering
-- ✅ SLA/SLO tracking
-- ✅ Runbook automation
-
-**auto-pr-droid-forge**
-- ✅ GitHub issue analysis
-- ✅ Automated code generation
-- ✅ PR creation and management
-- ✅ Iterative review and fix cycles (up to 5)
-- ✅ CI/CD monitoring and fixing
-- ✅ Merge conflict resolution
-
-**task-manager-droid-forge**
-- ✅ Atomic task operations
-- ✅ File locking protocol
-- ✅ Status marker updates
-- ✅ Task validation
-- ✅ Rollback on failure
-- ✅ Concurrent access handling
-
-**biome-droid-forge**
-- ✅ Code linting
-- ✅ Formatting enforcement
-- ✅ Style consistency
-- ✅ Auto-fix capabilities
+**Infrastructure Droids:**
+- manager-orchestrator: PRD analysis, multi-droid coordination, monitoring, error handling
+- reliability: Incident detection, automated response, chaos engineering, SLA tracking
+- auto-pr: Issue analysis, code generation, PR management, iterative review, CI/CD fixes
+- task-manager: Atomic operations, file locking, status updates, validation, rollback
 
 ---
 
@@ -405,877 +208,289 @@ Droids are organized into three categories following **Separation of Concerns**:
 
 ### When to Use Each Droid
 
-#### 1. **Manager Orchestrator** - Central Coordination
+| Task Type | Use Droid | Example Prompt |
+|-----------|-----------|----------------|
+| PRD analysis | manager-orchestrator | "Analyze tasks/tasks-0001.md and create plan with delegation" |
+| React component | frontend-engineer | "Create TypeScript user profile component with avatar upload, responsive" |
+| REST API | backend-engineer | "Implement auth API with JWT: register, login, logout, refresh" |
+| Bug investigation | debugging-assessment | "Analyze memory leak in logs/profile.txt, identify source" |
+| GitHub issue → PR | auto-pr | "Create PR for issue #123, monitor reviews, iterate 5x, fix CI/CD" |
+| Production incident | reliability | "Respond to incident: 50% error rate, classify, notify, execute playbook" |
+| Security audit | security-assessment | "Scan for SQL injection, XSS, CSRF, secrets, dependencies" |
+| Test creation | unit-test | "Write unit tests for UserService.ts, 90%+ coverage, edge cases" |
 
-**Use for:**
-- Analyzing PRDs and creating task breakdowns
-- Coordinating multi-droid workflows
-- Delegating complex features across multiple domains
-- Status tracking and progress monitoring
-
-**Example:**
-```bash
-Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description="Analyze PRD and create implementation plan" \
-  prompt "Analyze tasks/tasks-0001-user-auth.md and create comprehensive implementation plan with task delegation to appropriate specialist droids"
-```
-
-#### 2. **Frontend Engineer** - UI Development
-
-**Use for:**
-- React/Next.js component creation
-- Responsive layout implementation
-- Frontend state management
-- UI/UX optimization
-
-**Example:**
-```bash
-Task tool with subagent_type="frontend-engineer-droid-forge" \
-  description="Create user profile component" \
-  prompt "Generate TypeScript React component for user profile page with avatar upload, bio editing, and social links. Include responsive design for mobile/desktop and accessibility features."
-```
-
-#### 3. **Backend Engineer** - Server-Side Development
-
-**Use for:**
-- REST API or GraphQL endpoint creation
-- Database schema design
-- Microservice architecture
-- Backend performance optimization
-
-**Example:**
-```bash
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="Create authentication API" \
-  prompt "Design and implement REST API for user authentication with JWT tokens, including register, login, logout, and refresh token endpoints. Include password hashing, rate limiting, and error handling."
-```
-
-#### 4. **Debugging Expert** - Problem Solving
-
-**Use for:**
-- Investigating bug reports
-- Analyzing error logs
-- Performance bottleneck identification
-- Root cause analysis
-
-**Example:**
-```bash
-Task tool with subagent_type="debugging-expert-droid-forge" \
-  description="Debug memory leak issue" \
-  prompt "Analyze memory leak in production application. Review heap snapshots in logs/memory-profile.txt and identify the source. Provide fix recommendations with code examples."
-```
-
-#### 5. **Reliability Droid** - SRE Operations
-
-**Use for:**
-- Incident response and management
-- System monitoring setup
-- Chaos engineering experiments
-- SLA/SLO tracking
-- Runbook creation
-
-**Example:**
-```bash
-Task tool with subagent_type="reliability-droid-forge" \
-  description="Setup monitoring for payment service" \
-  prompt "Design comprehensive monitoring solution for payment-service including health checks, performance metrics, error rate tracking, and alerting. Create runbook for common incident scenarios."
-```
-
-#### 6. **Auto-PR Droid** - Automated Development
-
-**Use for:**
-- Converting GitHub issues to PRs
-- Automated feature implementation
-- **Iterative review and fix cycles** (up to 5 iterations)
-- CI/CD failure resolution
-- Merge conflict handling
-
-**Example:**
-```bash
-Task tool with subagent_type="auto-pr-droid-forge" \
-  description="Auto-generate PR from issue with iterative review" \
-  prompt "Create automated PR to fix GitHub issue #123. Implement the fix, create PR, and monitor for review feedback. Automatically iterate up to 5 times to address comments from CodeRabbit, GitHub Actions, and human reviewers. Monitor CI/CD pipeline and fix any failures."
-```
-
-**Key Feature - Iterative Review:**
-The auto-pr-droid will:
-1. Create initial PR with implementation
-2. Monitor PR for comments from bots and humans
-3. Automatically categorize feedback (code, style, security, tests, performance, logic)
-4. Route issues to appropriate specialist droids
-5. Commit fixes and update PR
-6. Repeat cycle up to configured max iterations (default: 5)
-7. Monitor CI/CD and fix pipeline failures
-
-#### 7. **Security Audit** - Security Review
-
-**Use for:**
-- Security vulnerability scanning
-- Code security review
-- Dependency auditing
-- Compliance validation
-
-**Example:**
-```bash
-Task tool with subagent_type="security-audit-droid-forge" \
-  description="Security audit of authentication flow" \
-  prompt "Perform comprehensive security audit of user authentication system. Check for SQL injection, XSS, CSRF, insecure password storage, and session management issues."
-```
-
-#### 8. **Unit Test** - Testing
-
-**Use for:**
-- Unit test generation
-- Test coverage improvement
-- Test debugging
-- Test execution
-
-**Example:**
-```bash
-Task tool with subagent_type="unit-test-droid-forge" \
-  description="Generate tests for user service" \
-  prompt "Create comprehensive unit tests for src/services/UserService.ts covering all public methods, edge cases, and error scenarios. Achieve 90%+ coverage."
-```
+**Auto-PR Iterative Review:**
+1. Create initial PR
+2. Monitor for bot/human comments
+3. Categorize feedback (code, style, security, tests, performance)
+4. Route to specialist droids
+5. Commit fixes, update PR
+6. Repeat (max 5 iterations)
+7. Monitor/fix CI/CD
 
 ---
 
 ## Decision Trees
 
-### Feature Development Decision Tree
+### Feature Development
 
 ```
-START: New Feature Request
-    ↓
-Is it complex/multi-domain?
-    ↓ YES → Use manager-orchestrator-droid-forge
-    |         ↓
-    |      Orchestrator delegates to specialists
-    ↓ NO
-    ↓
-What domain?
-    ↓
-    ├── Frontend UI? → frontend-engineer-droid-forge
-    ├── Backend API? → backend-engineer-droid-forge
-    ├── Both? → manager-orchestrator-droid-forge
-    ├── Testing? → unit-test-droid-forge
-    ├── Security? → security-audit-droid-forge
-    └── Operations? → reliability-droid-forge
+START → Complex/multi-domain? 
+  YES → manager-orchestrator → delegates
+  NO → What domain?
+    Frontend UI → frontend-engineer
+    Backend API → backend-engineer
+    Both → manager-orchestrator
+    Testing → unit-test
+    Security → security-assessment
+    Operations → reliability
 ```
 
-### Bug Fix Decision Tree
+### Bug Fix
 
 ```
-START: Bug Report
-    ↓
-Is root cause known?
-    ↓ YES → Route to domain specialist
-    |         ↓
-    |      ├── Frontend bug → frontend-engineer-droid-forge
-    |      ├── Backend bug → backend-engineer-droid-forge
-    |      └── Security bug → security-audit-droid-forge
-    ↓ NO
-    ↓
-Use debugging-expert-droid-forge for analysis
-    ↓
-Root cause identified
-    ↓
-Route to appropriate domain specialist
+START → Root cause known?
+  YES → Domain specialist (frontend/backend/security)
+  NO → debugging-assessment → identify → domain specialist
 ```
 
-### Automation Decision Tree
+### Automation
 
 ```
-START: Automation Request
-    ↓
-What to automate?
-    ↓
-    ├── GitHub issue → PR? → auto-pr-droid-forge
-    ├── Incident response? → reliability-droid-forge
-    ├── Code quality checks? → biome-droid-forge
-    ├── Testing automation? → unit-test-droid-forge
-    └── Git workflows? → git-workflow-orchestrator-droid-forge
+START → What to automate?
+  GitHub issue → PR → auto-pr
+  Incident response → reliability
+  Code quality → biome
+  Testing → unit-test
+  Git workflows → git-workflow-orchestrator
 ```
 
 ---
 
-## Practical Examples
+## Examples
 
-### Example 1: Full-Stack Feature Implementation
-
-**Scenario:** Build a user profile management feature
+### Full-Stack Feature
 
 ```bash
-# Step 1: Orchestrate the overall feature
 Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description="Orchestrate user profile feature" \
-  prompt "Analyze PRD in tasks/tasks-0005-user-profile.md and coordinate implementation across frontend, backend, and testing. Delegate tasks to appropriate droids and monitor progress."
-
-# Manager will delegate:
-# - Frontend component creation to frontend-engineer-droid-forge
-# - Backend API to backend-engineer-droid-forge
-# - Tests to unit-test-droid-forge
-# - Security review to security-audit-droid-forge
+  description="Orchestrate user profile" \
+  prompt "Analyze tasks/tasks-0005-user-profile.md, coordinate frontend/backend/testing"
+# Manager delegates to frontend-engineer, backend-engineer, unit-test, security-audit
 ```
 
-### Example 2: Bug Investigation and Fix
-
-**Scenario:** API endpoint returning 500 errors intermittently
+### Bug Investigation
 
 ```bash
-# Step 1: Analyze the issue
-Task tool with subagent_type="debugging-expert-droid-forge" \
-  description="Debug intermittent API 500 errors" \
-  prompt "Analyze error logs in logs/api-errors.log for intermittent 500 errors on /api/users endpoint. Identify root cause and provide detailed analysis with reproduction steps."
+# Step 1: Analyze
+Task tool with subagent_type="debugging-assessment-droid-forge" \
+  description="Debug API 500 errors" \
+  prompt "Analyze logs/api-errors.log for /api/users 500s, identify root cause"
 
-# Step 2: Implement fix (after analysis)
+# Step 2: Fix
 Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="Fix API error handling" \
-  prompt "Implement fix for identified race condition in user endpoint. Add proper error handling, transaction management, and retry logic."
+  description="Fix race condition" \
+  prompt "Fix race condition with transaction management, retry logic"
 
-# Step 3: Add tests
+# Step 3: Test
 Task tool with subagent_type="unit-test-droid-forge" \
-  description="Add tests for race condition fix" \
-  prompt "Create integration tests that verify the race condition fix works correctly under concurrent load."
+  description="Test fix" \
+  prompt "Integration tests for race condition under concurrent load"
 ```
 
-### Example 3: Automated Issue Resolution with Iterative Review
-
-**Scenario:** GitHub issue needs automated PR with comprehensive review cycle
+### Automated PR with Review
 
 ```bash
-# Single command handles entire lifecycle
 Task tool with subagent_type="auto-pr-droid-forge" \
-  description="Auto-resolve issue with full review cycle" \
-  prompt "Create automated PR for GitHub issue https://github.com/org/repo/issues/456. 
-
-Requirements:
-1. Analyze issue and implement complete fix
-2. Create PR with descriptive title and body
-3. Monitor for feedback from:
-   - CodeRabbit AI reviews
-   - GitHub Actions CI/CD
-   - Codecov reports
-   - Human reviewers
-4. Automatically iterate to address all feedback:
-   - Code quality issues
-   - Style and formatting
-   - Security concerns
-   - Test coverage
-   - Performance problems
-   - Logic errors
-5. Maximum 5 iterations
-6. Monitor CI/CD pipeline and fix failures
-7. Update PR with progress comments
-
-Expected outcome: Clean, mergeable PR ready for final human approval."
-
-# The auto-pr-droid will:
-# ✅ Parse issue and create implementation
-# ✅ Generate tests and documentation
-# ✅ Create feature branch and PR
-# ✅ Monitor for new comments/reviews
-# ✅ Categorize feedback types
-# ✅ Delegate fixes to specialist droids:
-#    - debugging-expert for code issues
-#    - biome for style issues
-#    - security-audit for security issues
-#    - unit-test for test issues
-#    - backend-engineer for performance issues
-# ✅ Commit and push fixes
-# ✅ Update PR with iteration status
-# ✅ Repeat until clean or max iterations
-# ✅ Monitor and fix CI/CD failures
+  description="Auto-resolve with review" \
+  prompt "Create PR for github.com/org/repo/issues/456. Implement fix, monitor feedback from CodeRabbit/CI/CD/humans, iterate 5x to address all comments, fix CI/CD failures"
 ```
 
-### Example 4: Security Audit
-
-**Scenario:** Pre-release security review
+### Security Audit
 
 ```bash
-# Comprehensive security audit
-Task tool with subagent_type="security-audit-droid-forge" \
-  description="Pre-release security audit" \
-  prompt "Perform comprehensive security audit of the application before v2.0 release. Focus on:
-- Authentication and authorization
-- Input validation and sanitization
-- SQL injection vulnerabilities
-- XSS and CSRF protection
-- Dependency vulnerabilities
-- API security
-- Data encryption
-Generate detailed report with severity ratings and remediation steps."
+Task tool with subagent_type="security-assessment-droid-forge" \
+  description="Pre-release audit" \
+  prompt "Audit v2.0: auth, input validation, SQL injection, XSS, CSRF, dependencies, API security, encryption. Generate report with severity + remediation"
 ```
 
-### Example 5: Incident Response
-
-**Scenario:** Production incident detected
+### Incident Response
 
 ```bash
-# Immediate incident response
 Task tool with subagent_type="reliability-droid-forge" \
-  description="Respond to production incident" \
-  prompt "Production incident detected: Payment service experiencing 50% error rate. 
-
-Actions required:
-1. Classify incident severity
-2. Notify on-call team
-3. Execute automated response playbook
-4. Create incident channel
-5. Start timeline tracking
-6. Analyze root cause
-7. Coordinate with debugging-expert-droid-forge for detailed analysis
-8. Generate post-mortem report
-
-Monitor: Prometheus alerts, Grafana dashboards, application logs"
-```
-
-### Example 6: Component Library Creation
-
-**Scenario:** Build reusable component library
-
-```bash
-# Frontend component library
-Task tool with subagent_type="frontend-engineer-droid-forge" \
-  description="Create design system components" \
-  prompt "Build comprehensive design system component library with:
-- Button variants (primary, secondary, danger, ghost)
-- Form inputs (text, email, password, select, checkbox, radio)
-- Modal/Dialog components
-- Card components
-- Navigation components
-
-Requirements:
-- TypeScript support
-- Accessibility (WCAG AA)
-- Responsive design
-- Storybook documentation
-- Unit tests with React Testing Library
-- CSS modules for styling"
-```
-
-### Example 7: Database Migration
-
-**Scenario:** Complex schema migration needed
-
-```bash
-# Step 1: Design migration
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="Design database migration" \
-  prompt "Design migration for user preferences feature:
-- Add user_preferences table with JSONB column
-- Add relationship to users table
-- Create indexes for performance
-- Include rollback strategy
-- Zero-downtime migration approach
-Generate migration script with up/down methods."
-
-# Step 2: Test migration
-Task tool with subagent_type="unit-test-droid-forge" \
-  description="Test database migration" \
-  prompt "Create integration tests for user_preferences migration:
-- Test migration up/down
-- Verify data integrity
-- Test performance with sample data
-- Verify rollback works correctly"
+  description="Production incident" \
+  prompt "Payment service 50% error rate. Classify severity, notify team, execute playbook, create channel, track timeline, coordinate with debugging-assessment, generate post-mortem"
 ```
 
 ---
 
 ## Best Practices
 
-### 1. **Always Start with Context**
-
-Provide comprehensive context in your prompts:
+### 1. Context Required
 
 ```bash
-# ❌ BAD - Vague prompt
-Task tool with subagent_type="frontend-engineer-droid-forge" \
-  description="Create form" \
-  prompt "Make a form"
+# ❌ BAD
+prompt "Make a form"
 
-# ✅ GOOD - Detailed prompt
-Task tool with subagent_type="frontend-engineer-droid-forge" \
-  description="Create user registration form" \
-  prompt "Create TypeScript React registration form with:
-- Fields: email (validated), password (strength meter), confirm password, agree to terms
-- Validation: Real-time with error messages
-- Submit: POST to /api/auth/register
-- Loading state during submission
-- Error handling with user-friendly messages
-- Accessibility: ARIA labels, keyboard navigation
-- Responsive: Mobile-first design
-Located in: src/components/auth/RegistrationForm.tsx"
+# ✅ GOOD
+prompt "Create TypeScript React registration form: email (validated), password (strength), confirm, terms. Real-time validation, POST /api/auth/register, loading state, error handling, ARIA labels, responsive mobile-first. Located: src/components/auth/RegistrationForm.tsx"
 ```
 
-### 2. **Use Manager Orchestrator for Complex Tasks**
-
-When work spans multiple domains, let the manager orchestrate:
+### 2. Manager for Complex
 
 ```bash
-# ✅ GOOD - Let manager coordinate
+# ✅ Let manager coordinate multi-domain work
 Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description="Implement search feature" \
-  prompt "Implement full-text search feature across the application:
-- Backend: Elasticsearch integration, indexing strategy
-- Frontend: Search UI with autocomplete, filters
-- Testing: Unit and integration tests
-- Security: Input sanitization, query injection prevention
-
-Coordinate specialist droids and track progress in tasks/tasks-0010-search.md"
+  description="Search feature" \
+  prompt "Implement search: backend (Elasticsearch, indexing), frontend (UI, autocomplete, filters), testing (unit/integration), security (input sanitization, injection prevention). Track in tasks/tasks-0010-search.md"
 ```
 
-### 3. **Leverage Iterative Review for PRs**
-
-Use auto-pr-droid for complete automation including review cycles:
+### 3. Auto-PR for Full Cycle
 
 ```bash
-# ✅ EXCELLENT - Full automation with iteration
-Task tool with subagent_type="auto-pr-droid-forge" \
-  description="Automated PR with iterative improvement" \
-  prompt "Create PR for feature XYZ with full review automation:
-- Initial implementation
-- Monitor for all feedback sources
-- Automatically iterate to fix issues
-- Max 5 iterations
-- Monitor CI/CD and fix failures
-- Update PR with progress
-
-This ensures the PR is clean and ready for final approval."
+# ✅ Full automation with iteration
+prompt "Create PR for feature XYZ with full review automation: initial implementation, monitor feedback sources, iterate 5x to fix issues, monitor CI/CD, update PR with progress"
 ```
 
-### 4. **Update Task Status Regularly**
-
-Keep task files current:
+### 4. Update Status
 
 ```bash
-# After completing sub-task 1.2
+# After completing 1.2
 Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description="Update task status" \
-  prompt "Mark task 1.2 as completed in tasks/tasks-0001-feature.md and update relevant files list if needed"
+  prompt "Mark task 1.2 completed in tasks/tasks-0001-feature.md"
 ```
 
-### 5. **Follow Git Workflow Conventions**
+### 5. Git Conventions
 
-Use consistent branch naming and commits:
+**Branches:** `feat/1.2-description` | `fix/2.3-description` | `refactor/3.1-description`  
+**Commits:** `feat(auth): implement JWT` | `fix(api): resolve timeout` | `refactor(db): optimize queries`
 
-```yaml
-# From droid-forge.yaml
-branch_patterns:
-  feature: "feat/{task-id}-{description}"
-  bugfix: "fix/{task-id}-{description}"
-  refactor: "refactor/{task-id}-{description}"
-
-commit_format: "{type}({scope}): {description}"
-```
-
-**Examples:**
-```bash
-# Branch names
-feat/1.2-user-authentication
-fix/2.3-api-timeout
-refactor/3.1-database-queries
-
-# Commit messages
-feat(auth): implement JWT token authentication
-fix(api): resolve timeout on user endpoint
-refactor(db): optimize query performance with indexes
-```
-
-### 6. **Security First**
-
-Always consider security implications:
+### 6. Security First
 
 ```bash
-# For any user-facing feature
-Task tool with subagent_type="security-audit-droid-forge" \
-  description="Security review of new feature" \
-  prompt "Review security of newly implemented user authentication feature:
-- Check input validation
-- Verify password hashing (bcrypt/scrypt)
-- Review session management
-- Check for SQL injection vulnerabilities
-- Verify HTTPS enforcement
-- Review error handling (no sensitive data leaks)"
+# Always audit user-facing features
+Task tool with subagent_type="security-assessment-droid-forge" \
+  prompt "Review auth: input validation, password hashing (bcrypt/scrypt), session management, SQL injection, HTTPS, error handling (no sensitive leaks)"
 ```
 
-### 7. **Test Coverage Matters**
-
-Ensure comprehensive testing:
+### 7. Test Coverage
 
 ```bash
-# After implementing feature
+# After feature implementation
 Task tool with subagent_type="unit-test-droid-forge" \
-  description="Comprehensive test suite" \
-  prompt "Create complete test suite for user authentication feature:
-- Unit tests for all service methods
-- Integration tests for API endpoints
-- Edge cases and error scenarios
-- Security tests (injection, XSS)
-Target: 90%+ coverage"
+  prompt "Complete test suite for auth: unit tests (all service methods), integration (API endpoints), edge cases, security tests (injection, XSS). Target: 90%+ coverage"
 ```
 
-### 8. **Document as You Go**
+### 8. Document
 
-Include documentation in feature development:
+Include documentation in prompts: "Component with PropTypes, JSDoc, Storybook stories, README usage examples, accessibility notes"
 
-```bash
-Task tool with subagent_type="frontend-engineer-droid-forge" \
-  description="Component with documentation" \
-  prompt "Create UserProfile component with:
-1. Component implementation
-2. PropTypes/TypeScript interfaces
-3. JSDoc comments
-4. Storybook stories with examples
-5. README with usage examples
-6. Accessibility notes"
-```
+### 9. Performance
 
-### 9. **Monitor and Optimize Performance**
+Consider in prompts: "API with pagination, query optimization + indexes, Redis caching, compression, rate limiting, benchmarks. Target: <200ms p95"
 
-Consider performance implications:
-
-```bash
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="API with performance optimization" \
-  prompt "Implement user search API with performance optimization:
-- Pagination for large result sets
-- Query optimization with proper indexes
-- Caching strategy with Redis
-- Response compression
-- Rate limiting
-- Performance benchmarks
-Target: < 200ms p95 latency"
-```
-
-### 10. **Use Chaos Engineering Proactively**
-
-Test system resilience:
+### 10. Chaos Engineering
 
 ```bash
 Task tool with subagent_type="reliability-droid-forge" \
-  description="Chaos engineering experiment" \
-  prompt "Design and execute chaos experiment for payment service:
-- Scenario: Database connection failure
-- Blast radius: 10% of traffic
-- Expected behavior: Graceful degradation with retry logic
-- Success criteria: No user-facing errors
-- Rollback: Automatic after 5 minutes
-Generate experiment plan and execute with monitoring."
+  prompt "Chaos experiment for payment: database connection failure, 10% traffic, expect graceful degradation + retry, no user errors, auto-rollback 5min"
 ```
 
 ---
 
 ## Common Pitfalls
 
-### ❌ Pitfall 1: Creating Custom Task Systems
+### ❌ 1. Custom Task Systems
 
-**WRONG:**
-```bash
-# Don't create separate task tracking
-echo "TODO: Implement feature" > my-tasks.txt
-```
+**WRONG:** `echo "TODO: feature" > my-tasks.txt`  
+**RIGHT:** Use ai-dev-tasks format in `tasks/tasks-0001.md`
 
-**RIGHT:**
-```bash
-# Use ai-dev-tasks format
-cat > tasks/tasks-0001-feature.md << 'EOF'
-## Relevant Files
-- `src/feature.ts`
+### ❌ 2. Skip Manager
 
-## Tasks
-- [ ] 1.0 Implement feature
-EOF
-```
+**WRONG:** Manual multi-droid coordination  
+**RIGHT:** `manager-orchestrator-droid-forge` to coordinate
 
-### ❌ Pitfall 2: Skipping the Manager Orchestrator
+### ❌ 3. Vague Prompts
 
-**WRONG:**
-```bash
-# Trying to coordinate manually
-Task tool with subagent_type="frontend-engineer-droid-forge" ...
-Task tool with subagent_type="backend-engineer-droid-forge" ...
-Task tool with subagent_type="unit-test-droid-forge" ...
-# Manual coordination is error-prone
-```
+**WRONG:** "Create API"  
+**RIGHT:** "REST API for users: GET /api/users (paginated), GET /api/users/:id, POST (create), PUT/:id (update), DELETE/:id (soft delete). Auth, validation, error handling, rate limiting, OpenAPI docs"
 
-**RIGHT:**
-```bash
-# Let manager orchestrate
-Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description="Coordinate full-stack feature" \
-  prompt "Orchestrate implementation with frontend, backend, and testing droids"
-```
+### ❌ 4. Ignore Security
 
-### ❌ Pitfall 3: Vague Prompts
+**WRONG:** Ship without review  
+**RIGHT:** Include `security-assessment-droid-forge` in workflow
 
-**WRONG:**
-```bash
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="Make API" \
-  prompt "Create API"
-```
+### ❌ 5. Skip Auto-PR Iteration
 
-**RIGHT:**
-```bash
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="Create user management REST API" \
-  prompt "Implement REST API for user management with:
-- GET /api/users (list with pagination)
-- GET /api/users/:id (single user)
-- POST /api/users (create)
-- PUT /api/users/:id (update)
-- DELETE /api/users/:id (soft delete)
-Include: Authentication, validation, error handling, rate limiting, OpenAPI docs"
-```
+**WRONG:** Manual PR, manual review responses  
+**RIGHT:** `auto-pr-droid-forge` with full iteration: "Monitor feedback, iterate 5x until clean and mergeable"
 
-### ❌ Pitfall 4: Ignoring Security
+### ❌ 6. No Tests
 
-**WRONG:**
-```bash
-# Implementing auth without security review
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  prompt "Create login endpoint"
-# Ship it!
-```
+**WRONG:** Feature without tests  
+**RIGHT:** Include in prompt: "with comprehensive test suite using React Testing Library"
 
-**RIGHT:**
-```bash
-# Include security in the workflow
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  prompt "Create login endpoint with security best practices"
+### ❌ 7. Inconsistent Git
 
-Task tool with subagent_type="security-audit-droid-forge" \
-  prompt "Security audit of login endpoint implementation"
-```
+**WRONG:** Random branch/commit names  
+**RIGHT:** Follow conventions: `fix/1.2-api-timeout`, `fix(api): resolve timeout`
 
-### ❌ Pitfall 5: Not Using Auto-PR Iterative Review
+### ❌ 8. No Monitoring
 
-**WRONG:**
-```bash
-# Create PR manually and hope for the best
-Task tool with subagent_type="auto-pr-droid-forge" \
-  prompt "Create PR and that's it"
-# Manual intervention needed for every review comment
-```
-
-**RIGHT:**
-```bash
-# Let auto-pr handle the full cycle
-Task tool with subagent_type="auto-pr-droid-forge" \
-  prompt "Create PR with full iterative review cycle. Monitor for feedback from CodeRabbit, CI/CD, and reviewers. Automatically fix issues through up to 5 iterations until PR is clean and mergeable."
-```
-
-### ❌ Pitfall 6: Forgetting Tests
-
-**WRONG:**
-```bash
-# Implement feature without tests
-Task tool with subagent_type="frontend-engineer-droid-forge" \
-  prompt "Create component"
-# No test coverage!
-```
-
-**RIGHT:**
-```bash
-# Include tests in the requirements
-Task tool with subagent_type="frontend-engineer-droid-forge" \
-  prompt "Create component with comprehensive test suite using React Testing Library"
-```
-
-### ❌ Pitfall 7: Inconsistent Git Workflow
-
-**WRONG:**
-```bash
-# Random branch names and commit messages
-git checkout -b temp-fix
-git commit -m "fix stuff"
-```
-
-**RIGHT:**
-```bash
-# Follow droid-forge.yaml conventions
-git checkout -b fix/1.2-api-timeout
-git commit -m "fix(api): resolve timeout on user endpoint"
-```
-
-### ❌ Pitfall 8: No Monitoring or Observability
-
-**WRONG:**
-```bash
-# Deploy to production without monitoring
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  prompt "Deploy service"
-# Hope nothing breaks!
-```
-
-**RIGHT:**
-```bash
-# Set up monitoring first
-Task tool with subagent_type="reliability-droid-forge" \
-  prompt "Setup comprehensive monitoring for service before deployment: health checks, metrics, alerting, dashboards"
-
-# Then deploy
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  prompt "Deploy service with gradual rollout"
-```
-
----
-
-## Advanced Patterns
-
-### Pattern 1: Multi-Phase Feature Development
-
-```bash
-# Phase 1: Architecture and Planning
-Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description="Phase 1: Architecture" \
-  prompt "Analyze PRD and create detailed architecture plan for e-commerce checkout feature"
-
-# Phase 2: Backend Implementation
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="Phase 2: Backend API" \
-  prompt "Implement checkout API based on architecture plan"
-
-# Phase 3: Frontend Implementation
-Task tool with subagent_type="frontend-engineer-droid-forge" \
-  description="Phase 3: Checkout UI" \
-  prompt "Implement checkout UI consuming backend API"
-
-# Phase 4: Testing
-Task tool with subagent_type="unit-test-droid-forge" \
-  description="Phase 4: Test Suite" \
-  prompt "Create comprehensive test suite for checkout feature"
-
-# Phase 5: Security Audit
-Task tool with subagent_type="security-audit-droid-forge" \
-  description="Phase 5: Security Review" \
-  prompt "Security audit of checkout feature, especially payment handling"
-
-# Phase 6: Performance Optimization
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="Phase 6: Performance" \
-  prompt "Optimize checkout performance: caching, query optimization, load testing"
-```
-
-### Pattern 2: Incident-Driven Development
-
-```bash
-# Incident occurs
-Task tool with subagent_type="reliability-droid-forge" \
-  description="Incident response" \
-  prompt "Respond to production incident: API 500 errors"
-
-# Debug root cause
-Task tool with subagent_type="debugging-expert-droid-forge" \
-  description="Root cause analysis" \
-  prompt "Analyze incident logs and identify root cause"
-
-# Implement fix
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="Implement fix" \
-  prompt "Fix identified race condition in database transaction"
-
-# Add tests to prevent regression
-Task tool with subagent_type="unit-test-droid-forge" \
-  description="Regression tests" \
-  prompt "Add integration tests for race condition scenario"
-
-# Improve monitoring
-Task tool with subagent_type="reliability-droid-forge" \
-  description="Enhanced monitoring" \
-  prompt "Add monitoring to detect this issue class early"
-```
-
-### Pattern 3: Continuous Security
-
-```bash
-# Regular security audits
-Task tool with subagent_type="security-audit-droid-forge" \
-  description="Weekly security audit" \
-  prompt "Perform weekly security scan:
-- Dependency vulnerabilities
-- Code security issues
-- Configuration security
-- Access control validation
-Generate report with prioritized remediation"
-
-# Automated dependency updates
-Task tool with subagent_type="auto-pr-droid-forge" \
-  description="Security dependency updates" \
-  prompt "Create PRs for security-related dependency updates with full test cycle"
-```
+**WRONG:** Deploy without monitoring  
+**RIGHT:** Setup first: "Comprehensive monitoring: health checks, metrics, alerting, dashboards"
 
 ---
 
 ## Quick Reference
 
-### Droid Selection Cheatsheet
+### Droid Selection
 
-| Task Type | Primary Droid | Secondary Droid |
-|-----------|---------------|-----------------|
+| Task | Primary | Secondary |
+|------|---------|-----------|
 | Complex feature | manager-orchestrator | (delegates) |
 | React component | frontend-engineer | unit-test |
-| REST API | backend-engineer | security-audit |
-| Bug investigation | debugging-expert | (domain specialist) |
-| GitHub issue → PR | auto-pr | (multiple via iteration) |
-| Production incident | reliability | debugging-expert |
-| Security review | security-audit | - |
+| REST API | backend-engineer | security-assessment |
+| Bug investigation | debugging-assessment | domain specialist |
+| GitHub issue → PR | auto-pr | multiple via iteration |
+| Production incident | reliability | debugging-assessment |
+| Security review | security-assessment | - |
 | Test creation | unit-test | - |
 | Code formatting | biome | - |
 | Git operations | git-workflow-orchestrator | - |
 
-### Common Task Tool Patterns
+### Task Tool Pattern
 
 ```bash
-# Simple delegation
 Task tool with subagent_type="[droid-name]" \
-  description="[brief-description]" \
-  prompt "[detailed-instructions]"
-
-# With context from files
-Task tool with subagent_type="[droid-name]" \
-  description="[brief-description]" \
-  prompt "Using context from [file-path], [detailed-instructions]"
-
-# Multi-step workflow
-Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description="[workflow-description]" \
-  prompt "Coordinate [step1], [step2], [step3] across [droid-list]"
+  description="[brief]" \
+  prompt "[detailed instructions]"
 ```
 
-### Status Update Pattern
+### Status Update
 
 ```bash
 # Via Manager
 Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description="Update task status" \
-  prompt "Update task [task-id] to [status] in tasks/tasks-[prd-name].md"
+  prompt "Update task [id] to [status] in tasks/tasks-[prd].md"
 
-# Manual update
-sed -i 's/- \[ \] [task-id]/- [x] [task-id]/' tasks/tasks-[prd-name].md
+# Manual
+sed -i 's/- \[ \] [id]/- [x] [id]/' tasks/tasks-[prd].md
 ```
-
----
-
-## Configuration Reference
 
 ### Key Files
 
 | File | Purpose |
 |------|---------|
-| `droid-forge.yaml` | Main configuration: delegation rules, git workflow, performance settings |
-| `biome.json` | Code quality standards: formatting, linting rules |
-| `.pre-commit-config.yaml` | Pre-commit hooks configuration |
-| `tasks/tasks-*.md` | ai-dev-tasks task tracking files |
-| `.factory/droids/*.md` | Droid definitions and specifications |
+| `droid-forge.yaml` | Delegation rules, git workflow, performance |
+| `biome.json` | Code quality standards |
+| `.pre-commit-config.yaml` | Pre-commit hooks |
+| `tasks/tasks-*.md` | ai-dev-tasks tracking |
+| `.factory/droids/*.md` | Droid definitions |
 
-### Environment Variables
+### Environment
 
 ```bash
-# Factory.ai CLI
 FACTORY_API_KEY="your-api-key"
-
-# Droid Forge
 DROID_FORGE_CONFIG="./droid-forge.yaml"
 DROID_FORGE_TASKS_DIR="./tasks"
 ```
@@ -1284,167 +499,87 @@ DROID_FORGE_TASKS_DIR="./tasks"
 
 ## Troubleshooting
 
-### Issue: Droid not found
+**Droid not found:** `ls .factory/droids/[droid-name].md` | `grep -A 5 "locations:" droid-forge.yaml`
 
-**Solution:**
+**Task file not updating:** `head -20 tasks/tasks-[prd].md` | Manual: `sed -i 's/- \[ \] id/- [x] id/' tasks/...`
+
+**Delegation not working:** `grep -A 10 "delegation_rules:" droid-forge.yaml` | Use manager explicitly
+
+**PR iteration stuck:** `gh pr view [num] --json state,reviewDecision,statusCheckRollup` | Debug with debugging-assessment
+
+---
+
+## Advanced Patterns
+
+### Multi-Phase Development
+
 ```bash
-# Verify droid exists
-ls .factory/droids/[droid-name].md
-
-# Check droid locations in config
-grep -A 5 "locations:" droid-forge.yaml
-```
-
-### Issue: Task file not updating
-
-**Solution:**
-```bash
-# Verify task file format
-head -20 tasks/tasks-[prd-name].md
-
-# Manual update if needed
-sed -i 's/- \[ \] task-id/- [x] task-id/' tasks/tasks-[prd-name].md
-```
-
-### Issue: Delegation not working
-
-**Solution:**
-```bash
-# Check delegation rules
-grep -A 10 "delegation_rules:" droid-forge.yaml
-
-# Use manager explicitly
+# Phase 1: Architecture
 Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description="Manual delegation" \
-  prompt "Analyze task and delegate to appropriate droid: [task-description]"
+  prompt "Analyze PRD, create architecture for e-commerce checkout"
+
+# Phase 2-6: Backend, Frontend, Testing, Security, Performance
+# (Delegate each phase to appropriate specialists)
 ```
 
-### Issue: PR iteration stuck
+### Incident-Driven
 
-**Solution:**
 ```bash
-# Check PR status
-gh pr view [pr-number] --json state,reviewDecision,statusCheckRollup
+# 1. Respond: reliability-droid-forge
+# 2. Debug: debugging-assessment-droid-forge  
+# 3. Fix: domain specialist (backend/frontend)
+# 4. Test: unit-test-droid-forge
+# 5. Monitor: reliability-droid-forge
+```
 
-# Manual intervention
-Task tool with subagent_type="debugging-expert-droid-forge" \
-  description="Debug PR issue" \
-  prompt "Analyze why PR #[number] is stuck in iteration cycle"
+### Continuous Security
+
+```bash
+# Weekly: security-assessment-droid-forge
+# Automated updates: auto-pr-droid-forge for security dependencies
 ```
 
 ---
 
-## Optimization Results and Benefits
+## Changelog
 
-### Token Efficiency Improvements (v2.0)
+**Current**: v2.1.0  
+**Status**: Phase 4.0 (Git workflow orchestration) in progress
 
-The recent optimization of all 21 droids has delivered significant benefits:
-
-**Performance Metrics:**
-- **60% average token reduction** across all droids
-- **40% faster AI response times** due to reduced context
-- **100% functionality preservation** while improving efficiency
-- **Standardized format** improves consistency and maintainability
-
-**Specific Improvements by Category:**
-
-| Droid Category | Token Reduction | Response Time | Consistency |
-|----------------|-----------------|---------------|-------------|
-| Assessment Droids | 62% avg | 38% faster | Highly standardized |
-| Action Droids | 61% avg | 42% faster | Unified approach |
-| Infrastructure Droids | 58% avg | 35% faster | Improved reliability |
-
-**Key Optimizations:**
-- Eliminated redundant explanations and overlapping capabilities
-- Consolidated similar functionality across droids
-- Standardized to direct instruction format
-- Replaced conversational language with concise bullet points
-- Maintained all essential functionality while removing verbosity
-
-**Impact on One-Shot Mode:**
-- Faster execution cycles due to reduced token processing
-- Better AI comprehension with standardized formats
-- Improved reliability in automated workflows
-- Enhanced performance for iterative PR review cycles
+**Recent:**
+- Token optimization (v2.1): 50% reduction in AGENTS.md
+- Comprehensive auto-pr iterative review
+- Enhanced decision trees
+- Chaos engineering patterns
+- Security-first practices
 
 ---
 
-## Changelog and Versioning
+## Resources
 
-This guide follows the Droid Forge versioning:
-
-- **Current Version**: 0.1.0
-- **Last Updated**: Based on commit b7d7e8e
-- **Status**: Phase 4.0 (Git workflow orchestration) in progress
-
-### Recent Updates
-
-- ✅ Added comprehensive auto-pr iterative review documentation
-- ✅ Enhanced decision trees and practical examples
-- ✅ Added chaos engineering patterns
-- ✅ Included security-first best practices
-- ✅ Added troubleshooting section
-- ✅ Added optimization results and benefits section with performance metrics
-
----
-
-## Additional Resources
-
-### Documentation
-
-- **Main README**: [README.md](./README.md)
-- **Changelog**: [CHANGELOG.md](./CHANGELOG.md)
-- **License**: [LICENSE](./LICENSE)
-
-### External Resources
-
-- [Factory.ai Platform](https://factory.ai/)
-- [ai-dev-tasks Framework](https://github.com/snarktank/ai-dev-tasks)
-- [Biome Linter Documentation](https://biomejs.dev/)
-
-### Community
-
-- **Issues**: Report bugs and feature requests via GitHub issues
-- **Contributions**: Follow contributing guidelines in repository
-- **Discussion**: Join community discussions for best practices
+**Docs:** [README.md](./README.md) | [CHANGELOG.md](./CHANGELOG.md) | [LICENSE](./LICENSE)  
+**External:** [Factory.ai](https://factory.ai/) | [ai-dev-tasks](https://github.com/snarktank/ai-dev-tasks) | [Biome](https://biomejs.dev/)  
+**Community:** GitHub issues for bugs/features
 
 ---
 
 ## Summary
 
-Droid Forge provides a powerful meta-orchestration framework for AI-driven development. By following these guidelines:
+Droid Forge provides systematic AI-driven development:
 
-1. ✅ **Use ai-dev-tasks exclusively** for task management
-2. ✅ **Delegate intelligently** via the Task tool
-3. ✅ **Leverage specialist droids** for domain-specific work
-4. ✅ **Let manager orchestrate** complex multi-domain features
-5. ✅ **Utilize iterative review** with auto-pr for comprehensive automation
-6. ✅ **Follow conventions** in droid-forge.yaml and biome.json
-7. ✅ **Prioritize security** with regular audits
-8. ✅ **Test comprehensively** with unit and integration tests
-9. ✅ **Monitor proactively** with reliability droid
-10. ✅ **Document thoroughly** as part of development
+1. Use ai-dev-tasks exclusively
+2. Delegate intelligently via Task tool
+3. Leverage specialist droids
+4. Manager orchestrates complex work
+5. Auto-PR for full automation + iteration
+6. Follow droid-forge.yaml conventions
+7. Prioritize security (regular audits)
+8. Test comprehensively (unit + integration)
+9. Monitor proactively (reliability droid)
+10. Document thoroughly (part of development)
 
-You'll build robust, secure, and maintainable software efficiently with the power of coordinated AI droids.
+**Status**: Production-ready, team adoption enabled 🚀
 
 ---
 
-**Built with ❤️ and a lot of droids**
-
-## One-Shot Mode Advanced Usage
-
-### Error Recovery
-- Max 3 retries per sub-task
-- Automatic rollback on failure
-- Human escalation for critical issues
-
-### Quality Gates
-- Biome linting (auto-fix)
-- Security scanning
-- Type checking
-- 90% coverage threshold
-
-### PR Management
-- One PR per major task
-- Iterative review cycle (max 5 iterations)
-- CI/CD monitoring and auto-fix
+**Built with ❤️ and optimized droids**
