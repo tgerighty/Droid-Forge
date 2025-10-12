@@ -166,14 +166,7 @@ verify_target_directory() {
         print_success "Git repository detected"
     else
         print_warning "Not a git repository"
-        read -p "   Initialize git repository? (y/N): " -n 1 -r
-        echo ""
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            (cd "$target" && git init)
-            print_success "Initialized git repository"
-        else
-            print_info "Continuing without git initialization"
-        fi
+        print_info "Note: You can initialize git later if needed (git init)"
     fi
     
     # Check if Droid Forge is already installed
@@ -424,9 +417,14 @@ update_gitignore() {
     print_step "Updating .gitignore"
     
     local gitignore_entries=(
-        "# Droid Forge"
+        "# Droid Forge - Custom droids directory"
+        ".factory/"
+        ""
+        "# Droid Forge - Task working files"
         ".droid-forge/"
         "*.log"
+        ""
+        "# OS Files"
         ".DS_Store"
     )
     
