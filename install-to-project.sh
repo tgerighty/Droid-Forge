@@ -295,22 +295,9 @@ install_configuration() {
         print_warning "droid-forge.yaml not found in source"
     fi
     
-    # Create tasks directory with template
+    # Create tasks directory for ai-dev-tools PRDs
     mkdir -p "$target/tasks"
-    
-    # Create a simple task template
-    cat > "$target/tasks/template.md" << 'EOF'
-## Relevant Files
-
-- `path/to/file.ext` - Description
-
-## Tasks
-
-- [ ] 1.0 Major Task Category
-  - [ ] 1.1 Sub-task description
-  - [ ] 1.2 Another sub-task
-EOF
-    print_success "Created: tasks/template.md"
+    print_success "Created: tasks/ directory for PRDs"
 }
 
 # Install documentation
@@ -363,16 +350,29 @@ Review and customize `droid-forge.yaml` for your project:
 - Set quality gate thresholds
 - Customize one-shot mode settings
 
-### 4. Creating Tasks
+### 4. Creating PRDs and Tasks
 
-1. Copy the template:
+This project uses **ai-dev-tools** for structured PRD and task management:
+
+1. Install ai-dev-tools (if not already installed):
    ```bash
-   cp tasks/template.md tasks/my-feature.md
+   npm install -g ai-dev-tools
    ```
 
-2. Edit your task file with specific requirements
+2. Create a new PRD:
+   ```bash
+   ai-dev-tools prd create my-feature
+   ```
 
-3. Run the manager orchestrator to execute tasks
+3. This generates a structured PRD file in `tasks/` directory
+
+4. Run the manager orchestrator to process the PRD and execute tasks:
+   ```bash
+   droid
+   > Ask manager-orchestrator-droid-forge to analyze tasks/my-feature.md and execute
+   ```
+
+For more information on ai-dev-tools: https://github.com/nxio-ai/ai-dev-tools
 
 ## Files Installed
 
@@ -469,9 +469,11 @@ show_summary() {
     echo "3. Customize configuration:"
     echo "   nano droid-forge.yaml"
     echo ""
-    echo "4. Create your first task:"
-    echo "   cp tasks/template.md tasks/my-first-feature.md"
-    echo "   nano tasks/my-first-feature.md"
+    echo "4. Create your first PRD using ai-dev-tools:"
+    echo "   # Install ai-dev-tools if not already installed"
+    echo "   npm install -g ai-dev-tools"
+    echo "   # Create a new PRD"
+    echo "   ai-dev-tools prd create my-feature"
     echo ""
     echo "5. Start using one-shot mode:"
     echo "   droid"
