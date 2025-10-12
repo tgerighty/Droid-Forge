@@ -59,10 +59,45 @@ delegation_rules:
       droid_types: ["code-refactoring-droid-forge", "fix-issue", "code-review"]
       priority: 1
     
+    - pattern: "nextjs|next.js|app-router|server-components|server-actions"
+      capabilities: ["nextjs", "react", "frontend-framework", "server-rendering"]
+      droid_types: ["nextjs15-specialist-droid-forge"]
+      priority: 1
+
+    - pattern: "trpc|tanstack-query|react-query|type-safe-api"
+      capabilities: ["trpc", "api", "type-safe-api", "data-fetching", "caching"]
+      droid_types: ["trpc-tanstack-integration-droid-forge"]
+      priority: 1
+
+    - pattern: "drizzle|orm|database-schema|migrations"
+      capabilities: ["drizzle", "orm", "database", "postgresql", "schema"]
+      droid_types: ["drizzle-orm-specialist-droid-forge"]
+      priority: 1
+
+    - pattern: "typescript|type-safe|generics|strict-mode|type-coverage"
+      capabilities: ["typescript", "type-safety", "advanced-types", "full-stack-types"]
+      droid_types: ["typescript-integration-droid-forge"]
+      priority: 1
+
+    - pattern: "better-auth|authentication|auth|oauth|security"
+      capabilities: ["authentication", "security", "better-auth", "nextjs-auth"]
+      droid_types: ["better-auth-integration-droid-forge"]
+      priority: 1
+
+    - pattern: "valkey|redis|caching|cache-strategy"
+      capabilities: ["caching", "valkey", "redis", "performance-optimization"]
+      droid_types: ["valkey-caching-strategist-droid-forge"]
+      priority: 1
+
+    - pattern: "database-performance|postgresql|postgres18|query-optimization"
+      capabilities: ["database-performance", "postgresql", "query-tuning", "optimization"]
+      droid_types: ["database-performance-droid-forge"]
+      priority: 1
+
     - pattern: "typescript|type-safe|generics|strict-mode|type-coverage"
       capabilities: ["typescript", "type-safety", "advanced-types"]
       droid_types: ["typescript-professional-droid-forge"]
-      priority: 1
+      priority: 2
 
     - pattern: "test|spec|coverage|testing"
       capabilities: ["testing", "quality-assurance", "setup-comprehensive-testing"]
@@ -105,8 +140,8 @@ delegation_rules:
       priority: 9
 
     - pattern: "performance|optimize|speed|latency"
-      capabilities: ["performance-optimization", "caching", "monitoring"]
-      droid_types: ["implement-caching-strategy", "optimize-database-performance", "performance-audit"]
+      capabilities: ["performance-optimization", "caching", "monitoring", "assessment"]
+      droid_types: ["nextjs15-assessment-droid-forge", "trpc-assessment-droid-forge", "drizzle-assessment-droid-forge", "typescript-integration-assessment-droid-forge", "auth-assessment-droid-forge", "caching-assessment-droid-forge", "database-performance-assessment-droid-forge", "implement-caching-strategy", "optimize-database-performance", "performance-audit"]
       priority: 10
 
     - pattern: "dependency|package.*audit"
