@@ -119,87 +119,77 @@ install_core_droids() {
         print_info "Installing to user directory (~/.factory/droids)"
     fi
     
-    # List of core droids to install
-    local core_droids=(
-        "manager-orchestrator-droid-forge"
-        "task-manager-droid-forge"
-        "git-workflow-orchestrator-droid-forge"
-        "ai-dev-tasks-integrator-droid-forge"
-        "auto-pr-droid-forge"
-        "reliability-droid-forge"
-        "backend-engineer-droid-forge"
-        "frontend-engineer-droid-forge"
-        "debugging-expert-droid-forge"
-        "security-audit-droid-forge"
-        "biome-droid-forge"
-        "unit-test-droid-forge"
-    )
-    
     # Create the target directory if needed
     if [ "$INSTALL_LOCATION" = "user" ]; then
-        mkdir -p "$HOME/.factory/droids"
-        print_info "Created user droids directory at $HOME/.factory/droids"
+        TARGET_DIR="$HOME/.factory/droids"
+        mkdir -p "$TARGET_DIR"
+        print_info "Created user droids directory at $TARGET_DIR"
     else
-        mkdir -p ".factory/droids"
-        print_info "Created project droids directory at .factory/droids"
+        TARGET_DIR=".factory/droids"
+        mkdir -p "$TARGET_DIR"
+        print_info "Created project droids directory at $TARGET_DIR"
     fi
     
-    # Install each droid
-    for droid in "${core_droids[@]}"; do
-        print_info "Setting up $droid..."
-        
-        # Check if droid file exists in the repository
-        if [ -f ".factory/droids/${droid}.md" ]; then
-            # Check if target file already exists
-            if [ "$INSTALL_LOCATION" = "user" ]; then
-                TARGET_FILE="$HOME/.factory/droids/${droid}.md"
-            else
-                TARGET_FILE=".factory/droids/${droid}.md"
-            fi
-            
-            # If target file exists, check if we should replace it based on version
-            if [ -f "$TARGET_FILE" ]; then
-                # Extract version from repo file (first line should contain version)
-                REPO_VERSION=""
-                if [ -r ".factory/droids/${droid}.md" ]; then
-                    REPO_VERSION=$(grep -E "^version:" ".factory/droids/${droid}.md" | cut -d: -f2- | tr -d ' ')
-                fi
+    # Install all droids using wildcard
+    local droid_count=0
+    if [ -d ".factory/droids" ]; then
+        for droid_file in .factory/droids/*-droid-forge.md; do
+            if [ -f "$droid_file" ]; then
+                local droid_name=$(basename "$droid_file" .md)
+                local TARGET_FILE="$TARGET_DIR/$(basename "$droid_file")"
                 
-                # Extract version from target file
-                TARGET_VERSION=""
-                if [ -r "$TARGET_FILE" ]; then
-                    TARGET_VERSION=$(grep -E "^version:" "$TARGET_FILE" | cut -d: -f2- | tr -d ' ')
-                fi
+                print_info "Setting up $droid_name..."
                 
-                # Replace if repo version is newer or target doesn't have version info
-                if [ -n "$REPO_VERSION" ] && [ -n "$TARGET_VERSION" ]; then
-                    # Simple string comparison for version numbers (assuming semantic versioning format)
-                    if [ "$REPO_VERSION" \> "$TARGET_VERSION" ] 2>/dev/null; then
-                        cp ".factory/droids/${droid}.md" "$TARGET_FILE"
-                        print_success "Upgraded $droid (version $REPO_VERSION > $TARGET_VERSION)"
+                # If target file exists, check version
+                if [ -f "$TARGET_FILE" ]; then
+                    # Extract version from repo file
+                    REPO_VERSION=""
+                    if [ -r "$droid_file" ]; then
+                        REPO_VERSION=$(grep -E "^version:" "$droid_file" | cut -d: -f2- | tr -d ' ' | tr -d '"')
+                    fi
+                    
+                    # Extract version from target file
+                    TARGET_VERSION=""
+                    if [ -r "$TARGET_FILE" ]; then
+                        TARGET_VERSION=$(grep -E "^version:" "$TARGET_FILE" | cut -d: -f2- | tr -d ' ' | tr -d '"')
+                    fi
+                    
+                    # Replace if repo version is newer or target doesn't have version info
+                    if [ -n "$REPO_VERSION" ] && [ -n "$TARGET_VERSION" ]; then
+                        # Simple string comparison for version numbers
+                        if [ "$REPO_VERSION" \> "$TARGET_VERSION" ] 2>/dev/null; then
+                            cp "$droid_file" "$TARGET_FILE"
+                            print_success "Upgraded $droid_name (v$REPO_VERSION > v$TARGET_VERSION)"
+                        else
+                            cp "$droid_file" "$TARGET_FILE"
+                            print_success "Updated $droid_name (v$REPO_VERSION)"
+                        fi
                     else
-                        # Even if same version or older, copy to ensure consistency
-                        cp ".factory/droids/${droid}.md" "$TARGET_FILE"
-                        print_success "Set up $droid (file copied)"
+                        # If version info not found, always copy to ensure latest
+                        cp "$droid_file" "$TARGET_FILE"
+                        if [ -n "$REPO_VERSION" ]; then
+                            print_success "Installed $droid_name (v$REPO_VERSION)"
+                        else
+                            print_success "Installed $droid_name"
+                        fi
                     fi
                 else
-                    # If version info not found in either file, always copy repo version to ensure latest
-                    cp ".factory/droids/${droid}.md" "$TARGET_FILE"
-                    if [ -n "$REPO_VERSION" ]; then
-                        print_success "Set up $droid (version $REPO_VERSION)"
-                    else
-                        print_success "Set up $droid (file copied)"
-                    fi
+                    # File doesn't exist in target, just copy it
+                    cp "$droid_file" "$TARGET_FILE"
+                    print_success "Installed $droid_name"
                 fi
-            else
-                # File doesn't exist in target, just copy it
-                cp ".factory/droids/${droid}.md" "$TARGET_FILE"
-                print_success "Set up $droid"
+                
+                droid_count=$((droid_count + 1))
             fi
-        else
-            print_warning "Droid file not found: .factory/droids/${droid}.md"
-        fi
-    done
+        done
+    fi
+    
+    if [ $droid_count -eq 0 ]; then
+        print_error "No droids found in .factory/droids/"
+        exit 1
+    fi
+    
+    print_success "Installed $droid_count droids total"
 }
 
 # Configure droid-forge.yaml
@@ -224,12 +214,21 @@ configure_droid_forge() {
 run_tests() {
     print_info "Running initial tests..."
     
-    # Test droid installation
-    if [ -d "$HOME/.factory/droids" ] && [ "$(ls -A $HOME/.factory/droids 2>/dev/null)" ]; then
-        print_success "Droids installed successfully"
-        ls -la "$HOME/.factory/droids/"
+    # Test droid installation based on where they were installed
+    if [ "$INSTALL_LOCATION" = "user" ]; then
+        if [ -d "$HOME/.factory/droids" ] && [ "$(ls -A "$HOME/.factory/droids" 2>/dev/null)" ]; then
+            local droid_count=$(find "$HOME/.factory/droids" -name "*-droid-forge.md" 2>/dev/null | wc -l | tr -d ' ')
+            print_success "Droids installed successfully: $droid_count droids in $HOME/.factory/droids/"
+        else
+            print_error "No droids found in $HOME/.factory/droids/"
+        fi
     else
-        print_error "No droids found in $HOME/.factory/droids/"
+        if [ -d ".factory/droids" ] && [ "$(ls -A ".factory/droids" 2>/dev/null)" ]; then
+            local droid_count=$(find ".factory/droids" -name "*-droid-forge.md" 2>/dev/null | wc -l | tr -d ' ')
+            print_success "Droids installed successfully: $droid_count droids in .factory/droids/"
+        else
+            print_error "No droids found in .factory/droids/"
+        fi
     fi
 }
 
@@ -325,9 +324,9 @@ case "${1:-}" in
         
         if [ "$REPLY" = "2" ] || [ "$REPLY" = "3" ]; then
             # Remove droids from personal directory
-            if [ -d "~/.factory/droids" ]; then
+            if [ -d "$HOME/.factory/droids" ]; then
                 print_info "Removing droids from ~/.factory/droids..."
-                rm -f ~/.factory/droids/*-droid-forge.md
+                rm -f "$HOME/.factory/droids"/*-droid-forge.md
                 print_success "Droids removed from personal directory"
             fi
         fi
@@ -346,11 +345,19 @@ case "${1:-}" in
         fi
         
         # Check droids in personal directory
-        if [ -d "~/.factory/droids" ]; then
-            local droid_count=$(find ~/.factory/droids -name "*-droid-forge.md" | wc -l)
+        if [ -d "$HOME/.factory/droids" ]; then
+            droid_count=$(find "$HOME/.factory/droids" -name "*-droid-forge.md" 2>/dev/null | wc -l | tr -d ' ')
             print_success "Found $droid_count droids in personal directory"
         else
-            print_error "Personal droids directory missing"
+            print_info "Personal droids directory not found (optional)"
+        fi
+        
+        # Check droids in project directory
+        if [ -d ".factory/droids" ]; then
+            droid_count=$(find .factory/droids -name "*-droid-forge.md" 2>/dev/null | wc -l | tr -d ' ')
+            print_success "Found $droid_count droids in project directory"
+        else
+            print_info "Project droids directory not found (optional)"
         fi
         
         # Check configuration
