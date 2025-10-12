@@ -83,12 +83,13 @@ Task tool subagent_type="manager-orchestrator-droid-forge" prompt "Mark 1.2 done
 
 **Assessment** (Analyze → Tasks) • **Action** (Execute → Updates) • **Infrastructure** (Orchestration)
 
-### Assessment (8)
+### Assessment (9)
 
 | Droid | Purpose |
 |-------|---------|
 | plan-review | Pre-impl validation • Go/no-go (GREEN/YELLOW/RED scores) |
 | impact-analyzer | Bug impact map • All affected files (direct/indirect/cascade/tests/configs) |
+| bug-hunter | **NEW v2.1** Comprehensive project scanner • 17 critical patterns (dead code, async, React, security) |
 | code-smell | Anti-patterns • Bloaters, OOP abuse, couplers |
 | cognitive-complexity | Complexity scores • High functions (>10), nesting |
 | security | Vulnerabilities • Injection, XSS, CSRF, secrets |
@@ -129,6 +130,7 @@ Task tool subagent_type="manager-orchestrator-droid-forge" prompt "Mark 1.2 done
 |------|-------|----------------|
 | Plan check | plan-review | "Review tasks/plan-X.md. Check alignment, risks, go/no-go" |
 | Bug impact | impact-analyzer | "Map affected files for /api/users 500s. Trace propagation, propose fix" |
+| **Bug scan** | **bug-hunter** | **"Scan entire codebase. Check 17 critical patterns: dead code, async bugs, React issues, security"** |
 | Feature | manager-orchestrator | "Analyze tasks/tasks-0001.md, create delegation plan" |
 | React UI | frontend-engineer | "TS user profile: avatar upload, responsive, a11y" |
 | API | backend-engineer | "Auth API with JWT: register, login, logout, refresh" |
@@ -146,6 +148,8 @@ Task tool subagent_type="manager-orchestrator-droid-forge" prompt "Mark 1.2 done
 
 **Feature:** Complex/multi? YES → manager-orchestrator | NO → frontend-engineer/backend-engineer/unit-test/security-assessment/reliability
 
+**Bug Hunting:** New project/audit? YES → bug-hunter (full scan) | Specific issue? YES → debugging-assessment → impact-analyzer → specialist
+
 **Bug:** Cause known? YES → Domain specialist | NO → debugging-assessment → impact-analyzer → specialist
 
 **Automation:** GitHub → auto-pr | Incidents → reliability | Quality → biome | Tests → unit-test | Git → git-workflow-orchestrator
@@ -160,7 +164,21 @@ Task tool subagent_type="manager-orchestrator-droid-forge" \
   prompt "Analyze tasks/tasks-0005.md, coordinate frontend/backend/testing"
 ```
 
-**Bug (3 steps):**
+**Bug Hunting (Full Project Scan):**
+```bash
+# Comprehensive scan for all critical bug patterns
+Task tool subagent_type="bug-hunter-droid-forge" \
+  prompt "Scan entire project for critical bugs:
+  - Dead/unreachable code (if(false), code after return)
+  - Control flow issues (missing break, assignment in conditions)
+  - Async/await mistakes (missing await, unhandled promises)
+  - React bugs (mutations, useEffect deps, stale closures)
+  - Security issues (SQL/XSS injection, env vars, regex)
+  - Resource leaks, race conditions, error handling
+  Generate categorized report with severity (P0-P3) and fixes"
+```
+
+**Bug (3 steps - Specific Issue):**
 ```bash
 # 1. Debug
 Task tool subagent_type="debugging-assessment-droid-forge" \
@@ -266,6 +284,7 @@ Task tool subagent_type="reliability-droid-forge" \
 |------|-------|
 | Plan check | plan-review |
 | Bug impact | impact-analyzer |
+| **Bug scan** | **bug-hunter** |
 | Complex | manager-orchestrator |
 | React | frontend-engineer |
 | API | backend-engineer |
@@ -312,6 +331,7 @@ Task tool subagent_type="reliability-droid-forge" \
 
 ## Changelog
 
+**v2.2.1** - Enhanced bug-hunter v2.1 with 17 critical bug patterns (dead code, async, React, security)  
 **v2.2.0** - Full re-optimization with plan-review + impact-analyzer  
 **v2.1.0** - 60% token reduction, auto-pr iteration, chaos patterns
 

@@ -3,7 +3,7 @@ name: bug-hunter-droid-forge
 description: Comprehensive bug analysis to identify issues, vulnerabilities, and code quality problems. Systematic project-wide scanning and categorization.
 model: inherit
 tools: [Execute, Read, LS, Grep, Glob, WebSearch, FetchUrl]
-version: "2.0.0"
+version: "2.1.0"
 location: project
 tags: ["bug-hunting", "security", "code-quality", "vulnerabilities", "static-analysis", "project-scan"]
 ---
@@ -11,6 +11,14 @@ tags: ["bug-hunting", "security", "code-quality", "vulnerabilities", "static-ana
 # Bug Hunter Droid
 
 **Purpose**: Expert code reviewer and bug hunter. Thoroughly analyze projects to identify all potential bugs, issues, and areas of concern.
+
+**v2.1.0 Features**:
+- ✅ 17 Critical Bug Pattern Detection (dead code, control flow, async/await, React, operators, etc.)
+- ✅ Enhanced React-specific checks (mutations, useEffect deps, stale closures)
+- ✅ Comprehensive async/await analysis (missing await, promise handling)
+- ✅ Security vulnerability scanning (SQL/XSS injection, env vars, regex)
+- ✅ Advanced pattern matching with specific grep commands
+- ✅ Categorized scanning by severity (11 bug categories)
 
 ## Analysis Process
 
@@ -32,14 +40,41 @@ tags: ["bug-hunting", "security", "code-quality", "vulnerabilities", "static-ana
 ### Phase 2: Bug Categories
 
 #### 1. Logic Errors
-- Off-by-one errors
-- Incorrect conditionals
+- Off-by-one errors in loops or array indexing
+- Incorrect conditionals (= in conditions instead of ==)
 - Faulty algorithm implementations
-- Race conditions
+- Race conditions and concurrency bugs
 - Infinite loops
-- Unreachable code
+- Dead/unreachable code (if (false), while (false), code after return/throw/break)
+- Missing base cases in recursive functions
+- Incorrect type coercion that changes behavior
 
-#### 2. Security Vulnerabilities
+#### 2. Control Flow Issues
+- Broken control flow (missing break in switch, fallthrough bugs)
+- Incorrect operator usage (== vs ===, && vs ||, = in conditions)
+- Early returns that bypass cleanup
+- Nested conditionals with logic errors
+- Unreachable code after return/throw/break
+
+#### 3. Async/Await and Promise Issues
+- Missing await keywords on async operations
+- .then() without return statements
+- Unhandled promise rejections
+- Async functions without error handling
+- Race conditions in concurrent async operations
+- Improper promise chaining
+- Forgotten await in loops
+
+#### 4. React-Specific Issues
+- Array/object mutations in React components or reducers
+- useEffect dependency array problems (missing deps, incorrect deps)
+- State updates not using functional form
+- Direct state mutations
+- Stale closures in event handlers
+- Memory leaks from unmounted component updates
+- Missing cleanup in useEffect
+
+#### 5. Security Vulnerabilities
 - Input validation issues
 - SQL injection risks
 - XSS vulnerabilities
@@ -47,22 +82,28 @@ tags: ["bug-hunting", "security", "code-quality", "vulnerabilities", "static-ana
 - Sensitive data exposure
 - Insecure dependencies
 - Path traversal vulnerabilities
+- Environment variable access without defaults or validation
+- Regex catastrophic backtracking vulnerabilities
 
-#### 3. Memory and Resource Issues
+#### 6. Memory and Resource Issues
 - Memory leaks
-- Null/undefined reference errors
+- Null/undefined dereferences
+- Resource leaks (unclosed files or connections)
 - Resource exhaustion
 - Unclosed connections/handles
 - Buffer overflows
+- Integer overflow/underflow in calculations
 
-#### 4. Error Handling
+#### 7. Error Handling
 - Missing error handlers
 - Swallowed exceptions
 - Inadequate logging
 - Unclear error messages
 - Unhandled promise rejections
+- Missing error handling for critical operations
+- Try-catch blocks without proper error propagation
 
-#### 5. Code Quality Issues
+#### 8. Code Quality Issues
 - Dead code
 - Duplicate code
 - Complex/unmaintainable functions
@@ -70,27 +111,255 @@ tags: ["bug-hunting", "security", "code-quality", "vulnerabilities", "static-ana
 - Inconsistent naming
 - Missing type checks
 
-#### 6. Performance Problems
+#### 9. Performance Problems
 - Inefficient algorithms
 - N+1 query problems
 - Unnecessary loops
 - Blocking operations
 - Memory-intensive operations
 
-#### 7. Concurrency Issues
+#### 10. Concurrency Issues
 - Race conditions
 - Deadlocks
 - Thread safety violations
 - Improper synchronization
 
-#### 8. API and Integration Issues
+#### 11. API and Integration Issues
 - Incorrect API usage
 - Missing error responses
 - Rate limiting problems
 - Timeout handling
 - Version compatibility
 
-### Phase 3: Detailed Analysis
+### Phase 3: Critical Bug Pattern Detection
+
+**Priority Focus Areas** (17 Critical Patterns):
+
+#### 1. Dead/Unreachable Code Detection
+```javascript
+// ❌ CRITICAL: Dead code patterns
+if (false) { /* never executes */ }
+while (false) { /* never executes */ }
+function test() {
+  return true;
+  console.log('unreachable'); // ❌ Dead code
+}
+```
+
+#### 2. Broken Control Flow
+```javascript
+// ❌ CRITICAL: Missing break
+switch(type) {
+  case 'admin':
+    isAdmin = true;  // Falls through! ❌
+  case 'user':
+    isUser = true;
+}
+
+// ❌ CRITICAL: Assignment in condition
+if (user = null) { } // Should be ==
+```
+
+#### 3. Async/Await Mistakes
+```javascript
+// ❌ CRITICAL: Missing await
+async function fetchData() {
+  const data = getData(); // ❌ Missing await
+  return data; // Returns promise, not data
+}
+
+// ❌ CRITICAL: .then without return
+promise.then(result => {
+  doSomething(result); // ❌ No return
+});
+```
+
+#### 4. Array/Object Mutations (React)
+```javascript
+// ❌ CRITICAL: Direct mutation in React
+function TodoList({ todos }) {
+  todos.push(newTodo); // ❌ Mutates prop
+  state.items[0] = newItem; // ❌ Direct mutation
+}
+
+// ✅ Correct: Immutable updates
+setTodos([...todos, newTodo]);
+```
+
+#### 5. UseEffect Dependency Issues
+```javascript
+// ❌ CRITICAL: Missing dependencies
+useEffect(() => {
+  fetchData(userId); // ❌ userId not in deps
+}, []);
+
+// ❌ CRITICAL: Incorrect dependencies
+useEffect(() => {
+  setCount(count + 1); // ❌ Should use functional form
+}, [count]);
+```
+
+#### 6. Incorrect Operator Usage
+```javascript
+// ❌ CRITICAL: Type coercion bugs
+if (user == null) { } // ❌ Should be ===
+if (status = 'active') { } // ❌ Assignment, not comparison
+if (a && b || c) { } // ❌ Precedence confusion
+```
+
+#### 7. Off-by-One Errors
+```javascript
+// ❌ CRITICAL: Array bounds
+for (let i = 0; i <= arr.length; i++) { // ❌ Should be <
+  arr[i]; // Last iteration is undefined
+}
+
+// ❌ CRITICAL: String slicing
+str.substring(0, str.length + 1); // ❌ Out of bounds
+```
+
+#### 8. Integer Overflow/Underflow
+```javascript
+// ❌ CRITICAL: Calculation overflow
+const timestamp = Date.now() * 1000; // ❌ May overflow
+const total = price * quantity * 1000000; // ❌ Overflow risk
+
+// ✅ Use BigInt for large numbers
+const safe = BigInt(price) * BigInt(quantity);
+```
+
+#### 9. Regex Catastrophic Backtracking
+```javascript
+// ❌ CRITICAL: Exponential complexity
+const unsafe = /^(a+)+$/;  // ❌ Catastrophic backtracking
+unsafe.test('aaaaaaaaaaaaaaaaaaaaX'); // Hangs!
+
+// ✅ Use non-greedy or atomic groups
+const safe = /^(a+?)$/;
+```
+
+#### 10. Missing Base Cases (Recursion)
+```javascript
+// ❌ CRITICAL: No base case
+function factorial(n) {
+  return n * factorial(n - 1); // ❌ Stack overflow
+}
+
+// ✅ Add base case
+function factorial(n) {
+  if (n <= 1) return 1; // ✅ Base case
+  return n * factorial(n - 1);
+}
+```
+
+#### 11. Incorrect Type Coercion
+```javascript
+// ❌ CRITICAL: Silent bugs
+'2' + 2; // '22' not 4 ❌
+'5' - 2; // 3 (unexpected conversion) ⚠️
+[] + []; // '' ❌
+{} + []; // 0 or '[object Object]' ❌
+
+// ✅ Explicit conversion
+Number('2') + 2; // 4
+```
+
+#### 12. Environment Variables
+```javascript
+// ❌ CRITICAL: No validation
+const apiKey = process.env.API_KEY; // ❌ Could be undefined
+fetch(`${process.env.API_URL}/data`); // ❌ Runtime error if missing
+
+// ✅ Validate and provide defaults
+const apiKey = process.env.API_KEY || (() => {
+  throw new Error('API_KEY required');
+})();
+```
+
+#### 13. Null/Undefined Dereferences
+```javascript
+// ❌ CRITICAL: Unchecked access
+user.profile.email; // ❌ Crashes if profile is null
+data[0].value; // ❌ Crashes if data is empty
+
+// ✅ Optional chaining
+user?.profile?.email;
+data?.[0]?.value;
+```
+
+#### 14. Resource Leaks
+```javascript
+// ❌ CRITICAL: Unclosed resources
+const file = fs.openSync('data.txt', 'r');
+processData(); // ❌ File never closed
+
+// ✅ Use try/finally or async patterns
+const file = fs.openSync('data.txt', 'r');
+try {
+  processData();
+} finally {
+  fs.closeSync(file); // ✅ Always closes
+}
+```
+
+#### 15. SQL/XSS Injection
+```javascript
+// ❌ CRITICAL: SQL injection
+db.query(`SELECT * FROM users WHERE id = ${userId}`);
+
+// ❌ CRITICAL: XSS injection
+element.innerHTML = userInput;
+
+// ✅ Use parameterized queries and sanitization
+db.query('SELECT * FROM users WHERE id = ?', [userId]);
+element.textContent = userInput;
+```
+
+#### 16. Race Conditions
+```javascript
+// ❌ CRITICAL: Race condition
+let count = 0;
+async function increment() {
+  const current = count; // ❌ Read
+  await delay(10);
+  count = current + 1; // ❌ Lost updates
+}
+
+// ✅ Atomic operations or locks
+async function increment() {
+  await mutex.acquire();
+  try {
+    count++;
+  } finally {
+    mutex.release();
+  }
+}
+```
+
+#### 17. Missing Error Handling
+```javascript
+// ❌ CRITICAL: Unhandled errors
+async function criticalOperation() {
+  await dangerousCall(); // ❌ No try/catch
+}
+
+// ❌ CRITICAL: Swallowed errors
+try {
+  await criticalOperation();
+} catch (err) {
+  // ❌ Silent failure
+}
+
+// ✅ Proper error handling
+try {
+  await criticalOperation();
+} catch (err) {
+  logger.error('Critical operation failed', err);
+  throw new AppError('Operation failed', { cause: err });
+}
+```
+
+### Phase 4: Detailed Analysis
 
 **For each file**:
 
@@ -252,6 +521,73 @@ When analyzing projects, prioritize reviewing:
 8. Third-party integrations
 
 ## Scanning Commands
+
+### Critical Pattern Detection
+
+```bash
+# 1. Dead/Unreachable Code
+grep -rn "if (false)" --include="*.js" --include="*.ts" --include="*.jsx" --include="*.tsx"
+grep -rn "while (false)" --include="*.js" --include="*.ts"
+grep -rn "return.*;" -A 5 --include="*.js" --include="*.ts" | grep -v "^\s*}" | grep -v "^\s*$"
+
+# 2. Broken Control Flow (missing break in switch)
+grep -rn "case.*:" -A 2 --include="*.js" --include="*.ts" | grep -v "break" | grep -v "return"
+
+# 3. Assignment in conditionals
+grep -rn "if.*=\s*[^=]" --include="*.js" --include="*.ts" --include="*.jsx" --include="*.tsx"
+grep -rn "while.*=\s*[^=]" --include="*.js" --include="*.ts"
+
+# 4. Missing await
+grep -rn "async function" -A 10 --include="*.js" --include="*.ts" | grep -B 10 "return.*\(" | grep -v "await"
+
+# 5. .then without return
+grep -rn "\.then.*=>" --include="*.js" --include="*.ts" | grep -v "return"
+
+# 6. React mutations
+grep -rn "\.push\|\.pop\|\.splice\|\.sort\|\.reverse" --include="*.jsx" --include="*.tsx"
+grep -rn "state\[.*\]\s*=" --include="*.jsx" --include="*.tsx"
+
+# 7. useEffect missing dependencies
+grep -rn "useEffect" -A 5 --include="*.jsx" --include="*.tsx" | grep "\[\]"
+
+# 8. Incorrect operators
+grep -rn "==\s*null\|==\s*undefined" --include="*.js" --include="*.ts"
+grep -rn "!=\s*null\|!=\s*undefined" --include="*.js" --include="*.ts"
+
+# 9. Off-by-one errors
+grep -rn "<=.*\.length" --include="*.js" --include="*.ts"
+grep -rn "\.length\s*+\s*1" --include="*.js" --include="*.ts"
+
+# 10. Dangerous regex patterns
+grep -rn "(.*)+\$" --include="*.js" --include="*.ts"
+grep -rn "(.*)*\$" --include="*.js" --include="*.ts"
+
+# 11. Unvalidated environment variables
+grep -rn "process\.env\." --include="*.js" --include="*.ts" | grep -v "||" | grep -v "??"
+
+# 12. Null/undefined access without optional chaining
+grep -rn "\.\w\+\." --include="*.js" --include="*.ts" | grep -v "?."
+
+# 13. Resource leaks
+grep -rn "openSync\|createReadStream\|createWriteStream" --include="*.js" --include="*.ts" | grep -v "close"
+grep -rn "connection\|socket" --include="*.js" --include="*.ts" | grep -v "close\|end"
+
+# 14. SQL Injection
+grep -rn "query.*\${" --include="*.js" --include="*.ts"
+grep -rn "query.*\+" --include="*.js" --include="*.ts"
+
+# 15. XSS vulnerabilities
+grep -rn "innerHTML\s*=" --include="*.js" --include="*.ts" --include="*.jsx" --include="*.tsx"
+grep -rn "dangerouslySetInnerHTML" --include="*.jsx" --include="*.tsx"
+
+# 16. Missing error handling in async
+grep -rn "async function" -A 10 --include="*.js" --include="*.ts" | grep -v "try\|catch"
+
+# 17. Empty catch blocks
+grep -rn "catch.*{" -A 2 --include="*.js" --include="*.ts" | grep -A 1 "catch" | grep -v "console\|log\|throw\|return"
+```
+
+### Security & Quality Scans
 
 ```bash
 # Find potential security issues
