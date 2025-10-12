@@ -28,7 +28,7 @@ tags: ["typescript", "assessment", "type-safety", "strict-mode", "type-coverage"
 - Fix: Add explicit type annotations
 
 **Null/Undefined Issues**: Missing null checks and undefined handling
-- Impact: 🟠 High | Detect: rg "\.|\?\.|\!\." --type ts
+- Impact: 🟠 High | Detect: rg "\.[a-zA-Z_][a-zA-Z0-9_]*(\()?|\?\.[a-zA-Z_][a-zA-Z0-9_]*(\()?|!\.[a-zA-Z_][a-zA-Z0-9_]*(\()?" --type ts
 - Fix: Strict null checking, optional chaining
 
 ### Strict Mode Compliance

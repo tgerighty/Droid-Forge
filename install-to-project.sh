@@ -114,7 +114,7 @@ get_target_directory() {
         echo "Enter the full path to your project directory:" >&2
         echo "(e.g., /Users/you/projects/my-app or ~/projects/my-app)" >&2
         echo "" >&2
-        read -p "Target directory: " target
+        read -r -p "Target directory: " target
         
         # Expand tilde
         target="${target/#\~/$HOME}"
@@ -202,7 +202,8 @@ install_droids() {
     if [ -d "$SOURCE_DIR/.factory/droids" ]; then
         for droid_file in "$SOURCE_DIR/.factory/droids"/*.md; do
             if [ -f "$droid_file" ]; then
-                local droid_name=$(basename "$droid_file")
+                local droid_name
+                droid_name=$(basename "$droid_file")
                 cp "$droid_file" "$target/.factory/droids/"
                 print_success "Installed: $droid_name"
                 droid_count=$((droid_count + 1))
@@ -232,7 +233,8 @@ install_tools() {
     if [ -d "$SOURCE_DIR/tools" ]; then
         for tool_file in "$SOURCE_DIR/tools"/*.sh; do
             if [ -f "$tool_file" ]; then
-                local tool_name=$(basename "$tool_file")
+                local tool_name
+                tool_name=$(basename "$tool_file")
                 cp "$tool_file" "$target/tools/"
                 chmod +x "$target/tools/$tool_name"
                 print_success "Installed: $tool_name"
@@ -258,7 +260,8 @@ install_tests() {
     if [ -d "$SOURCE_DIR/tests" ]; then
         for test_file in "$SOURCE_DIR/tests"/*.sh; do
             if [ -f "$test_file" ]; then
-                local test_name=$(basename "$test_file")
+                local test_name
+                test_name=$(basename "$test_file")
                 cp "$test_file" "$target/tests/"
                 chmod +x "$target/tests/$test_name"
                 test_count=$((test_count + 1))
@@ -269,7 +272,8 @@ install_tests() {
         if [ -d "$SOURCE_DIR/tests/integration" ]; then
             for test_file in "$SOURCE_DIR/tests/integration"/*.sh; do
                 if [ -f "$test_file" ]; then
-                    local test_name=$(basename "$test_file")
+                    local test_name
+                    test_name=$(basename "$test_file")
                     cp "$test_file" "$target/tests/integration/"
                     chmod +x "$target/tests/integration/$test_name"
                     test_count=$((test_count + 1))

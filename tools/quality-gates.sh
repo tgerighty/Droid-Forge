@@ -1,6 +1,5 @@
 #!/bin/bash
 # Quality Gates - Linting, Formatting, Security, Type Checking (Tasks 3.1-3.11)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Biome linting with auto-fix
 run_biome_lint() {
