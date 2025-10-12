@@ -350,29 +350,32 @@ Review and customize `droid-forge.yaml` for your project:
 - Set quality gate thresholds
 - Customize one-shot mode settings
 
-### 4. Creating PRDs and Tasks
+### 4. Getting Started with Your First Feature
 
-This project uses **ai-dev-tools** for structured PRD and task management:
+The **manager-orchestrator-droid-forge** will guide you through the entire process:
 
-1. Install ai-dev-tools (if not already installed):
-   ```bash
-   npm install -g ai-dev-tools
-   ```
+```bash
+droid
+> Ask manager-orchestrator-droid-forge to help me create a new feature
+```
 
-2. Create a new PRD:
-   ```bash
-   ai-dev-tools prd create my-feature
-   ```
+**The manager orchestrator will:**
 
-3. This generates a structured PRD file in `tasks/` directory
+1. **Guide PRD Creation**: Help you install ai-dev-tools and create a structured PRD
+2. **Task Breakdown**: Analyze your PRD and break it into actionable tasks
+3. **Mode Selection**: Ask if you want one-shot (autonomous) or iterative (with confirmations)
+4. **Execute**: Coordinate specialist droids to implement your feature
+5. **Quality Gates**: Run tests, security checks, and linting automatically
+6. **PR Creation**: Generate pull request with all changes (if configured)
 
-4. Run the manager orchestrator to process the PRD and execute tasks:
-   ```bash
-   droid
-   > Ask manager-orchestrator-droid-forge to analyze tasks/my-feature.md and execute
-   ```
+**Example Prompts:**
+- "Help me create a new authentication feature"
+- "Analyze tasks/my-feature.md and execute in one-shot mode"
+- "I need to add a dark mode toggle - guide me through it"
 
-For more information on ai-dev-tools: https://github.com/nxio-ai/ai-dev-tools
+**ai-dev-tools Integration:**
+This project uses [ai-dev-tools](https://github.com/nxio-ai/ai-dev-tools) for PRD management.
+The manager will handle installation and setup automatically when needed.
 
 ## Files Installed
 
@@ -469,15 +472,15 @@ show_summary() {
     echo "3. Customize configuration:"
     echo "   nano droid-forge.yaml"
     echo ""
-    echo "4. Create your first PRD using ai-dev-tools:"
-    echo "   # Install ai-dev-tools if not already installed"
-    echo "   npm install -g ai-dev-tools"
-    echo "   # Create a new PRD"
-    echo "   ai-dev-tools prd create my-feature"
-    echo ""
-    echo "5. Start using one-shot mode:"
+    echo "4. Start with the manager orchestrator:"
     echo "   droid"
-    echo "   > Ask manager-orchestrator-droid-forge to analyze and execute my tasks"
+    echo "   > Ask manager-orchestrator-droid-forge to help me create a new feature"
+    echo ""
+    echo "   The manager will guide you through:"
+    echo "   - Installing ai-dev-tools (if needed)"
+    echo "   - Creating a structured PRD"
+    echo "   - Breaking down tasks"
+    echo "   - Executing in one-shot or iterative mode"
     echo ""
     
     print_success "Happy autonomous developing! 🚀"
