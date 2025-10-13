@@ -2,7 +2,7 @@
 name: valkey-caching-strategist-droid-forge
 description: Valkey (Redis) caching - strategies, TTL, invalidation, Next.js/tRPC optimization
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: "2.1.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-01-12"

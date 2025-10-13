@@ -2,7 +2,7 @@
 name: task-manager-droid-forge
 description: Atomic task lifecycle management with file locking and status tracking
 model: inherit
-tools: [Read, Edit, MultiEdit, LS, Create, Grep]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
 version: "2.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

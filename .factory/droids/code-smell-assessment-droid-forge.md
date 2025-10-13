@@ -2,7 +2,7 @@
 name: code-smell-assessment-droid-forge
 description: Detects and prioritizes code smells, anti-patterns, and technical debt for refactoring planning. Assessment-only, no code modifications.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task]
 version: "1.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

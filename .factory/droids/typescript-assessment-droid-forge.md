@@ -2,7 +2,7 @@
 name: typescript-assessment-droid-forge
 description: Analyzes TypeScript type safety, strict mode compliance, and type coverage. Identifies type-related issues and creates improvement tasks.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob, WebSearch]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task, TodoWrite]
 version: "1.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

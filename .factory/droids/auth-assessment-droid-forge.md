@@ -2,7 +2,7 @@
 name: auth-assessment-droid-forge
 description: Authentication assessment specialist for analyzing security patterns, Better Auth implementation, and identifying authentication vulnerabilities and optimization opportunities.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task, TodoWrite]
 version: "2.1.0"
 location: project
 tags: ["authentication", "security", "auth-vulnerabilities", "session-management", "jwt", "oauth", "better-auth"]

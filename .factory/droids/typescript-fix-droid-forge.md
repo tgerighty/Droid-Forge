@@ -2,7 +2,7 @@
 name: typescript-fix-droid-forge
 description: TypeScript type safety improvement specialist - implements type fixes from assessment findings with task status tracking
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: "1.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

@@ -2,7 +2,7 @@
 name: database-performance-droid-forge
 description: PostgreSQL 18 performance optimization - query tuning, indexing, connection pooling, monitoring
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: "2.1.0"
 createdAt: "2025-01-12"
 updatedAt: "2025-01-12"

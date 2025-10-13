@@ -2,7 +2,7 @@
 name: typescript-professional-droid-forge
 description: TypeScript specialist for type-safe development, advanced TypeScript patterns, and professional-grade TypeScript codebases
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
 version: "2.1.0"
 location: project
 tags: ["typescript", "type-safety", "strict-mode", "generics", "advanced-types", "tsconfig"]

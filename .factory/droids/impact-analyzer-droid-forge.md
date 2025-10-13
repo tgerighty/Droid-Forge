@@ -2,7 +2,7 @@
 name: impact-analyzer-droid-forge
 description: Bug impact analyst. Maps all affected files (direct, indirect, cascading), traces propagation, identifies root cause, proposes minimal fixes with test requirements.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
 version: "1.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"
