@@ -2,7 +2,7 @@
 name: database-performance-assessment-droid-forge
 description: Database performance assessment specialist for analyzing PostgreSQL 18 performance, query optimization opportunities, and identifying database bottlenecks.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task]
 version: "2.1.0"
 location: project
 tags: ["database-performance", "postgresql", "query-optimization", "performance-tuning", "bottleneck-analysis", "database-monitoring"]

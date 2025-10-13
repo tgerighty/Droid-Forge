@@ -2,7 +2,7 @@
 name: nextjs15-specialist-droid-forge
 description: Next.js 15 specialist for App Router, Server Components, Server Actions, and modern Next.js patterns with tRPC integration.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: "2.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

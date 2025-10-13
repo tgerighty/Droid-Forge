@@ -2,7 +2,7 @@
 name: test-assessment-droid-forge
 description: Analyzes test coverage, quality, and gaps. Creates prioritized testing tasks to improve code reliability.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task]
 version: "1.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

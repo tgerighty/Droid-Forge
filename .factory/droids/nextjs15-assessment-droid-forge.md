@@ -2,7 +2,7 @@
 name: nextjs15-assessment-droid-forge
 description: Next.js 15 assessment specialist for analyzing App Router implementation, Server Components usage, performance patterns, and identifying optimization opportunities.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob, Create, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task, TodoWrite]
 version: "2.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

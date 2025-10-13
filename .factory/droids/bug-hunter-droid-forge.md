@@ -2,7 +2,7 @@
 name: bug-hunter-droid-forge
 description: Comprehensive bug analysis to identify issues, vulnerabilities, and code quality problems. Systematic project-wide scanning and categorization.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task, TodoWrite]
 version: "2.2.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

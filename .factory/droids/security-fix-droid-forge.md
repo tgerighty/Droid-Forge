@@ -2,7 +2,7 @@
 name: security-fix-droid-forge
 description: Security vulnerability remediation specialist. Implements fixes from security assessment findings with task status tracking.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: "2.1.0"
 location: project
 tags: ["security", "vulnerability-fix", "remediation", "security-patches", "security-audit", "cve-fixes"]

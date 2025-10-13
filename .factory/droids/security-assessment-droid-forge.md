@@ -2,7 +2,7 @@
 name: security-assessment-droid-forge
 description: Detects security vulnerabilities and creates prioritized remediation tasks. Covers injection flaws, authentication issues, dependency vulnerabilities.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob, WebSearch]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task, TodoWrite]
 version: "1.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

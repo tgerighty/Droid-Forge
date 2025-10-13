@@ -2,7 +2,7 @@
 name: frontend-engineer-droid-forge
 description: Frontend development specialist for React/Next.js components, responsive design, accessibility, and UI/UX implementation.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: "2.1.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

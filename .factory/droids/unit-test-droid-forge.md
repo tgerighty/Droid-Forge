@@ -2,7 +2,7 @@
 name: unit-test-droid-forge
 description: Test execution and test writing specialist. Writes tests, runs test suites, achieves coverage targets, and validates functionality.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: "2.1.0"
 location: project
 tags: ["unit-testing", "test-automation", "coverage", "tdd", "bdd", "jest", "vitest", "testing"]
@@ -49,28 +49,11 @@ export default defineConfig({
     setupFiles: ['./tests/setup.ts'],
     coverage: {
       provider: 'c8',
-      reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/',
-        'tests/',
-        '**/*.d.ts',
-        '**/*.config.*',
-      ],
-      thresholds: {
-        global: {
-          branches: 80,
-          functions: 80,
-          lines: 80,
-          statements: 80,
-        },
-      },
+      reporter: ['text', 'json'],
+      thresholds: { global: { branches: 80, functions: 80, lines: 80, statements: 80 } },
     },
   },
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, './src'),
-    },
-  },
+  resolve: { alias: { '@': resolve(__dirname, './src') } },
 });
 ```
 

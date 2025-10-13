@@ -2,7 +2,7 @@
 name: auto-pr-droid-forge
 description: Automated Pull Request generation and issue resolution with iterative review cycles. Handles complete issue-to-PR workflow.
 model: inherit
-tools: [Read, Grep, Glob, LS, Execute, Edit, MultiEdit, Create, WebSearch, FetchUrl, TodoWrite]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: "1.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

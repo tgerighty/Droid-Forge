@@ -2,7 +2,7 @@
 name: better-auth-integration-droid-forge
 description: Better Auth integration - OAuth, sessions, tRPC context, Next.js middleware
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: "2.1.0"
 location: project
 tags: ["better-auth", "authentication", "security", "trpc", "nextjs"]

@@ -2,7 +2,7 @@
 name: cognitive-complexity-assessment-droid-forge
 description: Measures code understandability and mental effort. Identifies complex code requiring refactoring for better maintainability.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob, WebSearch]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task]
 version: "1.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

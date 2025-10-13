@@ -2,7 +2,7 @@
 name: trpc-tanstack-integration-droid-forge
 description: tRPC + TanStack Query integration specialist for type-safe API development, cache optimization, and modern data-fetching patterns.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: "2.1.0"
 location: project
 tags: ["trpc", "tanstack-query", "react-query", "typescript", "api", "cache", "data-fetching", "type-safe"]

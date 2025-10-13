@@ -2,7 +2,7 @@
 name: typescript-integration-droid-forge
 description: Full-stack TypeScript integration specialist for end-to-end type safety, advanced type patterns, and modern TypeScript development practices.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: "2.1.0"
 location: project
 tags: ["typescript", "full-stack", "type-safety", "integration", "advanced-types", "generics", "type-inference"]

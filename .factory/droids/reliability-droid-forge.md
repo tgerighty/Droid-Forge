@@ -2,7 +2,7 @@
 name: reliability-droid-forge
 description: System reliability, incident management, and operational excellence specialist
 model: inherit
-tools: [Read, Grep, Glob, LS, Execute, Edit, MultiEdit, Create, WebSearch, FetchUrl, TodoWrite]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: v1
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

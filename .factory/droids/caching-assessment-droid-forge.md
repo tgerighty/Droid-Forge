@@ -2,7 +2,7 @@
 name: caching-assessment-droid-forge
 description: Caching assessment specialist for analyzing cache strategies, performance optimization, and identifying caching bottlenecks and improvement opportunities.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task]
 version: "2.1.0"
 location: project
 tags: ["caching", "performance-optimization", "redis", "cache-strategy", "cache-invalidation", "performance-analysis"]

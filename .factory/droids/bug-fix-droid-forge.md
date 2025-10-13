@@ -2,7 +2,7 @@
 name: bug-fix-droid-forge
 description: Bug fix implementation specialist - executes bug fixes from debugging assessment with task tracking
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
 version: "1.0.0"
 createdAt: "2025-01-12"
 updatedAt: "2025-01-12"

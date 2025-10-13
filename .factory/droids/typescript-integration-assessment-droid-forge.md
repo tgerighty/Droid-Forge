@@ -2,7 +2,7 @@
 name: typescript-integration-assessment-droid-forge
 description: TypeScript integration assessment specialist for analyzing end-to-end type safety, advanced type patterns, and identifying type system optimization opportunities.
 model: inherit
-tools: [Execute, Read, LS, Grep, Glob, Create, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task]
 version: "2.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"
