@@ -414,10 +414,10 @@ EOF
 update_gitignore() {
     local target="$1"
     
-    print_step "Updating .gitignore"
+    print_step "Updating .gitignore for project installation"
     
     local gitignore_entries=(
-        "# Droid Forge - Custom droids directory"
+        "# Droid Forge - Project-specific droids directory"
         ".factory/"
         ""
         "# Droid Forge - Task working files"
@@ -443,7 +443,7 @@ update_gitignore() {
         for entry in "${gitignore_entries[@]}"; do
             echo "$entry" >> "$gitignore_file"
         done
-        print_success "Updated .gitignore with Droid Forge entries"
+        print_success "Updated .gitignore with Droid Forge entries for project installation"
     else
         print_info ".gitignore already contains Droid Forge entries"
     fi

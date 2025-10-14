@@ -73,73 +73,46 @@ const schemaChecks = {
 
 ### Query Performance Analysis
 ```typescript
-// Performance assessment criteria
 const performanceChecks = {
-  queryEfficiency: {
-    complexQueries: 'Complex query optimization',
-    joinStrategies: 'Efficient join implementations',
-    subqueryOptimization: 'Subquery vs join analysis',
-    aggregateFunctions: 'Aggregate function optimization'
-  },
-  indexingAnalysis: {
-    indexCoverage: 'Comprehensive index coverage',
-    indexUsage: 'Actual index usage statistics',
-    missingIndexes: 'Identified missing indexes',
-    redundantIndexes: 'Redundant or unused indexes'
-  },
-  nplusOneDetection: {
-    queryBatching: 'Query batching implemented',
-    loadingStrategies: 'Efficient data loading patterns',
-    relationshipLoading: 'Proper relationship loading',
-    prefetchingOptimization: 'Intelligent prefetching'
-  }
+  queryEfficiency: ['complexQueries', 'joinStrategies', 'subqueryOptimization', 'aggregateFunctions'],
+  indexingAnalysis: ['indexCoverage', 'indexUsage', 'missingIndexes', 'redundantIndexes'],
+  nplusOneDetection: ['queryBatching', 'loadingStrategies', 'relationshipLoading', 'prefetchingOptimization']
 };
-```
+````
 
 ### Migration Safety Evaluation
 ```typescript
-// Migration safety criteria
 const migrationChecks = {
-  safety: {
-    rollbackCapability: 'Rollback strategies implemented',
-    backwardCompatibility: 'Backward compatible changes',
-    dataValidation: 'Data validation and integrity',
-    testingCoverage: 'Comprehensive migration testing'
-  },
-  deployment: {
-    zeroDowntime: 'Zero-downtime deployment strategy',
-    incrementalChanges: 'Incremental migration approach',
-    monitoring: 'Migration monitoring and alerts',
-    documentation: 'Clear migration documentation'
-  }
+  safety: ['rollbackCapability', 'backwardCompatibility', 'dataValidation', 'testingCoverage'],
+  deployment: ['zeroDowntime', 'incrementalChanges', 'monitoring', 'documentation']
 };
 ```
 
 ## Assessment Workflow
 
 ### 1. Schema Structure Analysis
-- **Table Design**: Evaluate normalization and relationships
-- **Data Types**: Assess data type appropriateness and optimization
-- **Constraints Review**: Check constraint implementation and completeness
-- **Naming Consistency**: Verify naming conventions and clarity
+- Table Design: Evaluate normalization and relationships
+- Data Types: Assess data type appropriateness and optimization
+- Constraints Review: Check constraint implementation and completeness
+- Naming Consistency: Verify naming conventions and clarity
 
 ### 2. Performance Evaluation
-- **Query Analysis**: Analyze complex queries and optimization opportunities
-- **Index Assessment**: Evaluate indexing strategy and effectiveness
-- **N+1 Detection**: Identify and analyze N+1 query problems
-- **Database Metrics**: Review database performance metrics
+- Query Analysis: Analyze complex queries and optimization opportunities
+- Index Assessment: Evaluate indexing strategy and effectiveness
+- N+1 Detection: Identify and analyze N+1 query problems
+- Database Metrics: Review database performance metrics
 
 ### 3. Migration Safety Review
-- **Migration Structure**: Analyze migration files and patterns
-- **Rollback Strategy**: Evaluate rollback implementation
-- **Testing Coverage**: Check migration testing and validation
-- **Deployment Safety**: Assess production deployment readiness
+- Migration Structure: Analyze migration files and patterns
+- Rollback Strategy: Evaluate rollback implementation
+- Testing Coverage: Check migration testing and validation
+- Deployment Safety: Assess production deployment readiness
 
 ### 4. Type Safety Assessment
-- **Type Coverage**: Evaluate TypeScript type integration
-- **Schema Types**: Check type inference and consistency
-- **Query Types**: Verify query type safety
-- **Runtime Validation**: Assess runtime type checking
+- Type Coverage: Evaluate TypeScript type integration
+- Schema Types: Check type inference and consistency
+- Query Types: Verify query type safety
+- Runtime Validation: Assess runtime type checking
 
 ## Common Issues Identified
 
@@ -210,40 +183,23 @@ const migrationIssues = [
 
 ## Executive Summary
 - Overall Score: 78/100
-- Schema Quality Score: 85/100
+- Schema Quality: 85/100
 - Performance Score: 72/100
-- Migration Safety Score: 80/100
+- Migration Safety: 80/100
 
 ## Critical Findings
 
-### 1. Performance Bottlenecks
-**Severity**: High
-**Impact**: Application performance, user experience
-**Recommendation**: Optimize N+1 queries and add proper indexes
+### 1. Performance Bottlenecks (High)
+- Optimize N+1 queries and add proper indexes
+- Impact: Application performance, user experience
 
-### 2. Schema Design Issues
-**Severity**: High
-**Impact**: Data integrity, maintenance
-**Recommendation**: Add missing foreign key constraints and proper normalization
+### 2. Schema Design Issues (High)
+- Add missing foreign key constraints and proper normalization
+- Impact: Data integrity, maintenance
 
-### 3. Migration Safety Gaps
-**Severity**: Medium
-**Impact**: Deployment safety, reliability
-**Recommendation**: Implement rollback strategies and testing
-
-## Detailed Analysis
-
-### Schema Design
-[Detailed findings about schema structure and relationships]
-
-### Query Performance
-[Analysis of query efficiency and optimization opportunities]
-
-### Migration Safety
-[Assessment of migration patterns and safety measures]
-
-### Type Safety
-[Evaluation of TypeScript integration and type coverage]
+### 3. Migration Safety Gaps (Medium)
+- Implement rollback strategies and testing
+- Impact: Deployment safety, reliability
 
 ## Action Items
 [Prioritized list of tasks with droid assignments]

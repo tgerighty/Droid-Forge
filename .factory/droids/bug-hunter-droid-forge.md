@@ -12,11 +12,11 @@ tags: ["bug-hunting", "security", "code-quality", "vulnerabilities", "static-ana
 
 # Bug Hunter Droid
 
-**Purpose**: Expert code reviewer and bug hunter. Thoroughly analyze projects to identify all potential bugs, issues, and areas of concern.
+**Purpose**: Comprehensive bug analysis to identify issues, vulnerabilities, and code quality problems
 
 **v2.2.0 Features**:
 - ✅ 17 Critical Bug Pattern Detection
-- ✅ Enhanced React-specific checks
+- ✅ Enhanced React-specific checks  
 - ✅ Comprehensive async/await analysis
 - ✅ Security vulnerability scanning
 - ✅ Advanced pattern matching with specific grep commands
@@ -116,9 +116,7 @@ async function fetchData() {
 }
 
 // ❌ CRITICAL: .then without return
-promise.then(result => {
-  doSomething(result); // ❌ No return
-});
+promise.then(result => doSomething(result)); // ❌ No return
 ```
 
 ### 4. Array/Object Mutations (React)
@@ -136,14 +134,10 @@ setTodos([...todos, newTodo]);
 ### 5. UseEffect Dependency Issues
 ```javascript
 // ❌ CRITICAL: Missing dependencies
-useEffect(() => {
-  fetchData(userId); // ❌ userId not in deps
-}, []);
+useEffect(() => fetchData(userId), []); // ❌ userId not in deps
 
-// ❌ CRITICAL: Incorrect dependencies
-useEffect(() => {
-  setCount(count + 1); // ❌ Should use functional form
-}, [count]);
+// ❌ CRITICAL: Incorrect dependencies  
+useEffect(() => setCount(count + 1), [count]); // ❌ Should use functional form
 ```
 
 ### 6. Incorrect Operator Usage
@@ -169,7 +163,6 @@ str.substring(0, str.length + 1); // ❌ Out of bounds
 ```javascript
 // ❌ CRITICAL: Calculation overflow
 const timestamp = Date.now() * 1000; // ❌ May overflow
-const total = price * quantity * 1000000; // ❌ Overflow risk
 
 // ✅ Use BigInt for large numbers
 const safe = BigInt(price) * BigInt(quantity);
@@ -178,8 +171,7 @@ const safe = BigInt(price) * BigInt(quantity);
 ### 9. Regex Catastrophic Backtracking
 ```javascript
 // ❌ CRITICAL: Exponential complexity
-const unsafe = /^(a+)+$/;  // ❌ Catastrophic backtracking
-unsafe.test('aaaaaaaaaaaaaaaaaaaaX'); // Hangs!
+const unsafe = /^(a+)+$/; // ❌ Catastrophic backtracking
 
 // ✅ Use non-greedy or atomic groups
 const safe = /^(a+?)$/;
@@ -215,23 +207,18 @@ Number('2') + 2; // 4
 ```javascript
 // ❌ CRITICAL: No validation
 const apiKey = process.env.API_KEY; // ❌ Could be undefined
-fetch(`${process.env.API_URL}/data`); // ❌ Runtime error if missing
 
 // ✅ Validate and provide defaults
-const apiKey = process.env.API_KEY || (() => {
-  throw new Error('API_KEY required');
-})();
+const apiKey = process.env.API_KEY || (() => { throw new Error('API_KEY required'); })();
 ```
 
 ### 13. Null/Undefined Dereferences
 ```javascript
 // ❌ CRITICAL: Unchecked access
 user.profile.email; // ❌ Crashes if profile is null
-data[0].value; // ❌ Crashes if data is empty
 
 // ✅ Optional chaining
 user?.profile?.email;
-data?.[0]?.value;
 ```
 
 ### 14. Resource Leaks
@@ -240,13 +227,9 @@ data?.[0]?.value;
 const file = fs.openSync('data.txt', 'r');
 processData(); // ❌ File never closed
 
-// ✅ Use try/finally or async patterns
+// ✅ Use try/finally
 const file = fs.openSync('data.txt', 'r');
-try {
-  processData();
-} finally {
-  fs.closeSync(file);
-}
+try { processData(); } finally { fs.closeSync(file); }
 ```
 
 ### 15. Missing Error Handling
@@ -282,7 +265,7 @@ db.query(query, [userId]);
 // ❌ CRITICAL: XSS vulnerability
 div.innerHTML = userInput; // ❌ Unsanitized input
 
-// ✅ Sanitize or use text content
+// ✅ Use text content
 div.textContent = userInput;
 ```
 
@@ -455,28 +438,73 @@ rg -n "addEventListener\(" --type js | rg -v "removeEventListener\("
 
 ## Integration Examples
 
-```bash
-# Full project scan
-Task tool subagent_type="bug-hunter-droid-forge" \
-  description="Comprehensive bug scan" \
-  prompt "Scan entire project for bugs:
-  - Dead/unreachable code (if(false), code after return)
-  - Control flow issues (missing break, assignment in conditions)
-  - Async/await mistakes (missing await, unhandled promises)
-  - React bugs (mutations, useEffect deps, stale closures)
-  - Security issues (SQL/XSS injection, env vars, regex)
-  - Resource leaks, race conditions, error handling
-  Generate categorized report with severity (P0-P3) and fixes"
+The bug hunter droid creates detailed task files with categorized bug findings:
 
-# Targeted analysis
-Task tool subagent_type="bug-hunter-droid-forge" \
-  description="Security audit" \
-  prompt "Focus on security vulnerabilities: injection flaws, authentication issues, input validation, data exposure. Provide remediation steps."
+```markdown
+# tasks/tasks-bug-scan-2025-01-13.md
 
-# Performance-focused scan  
-Task tool subagent_type="bug-hunter-droid-forge" \
-  description="Performance bug analysis" \
-  prompt "Identify performance issues: memory leaks, N+1 queries, blocking operations, inefficient algorithms. Prioritize by impact."
+## Tasks
+
+### Comprehensive Bug Scan (BLOCKER)
+- [x] 1.1 Complete project bug analysis
+  - **Droid**: bug-hunter-droid-forge (completed)
+  - **Scope**: 17 critical bug patterns analyzed
+  - **Bugs Found**: 12 critical, 8 medium, 15 minor
+  - **Critical Issues**: 
+    - SQL injection in src/api/users.ts (P0)
+    - Memory leak in src/components/DataTable.tsx (P0)
+    - Race condition in src/services/auth.ts (P1)
+  - **Recommendations**: Fix P0 issues immediately, address P1 this week
+
+### Security Vulnerability Analysis (HIGH)
+- [ ] 2.1 Fix identified security issues
+  - **Droid**: security-fix-droid-forge
+  - **Dependencies**: Task 1.1 must be completed
+  - **Priority**: Address P0 issues immediately
+
+### Performance Bug Fixes (HIGH)
+- [ ] 3.1 Resolve performance issues
+  - **Droid**: database-performance-droid-forge
+  - **Focus**: N+1 queries, memory leaks, blocking operations
+  - **Files**: From analysis report
+```
+
+**Targeted Analysis Example:**
+
+```markdown
+# tasks/tasks-security-audit-2025-01-13.md
+
+## Tasks
+
+### Security Vulnerability Assessment (BLOCKER)
+- [x] 1.1 Security vulnerability scan
+  - **Droid**: bug-hunter-droid-forge
+  - **Focus**: Injection flaws, authentication issues, input validation, data exposure
+  - **Critical**: SQL injection patterns, XSS vulnerabilities, exposed credentials
+
+### Vulnerability Remediation (HIGH)
+- [ ] 2.1 Fix security vulnerabilities
+  - **Droid**: security-fix-droid-forge
+  - **Priority**: Address BLOCKER and HIGH severity findings first
+  - **Files**: From security analysis report
+```
+
+**Performance Analysis Example:**
+
+```markdown
+# tasks/tasks-performance-bugs-2025-01-13.md
+
+## Tasks
+
+### Performance Bug Analysis (BLOCKER)
+- [ ] 1.1 Performance bug analysis
+  - **Droid**: bug-hunter-droid-forge
+  - **Scope**: Memory leaks, N+1 queries, blocking operations
+  - **Findings**: 
+    - Memory leak in src/components/DataTable.tsx (P0)
+    - N+1 queries in src/services/orderService.ts (P1)
+    - Blocking operations in src/api/payment.ts (P1)
+```
 ```
 
 ## Bug Categories Quick Reference

@@ -414,21 +414,68 @@ rg -n "if.*auth|if.*login|if.*session" --type js --type ts
 
 ## Integration Examples
 
-```bash
-# Comprehensive authentication assessment
-Task tool subagent_type="auth-assessment-droid-forge" \
-  description "Assess authentication security" \
-  prompt "Conduct comprehensive authentication security assessment: analyze session management, JWT security, password policies, MFA implementation, and OAuth security. Generate detailed vulnerability report."
+The auth assessment droid creates task files with detailed security findings:
 
-# Better Auth configuration review
-Task tool subagent_type="auth-assessment-droid-forge" \
-  description "Review Better Auth setup" \
-  prompt "Analyze Better Auth configuration for security issues: session handling, social provider security, database adapter security, and middleware protection. Provide security recommendations."
+```markdown
+# tasks/tasks-auth-security-2025-01-13.md
 
-# Authentication penetration testing
-Task tool subagent_type="auth-assessment-droid-forge" \
-  description "Authentication pentest" \
-  prompt "Perform authentication penetration testing: test for session fixation, token leakage, brute force attacks, authorization bypass, and other auth vulnerabilities."
+## Tasks
+
+### Authentication Security Assessment (BLOCKER)
+- [ ] 1.1 Comprehensive authentication security analysis
+  - **Droid**: auth-assessment-droid-forge (completed)
+  - **Scope**: Session management, JWT security, password policies, MFA implementation
+  - **Output**: Detailed vulnerability report with risk assessment
+
+### Session Management Review (HIGH)
+- [ ] 2.1 Analyze session handling and token security
+  - **Droid**: security-fix-droid-forge
+  - **Files**: src/lib/auth.ts, src/middleware/auth.ts
+  - **Focus**: Session fixation, token leakage, secure storage
+
+### Password Security Implementation (HIGH)
+- [ ] 3.1 Review password policies and hashing
+  - **Droid**: security-fix-droid-forge
+  - **Files**: src/services/auth.ts, src/utils/password.ts
+  - **Scope**: Password strength, hashing algorithms, rate limiting
+```
+
+**Better Auth Configuration Review Example:**
+
+```markdown
+# tasks/tasks-better-auth-review-2025-01-13.md
+
+## Tasks
+
+### Better Auth Configuration (BLOCKER)
+- [ ] 1.1 Analyze Better Auth security configuration
+  - **Droid**: auth-assessment-droid-forge
+  - **Files**: auth/index.ts, auth.config.ts
+  - **Focus**: Session handling, provider security, database adapter
+
+### OAuth Provider Security (HIGH)
+- [ ] 2.1 Review OAuth provider implementations
+  - **Droid**: security-fix-droid-forge
+  - **Providers**: Google, GitHub, Microsoft
+  - **Scope**: Client secret handling, token validation
+```
+
+**Authentication Penetration Testing Example:**
+
+```markdown
+# tasks/tasks-auth-pentest-2025-01-13.md
+
+## Tasks
+
+### Penetration Testing (BLOCKER)
+- [ ] 1.1 Authentication penetration testing
+  - **Droid**: auth-assessment-droid-forge
+  - **Scope**: Session fixation, token leakage, brute force, authorization bypass
+
+### Vulnerability Remediation (HIGH)
+- [ ] 2.1 Fix identified authentication vulnerabilities
+  - **Droid**: security-fix-droid-forge
+  - **Priority**: Address BLOCKER and HIGH severity findings first
 ```
 
 ## Best Practices

@@ -209,17 +209,57 @@ If tests fail or implementation is blocked:
 ## Integration Examples
 
 ### With Task File
-```bash
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="Implement API from tasks" \
-  prompt "Implement backend from /tasks/tasks-auth-api.md: Complete REST API for user management with CRUD operations, authentication, and database integration. Update task file with progress."
+The backend engineer reads and updates the existing task file:
+
+```markdown
+# tasks/tasks-auth-api.md
+
+## Tasks
+
+### API Implementation (BLOCKER)
+- [~] 1.1 Create user management REST API endpoints
+  - **Droid**: backend-engineer-droid-forge
+  - **Files**: src/api/users.ts, src/services/userService.ts
+  - **Endpoints**: GET /api/users, POST /api/users, PUT /api/users/:id, DELETE /api/users/:id
+
+### Authentication Integration (HIGH)
+- [ ] 2.1 Implement authentication middleware
+  - **Droid**: backend-engineer-droid-forge
+  - **Files**: src/middleware/auth.ts, src/lib/auth.ts
+  - **Scope**: JWT verification, user session management
+
+### Database Integration (HIGH)
+- [ ] 3.1 Set up database models and queries
+  - **Droid**: drizzle-orm-specialist-droid-forge
+  - **Files**: db/schema/, db/migrations/
+  - **Dependencies**: Task 1.1 must be completed
+
+### Testing Implementation (MEDIUM)
+- [ ] 4.1 Add comprehensive API tests
+  - **Droid**: unit-test-droid-forge
+  - **Coverage**: Unit tests, integration tests, security tests
+  - **Files**: tests/api/users.test.ts
 ```
 
 ### Standalone Implementation
-```bash
-Task tool with subagent_type="backend-engineer-droid-forge" \
-  description="Microservice architecture design" \
-  prompt "Design microservice architecture for e-commerce platform with proper service communication"
+The backend engineer creates task files for standalone work:
+
+```markdown
+# tasks/tasks-microservice-design-2025-01-13.md
+
+## Tasks
+
+### Architecture Design (BLOCKER)
+- [ ] 1.1 Design microservice architecture
+  - **Droid**: backend-engineer-droid-forge
+  - **Scope**: Service communication, data flow, API contracts
+  - **Services**: User Service, Product Service, Order Service, Payment Service
+
+### Service Communication (HIGH)
+- [ ] 2.1 Define inter-service communication patterns
+  - **Droid**: backend-engineer-droid-forge
+  - **Methods**: REST APIs, message queues, event streaming
+  - **Files**: src/services/, src/gateway/
 ```
 
 ## Quality Assurance

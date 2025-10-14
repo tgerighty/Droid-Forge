@@ -1,5 +1,5 @@
 ---
-name: better-auth-integration-droid-forge
+name: better-auth-droid-forge
 description: Better Auth integration - OAuth, sessions, tRPC context, Next.js middleware
 model: inherit
 tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
@@ -36,8 +36,8 @@ export const auth = betterAuth({
   },
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      oauthId: env.GOOGLE_OAUTH_ID,
+      oauthSecret: env.GOOGLE_OAUTH_SECRET,
     },
   },
   session: {
@@ -45,7 +45,7 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 24,
     cookieCache: { enabled: true, maxAge: 5 * 60 },
   },
-  plugins: [admin(), twoFactor({ issuer: "app.com" }), passkey()],
+  plugins: [admin(), twoFactor({ issuer: "example.com" }), passkey()],
 });
 
 export type Session = typeof auth.$Infer.Session;
@@ -68,7 +68,7 @@ export default authMiddleware({
 });
 
 export const config = {
-  matcher: ["/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico)).*)", "/(api|trpc)(.*)"],
+  matcher: ["/((?!_next|[^?]*\\\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico)).*)", "/(api|trpc)(.*)"],
 };
 ```
 
@@ -94,7 +94,7 @@ const t = initTRPC.context<Context>().create();
 
 const isAuthed = t.middleware(async ({ ctx, next }) => {
   if (!ctx.session || !ctx.user) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+    throw new TRPCError({ code: "FORBIDDEN" });
   }
   return next({ ctx: { session: ctx.session, user: ctx.user } });
 });
@@ -322,11 +322,11 @@ export async function requireAdmin() {
 ### Environment Variables
 ```bash
 # .env.example
-GOOGLE_CLIENT_ID=your-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-BETTER_AUTH_SECRET=your-better-auth-secret
-BETTER_AUTH_URL=https://yourapp.com
-DATABASE_URL=postgresql://user:password@localhost:5432/db
+GOOGLE_OAUTH_ID=your-oauth-id
+GOOGLE_OAUTH_SECRET=your-oauth-secret
+BETTER_AUTH_SECRET=your-auth-secret-placeholder
+BETTER_AUTH_URL=http://localhost:3000
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
 ```
 
 ---

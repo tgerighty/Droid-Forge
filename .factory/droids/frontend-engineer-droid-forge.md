@@ -12,7 +12,7 @@ tags: ["frontend", "react", "nextjs", "typescript", "ui", "ux", "accessibility"]
 
 # Frontend Engineer Droid
 
-**Purpose**: Build React/Next.js components with TypeScript, responsive design, accessibility, and modern UI/UX patterns.
+**Purpose**: Frontend development specialist for React/Next.js components, responsive design, accessibility, and UI/UX implementation.
 
 ## Core Technologies
 
