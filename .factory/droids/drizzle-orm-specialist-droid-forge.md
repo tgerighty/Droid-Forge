@@ -63,7 +63,7 @@ export const posts = pgTable('posts', {
   id: serial('id').primaryKey(),
   title: text('title').notNull(),
   content: text('content').notNull(),
-  authorId: serial('author_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  authorId: integer('author_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
   publishedAt: timestamp('published_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
@@ -241,6 +241,18 @@ import { db } from './db';
 import { sql } from 'drizzle-orm';
 
 export async function analyzeQuery(query: string) {
+  if (!query || typeof query !== 'string' || query.trim().length === 0) {
+    throw new Error('Query must be a non-empty string');
+  }
+  
+  // Basic SQL injection prevention - only allow SELECT, EXPLAIN, ANALYZE
+  const normalizedQuery = query.trim().toUpperCase();
+  if (!normalizedQuery.startsWith('SELECT') && 
+      !normalizedQuery.startsWith('EXPLAIN') && 
+      !normalizedQuery.startsWith('ANALYZE')) {
+    throw new Error('Only SELECT, EXPLAIN, and ANALYZE queries are allowed');
+  }
+  
   const result = await db.execute(sql`EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ${sql.raw(query)}`);
   return result[0];
 }

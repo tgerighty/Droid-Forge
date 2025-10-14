@@ -153,7 +153,7 @@ test.describe('Cross-Browser Testing', () => {
           await page.goto(pagePath);
           await page.waitForLoadState('networkidle');
           
-          const pageName = pagePath.replace('/', 'homepage') || 'homepage';
+          const pageName = pagePath === '/' ? 'homepage' : pagePath.replace(/^\//, '').replace(/\//g, '-');
           await expect(page).toHaveScreenshot(`${pageName}-${browser.name}.png`, {
             fullPage: true,
             animations: 'disabled'
@@ -376,7 +376,7 @@ export default defineConfig({
     // Screenshot comparison configuration
     toHaveScreenshot: {
       // Allow for slight pixel differences
-      threshold: 0.2,
+      threshold: 0.05,
       // Animation mode
       animations: 'disabled',
       // Full page screenshots
@@ -430,11 +430,15 @@ export class VisualTestUtils {
     });
   }
   
-  static async normalizePage(page: any) {
+  static async normalizePage(page: any, options: { removeFocusOutlines?: boolean } = {}) {
     await page.addStyleTag({
       content: `*, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; }`
     });
-    await page.addStyleTag({ content: '*:focus { outline: none !important; }' });
+    
+    // Only remove focus outlines if explicitly requested
+    if (options.removeFocusOutlines) {
+      await page.addStyleTag({ content: '*:focus { outline: none !important; }' });
+    }
   }
 }
 ```

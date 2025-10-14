@@ -66,7 +66,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: '**/node_modules'
+          cache-dependency-path: '**/package-lock.json'
       
       - name: Install dependencies
         run: npm ci
@@ -257,8 +257,8 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 
-# Create non-root user
-RUN addgroup -g node && adduser -g node node
+# Create non-root user (Alpine compatible)
+RUN addgroup -S node && adduser -S -G node node
 RUN chown -R node:node /app
 
 # Expose port

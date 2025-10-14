@@ -106,7 +106,7 @@ type Email = Brand<string, 'Email'>;
 
 // Type guards for branded types
 const isUserId = (value: unknown): value is UserId =>
-  typeof value === 'string' && value.startsWith('user_');
+  typeof value === 'string' && value.startsWith('user_'); // Implementation-specific format, adapt to your project's user-id format
 
 // Template literal types
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -116,9 +116,9 @@ type EventName<T extends string> = `on${Capitalize<T>}`;
 
 ### Advanced Generics
 ```typescript
-// Higher-kinded types simulation
-interface Functor<F> {
-  map<A, B>(fa: F, f: (a: A) => B): F;
+// Functor pattern (simplified HKT simulation)
+interface Functor<A> {
+  map<B>(f: (a: A) => B): Functor<B>;
 }
 
 // Generic repository pattern
@@ -208,6 +208,9 @@ interface FormComponentProps<T> extends BaseComponentProps {
 }
 
 // Type-safe hooks
+// Type-safe query hook (requires @tanstack/react-query)
+// Install: npm install @tanstack/react-query
+// Import: import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 function useTypedQuery<T>(
   key: string[],
   fetcher: () => Promise<T>
@@ -264,10 +267,20 @@ async function apiCall<T extends keyof ApiRouter>(
   route: T,
   input?: ApiInput<T>
 ): Promise<ApiOutput<T>> {
+  // Extract method from route with robust parsing
+  const methodMatch = route.match(/^(GET|POST|PUT|DELETE|PATCH)\s+/i);
+  const method = (methodMatch ? methodMatch[1].toUpperCase() : 'GET') as HttpMethod;
+  
+  // Validate method
+  const validMethods: HttpMethod[] = ['GET', 'POST', 'PUT', 'DELETE'];
+  if (!validMethods.includes(method)) {
+    throw new Error(`Invalid HTTP method: ${method}`);
+  }
+
   const response = await fetch(route, {
-    method: route.split(' ')[0] as HttpMethod,
+    method,
     headers: { 'Content-Type': 'application/json' },
-    body: input ? JSON.stringify(input) : undefined,
+    body: (method !== 'GET' && method !== 'HEAD') && input ? JSON.stringify(input) : undefined,
   });
 
   if (!response.ok) {
@@ -294,7 +307,7 @@ const createUser = (data: {
 });
 
 // Prefer interfaces over type aliases for public APIs
-public interface UserConfig {
+interface UserConfig {
   readonly id: string;
   readonly email: string;
   readonly preferences: UserPreferences;

@@ -308,7 +308,10 @@ export const Input: React.FC<InputProps> = ({ label, error, helperText, required
           className
         )}
         aria-invalid={error ? 'true' : 'false'}
-        aria-describedby={cn(errorId, helperText && `${inputId}-helper`)}
+        aria-describedby={([
+          errorId,
+          helperText ? `${inputId}-helper` : undefined
+        ].filter(Boolean).join(' ') || undefined}
         aria-required={required}
         {...props}
       />
