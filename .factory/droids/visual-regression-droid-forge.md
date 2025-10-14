@@ -47,11 +47,8 @@ test.describe('Visual Regression Tests', () => {
   test('homepage visual consistency', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    
-    // Wait for dynamic content
     await page.waitForSelector('[data-testid="main-content"]');
     
-    // Take full page screenshot
     await expect(page).toHaveScreenshot('homepage-full.png', {
       fullPage: true,
       animations: 'disabled',
@@ -61,13 +58,10 @@ test.describe('Visual Regression Tests', () => {
 
   test('component library verification', async ({ page }) => {
     await page.goto('/components');
-    
-    // Test each component section
     const componentSections = await page.$$('[data-testid^="component-"]');
     
     for (const section of componentSections) {
       const componentName = await section.getAttribute('data-testid');
-      
       await expect(section).toHaveScreenshot(`${componentName}.png`, {
         animations: 'disabled'
       });
@@ -76,7 +70,6 @@ test.describe('Visual Regression Tests', () => {
 
   test('responsive design validation', async ({ page }) => {
     await page.goto('/');
-    
     // Test different viewports
     const viewports = [
       { name: 'mobile', width: 375, height: 667 },
@@ -105,42 +98,29 @@ test.describe('Advanced Visual Testing', () => {
     await page.goto('/dashboard');
     await page.waitForLoadState('networkidle');
     
-    // Hide dynamic content that changes frequently
+    // Hide dynamic content
     await page.addStyleTag({
-      content: `
-        [data-testid="timestamp"], 
-        [data-testid="user-avatar"],
-        [data-testid="notification-badge"] {
-          visibility: hidden !important;
-        }
-      `
+      content: '[data-testid="timestamp"], [data-testid="user-avatar"] { visibility: hidden !important; }'
     });
     
     await expect(page).toHaveScreenshot('dashboard-static.png', {
       fullPage: true,
       animations: 'disabled',
-      mask: [
-        page.locator('[data-testid="chart-canvas"]'), // Ignore charts
-        page.locator('[data-testid="live-feed"]')     // Ignore live data
-      ]
+      mask: [page.locator('[data-testid="chart-canvas"]'), page.locator('[data-testid="live-feed"]')]
     });
   });
 
-  test('form states visual validation', async ({ page }) => {
+  test('form states validation', async ({ page }) => {
     await page.goto('/contact');
     
-    // Test default state
     await expect(page.locator('form')).toHaveScreenshot('form-default.png');
     
-    // Test focus state
     await page.fill('[name="email"]', 'test@example.com');
     await expect(page.locator('form')).toHaveScreenshot('form-focus.png');
     
-    // Test error state
     await page.click('[type="submit"]');
     await expect(page.locator('form')).toHaveScreenshot('form-error.png');
     
-    // Test success state
     await page.fill('[name="name"]', 'John Doe');
     await page.fill('[name="email"]', 'john@example.com');
     await page.fill('[name="message"]', 'Test message');
@@ -150,7 +130,7 @@ test.describe('Advanced Visual Testing', () => {
 });
 ```
 
-### Cross-Browser Visual Testing
+### Cross-Browser Testing
 ```typescript
 // visual-regression/cross-browser.test.ts
 import { devices } from '@playwright/test';
@@ -161,19 +141,13 @@ const browsers = [
   { name: 'webkit', device: devices['Desktop Safari'] }
 ];
 
-test.describe('Cross-Browser Visual Testing', () => {
+test.describe('Cross-Browser Testing', () => {
   browsers.forEach(browser => {
-    test.describe(`${browser.name} visual tests`, () => {
+    test.describe(`${browser.name} tests`, () => {
       test.use({ ...browser.device });
       
-      test('critical pages visual consistency', async ({ page }) => {
-        const criticalPages = [
-          '/',
-          '/about',
-          '/products',
-          '/contact',
-          '/dashboard'
-        ];
+      test('critical pages consistency', async ({ page }) => {
+        const criticalPages = ['/', '/about', '/products', '/contact', '/dashboard'];
         
         for (const pagePath of criticalPages) {
           await page.goto(pagePath);
@@ -229,17 +203,14 @@ test.describe('Design System Components', () => {
     for (const element of formElements) {
       const elementType = await element.getAttribute('data-testid');
       
-      // Test default state
       await expect(element).toHaveScreenshot(`${elementType}-default.png`);
       
-      // Test error state
       await element.evaluate((el: any) => {
         el.classList.add('error');
         el.setAttribute('aria-invalid', 'true');
       });
       await expect(element).toHaveScreenshot(`${elementType}-error.png`);
       
-      // Reset for next test
       await element.evaluate((el: any) => {
         el.classList.remove('error');
         el.removeAttribute('aria-invalid');
@@ -249,9 +220,9 @@ test.describe('Design System Components', () => {
 });
 ```
 
-## AI-Powered Visual Analysis
+## AI-Powered Analysis
 
-### Intelligent Difference Detection
+### Visual Difference Detection
 ```typescript
 // visual-regression/ai-analysis.ts
 export class VisualAnalyzer {
@@ -259,7 +230,6 @@ export class VisualAnalyzer {
     baselineImage: Buffer, 
     currentImage: Buffer
   ): Promise<VisualAnalysisResult> {
-    // Use AI to analyze visual differences
     const analysis = await this.performAIComparison(baselineImage, currentImage);
     
     return {
@@ -271,10 +241,8 @@ export class VisualAnalyzer {
   }
   
   private async performAIComparison(baseline: Buffer, current: Buffer) {
-    // Simulate AI analysis - in real implementation, this would use
-    // computer vision APIs or ML models
     return {
-      score: 0.05, // 5% difference
+      score: 0.05,
       regions: [
         { x: 100, y: 200, width: 50, height: 30, type: 'text-change' },
         { x: 300, y: 400, width: 100, height: 100, type: 'layout-shift' }
@@ -290,35 +258,20 @@ export class VisualAnalyzer {
   }
   
   private generateRecommendations(analysis: any): string[] {
-    const recommendations: string[] = [];
-    
-    analysis.regions.forEach((region: any) => {
+    return analysis.regions.map((region: any) => {
       switch (region.type) {
-        case 'text-change':
-          recommendations.push('Review text content changes in affected area');
-          break;
-        case 'layout-shift':
-          recommendations.push('Investigate layout shift - possible responsive design issue');
-          break;
-        case 'color-change':
-          recommendations.push('Verify color changes align with design system');
-          break;
+        case 'text-change': return 'Review text content changes';
+        case 'layout-shift': return 'Investigate layout shift';
+        case 'color-change': return 'Verify color changes align with design system';
+        default: return 'Review visual difference';
       }
     });
-    
-    return recommendations;
   }
 }
 
 interface VisualAnalysisResult {
   hasSignificantDifferences: boolean;
-  differenceRegions: Array<{
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    type: string;
-  }>;
+  differenceRegions: Array<{ x: number; y: number; width: number; height: number; type: string; }>;
   severity: 'low' | 'medium' | 'high';
   recommendations: string[];
 }
@@ -462,60 +415,26 @@ export default defineConfig({
 // visual-regression/utils.ts
 export class VisualTestUtils {
   static async waitForStablePage(page: any) {
-    // Wait for network to be idle
     await page.waitForLoadState('networkidle');
-    
-    // Wait for images to load
     await page.waitForFunction(() => {
       const images = Array.from(document.images);
       return images.every(img => img.complete && img.naturalHeight !== 0);
     });
-    
-    // Wait for fonts to load
-    await page.waitForFunction(() => {
-      return document.fonts.ready;
-    });
-    
-    // Small delay for any remaining animations
+    await page.waitForFunction(() => document.fonts.ready);
     await page.waitForTimeout(100);
   }
   
   static async hideDynamicElements(page: any) {
-    // Hide elements that change frequently
     await page.addStyleTag({
-      content: `
-        [data-testid="timestamp"],
-        [data-testid="live-counter"],
-        [data-testid="random-quote"],
-        .clock,
-        .timer {
-          visibility: hidden !important;
-        }
-      `
+      content: '[data-testid="timestamp"], [data-testid="live-counter"], .clock, .timer { visibility: hidden !important; }'
     });
   }
   
   static async normalizePage(page: any) {
-    // Disable animations
     await page.addStyleTag({
-      content: `
-        *, *::before, *::after {
-          animation-duration: 0s !important;
-          animation-delay: 0s !important;
-          transition-duration: 0s !important;
-          transition-delay: 0s !important;
-        }
-      `
+      content: `*, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; }`
     });
-    
-    // Normalize focus states
-    await page.addStyleTag({
-      content: `
-        *:focus {
-          outline: none !important;
-        }
-      `
-    });
+    await page.addStyleTag({ content: '*:focus { outline: none !important; }' });
   }
 }
 ```
@@ -530,7 +449,6 @@ export class VisualTestUtils {
   - [ ] 1.3 Setup cross-browser testing
   - [ ] 1.4 Configure AI-powered analysis
   - [ ] 1.5 Integrate with CI/CD pipeline
-  - [ ] 1.6 Document visual testing procedures
 ```
 
 ### Visual Regression Tasks

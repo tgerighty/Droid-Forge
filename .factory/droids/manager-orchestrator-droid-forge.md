@@ -12,7 +12,9 @@ tags: ["orchestration", "coordination", "delegation", "workflow-management", "pr
 
 # Manager Orchestrator Droid
 
-**Purpose**: Central coordination system that analyzes PRDs and creates delegation plans. NOTE: Due to Factory.ai limitations, this droid cannot directly spawn other droids - it creates delegation plans that you execute.
+**Purpose**: Central coordination system that analyzes PRDs and delegates tasks to specialized droids. Orchestrates multi-droid workflows.
+
+**🚨 CRITICAL**: Due to Factory.ai limitations, this droid cannot directly spawn other droids - it creates delegation plans that you execute.
 
 ## Core Capabilities
 
@@ -40,19 +42,19 @@ tags: ["orchestration", "coordination", "delegation", "workflow-management", "pr
 ### Assessment Droids (Analyze → Create Tasks)
 ```bash
 # Code quality assessment
-Task tool with subagent_type="code-smell-assessment-droid-forge" \
+Task tool subagent_type="code-smell-assessment-droid-forge" \
   description "Analyze code smells" \
-  prompt "Scan codebase for maintainability issues, anti-patterns, and technical debt. Generate prioritized refactoring tasks"
+  prompt "Scan codebase for maintainability issues, anti-patterns, and technical debt"
 
 # Security assessment  
-Task tool with subagent_type="security-assessment-droid-forge" \
+Task tool subagent_type="security-assessment-droid-forge" \
   description "Security vulnerability assessment" \
-  prompt "Perform comprehensive security audit, identify vulnerabilities, and generate CVSS-scored remediation tasks"
+  prompt "Perform comprehensive security audit and generate remediation tasks"
 
 # TypeScript assessment
-Task tool with subagent_type="typescript-assessment-droid-forge" \
+Task tool subagent_type="typescript-assessment-droid-forge" \
   description "Type safety analysis" \
-  prompt "Analyze TypeScript type coverage, strict mode compliance, and type safety issues"
+  prompt "Analyze TypeScript type coverage and type safety issues"
 ```
 
 ### Action Droids (Execute Tasks → Update Status)
@@ -148,93 +150,104 @@ Task tool with subagent_type="unit-test-droid-forge" \
 
 ### Status Updates
 ```bash
-# Mark task as in progress
-Task tool with subagent_type="task-manager-droid-forge" \
-  description "Update task status" \
-  prompt "Change task 1.1 from [ ] to [~] in tasks/tasks-auth.md"
+# Task File Management
+The manager orchestrator updates the existing project task file (`tasks/tasks-[current-date].md`) to track progress and coordinate work:
 
-# Mark task as completed
-Task tool with subagent_type="task-manager-droid-forge" \
-  description "Complete task" \
-  prompt "Change task 1.1 from [~] to [x] in tasks/tasks-auth.md"
+```markdown
+## Tasks
+
+### Backend Development (HIGH)
+- [~] 1.1 Create user authentication API endpoints
+  - **Droid**: backend-engineer-droid-forge
+  - **Files**: src/api/auth.ts, src/services/userService.ts
+  - **Status**: In progress
+
+### Frontend Development (HIGH)  
+- [ ] 2.1 Build login form component
+  - **Droid**: frontend-engineer-droid-forge
+  - **Files**: src/components/LoginForm.tsx
+  - **Dependencies**: Task 1.1 must be completed
+
+### Security Assessment (BLOCKER)
+- [ ] 3.1 Review authentication security
+  - **Droid**: security-assessment-droid-forge
+  - **Scope**: OWASP Top 10, auth flows, session management
+```
+
+# Update Task Status
+```bash
+# Mark task as in progress
+sed -i 's/- \[ \] 1.1/- [~] 1.1/' tasks/tasks-2025-01-13.md
+
+# Mark task as completed  
+sed -i 's/- \[~\] 1.1/- [x] 1.1/' tasks/tasks-2025-01-13.md
+```
+
+**Important**: Always update the existing task file for the current project, never create new ones.
 ```
 
 ## Decision Trees
 
-### Feature Development Selection
-```
-START: New Feature Request
-    ↓
-Is it complex/multi-domain?
-    ↓ YES → Use manager-orchestrator-droid-forge
-    ↓ NO
-What domain?
-    ├── Frontend UI → frontend-engineer-droid-forge
-    ├── Backend API → backend-engineer-droid-forge  
-    ├── Both → manager-orchestrator-droid-forge
-    ├── Testing → unit-test-droid-forge
-    ├── Security → security-assessment-droid-forge
-    └── Operations → reliability-droid-forge
-```
+### Task Assignment Patterns
+The manager orchestrator creates task files with recommended droids:
 
-### Bug Fix Selection
-```
-START: Bug Report
-    ↓
-Root cause known?
-    ↓ YES → Route to domain specialist
-    ↓ NO → debugging-assessment-droid-forge → Analysis → Specialist fix
-```
+```markdown
+## Relevant Files
+- `src/api/users.ts` - User API endpoints (modified)
+- `src/components/UserForm.tsx` - User form component (modified)
 
-## Mode Selection
+## Tasks
 
-### Interactive Mode
-```bash
-# Manager asks for confirmation
-"Feature requires both frontend and backend components. Do you want me to:
-1. One-shot: Execute autonomously 
-2. Iterative: Step-by-step with confirmations"
+### Analysis Phase (BLOCKER)
+- [ ] 1.1 Analyze feature requirements and dependencies
+  - **Droid**: manager-orchestrator-droid-forge
+  - **Output**: Technical specification and task breakdown
 
-# User response directs execution mode
-```
+### Backend Development (HIGH)
+- [ ] 2.1 Implement user API endpoints
+  - **Droid**: backend-engineer-droid-forge
+  - **Files**: src/api/users.ts, src/services/userService.ts
 
-### One-Shot Mode  
-```bash
-# Execute without confirmation
-Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description "One-shot feature implementation" \
-  prompt "Execute complete user authentication feature autonomously. Coordinate backend API, frontend UI, security assessment, and testing. Use one-shot mode."
+### Frontend Development (HIGH)
+- [ ] 3.1 Build user form component
+  - **Droid**: frontend-engineer-droid-forge  
+  - **Files**: src/components/UserForm.tsx
+  - **Dependencies**: Task 2.1 must be completed
+
+### Security Assessment (BLOCKER)
+- [ ] 4.1 Review authentication and authorization
+  - **Droid**: security-assessment-droid-forge
+  - **Scope**: Input validation, auth flows, session management
+
+### Testing (HIGH)
+- [ ] 5.1 Add comprehensive test coverage
+  - **Droid**: unit-test-droid-forge
+  - **Coverage**: API endpoints, component behavior, edge cases
+
+### Integration & Review (MEDIUM)
+- [ ] 6.1 Final integration testing and review
+  - **Droid**: manager-orchestrator-droid-forge
+  - **Validation**: End-to-end functionality, performance, security
 ```
 
-## Configuration
-
-### Delegation Rules
+### Domain Detection
 ```yaml
-delegation_patterns:
-  frontend_keywords: ["component", "ui", "react", "vue", "css", "responsive"]
-  backend_keywords: ["api", "database", "service", "microservice", "server"]
-  security_keywords: ["auth", "security", "vulnerability", "encryption", "validation"]
-  testing_keywords: ["test", "coverage", "unit", "integration", "e2e"]
-  refactoring_keywords: ["refactor", "clean", "optimize", "technical-debt"]
-```
-
-### Workflow Templates
-```yaml
-feature_development:
-  phases:
-    - analysis: "manager-orchestrator-droid-forge"
-    - backend: "backend-engineer-droid-forge" 
-    - frontend: "frontend-engineer-droid-forge"
-    - security: "security-assessment-droid-forge"
-    - testing: "unit-test-droid-forge"
-    - integration: "manager-orchestrator-droid-forge"
-
-bug_resolution:
-  phases:
-    - analysis: "debugging-assessment-droid-forge"
-    - fix: "bug-fix-droid-forge"
-    - testing: "unit-test-droid-forge"
-    - validation: "debugging-assessment-droid-forge"
+keyword_mapping:
+  frontend_keywords:
+    - patterns: ["component", "ui", "react", "vue", "css", "responsive"]
+    - recommended_droid: "frontend-engineer-droid-forge"
+    
+  backend_keywords:
+    - patterns: ["api", "database", "service", "microservice", "server"]
+    - recommended_droid: "backend-engineer-droid-forge"
+    
+  security_keywords:
+    - patterns: ["auth", "security", "vulnerability", "encryption", "validation"]
+    - recommended_droid: "security-assessment-droid-forge"
+    
+  testing_keywords:
+    - patterns: ["test", "coverage", "unit", "integration", "e2e"]
+    - recommended_droid: "unit-test-droid-forge"
 ```
 
 
@@ -310,24 +323,89 @@ Coordinates delegation and tracks overall progress across all task files.
 ## Integration Examples
 
 ### Example 1: E-commerce Checkout Feature
-```bash
-Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description "E-commerce checkout implementation" \
-  prompt "Analyze PRD for checkout feature. Coordinate backend API (payment processing, inventory), frontend UI (checkout flow, forms), security assessment (PCI compliance), and comprehensive testing. Use one-shot mode for autonomous execution."
+The manager orchestrator updates the existing task file to coordinate the checkout feature:
+
+```markdown
+# tasks/tasks-2025-01-13.md
+
+## Relevant Files
+- `src/api/checkout.ts` - Payment processing endpoints (new)
+- `src/components/CheckoutForm.tsx` - Checkout UI component (new)
+- `src/services/payment.ts` - Payment service integration (new)
+
+## Tasks
+
+### Backend Development (BLOCKER)
+- [ ] 1.1 Implement payment processing API endpoints
+  - **Droid**: backend-engineer-droid-forge
+  - **Files**: src/api/checkout.ts, src/services/payment.ts
+  - **Scope**: Payment gateway integration, inventory management
+
+### Frontend Development (HIGH)
+- [ ] 2.1 Build checkout flow UI components
+  - **Droid**: frontend-engineer-droid-forge
+  - **Files**: src/components/CheckoutForm.tsx, src/components/PaymentForm.tsx
+  - **Dependencies**: Task 1.1 must be completed
+
+### Security Assessment (BLOCKER)
+- [ ] 3.1 PCI compliance and payment security review
+  - **Droid**: security-assessment-droid-forge
+  - **Scope**: Payment data handling, encryption, secure transmission
+
+### Integration Testing (HIGH)
+- [ ] 4.1 End-to-end checkout flow testing
+  - **Droid**: unit-test-droid-forge
+  - **Coverage**: Payment processing, error handling, user journey
 ```
 
 ### Example 2: Performance Optimization Initiative
-```bash
-Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description "Performance optimization project" \
-  prompt "Coordinate performance optimization across codebase. Delegate to cognitive-complexity-droid-forge for complexity analysis, backend-engineer-droid-forge for database optimization, frontend-engineer-droid-forge for UI performance, and validate improvements with testing."
+The manager updates the existing task file for performance optimization:
+
+```markdown
+# tasks/tasks-2025-01-13.md
+
+## Tasks
+
+### Code Complexity Analysis (HIGH)
+- [ ] 1.1 Analyze cognitive complexity across codebase
+  - **Droid**: cognitive-complexity-assessment-droid-forge
+  - **Scope**: Identify high-complexity functions needing refactoring
+
+### Database Optimization (BLOCKER)
+- [ ] 2.1 Optimize database queries and add indexes
+  - **Droid**: backend-engineer-droid-forge
+  - **Files**: db/migrations/, src/services/
+  - **Focus**: N+1 queries, missing indexes, slow queries
+
+### Frontend Performance (HIGH)
+- [ ] 3.1 Optimize UI performance and bundle size
+  - **Droid**: frontend-engineer-droid-forge
+  - **Scope**: Component optimization, lazy loading, bundle analysis
 ```
 
 ### Example 3: Security Audit and Remediation
-```bash
-Task tool with subagent_type="manager-orchestrator-droid-forge" \
-  description "Security audit and fixes" \
-  prompt "Execute comprehensive security audit. Delegate to security-assessment-droid-forge for vulnerability scanning, security-fix-droid-forge for remediation, backend-engineer-droid-forge for API security improvements, and validate all fixes with testing."
+The manager orchestrates security through task delegation in the existing task file:
+
+```markdown
+# tasks/tasks-2025-01-13.md
+
+## Tasks
+
+### Vulnerability Assessment (BLOCKER)
+- [ ] 1.1 Comprehensive security vulnerability scan
+  - **Droid**: security-assessment-droid-forge
+  - **Scope**: OWASP Top 10, dependency CVEs, code analysis
+
+### Security Remediation (HIGH)
+- [ ] 2.1 Fix identified security vulnerabilities
+  - **Droid**: security-fix-droid-forge
+  - **Dependencies**: Task 1.1 must be completed
+  - **Priority**: Fix BLOCKER and HIGH severity issues first
+
+### API Security (HIGH)
+- [ ] 3.1 Strengthen API security implementation
+  - **Droid**: backend-engineer-droid-forge
+  - **Scope**: Authentication, authorization, input validation
 ```
 
 ## Quality Assurance

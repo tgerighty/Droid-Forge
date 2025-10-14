@@ -99,14 +99,10 @@ import jwt from 'jsonwebtoken';
 
 async function login(username: string, password: string) {
   const user = await findUserByUsername(username);
-  if (!user) {
-    throw new Error('Invalid credentials');
-  }
+  if (!user) throw new Error('Invalid credentials');
 
   const isValidPassword = await bcrypt.compare(password, user.passwordHash);
-  if (!isValidPassword) {
-    throw new Error('Invalid credentials');
-  }
+  if (!isValidPassword) throw new Error('Invalid credentials');
 
   const token = jwt.sign(
     { userId: user.id, role: user.role },
@@ -134,24 +130,16 @@ import { z } from 'zod';
 
 // Define validation schemas
 const userSchema = z.object({
-  username: z.string()
-    .min(3, 'Username must be at least 3 characters')
-    .max(50, 'Username must be less than 50 characters')
-    .regex(/^[a-zA-Z0-9]+$/, 'Username can only contain alphanumeric characters'),
-  email: z.string()
-    .email('Invalid email format')
-    .max(255, 'Email must be less than 255 characters'),
+  username: z.string().min(3).max(50).regex(/^[a-zA-Z0-9]+$/),
+  email: z.string().email().max(255),
   password: z.string()
-    .min(8, 'Password must be at least 8 characters')
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/, 
-      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
+    .min(8)
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/),
 });
 
 // Secure input validation
 async function createUser(userData: unknown) {
   const validatedData = userSchema.parse(userData); // ✅ SECURE validation
-  
-  // Hash password
   const passwordHash = await bcrypt.hash(validatedData.password, 12);
   
   return db.insert(users).values({
@@ -170,7 +158,6 @@ const apiKey = process.env.API_KEY; // ❌ Could be undefined
 // AFTER: Secure environment variable validation
 import dotenv from 'dotenv';
 
-// Load and validate environment variables
 dotenv.config();
 
 const envSchema = z.object({
@@ -183,7 +170,6 @@ const envSchema = z.object({
 
 const env = envSchema.parse(process.env);
 
-// Type-safe environment access
 export const config = {
   nodeEnv: env.NODE_ENV,
   port: env.PORT,

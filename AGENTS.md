@@ -83,7 +83,7 @@ Task tool subagent_type="manager-orchestrator-droid-forge" prompt "Mark 1.2 done
 
 **Assessment** (Analyze → Tasks) • **Action** (Execute → Updates) • **Infrastructure** (Orchestration)
 
-### Assessment (9)
+### Assessment (10)
 
 | Droid | Purpose |
 |-------|---------|
@@ -96,6 +96,7 @@ Task tool subagent_type="manager-orchestrator-droid-forge" prompt "Mark 1.2 done
 | typescript | Type safety • 'any' usage, weak types, null checks |
 | debugging | Root cause • Bugs, perf, memory leaks, races |
 | test | Test quality • Coverage, flaky tests, missing cases |
+| replit-assessment | **NEW** Platform optimization • Identifies tasks Replit handles, eliminates 70% infrastructure work |
 
 ### Action (7)
 
@@ -131,6 +132,7 @@ Task tool subagent_type="manager-orchestrator-droid-forge" prompt "Mark 1.2 done
 | Plan check | plan-review | "Review tasks/plan-X.md. Check alignment, risks, go/no-go" |
 | Bug impact | impact-analyzer | "Map affected files for /api/users 500s. Trace propagation, propose fix" |
 | **Bug scan** | **bug-hunter** | **"Scan entire codebase. Check 17 critical patterns: dead code, async bugs, React issues, security"** |
+| **Platform optimize** | **replit-assessment** | **"Analyze tasks/tasks-X.md: mark Replit-handled tasks as [x], partial as [~], focus on actual dev work"** |
 | Feature | manager-orchestrator | "Analyze tasks/tasks-0001.md, create delegation plan" |
 | React UI | frontend-engineer | "TS user profile: avatar upload, responsive, a11y" |
 | API | backend-engineer | "Auth API with JWT: register, login, logout, refresh" |
@@ -285,6 +287,7 @@ Task tool subagent_type="reliability-droid-forge" \
 | Plan check | plan-review |
 | Bug impact | impact-analyzer |
 | **Bug scan** | **bug-hunter** |
+| **Platform optimize** | **replit-assessment** |
 | Complex | manager-orchestrator |
 | React | frontend-engineer |
 | API | backend-engineer |
@@ -338,7 +341,7 @@ Task tool subagent_type="reliability-droid-forge" \
 ---
 
 **Docs:** [README](./README.md) • [CHANGELOG](./CHANGELOG.md) • [LICENSE](./LICENSE)  
-**External:** [Factory.ai](https://factory.ai/) • [ai-dev-tasks](https://github.com/snarktank/ai-dev-tasks) • [Biome](https://biomejs.dev/)
+**External:** [Factory.ai](https://factory.ai/) • [ai-dev-tasks](https://github.com/tgerighty/ai-dev-tasks) • [Biome](https://biomejs.dev/)
 
 ---
 

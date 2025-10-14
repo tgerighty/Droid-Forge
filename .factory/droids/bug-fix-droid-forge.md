@@ -233,16 +233,30 @@ function getUserName(user) {
 
 ## Manager Droid Integration
 
-```bash
-coordinate_debugging_and_fixing() {
-  Task tool with subagent_type="debugging-assessment-droid-forge" \
-    description="Analyze bugs" \
-    prompt "Perform root cause analysis and create tasks"
-  
-  Task tool with subagent_type="bug-fix-droid-forge" \
-    description="Execute bug fixes" \
-    prompt "Process tasks and implement fixes. Run tests after each fix."
-}
+The bug fix droid coordinates with the manager orchestrator through task files:
+
+```markdown
+# tasks/tasks-bug-fixes-2025-01-13.md
+
+## Tasks
+
+### Bug Analysis (BLOCKER)
+- [ ] 1.1 Perform root cause analysis
+  - **Droid**: debugging-assessment-droid-forge
+  - **Input**: Bug reports, error logs, reproduction steps
+  - **Output**: Detailed analysis report with findings
+
+### Bug Fixing (HIGH)
+- [ ] 2.1 Implement bug fixes based on analysis
+  - **Droid**: bug-fix-droid-forge
+  - **Dependencies**: Task 1.1 must be completed
+  - **Process**: Read analysis report, implement fixes, run tests
+
+### Validation (HIGH)
+- [ ] 3.1 Verify fixes work and no regressions
+  - **Droid**: unit-test-droid-forge
+  - **Scope**: Test fixed functionality, ensure no new bugs introduced
+  - **Coverage**: Full regression test suite
 ```
 
 ## Success Criteria

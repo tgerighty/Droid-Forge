@@ -224,6 +224,11 @@ delegation_rules:
       droid_types: ["generate-test-cases", "write-unit-tests"]
       priority: 16
 
+    - pattern: "replit|deployment|ci/cd|hosting|platform.*setup"
+      capabilities: ["replit-assessment", "platform-evaluation", "task-optimization"]
+      droid_types: ["replit-assessment-droid-forge"]
+      priority: 1
+
 # Git workflow configuration
 git:
   # Default branch strategy

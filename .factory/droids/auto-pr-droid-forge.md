@@ -48,42 +48,28 @@ tags: ["automation", "pull-requests", "issue-resolution", "cicd", "iterative-rev
 
 ## Iterative Review System
 
-### Feedback Categories & Routing
-```javascript
-const FEEDBACK_ROUTING = {
-  'code-logic': 'debugging-assessment-droid-forge',
-  'style-formatting': 'biome-droid-forge', 
-  'security': 'security-assessment-droid-forge',
-  'tests': 'unit-test-droid-forge',
-  'performance': 'backend-engineer-droid-forge',
-  'typescript': 'typescript-assessment-droid-forge',
-  'refactoring': 'code-refactoring-droid-forge'
-};
-```
-
 ### Review Cycle Process
 1. **Monitor**: Check PR for new comments/reviews
 2. **Categorize**: Classify feedback by type and severity
-3. **Delegate**: Route to appropriate specialist droid
-4. **Fix**: Specialist generates fix solutions
-5. **Commit**: Apply fixes and update PR
-6. **Repeat**: Continue until PR is clean or max iterations
+3. **Generate Fixes**: Create solutions for identified issues
+4. **Commit**: Apply fixes and update PR
+5. **Repeat**: Continue until PR is clean or max iterations
 
 ### Example Review Cycle
 ```bash
 # Initial PR creation
-Task tool with subagent_type="auto-pr-droid-forge" \
+Task tool subagent_type="auto-pr-droid-forge" \
   description "Automated PR with iterative review" \
-  prompt "Create PR for issue #123: Add user authentication. Include iterative review cycle with max 5 iterations, monitor CodeRabbit and CI/CD feedback, auto-route fixes to specialist droids"
+  prompt "Create PR for issue #123: Add user authentication. Include iterative review cycle with max 5 iterations, monitor CodeRabbit and CI/CD feedback, automatically fix issues"
 
 # Iteration 1: CodeRabbit feedback on security
-# Routes to security-assessment-droid-forge -> fixes SQL injection issues
+# Auto-generates security fixes based on feedback patterns
 
 # Iteration 2: CI/CD test failures  
-# Routes to unit-test-droid-forge -> adds missing tests
+# Auto-adds missing tests and fixes failing tests
 
 # Iteration 3: Human review on code style
-# Routes to biome-droid-forge -> fixes formatting issues
+# Auto-applies formatting and linting fixes
 
 # Result: Clean, mergeable PR after 3 iterations
 ```
@@ -274,22 +260,46 @@ const PR_METRICS = {
 ## Error Handling
 
 ### Common Scenarios
-```bash
-# CI/CD Pipeline Failure
-if [ $? -ne 0 ]; then
-  Task tool with subagent_type="auto-pr-droid-forge" \
-    description "Fix CI/CD failures" \
-    prompt "PR #123 failed CI/CD. Analyze failure logs and route fixes to appropriate specialist droids"
-fi
 
-# Merge Conflicts
-if git merge main --no-edit; then
-  echo "Merge successful"
-else
-  Task tool with subagent_type="auto-pr-droid-forge" \
-    description "Resolve merge conflicts" \
-    prompt "PR #123 has merge conflicts. Resolve conflicts and update PR"
-fi
+**CI/CD Pipeline Failure**
+The auto-pr droid creates task files to handle CI/CD failures:
+
+```markdown
+# tasks/tasks-pr-123-ci-fixes.md
+
+## Tasks
+
+### CI/CD Troubleshooting (BLOCKER)
+- [ ] 1.1 Analyze CI/CD failure logs
+  - **Droid**: debugging-assessment-droid-forge
+  - **Scope**: Identify root cause of build/test failures
+  - **Files**: .github/workflows/, ci.yml
+
+### Build Fixes (HIGH)
+- [ ] 2.1 Fix identified build issues
+  - **Droid**: bug-fix-droid-forge
+  - **Dependencies**: Task 1.1 must be completed
+  - **Focus**: Linting errors, dependency issues, test failures
+```
+
+**Merge Conflicts**
+The auto-pr droid creates task files to resolve merge conflicts:
+
+```markdown
+# tasks/tasks-pr-123-merge-fixes.md
+
+## Tasks
+
+### Conflict Resolution (BLOCKER)
+- [ ] 1.1 Resolve merge conflicts in affected files
+  - **Droid**: git-workflow-orchestrator-droid-forge
+  - **Files**: Conflicted files from git status
+  - **Method**: Manual merge with conflict resolution
+
+### Conflict Testing (HIGH)
+- [ ] 2.1 Test merged changes
+  - **Droid**: unit-test-droid-forge
+  - **Scope**: Ensure merged code doesn't break existing functionality
 ```
 
 ### Recovery Procedures

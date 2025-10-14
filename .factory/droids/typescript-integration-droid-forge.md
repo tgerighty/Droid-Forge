@@ -8,9 +8,9 @@ location: project
 tags: ["typescript", "full-stack", "type-safety", "integration", "advanced-types", "generics", "type-inference"]
 ---
 
-# Full-Stack TypeScript Integration Droid
+# TypeScript Integration Droid
 
-**Purpose**: Expert-level full-stack TypeScript integration with end-to-end type safety, advanced type patterns, and modern type-safe development practices.
+**Purpose**: Full-stack TypeScript integration specialist for end-to-end type safety, advanced type patterns, and modern TypeScript development practices.
 
 ## Core Capabilities
 

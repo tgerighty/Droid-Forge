@@ -8,11 +8,11 @@ createdAt: "2025-10-12"
 updatedAt: "2025-10-12"
 ---
 
-# Reliability Droid Foundry
+# Reliability Droid
 
-**Purpose**: Proactive system reliability management, incident response, and operational excellence automation.
+**Purpose**: System reliability, incident management, and operational excellence
 
-**🚨 CRITICAL**: Use ONLY ai-dev-tasks task system. No built-in task management. Single source of truth: `/tasks/tasks-[prd-file-name].md`.
+**🚨 CRITICAL**: Use ONLY ai-dev-tasks task system. No built-in task management.
 
 ## Core Capabilities
 
@@ -98,54 +98,24 @@ updatedAt: "2025-10-12"
 ```bash
 # Incident detection and classification
 detect_incident() {
-  local monitoring_system="$1"
-  local alert_threshold="$2"
-  
-  # Analyze alerts and classify severity
-  local incident_data=$(analyze_alerts "$monitoring_system")
-  local severity=$(classify_incident_severity "$incident_data" "$alert_threshold")
-  
-  if [ "$severity" != "none" ]; then
-    trigger_incident_response "$incident_data" "$severity"
-  fi
+  local incident_data=$(analyze_alerts "$1")
+  local severity=$(classify_incident_severity "$incident_data" "$2")
+  [ "$severity" != "none" ] && trigger_incident_response "$incident_data" "$severity"
 }
 
 # Automated incident response
 trigger_incident_response() {
-  local incident_data="$1"
-  local severity="$2"
-  
-  # Create incident tracking
-  local incident_id=$(create_incident "$incident_data" "$severity")
-  
-  # Notify on-call team
-  notify_oncall_team "$incident_id" "$severity"
-  
-  # Execute automated response playbook
-  execute_response_playbook "$incident_id" "$severity"
-  
-  # Create incident channel
+  local incident_id=$(create_incident "$1" "$2")
+  notify_oncall_team "$incident_id" "$2"
+  execute_response_playbook "$incident_id" "$2"
   create_incident_channel "$incident_id"
-  
-  # Start incident timeline tracking
   start_incident_timeline "$incident_id"
 }
 
 # Root cause analysis
 perform_root_cause_analysis() {
-  local incident_id="$1"
-  local incident_data="$2"
-  
-  # Create RCA task file for user to execute with debugging droid
-  create_rca_task_file "$incident_id" "$incident_data"
-  
-  # Output instructions for user:
-  # "Created /tasks/rca-incident-${incident_id}.md"
-  # "Execute: Task tool with subagent_type='debugging-assessment-droid-forge'"
-  # "         prompt 'Analyze incident using /tasks/rca-incident-${incident_id}.md'"
-  
-  # Create post-incident review template
-  generate_postmortem_template "$incident_id"
+  create_rca_task_file "$1" "$2"
+  generate_postmortem_template "$1"
 }
 ```
 
@@ -153,31 +123,17 @@ perform_root_cause_analysis() {
 ```bash
 # System health assessment
 assess_system_health() {
-  local service_list="$1"
-  local health_check_interval="$2"
-  
-  for service in $service_list; do
+  for service in $1; do
     local health_status=$(check_service_health "$service")
     local performance_metrics=$(collect_performance_metrics "$service")
-    
-    if [ "$health_status" != "healthy" ]; then
-      trigger_health_alert "$service" "$health_status" "$performance_metrics"
-    fi
-    
-    # Check for performance degradation
+    [ "$health_status" != "healthy" ] && trigger_health_alert "$service" "$health_status" "$performance_metrics"
     analyze_performance_trends "$service" "$performance_metrics"
   done
 }
 
 # Anomaly detection
 detect_anomalies() {
-  local metric_data="$1"
-  local baseline="$2"
-  
-  # Statistical anomaly detection
-  local anomalies=$(statistical_anomaly_detection "$metric_data" "$baseline")
-  
-  # Machine learning based detection
+  local anomalies=$(statistical_anomaly_detection "$1" "$2")
   local ml_anomalies=$(ml_anomaly_detection "$metric_data")
   
   # Correlate anomalies across systems

@@ -214,6 +214,14 @@ configure_droid_forge() {
 
 # Update .gitignore for .factory directory
 update_gitignore() {
+    # Only add .factory/ to .gitignore for project installations
+    # Personal installations (~/.factory/droids) don't need gitignore
+    if [ "$INSTALL_LOCATION" = "user" ]; then
+        print_info "Personal installation detected - skipping .gitignore update"
+        print_info "Personal droids are installed outside the project and don't need gitignore"
+        return
+    fi
+    
     print_info "Updating .gitignore to exclude .factory directory..."
     
     local gitignore_file=".gitignore"
@@ -222,7 +230,7 @@ update_gitignore() {
     if [ ! -f "$gitignore_file" ]; then
         print_info "Creating .gitignore file"
         cat > "$gitignore_file" << 'EOF'
-# Droid Forge - Custom droids directory (personal overrides)
+# Droid Forge - Custom droids directory (project-specific)
 .factory/
 EOF
         print_success "Created .gitignore with .factory/ entry"
@@ -235,17 +243,14 @@ EOF
         return
     fi
     
-    # Check if there's a Droid Forge section
-    if grep -q "# Droid Forge" "$gitignore_file" 2>/dev/null; then
-        print_info ".gitignore already has Droid Forge section"
-        return
-    fi
+    # For project installations, always add .factory/ if it's not already there
+    # (Don't skip just because there's a Droid Forge section elsewhere)
     
     # Add .factory entry to .gitignore
     echo "" >> "$gitignore_file"
-    echo "# Droid Forge - Custom droids directory (personal overrides)" >> "$gitignore_file"
+    echo "# Droid Forge - Custom droids directory (project-specific)" >> "$gitignore_file"
     echo ".factory/" >> "$gitignore_file"
-    print_success "Added .factory/ to .gitignore"
+    print_success "Added .factory/ to .gitignore for project installation"
 }
 
 # Run initial tests
@@ -290,9 +295,6 @@ show_next_steps() {
     echo "   - README.md (overview and usage)"
     echo "   - DROID_CREATION_GUIDE.md (create custom droids)"
     echo "   - GITHUB_REPO_GUIDE.md (GitHub integration)"
-    echo ""
-    echo "5. Create your first task file:"
-    echo "   cp tasks/template.md tasks/my-first-task.md"
     echo ""
     print_success "Droid Forge is ready to use! 🚀"
     

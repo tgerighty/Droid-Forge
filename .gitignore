@@ -43,9 +43,4 @@ build/
 # Biome configuration
 biome.json
 
-# Task management folders (keep local, don't sync to GitHub)
-ai-dev-tasks/
-tasks/
 
-# Local droid forge data
-.droid-forge/

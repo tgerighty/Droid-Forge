@@ -39,61 +39,18 @@ tags: ["caching", "performance-optimization", "redis", "cache-strategy", "cache-
 
 ### Redis Performance Analysis
 ```typescript
-// Redis performance monitoring
 interface RedisMetrics {
-  memory: {
-    used: number;
-    peak: number;
-    rss: number;
-    overhead: number;
-  };
-  performance: {
-    opsPerSec: number;
-    hitRate: number;
-    missRate: number;
-    avgResponseTime: number;
-  };
-  keyspace: {
-    totalKeys: number;
-    expiresKeys: number;
-    avgTTL: number;
-  };
-  connections: {
-    connected: number;
-    blocked: number;
-    maxClients: number;
-  };
+  memory: { used: number; peak: number; hitRate: number };
+  performance: { opsPerSec: number; avgResponseTime: number };
+  keyspace: { totalKeys: number; avgTTL: number };
 }
 
-// Redis optimization analysis
-const redisAssessment = {
-  memoryUsage: {
-    maxMemoryLimit: boolean, // ✅ Set appropriate maxmemory limit
-    evictionPolicy: 'allkeys-lru' | 'volatile-lru' | 'noeviction', // ✅ Use appropriate eviction
-    memoryOptimization: boolean, // ✅ Optimize data structures
-    keyExpiration: boolean, // ✅ Set appropriate TTL values
-  },
-  
-  performance: {
-    hitRateThreshold: 0.8, // ✅ Target >80% hit rate
-    responseTimeThreshold: 1, // ✅ <1ms response time
-    throughputOptimization: boolean, // ✅ Optimize for high throughput
-    connectionPooling: boolean, // ✅ Use connection pooling
-  },
-  
-  dataStructures: {
-    efficientStructures: boolean, // ✅ Use optimal data structures
-    serializationOptimization: boolean, // ✅ Optimize serialization
-    keyNamingConvention: boolean, // ✅ Use consistent naming
-    compressionUsage: boolean, // ✅ Use compression for large values
-  },
-  
-  clustering: {
-    highAvailability: boolean, // ✅ Implement Redis clustering
-    failoverMechanism: boolean, // ✅ Configure automatic failover
-    loadBalancing: boolean, // ✅ Implement load balancing
-    dataReplication: boolean, // ✅ Configure data replication
-  },
+// Key Redis optimization checks
+const redisChecks = {
+  memoryUsage: ['maxMemoryLimit', 'evictionPolicy', 'keyExpiration'],
+  performance: ['hitRateThreshold', 'responseTimeThreshold', 'connectionPooling'],
+  dataStructures: ['efficientStructures', 'serializationOptimization', 'compressionUsage'],
+  clustering: ['highAvailability', 'failoverMechanism', 'dataReplication']
 };
 ```
 
@@ -153,94 +110,36 @@ const cacheStrategyAssessment = {
 
 ### Database Caching Assessment
 ```typescript
-// Database query caching analysis
 interface DatabaseCacheMetrics {
-  queryCache: {
-    hitRate: number;
-    missRate: number;
-    totalQueries: number;
-    cacheSize: number;
-  };
-  connectionPooling: {
-    activeConnections: number;
-    totalConnections: number;
-    poolUtilization: number;
-  };
-  queryPerformance: {
-    avgQueryTime: number;
-    slowQueries: number;
-    optimizedQueries: number;
-  };
+  queryCache: { hitRate: number; cacheSize: number };
+  connectionPooling: { activeConnections: number; poolUtilization: number };
+  queryPerformance: { avgQueryTime: number; slowQueries: number };
 }
 
-// Database caching strategies
-const databaseCacheAssessment = {
-  queryResultCaching: {
-    selectQueryCaching: boolean, // ✅ Cache SELECT results
-    parameterizedQueries: boolean, // ✅ Cache parameterized queries
-    resultExpiry: boolean, // ✅ Appropriate result expiry
-    cacheInvalidation: boolean, // ✅ Query result invalidation
-  },
-  
-  connectionCaching: {
-    connectionPooling: boolean, // ✅ Implement connection pooling
-    persistentConnections: boolean, // ✅ Use persistent connections
-    connectionReuse: boolean, // ✅ Reuse connections efficiently
-    poolSizing: boolean, // ✅ Optimal pool size configuration
-  },
-  
-  metadataCaching: {
-    schemaCache: boolean, // ✅ Cache database schema
-    tableStatistics: boolean, // ✅ Cache table statistics
-    indexInformation: boolean, // ✅ Cache index metadata
-    queryPlans: boolean, // ✅ Cache query execution plans
-  },
-  
-  ormCaching: {
-    entityCaching: boolean, // ✅ Cache ORM entities
-    relationshipCaching: boolean, // ✅ Cache entity relationships
-    collectionCaching: boolean, // ✅ Cache entity collections
-    secondLevelCache: boolean, // ✅ Implement second-level cache
-  },
+// Database caching strategy checks
+const dbCacheChecks = {
+  queryResultCaching: ['selectQueryCaching', 'parameterizedQueries', 'cacheInvalidation'],
+  connectionCaching: ['connectionPooling', 'persistentConnections', 'poolSizing'],
+  metadataCaching: ['schemaCache', 'tableStatistics', 'queryPlans'],
+  ormCaching: ['entityCaching', 'relationshipCaching', 'secondLevelCache']
 };
 ```
 
 ### CDN Caching Analysis
 ```typescript
-// CDN performance assessment
 interface CDNMetrics {
   cacheHitRate: number;
   bandwidthSavings: number;
   responseTime: number;
   edgeLocationCount: number;
-  cacheUtilization: number;
 }
 
-// CDN optimization strategies
-const cdnAssessment = {
-  cachingConfiguration: {
-    staticAssetCaching: boolean, // ✅ Cache static assets long-term
-    dynamicContentCaching: boolean, // ✅ Cache dynamic content appropriately
-    edgeCaching: boolean, // ✅ Use edge caching
-    regionalCaching: boolean, // ✅ Regional cache distribution
-  },
-  
-  cacheHeaders: {
-    cacheControl: boolean, // ✅ Proper Cache-Control headers
-    expiresHeaders: boolean, // ✅ Expires headers
-    etagImplementation: boolean, // ✅ ETag implementation
-    varyHeaders: boolean, // ✅ Vary headers for content negotiation
-  },
-  
-  optimization: {
-    compressionEnabled: boolean, // ✅ Enable compression
-    minificationEnabled: boolean, // ✅ Minify assets
-    imageOptimization: boolean, // ✅ Optimize images
-    bundleOptimization: boolean, // ✅ Optimize bundles
-  },
-  
-  performance: {
-    geoDistribution: boolean, // ✅ Geographic distribution
+// CDN optimization checks
+const cdnChecks = {
+  cachingConfiguration: ['staticAssetCaching', 'dynamicContentCaching', 'edgeCaching'],
+  cacheHeaders: ['cacheControl', 'expiresHeaders', 'etagImplementation'],
+  optimization: ['compressionEnabled', 'minificationEnabled', 'imageOptimization'],
+  performance: ['geoDistribution', 'loadBalancing', 'failover']
     loadBalancing: boolean, // ✅ CDN load balancing
     failoverSupport: boolean, // ✅ CDN failover support
     healthMonitoring: boolean, // ✅ CDN health monitoring
@@ -319,80 +218,38 @@ interface CacheMonitoring {
 
 ### Cache Optimization Implementation
 ```typescript
-// Redis optimization implementation
+// Optimized Redis cache with performance tracking
 class OptimizedRedisCache {
-  private client: Redis;
-  private metrics: CacheMetrics;
-
   constructor(redisConfig: RedisOptions) {
-    this.client = new Redis(redisConfig);
     this.setupOptimizations();
   }
 
   private setupOptimizations() {
-    // Enable memory optimization
+    // Memory optimization
     this.client.configSet('maxmemory-policy', 'allkeys-lru');
     this.client.configSet('hash-max-ziplist-entries', '512');
-    this.client.configSet('hash-max-ziplist-value', '64');
-    
-    // Enable compression for large values
-    this.client.configSet('zset-max-ziplist-entries', '128');
-    this.client.configSet('zset-max-ziplist-value', '64');
   }
 
   async get(key: string): Promise<any> {
-    const startTime = Date.now();
-    try {
-      const value = await this.client.get(key);
-      this.recordMetrics('get', Date.now() - startTime, value !== null);
-      return value ? JSON.parse(value) : null;
-    } catch (error) {
-      this.recordError('get', error);
-      throw error;
-    }
+    const value = await this.client.get(key);
+    this.recordMetrics(value !== null);
+    return value ? JSON.parse(value) : null;
   }
 
   async set(key: string, value: any, ttl?: number): Promise<void> {
-    const startTime = Date.now();
-    try {
-      const serialized = JSON.stringify(value);
-      if (ttl) {
-        await this.client.setex(key, ttl, serialized);
-      } else {
-        await this.client.set(key, serialized);
-      }
-      this.recordMetrics('set', Date.now() - startTime, true);
-    } catch (error) {
-      this.recordError('set', error);
-      throw error;
-    }
-  }
-
-  private recordMetrics(operation: string, duration: number, success: boolean) {
-    // Update performance metrics
-    this.metrics.performance.opsPerSec++;
-    if (operation === 'get') {
-      this.metrics.performance.hitRate = success ? 
-        this.metrics.performance.hitRate + 0.01 : 
-        this.metrics.performance.hitRate - 0.01;
-    }
+    const serialized = JSON.stringify(value);
+    ttl ? await this.client.setex(key, ttl, serialized) : await this.client.set(key, serialized);
   }
 }
 
-// Multi-level cache implementation
+// Multi-level cache pattern
 class MultiLevelCache {
-  private l1Cache: LRUCache<string, any>; // Memory cache
-  private l2Cache: OptimizedRedisCache; // Redis cache
-  private l3Cache: DatabaseCache; // Database cache
-
   async get(key: string): Promise<any> {
-    // Level 1: Memory cache
+    // L1: Memory cache
     let value = this.l1Cache.get(key);
-    if (value !== undefined) {
-      return value;
-    }
+    if (value !== undefined) return value;
 
-    // Level 2: Redis cache
+    // L2: Redis cache  
     value = await this.l2Cache.get(key);
     if (value !== null) {
       this.l1Cache.set(key, value);
@@ -442,45 +299,23 @@ class MultiLevelCache {
 - **Cost Optimization**: [X]%
 
 ### Performance Impact
-- **Cache Hit Improvement**: [X]% potential improvement
-- **Memory Optimization**: [X]% potential savings
-- **Response Time Improvement**: [X]% potential improvement
-- **Cost Reduction**: [X]% potential savings
+- **Cache Hit Improvement**: Target 80%+ hit rate
+- **Memory Optimization**: Reduce fragmentation by 30%
+- **Response Time**: Sub-millisecond cache operations
+- **Cost Reduction**: Optimize memory usage patterns
 ```
 
-### Detailed Findings
+### Key Findings Template
 ```markdown
-## Redis Performance Analysis
+## Performance Summary
+- **Hit Rate**: [Current]% → [Target] (Target: >80%)
+- **Memory Usage**: [Current]MB / [Total]MB
+- **Response Time**: [Current]ms
 
-### Current Performance
-- **Hit Rate**: [X]% (Target: >80%)
-- **Memory Usage**: [X]MB / [X]MB
-- **Response Time**: [X]ms
-- **Operations/sec**: [X]
-
-### Optimization Opportunities
-1. **Memory Optimization** - [X]% improvement potential
-   - Current configuration issues
-   - Recommended changes
-   - Expected impact
-
-2. **Hit Rate Improvement** - [X]% improvement potential
-   - Identify cache misses
-   - Improve caching strategies
-   - Implement cache warming
-
-## Application Caching
-
-### Current Implementation
-- **Cache Strategy**: [Cache-aside/Write-through/Write-behind]
-- **Hit Rate**: [X]%
-- **Invalidation Strategy**: [Time-based/Event-based/Tag-based]
-
-### Recommendations
-1. **Strategy Optimization**
-2. **Invalidation Improvements**
-3. **Performance Tuning**
-4. **Monitoring Enhancement**
+## Top 3 Issues
+1. [Primary issue with impact]
+2. [Secondary optimization opportunity]
+3. [Monitoring improvement needed]
 ```
 
 ## Task File Integration
@@ -514,30 +349,24 @@ class MultiLevelCache {
 ## Tool Usage Guidelines
 
 ### Execute Tool
-**Purpose**: Run cache analysis and performance commands
+**Purpose**: Cache analysis and performance commands
 
-**Allowed Commands**:
-- `redis-cli info memory` - Analyze Redis memory usage
-- `redis-cli info stats` - Get Redis performance statistics
-- `redis-cli slowlog get 10` - Analyze slow Redis operations
-- `npm run cache:analyze` - Run cache analysis script
+**Key Commands**:
+- `redis-cli info memory` - Memory usage analysis
+- `redis-cli info stats` - Performance statistics  
+- `redis-cli slowlog get 10` - Slow operations
+- `npm run cache:analyze` - Cache analysis script
 
 ### Grep Tool
-**Purpose**: Find caching issues in code
+**Purpose**: Find caching patterns and issues
 
-**Usage Examples**:
+**Search Examples**:
 ```bash
-# Find cache misses
-rg -n "cache.*miss|miss.*cache" --type ts --type js
-
-# Find cache invalidation issues
-rg -n "invalidate|clear|flush" --type ts --type js
-
-# Find TTL configuration
-rg -n "ttl|expire|timeout" --type ts --type js
+rg -n "cache.*miss|invalidate|ttl" --type ts --type js
+rg -n "redis|cache" --type ts --type js
 ```
 
-## Integration Examples
+## Usage Examples
 
 ```bash
 # Comprehensive caching assessment

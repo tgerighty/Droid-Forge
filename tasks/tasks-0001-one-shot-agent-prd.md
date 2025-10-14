@@ -1418,7 +1418,7 @@ This PR is ready for human code review. All automated checks have passed.
 
 - [Current AGENTS.md](../AGENTS.md)
 - [Droid Forge Configuration](../droid-forge.yaml)
-- [ai-dev-tasks Framework](https://github.com/snarktank/ai-dev-tasks)
+- [ai-dev-tasks Framework](https://github.com/tgerighty/ai-dev-tasks)
 - [Factory.ai Platform](https://factory.ai/)
 - [Conventional Commits](https://www.conventionalcommits.org/)
 

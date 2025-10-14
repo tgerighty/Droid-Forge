@@ -39,9 +39,6 @@ tags: ["unit-testing", "test-automation", "coverage", "tdd", "bdd", "jest", "vit
 ### Test Configuration
 ```typescript
 // vitest.config.ts
-import { defineConfig } from 'vitest/config';
-import { resolve } from 'path';
-
 export default defineConfig({
   test: {
     globals: true,
@@ -61,23 +58,21 @@ export default defineConfig({
 ```typescript
 // tests/unit/utils/userValidator.test.ts
 import { describe, it, expect, beforeEach } from 'vitest';
-import { validateUser, UserValidationError } from '@/utils/userValidator';
+import { validateUser } from '@/utils/userValidator';
 
 describe('validateUser', () => {
   const validUser = {
     email: 'test@example.com',
     username: 'testuser',
-    password: 'testPassword123',
+    password: 'valid-test-password',
   };
 
-  describe('when user data is valid', () => {
-    it('should return success with validated user', () => {
-      const result = validateUser(validUser);
-      
-      expect(result.success).toBe(true);
-      expect(result.data).toEqual(validUser);
-      expect(result.errors).toHaveLength(0);
-    });
+  it('should return success for valid user', () => {
+    const result = validateUser(validUser);
+    expect(result.success).toBe(true);
+    expect(result.data).toEqual(validUser);
+    expect(result.errors).toHaveLength(0);
+  });
   });
 
   describe('when email is invalid', () => {
@@ -95,48 +90,35 @@ describe('validateUser', () => {
       );
     });
 
-    it('should return validation error for empty email', () => {
-      const invalidUser = { ...validUser, email: '' };
-      
-      const result = validateUser(invalidUser);
-      
+    it('should return error for empty email', () => {
+      const result = validateUser({ ...validUser, email: '' });
       expect(result.success).toBe(false);
       expect(result.errors).toContainEqual(
-        expect.objectContaining({
-          field: 'email',
-          message: expect.stringContaining('required'),
-        })
+        expect.objectContaining({ field: 'email', message: expect.stringContaining('required') })
       );
     });
   });
 
-  describe('when username is invalid', () => {
+  describe('username validation', () => {
     it.each([
-      ['', 'username is required'],
-      ['ab', 'at least 3 characters'],
-      ['user-with-dash', 'alphanumeric only'],
-      ['user_with_underscore', 'alphanumeric only'],
-    ])('should return error for username "%s": %s', (username, expectedMessage) => {
-      const invalidUser = { ...validUser, username };
-      
-      const result = validateUser(invalidUser);
-      
+      ['', 'required'],
+      ['ab', '3 characters'],
+      ['user-with-dash', 'alphanumeric'],
+    ])('should error for "%s" (%s)', (username, expected) => {
+      const result = validateUser({ ...validUser, username });
       expect(result.success).toBe(false);
       expect(result.errors).toContainEqual(
-        expect.objectContaining({
-          field: 'username',
-          message: expect.stringContaining(expectedMessage),
-        })
+        expect.objectContaining({ field: 'username', message: expect.stringContaining(expected) })
       );
     });
   });
 });
 ```
 
-### Component Testing with React Testing Library
+### Component Testing Patterns
 ```typescript
 // tests/components/UserForm.test.tsx
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UserForm } from '@/components/UserForm';
 import { vi } from 'vitest';
@@ -144,45 +126,31 @@ import { vi } from 'vitest';
 describe('UserForm', () => {
   const mockOnSubmit = vi.fn();
   
-  beforeEach(() => {
-    mockOnSubmit.mockClear();
+  beforeEach(() => mockOnSubmit.mockClear());
+
+  it('should render form fields', () => {
+    render(<UserForm onSubmit={mockOnSubmit} />);
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
   });
 
-  describe('form rendering', () => {
-    it('should render all form fields', () => {
-      render(<UserForm onSubmit={mockOnSubmit} />);
-      
-      expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/^password/i)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
-    });
-
-    it('should display proper field labels and placeholders', () => {
-      render(<UserForm onSubmit={mockOnSubmit} />);
-      
-      expect(screen.getByLabelText(/email/i)).toHaveAttribute('placeholder', 'Enter your email');
-      expect(screen.getByLabelText(/username/i)).toHaveAttribute('placeholder', 'Choose a username');
-    });
-  });
-
-  describe('form submission', () => {
-    it('should call onSubmit with form data when valid form is submitted', async () => {
-      const user = userEvent.setup();
-      render(<UserForm onSubmit={mockOnSubmit} />);
-      
-      await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-      await user.type(screen.getByLabelText(/username/i), 'testuser');
-      await user.type(screen.getByLabelText(/^password/i), 'testPassword123');
-      await user.click(screen.getByRole('button', { name: /submit/i }));
-      
-      await waitFor(() => {
-        expect(mockOnSubmit).toHaveBeenCalledWith({
-          email: 'test@example.com',
-          username: 'testuser',
-          password: 'testPassword123',
-        });
+  it('should submit valid form data', async () => {
+    const user = userEvent.setup();
+    render(<UserForm onSubmit={mockOnSubmit} />);
+    
+    await user.type(screen.getByLabelText(/email/i), 'test@example.com');
+    await user.type(screen.getByLabelText(/username/i), 'testuser');
+    await user.type(screen.getByLabelText(/^password/i), 'valid-test-password');
+    await user.click(screen.getByRole('button', { name: /submit/i }));
+    
+    await waitFor(() => {
+      expect(mockOnSubmit).toHaveBeenCalledWith({
+        email: 'test@example.com',
+        username: 'testuser',
+        password: 'valid-test-password',
       });
+    });
     });
 
     it('should not call onSubmit when form has validation errors', async () => {
@@ -205,7 +173,7 @@ describe('UserForm', () => {
       
       await user.type(screen.getByLabelText(/email/i), 'test@example.com');
       await user.type(screen.getByLabelText(/username/i), 'testuser');
-      await user.type(screen.getByLabelText(/^password/i), 'testPassword123');
+      await user.type(screen.getByLabelText(/^password/i), 'valid-test-password');
       await user.click(screen.getByRole('button', { name: /submit/i }));
       
       expect(screen.getByRole('button', { name: /submitting/i })).toBeDisabled();
@@ -232,28 +200,18 @@ export const mockUserService: UserService = {
   searchUsers: vi.fn(),
 };
 
+// Service testing with mocks
+```typescript
 // tests/unit/services/UserService.test.ts
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { UserService } from '@/services/UserService';
-import { mockUserService } from '../mocks/userService.mock';
-
-// Mock the entire module
-vi.mock('@/services/UserService', () => ({
-  UserService: vi.fn(() => mockUserService),
-}));
+vi.mock('../services/UserService');
 
 describe('UserService', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
+  beforeEach(() => vi.clearAllMocks());
+  afterEach(() => vi.restoreAllMocks());
 
   describe('getUserById', () => {
     it('should return user when found', async () => {
-      const mockUser = { id: 1, email: 'test@example.com', username: 'test' };
+      const mockUser = { id: 1, email: 'test@example.com' };
       mockUserService.getUserById.mockResolvedValue(mockUser);
 
       const service = new UserService();
@@ -263,28 +221,21 @@ describe('UserService', () => {
       expect(mockUserService.getUserById).toHaveBeenCalledWith(1);
     });
 
-    it('should return null when user not found', async () => {
+    it('should return null when not found', async () => {
       mockUserService.getUserById.mockResolvedValue(null);
-
-      const service = new UserService();
-      const result = await service.getUserById(999);
-
+      const result = await new UserService().getUserById(999);
       expect(result).toBeNull();
     });
 
-    it('should throw error when service fails', async () => {
-      const error = new Error('Database error');
-      mockUserService.getUserById.mockRejectedValue(error);
-
-      const service = new UserService();
-
-      await expect(service.getUserById(1)).rejects.toThrow('Database error');
+    it('should throw on service error', async () => {
+      mockUserService.getUserById.mockRejectedValue(new Error('Database error'));
+      await expect(new UserService().getUserById(1)).rejects.toThrow('Database error');
     });
   });
 });
 ```
 
-### Integration Testing
+### Integration Testing Patterns
 ```typescript
 // tests/integration/userRegistration.test.ts
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
@@ -292,19 +243,14 @@ import { request } from 'vitest/browser';
 import { setupTestApp, cleanupTestApp } from '../helpers/testApp';
 
 describe('User Registration Integration', () => {
-  beforeEach(async () => {
-    await setupTestApp();
-  });
-
-  afterEach(async () => {
-    await cleanupTestApp();
-  });
+  beforeEach(async () => await setupTestApp());
+  afterEach(async () => await cleanupTestApp());
 
   it('should register new user successfully', async () => {
     const userData = {
       email: 'newuser@example.com',
       username: 'newuser',
-      password: 'testPassword123',
+      password: 'valid-test-password',
     };
 
     const response = await request('/api/auth/register', {
@@ -315,21 +261,17 @@ describe('User Registration Integration', () => {
 
     expect(response.status).toBe(201);
     const body = await response.json();
-    expect(body).toEqual({
-      success: true,
-      data: expect.objectContaining({
-        id: expect.any(Number),
-        email: userData.email,
-        username: userData.username,
-      }),
+    expect(body.data).toMatchObject({
+      email: userData.email,
+      username: userData.username,
     });
   });
 
-  it('should return validation error for duplicate email', async () => {
+  it('should validate duplicate email', async () => {
     const userData = {
       email: 'existing@example.com',
       username: 'newuser',
-      password: 'testPassword123',
+      password: 'valid-test-password',
     };
 
     // First registration
@@ -423,7 +365,7 @@ Feature: User Registration
     Then I should see an error message "Invalid email format"
 
 // tests/bdd/userRegistration.steps.ts
-import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
+import { Given, When, Then } from 'cypress-cucumber-preprocessor';
 import { mount } from 'cypress/react';
 import { RegistrationForm } from '@/components/RegistrationForm';
 
@@ -456,24 +398,19 @@ Then('I should be redirected to the dashboard', () => {
 ### Custom Matchers
 ```typescript
 // tests/matchers/toBeValidUser.ts
-import { expect } from 'vitest';
-
-interface CustomMatchers<R = unknown> {
-  toBeValidUser(): R;
-  toHaveValidationError(field: string, message: string): R;
-}
-
-expect.extend<CustomMatchers>({
+// Custom matchers
+```typescript
+// tests/matchers/customMatchers.ts
+expect.extend({
   toBeValidUser(received) {
     const isValid = received &&
       typeof received.id === 'number' &&
       typeof received.email === 'string' &&
       received.email.includes('@') &&
-      typeof received.username === 'string' &&
-      received.username.length >= 3;
+      typeof received.username === 'string';
 
     return {
-      message: () => `expected ${received} to be a valid user object`,
+      message: () => `expected ${received} to be a valid user`,
       pass: isValid,
     };
   },
@@ -482,46 +419,31 @@ expect.extend<CustomMatchers>({
     const hasError = received.errors?.some((error: any) =>
       error.field === field && error.message.includes(message)
     );
-
     return {
-      message: () => `expected validation error for field ${field} with message "${message}"`,
+      message: () => `expected validation error for ${field}`,
       pass: hasError,
     };
   },
 });
-
-declare global {
-  namespace Vi {
-    interface Assertion extends CustomMatchers {}
-  }
-}
 ```
 
 ### Test Helpers
 ```typescript
 // tests/helpers/testUtils.ts
-import { render, RenderOptions } from '@testing-library/react';
-import { ReactElement } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/query';
 
 const createTestQueryClient = () => new QueryClient({
-  defaultOptions: {
-    queries: { retry: false },
-    mutations: { retry: false },
-  },
+  defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
 });
 
-const AllTheProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const queryClient = createTestQueryClient();
-  
-  return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
-  );
-};
+const AllTheProviders = ({ children }: { children: React.ReactNode }) => (
+  <QueryClientProvider client={createTestQueryClient()}>
+    {children}
+  </QueryClientProvider>
+);
 
-const customRender = (ui: ReactElement, options?: RenderOptions) =>
+export const customRender = (ui: ReactElement, options?: RenderOptions) =>
   render(ui, { wrapper: AllTheProviders, ...options });
 
 export * from '@testing-library/react';
@@ -575,50 +497,47 @@ export { createTestQueryClient };
 **Usage Examples**:
 ```bash
 # Find untested files
-rg -l "export.*function|export.*class" src/ | xargs grep -L "\.test\."
+find src/ -name "*.ts" -o -name "*.tsx" | xargs grep -L "\.test\."
 
-# Find missing assertions
-rg -n "expect\(" tests/ | rg -v "\.to.*\("
-
-# Find test files with low coverage
-rg -n "describe\(" tests/ | wc -l
+# Analysis commands
+grep -n "expect(" tests/ | grep -v "\.to.*\("
+grep -n "describe(" tests/ | wc -l
 ```
 
-## Integration Examples
+## Usage Examples
 
 ```bash
 # Complete test setup
 Task tool subagent_type="unit-test-droid-forge" \
   description="Set up comprehensive testing" \
-  prompt "Implement tasks from /tasks/tasks-unit-test.md: Set up Vitest, React Testing Library, coverage reporting, and create comprehensive test suite with 85%+ coverage."
+  prompt "Set up Vitest, React Testing Library, coverage reporting, and create test suite with 85%+ coverage."
 
-# Performance testing implementation
+# Performance tests
 Task tool subagent_type="unit-test-droid-forge" \
-  description "Add performance tests" \
+  description="Add performance tests" \
   prompt "Create performance tests for API endpoints, measure response times, and implement load testing scenarios."
 
-# BDD test implementation
+# BDD implementation
 Task tool subagent_type="unit-test-droid-forge" \
-  description "Implement BDD tests" \
-  prompt "Set up BDD testing with Gherkin syntax, create feature files, and implement step definitions for user registration flow."
+  description="Implement BDD tests" \
+  prompt "Set up BDD testing with Gherkin syntax, create feature files, and implement step definitions."
 ```
 
 ## Best Practices
 
 ### Test Organization
-- Group related tests in describe blocks
-- Use descriptive test names that explain what is being tested
-- Arrange tests in Given-When-Then structure
+- Group tests in describe blocks with clear structure
+- Use descriptive test names
 - Keep tests independent and isolated
 
-### Quality Standards
-- Achieve minimum 80% code coverage
-- Test both happy paths and error scenarios
-- Use meaningful assertions with proper matchers
-- Mock external dependencies properly
+### Quality Standards  
+- Achieve 80%+ code coverage
+- Test happy paths and error scenarios
+- Use meaningful assertions and proper matchers
+- Mock external dependencies appropriately
 
-### Performance Considerations
+### Performance
 - Use test isolation to prevent interference
-- Optimize test files for fast execution
+- Optimize for fast execution
 - Use parallel test execution when possible
 - Clean up resources in afterEach hooks

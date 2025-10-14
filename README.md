@@ -287,7 +287,7 @@ droid-forge/
 ├── .factory/droids/          # Factory.ai droids (our custom ones)
 ├── .droid-forge/            # Droid Forge-specific data
 │   └── metadata/            # Branch and task metadata
-├── ai-dev-tasks/            # Process files from https://github.com/snarktank/ai-dev-tasks (linked, not copied)
+├── ai-dev-tasks/            # Process files from https://github.com/tgerighty/ai-dev-tasks (linked, not copied)
 ├── tasks/                   # Generated task lists
 ├── tools/                   # Analysis utilities
 ├── droid-forge.yaml         # Configuration file
@@ -421,7 +421,7 @@ concurrency:
 
 ### Task Management
 
-Droid Forge integrates with [ai-dev-tasks](https://github.com/snarktank/ai-dev-tasks) for PRD-driven development:
+Droid Forge integrates with [ai-dev-tasks](https://github.com/tgerighty/ai-dev-tasks) for PRD-driven development:
 
 - PRD analysis and task breakdown
 - Structured task list generation
@@ -449,7 +449,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Special Thanks
 
 - **[Factory.ai](https://factory.ai/)** - For providing the incredible droid platform and CLI tools that make this meta-orchestration possible
-- **[ai-dev-tasks](https://github.com/snarktank/ai-dev-tasks)** - For the excellent PRD-driven development framework and process documentation that guides our implementation approach
+- **[ai-dev-tasks](https://github.com/tgerighty/ai-dev-tasks)** - For the excellent PRD-driven development framework and process documentation that guides our implementation approach
 - **Gemini 2.5 Pro** - For invaluable architecture review and recommendations that shaped the robust design of this system
 
 ### Inspiration
@@ -459,7 +459,7 @@ The "droid factory" concept is inspired by advanced manufacturing and orchestrat
 ## 🔗 Related Projects
 
 - [Factory.ai](https://factory.ai/) - AI-powered development platform
-- [ai-dev-tasks](https://github.com/snarktank/ai-dev-tasks) - PRD-driven development framework
+- [ai-dev-tasks](https://github.com/tgerighty/ai-dev-tasks) - PRD-driven development framework
 - [Factory.ai CLI](https://docs.factory.ai/cli/getting-started/quickstart) - Command-line AI agent
 
 ## 📄 License

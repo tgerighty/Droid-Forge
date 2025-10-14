@@ -162,12 +162,23 @@ validate_task_list_format() {
 
 ## Manager Droid Integration
 
-```bash
-coordinate_with_baas_orchestrator() {
-  Task tool with subagent_type="manager-orchestrator-droid-forge" \
-    description="Process new task list" \
-    prompt="Process task list $1 from PRD $2 during phase $3"
-}
+The AI dev tasks integrator creates task files for the manager orchestrator to process:
+
+```markdown
+# tasks/tasks-[current-date].md
+
+## Tasks
+
+### PRD Processing (BLOCKER)
+- [ ] 1.1 Analyze PRD requirements and create task breakdown
+  - **Droid**: manager-orchestrator-droid-forge
+  - **Input**: docs/PRD-[name].md
+  - **Output**: Structured task list with droid assignments
+
+### Task Coordination (HIGH)
+- [ ] 2.1 Coordinate task execution across droids
+  - **Droid**: manager-orchestrator-droid-forge
+  - **Scope**: Monitor progress, handle dependencies, resolve conflicts
 ```
 
 ## Error Handling
