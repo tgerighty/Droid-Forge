@@ -130,55 +130,68 @@ install_core_droids() {
         print_info "Created project droids directory at $TARGET_DIR"
     fi
     
-    # Install all droids using wildcard
+    # Install all droids using wildcard with improved version handling
     local droid_count=0
+    local updated_count=0
+    local new_count=0
+    
     if [ -d ".factory/droids" ]; then
         for droid_file in .factory/droids/*-droid-forge.md; do
             if [ -f "$droid_file" ]; then
+                # Skip backup files
+                if [[ "$droid_file" == *.backup ]]; then
+                    continue
+                fi
+                
                 local droid_name
                 droid_name=$(basename "$droid_file" .md)
                 local TARGET_FILE
                 TARGET_FILE="$TARGET_DIR/$(basename "$droid_file")"
                 
-                print_info "Setting up $droid_name..."
+                # Extract version from source file
+                local source_version=""
+                if [ -r "$droid_file" ]; then
+                    source_version=$(grep -E "^version:" "$droid_file" 2>/dev/null | head -1 | cut -d: -f2- | tr -d ' "')
+                fi
                 
-                # If target file exists, check version
-                if [ -f "$TARGET_FILE" ]; then
-                    # Extract version from repo file
-                    REPO_VERSION=""
-                    if [ -r "$droid_file" ]; then
-                        REPO_VERSION=$(grep -E "^version:" "$droid_file" | cut -d: -f2- | tr -d ' ' | tr -d '"')
-                    fi
-                    
-                    # Extract version from target file
-                    TARGET_VERSION=""
-                    if [ -r "$TARGET_FILE" ]; then
-                        TARGET_VERSION=$(grep -E "^version:" "$TARGET_FILE" | cut -d: -f2- | tr -d ' ' | tr -d '"')
-                    fi
-                    
-                    # Replace if repo version is newer or target doesn't have version info
-                    if [ -n "$REPO_VERSION" ] && [ -n "$TARGET_VERSION" ]; then
-                        # Simple string comparison for version numbers
-                        if [ "$REPO_VERSION" \> "$TARGET_VERSION" ] 2>/dev/null; then
-                            cp "$droid_file" "$TARGET_FILE"
-                            print_success "Upgraded $droid_name (v$REPO_VERSION > v$TARGET_VERSION)"
-                        else
-                            cp "$droid_file" "$TARGET_FILE"
-                            print_success "Updated $droid_name (v$REPO_VERSION)"
-                        fi
-                    else
-                        # If version info not found, always copy to ensure latest
-                        cp "$droid_file" "$TARGET_FILE"
-                        if [ -n "$REPO_VERSION" ]; then
-                            print_success "Installed $droid_name (v$REPO_VERSION)"
-                        else
-                            print_success "Installed $droid_name"
-                        fi
+                # Extract version from target file if it exists
+                local target_version=""
+                if [ -r "$TARGET_FILE" ]; then
+                    target_version=$(grep -E "^version:" "$TARGET_FILE" 2>/dev/null | head -1 | cut -d: -f2- | tr -d ' "')
+                fi
+                
+                local action="Installed"
+                local should_copy=false
+                
+                # Determine if we need to copy/update
+                if [ ! -f "$TARGET_FILE" ]; then
+                    # New installation
+                    should_copy=true
+                    action="Installed"
+                    new_count=$((new_count + 1))
+                elif [ -n "$source_version" ] && [ -n "$target_version" ]; then
+                    # Both have version info - compare them
+                    if [ "$source_version" != "$target_version" ]; then
+                        should_copy=true
+                        action="Updated"
+                        updated_count=$((updated_count + 1))
                     fi
                 else
-                    # File doesn't exist in target, just copy it
+                    # Missing version info - copy to ensure latest
+                    should_copy=true
+                    action="Refreshed"
+                    updated_count=$((updated_count + 1))
+                fi
+                
+                if [ "$should_copy" = true ]; then
                     cp "$droid_file" "$TARGET_FILE"
-                    print_success "Installed $droid_name"
+                    if [ -n "$source_version" ]; then
+                        print_success "$action: $droid_name (v$source_version)"
+                    else
+                        print_success "$action: $droid_name"
+                    fi
+                else
+                    print_info "Skipped: $droid_name (already up to date)"
                 fi
                 
                 droid_count=$((droid_count + 1))
@@ -191,7 +204,54 @@ install_core_droids() {
         exit 1
     fi
     
-    print_success "Installed $droid_count droids total"
+    if [ $new_count -gt 0 ]; then
+        print_info "New installations: $new_count droids"
+    fi
+    if [ $updated_count -gt 0 ]; then
+        print_info "Updated: $updated_count droids to newer versions"
+    fi
+    print_success "Processed $droid_count droids total"
+    
+    # Verify key droids are installed
+    verify_key_droids "$TARGET_DIR"
+}
+
+# Verify key droids are properly installed
+verify_key_droids() {
+    local droids_dir="$1"
+    
+    print_info "Verifying key droids installation..."
+    
+    local key_droids=(
+        "manager-orchestrator-droid-forge.md"
+        "replit-assessment-droid-forge.md"
+        "frontend-engineer-droid-forge.md"
+        "backend-engineer-droid-forge.md"
+        "unit-test-droid-forge.md"
+        "security-assessment-droid-forge.md"
+        "typescript-integration-droid-forge.md"
+        "bug-hunter-droid-forge.md"
+    )
+    
+    local missing_droids=()
+    local found_droids=0
+    
+    for droid in "${key_droids[@]}"; do
+        if [ -f "$droids_dir/$droid" ]; then
+            print_success "✓ $droid"
+            found_droids=$((found_droids + 1))
+        else
+            print_warning "✗ Missing: $droid"
+            missing_droids+=("$droid")
+        fi
+    done
+    
+    if [ ${#missing_droids[@]} -eq 0 ]; then
+        print_success "All key droids verified ($found_droids/$#key_droids)"
+    else
+        print_warning "Missing ${#missing_droids[@]} key droids: ${missing_droids[*]}"
+        print_info "These droids are recommended for optimal Droid Forge functionality"
+    fi
 }
 
 # Configure droid-forge.yaml
