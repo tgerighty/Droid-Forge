@@ -1,0 +1,746 @@
+Starting CodeRabbit review in plain text mode...
+
+Connecting to review service
+Setting up
+Analyzing
+Reviewing
+
+============================================================================
+File: .factory/droids/cognitive-complexity-assessment-droid-forge.md
+Line: 5
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/cognitive-complexity-assessment-droid-forge.md around line 5: the tools list includes Edit and MultiEdit which contradicts the assessment-only security principle; remove Edit and MultiEdit from the tools array and leave Create (and other non-modifying tools) only so this droid cannot modify source files, ensuring task file generation remains allowed per the workflow.
+
+
+
+============================================================================
+File: coderabbit/coderabbit_2025-10-14_20-33-04.txt
+Line: 2 to 3
+Type: nitpick
+
+Prompt for AI Agent:
+In coderabbit/coderabbit_2025-10-14_20-33-04.txt around lines 2 to 3 the file ends with two trailing blank lines; remove those extra blank lines at the end of the file so the file ends immediately after the last non-empty line ("Connecting to review service"), leaving no blank lines following it.
+
+
+
+============================================================================
+File: tasks/tasks-replit-sample.md
+Line: 12 to 28
+Type: potential_issue
+
+Prompt for AI Agent:
+In tasks/tasks-replit-sample.md around lines 12 to 28, the non-standard "Replit Assessment Summary" section violates the ai-dev-tasks markdown structure; remove this section entirely or relocate its contents to a separate documentation file (e.g., docs/replit-assessment.md) and update any references accordingly so the tasks file contains only the "Relevant Files" section and the hierarchical task list with status markers as per guidelines.
+
+
+
+============================================================================
+File: .factory/droids/impact-analyzer-droid-forge.md
+Line: 5
+Type: potential_issue
+
+Prompt for AI Agent:
+.file .factory/droids/impact-analyzer-droid-forge.md around line 5: the tools list includes Edit and MultiEdit which violate the droid's assessment-only security model; remove Edit and MultiEdit from the tools array so the list becomes read-only for analysis (retain Execute, Read, LS, Create, Grep, Glob, WebSearch, FetchUrl or whichever non-editing tools are required), and update any nearby documentation or comments if they reference the removed tools to keep the file consistent.
+
+
+
+============================================================================
+File: .factory/droids/trpc-tanstack-integration-droid-forge.md
+Line: 210 to 249
+Type: nitpick
+
+Prompt for AI Agent:
+.factory/droids/trpc-tanstack-integration-droid-forge.md around lines 210 to 249: the hook builds query keys manually and lacks type-safe utilities and context typing; change to use trpc.user.profile.getQueryKey() for cancel/get/set/invalidate to guarantee consistent keys, call const utils = trpc.useUtils() and use utils.user.profile.invalidate() in onSettled, type the optimistic setter as (old: User | undefined) => ... and tighten the onError context type so you restore context.previousUser with the same getQueryKey() instead of the hardcoded nested array.
+
+
+
+============================================================================
+File: .factory/droids/trpc-tanstack-integration-droid-forge.md
+Line: 340 to 365
+Type: refactor_suggestion
+
+
+
+
+============================================================================
+File: .factory/droids/drizzle-orm-specialist-droid-forge.md
+Line: 244 to 245
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/drizzle-orm-specialist-droid-forge.md around lines 244-245, the code uses sql.raw(query) without validating the query string; validate and/or avoid raw SQL by ensuring query is a non-empty string from a trusted source (throw if not), or better refactor to accept parameterized/prepared statement inputs or a whitelisted query identifier and build the SQL server-side instead of interpolating user-provided SQL; implement input checks (type and non-empty) and replace sql.raw usage with parameter binding or a safe mapping to known queries.
+
+
+
+============================================================================
+File: install.sh
+Line: 172 to 178
+Type: nitpick
+
+Prompt for AI Agent:
+In install.sh around lines 172 to 178, the code currently compares versions using string inequality ("$source_version" != "$target_version"); replace that with a semantic version comparison so you only mark the file as updated when the source is actually newer. Use a robust check such as comparing the two versions with sort -V (or an equivalent semantic comparator) and set should_copy=true, action="Updated" and increment updated_count only when source_version is determined to be newer than target_version; include a fallback to the existing string inequality if sort -V is not available.
+
+
+
+============================================================================
+File: .factory/droids/visual-regression-droid-forge.md
+Line: 414 to 440
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/visual-regression-droid-forge.md around lines 414 to 440, the utility unconditionally removes focus outlines which can hide accessibility issues; make the focus-outline removal configurable and/or opt-in: add a boolean option (e.g., preserveFocusOutline or removeFocusOutline defaulting to false) to VisualTestUtils.normalizePage so callers can choose to keep focus outlines, update the method to only inject the '*:focus { outline: none !important; }' style when the option is set to remove outlines, and add a short comment or documentation note explaining that focus states should be tested separately when outlines are removed.
+
+
+
+============================================================================
+File: .factory/droids/trpc-tanstack-integration-droid-forge.md
+Line: 304 to 338
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/trpc-tanstack-integration-droid-forge.md around lines 304 to 338, the LiveNotifications component references the Notification type and NotificationItem component but doesn’t import them; add imports at the top of the file such as: import type { Notification } from '../types'; and import { NotificationItem } from './NotificationItem'; (adjust relative paths if your project layout differs) and ensure NotificationItem is exported from its module.
+
+
+
+============================================================================
+File: .factory/droids/trpc-tanstack-integration-droid-forge.md
+Line: 58 to 63
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/trpc-tanstack-integration-droid-forge.md around lines 58 to 63, the code throws TRPCError but does not import it; add an import for TRPCError from '@trpc/server' at the top of the file (or alongside other tRPC imports) so runtime will have TRPCError defined, then save and run types/build to confirm no unresolved import errors.
+
+
+
+============================================================================
+File: install-to-project.sh
+Line: 300
+Type: potential_issue
+
+Prompt for AI Agent:
+In install-to-project.sh around line 300, the print_success call uses the incorrect shell array length syntax $#key_droids; replace it with the correct form ${#key_droids[@]} so the message shows the actual number of elements in the key_droids array (i.e., update the string to use ${#key_droids[@]} instead of $#key_droids).
+
+
+
+============================================================================
+File: .factory/droids/replit-assessment-droid-forge.md
+Line: 1 to 6
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/replit-assessment-droid-forge.md around lines 1 to 6, the file lacks the YAML front matter used by other droid definitions; add a front matter block (--- ... ---) at the top containing the standard keys: tools, version, location, tags (and any additional keys present in template-droid-forge.md lines 1-10), populate values consistent with this droid (e.g., model inheritance, project location, relevant tags), and ensure spacing/formatting matches the other droid files for consistency.
+
+
+
+============================================================================
+File: .factory/droids/trpc-tanstack-integration-droid-forge.md
+Line: 74 to 79
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/trpc-tanstack-integration-droid-forge.md around lines 74-79: the procedure input is declared as z.string().optional() but the client calls it with an object { userId }, causing a type mismatch; fix by either changing the procedure to accept an object schema (e.g., .input(z.object({ userId: z.string().optional() }).optional()) and update the resolver to extract userId from input.userId || ctx.user.id) or change every client call to pass the string directly (call profile(userId) or profile(undefined) when using current user), and ensure TypeScript types and example usages are updated accordingly.
+
+
+
+============================================================================
+File: .factory/droids/debugging-assessment-droid-forge.md
+Line: 5
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/debugging-assessment-droid-forge.md around line 5: the tools list currently includes modification-capable tools which contradict the documented security principle at lines 233 and 271 that assessment droids must never modify source code; remove Edit, MultiEdit, and Create from the tools array and leave only non-modifying tools (e.g., Execute, Read, LS, Grep, Glob, WebSearch, FetchUrl, Task), and verify the updated tools list aligns with the "never modify code" statements elsewhere in the file.
+
+
+
+============================================================================
+File: .factory/droids/reliability-droid-forge.md
+Line: 126
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/reliability-droid-forge.md around line 126: the loop currently uses "for service in $1" which treats a comma-separated string like "api,db,cache" as one item; restore comma-separated handling by iterating over the parameter after converting commas to spaces (e.g., replace the loop header with one that uses $(echo "$1" | tr ',' ' ') or equivalent shell splitting), or if you intentionally changed the parameter format to space-separated, update the usage example at line 390 to show space-separated services instead of comma-separated.
+
+
+
+============================================================================
+File: .factory/droids/caching-assessment-droid-forge.md
+Line: 252 to 257
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/caching-assessment-droid-forge.md around lines 252-257, the get flow reads L2 then L3 without coordination, which allows multiple concurrent misses for the same key to trigger simultaneous L3 loads (cache stampede); implement an in-flight request guard: maintain a Map of pending Promises keyed by cache key, check and return an existing Promise if present before starting a lower-level fetch, set the Promise into the map when initiating a fetch from lower levels, await it, then remove the key from the map in finally so only one fetch populates the caches and all concurrent callers await that single Promise.
+
+
+
+============================================================================
+File: .factory/droids/replit-assessment-droid-forge.md
+Line: 62 to 64
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/replit-assessment-droid-forge.md around lines 62-64, the Notes section buries critical caveats (plan requirements, DB schema limitations, external DNS) that affect assessment accuracy; move or duplicate these items into a new prominent "Prerequisites & Limitations" section placed before "Replit Platform Capabilities", bold or italicize the heading for visibility, and ensure each caveat is a concise bullet with any actions required (e.g., required plan tier, DB work remaining, DNS steps) so readers see them immediately.
+
+
+
+============================================================================
+File: .factory/droids/drizzle-orm-specialist-droid-forge.md
+Line: 66
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/drizzle-orm-specialist-droid-forge.md around line 66, the foreign key column uses serial('author_id') which incorrectly creates a sequence; replace it with the same column type as users.id (e.g., integer('author_id') or uuid('author_id') depending on users.id) and keep the .references(() => users.id, { onDelete: 'cascade' }).notNull() so the FK references existing values rather than generating a new sequence.
+
+
+
+============================================================================
+File: .factory/droids/code-reviewer-lite-droid-forge.md
+Line: 116 to 120
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/code-reviewer-lite-droid-forge.md around lines 116 to 120, the hardcoded_secrets regex is too broad and produces false positives; tighten it by enforcing word boundaries around the identifier (so it matches exactly password/secret/key/token, not secretName), increase the minimum literal length to 12 characters, and add a negative lookahead to exclude common placeholders like PLACEHOLDER, ENV, TODO, or _ENV_; update the regex accordingly so it still detects real hardcoded secrets but skips placeholder/example values and longer variable names.
+
+
+
+============================================================================
+File: .factory/droids/typescript-professional-droid-forge.md
+Line: 211 to 216
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/typescript-professional-droid-forge.md around lines 211 to 216, the useTypedQuery example uses UseQueryResult and useQuery from an external library but does not document that dependency; add a brief comment above the snippet stating the required import/package (e.g., @tanstack/react-query) and show the import names to include so readers know which dependency to install and which symbols to import before using the example.
+
+
+
+============================================================================
+File: .factory/droids/test-assessment-droid-forge.md
+Line: 5
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/test-assessment-droid-forge.md around line 5: the tools list includes Edit and MultiEdit which contradicts the documented rule that assessment droids must never modify source code; remove Edit and MultiEdit from the tools array (leave Create since task files/reports are allowed per lines 186–189) so the permitted tools reflect read-only plus allowed report-creation capabilities.
+
+
+
+============================================================================
+File: docs/shared-guidelines.md
+Line: 198
+Type: potential_issue
+
+Prompt for AI Agent:
+In docs/shared-guidelines.md around line 198, the "Updated" date currently reads "2025-01-14" and must be changed to the actual last modification date; update that single line to the current correct date (e.g., "2025-10-14" or the precise date the document was last edited), commit the change with a clear message like "docs: update Updated date in shared-guidelines.md", and ensure the repository date format matches surrounding entries.
+
+
+
+============================================================================
+File: .factory/droids/visual-regression-droid-forge.md
+Line: 371 to 411
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/visual-regression-droid-forge.md around lines 371 to 411, the Playwright visual test config sets a very permissive screenshot threshold of 0.2; change this to a stricter default (e.g., 0.02 or 0.05) by updating the threshold value accordingly, and optionally expose it as a constant or env-config so teams can tune it after running baseline comparisons.
+
+
+
+============================================================================
+File: .factory/droids/database-performance-assessment-droid-forge.md
+Line: 236 to 284
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/database-performance-assessment-droid-forge.md around lines 236 to 284, the bloat estimation SQL is deeply nested and hard to maintain; refactor by (1) adding brief inline comments above each logical calculation block describing what it computes (tuple width, page count, overheads, total size, bloat), (2) extracting the complex expression into a named SQL view or a PL/pgSQL function that returns schemaname, tablename, and bloat_percentage and then SELECTing from that view/function, and (3) add a one-line source reference (e.g., PostgreSQL Wiki or the original formula link) in the file header so future maintainers can trace the formula.
+
+
+
+============================================================================
+File: .factory/droids/trpc-assessment-droid-forge.md
+Line: 5
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/trpc-assessment-droid-forge.md around line 5: the tools list includes Edit and MultiEdit which contradicts the file’s explicit rules at lines 275 and 313 that assessment droids must never modify source code; remove Edit and MultiEdit from the tools array (retain Read, LS, Grep, Glob, WebSearch, FetchUrl, Execute and keep Create only if it’s limited to task files/reports as allowed by lines 300–305), and update the tools line to reflect the non-modifying set to enforce the security constraint.
+
+
+
+============================================================================
+File: .factory/droids/typescript-professional-droid-forge.md
+Line: 108 to 109
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/typescript-professional-droid-forge.md around lines 108 to 109, the isUserId type guard is too business-specific (uses startsWith('user_')); replace it with a more generic example (e.g., check typeof value === 'string' and a generic format check like a regex placeholder or simple non-empty string check) or add a one-line comment above the function stating that the startsWith('user_') check is implementation-specific and should be adapted to the project’s user-id format.
+
+
+
+============================================================================
+File: .factory/droids/typescript-professional-droid-forge.md
+Line: 297 to 301
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/typescript-professional-droid-forge.md around lines 297 to 301, the example shows "public interface UserConfig" which is invalid TypeScript; remove the "public" keyword so the declaration is "interface UserConfig { ... }" (and ensure the rest of the example fields remain unchanged), and if this is a documentation note, update surrounding wording to present it as a TypeScript code snippet rather than using language-specific visibility modifiers.
+
+
+
+============================================================================
+File: install.sh
+Line: 250
+Type: potential_issue
+
+Prompt for AI Agent:
+In install.sh around line 250, the print_success message uses the incorrect array length syntax $#key_droids; replace it with the correct Bash array length expression ${#key_droids[@]} so the message reads that it verified all key droids using the actual number of elements in the key_droids array.
+
+
+
+============================================================================
+File: .factory/droids/typescript-professional-droid-forge.md
+Line: 119 to 122
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/typescript-professional-droid-forge.md around lines 119–122, the Functor example tries to simulate higher-kinded types but is invalid in TypeScript; replace it with a correct, usable pattern such as a generic Functor that defines map(f: (t: T) => U): Functor, or, if you need true HKT-like behavior, use the fp-ts HKT/URI encoding (define URI/Kind types and implement Functor1/2 patterns) so the map signature is type-safe; update the example accordingly and remove the impossible Functor signature.
+
+
+
+============================================================================
+File: .factory/droids/visual-regression-droid-forge.md
+Line: 281 to 323
+Type: nitpick
+
+Prompt for AI Agent:
+.factory/droids/visual-regression-droid-forge.md lines 281-323: replace the unreliable CSP-header approach to disable JavaScript with Playwright's supported method—create the test context with javaScriptEnabled: false or, if modifying the existing context is required, intercept and abort script requests via page.route('/*.js', route => route.abort()) before navigating; ensure the context or route is set up prior to page.goto so scripts are actually blocked and tests reflect a no-JS environment.
+
+
+
+============================================================================
+File: tools/aggressive-optimize.py
+Line: 49 to 54
+Type: potential_issue
+
+
+
+
+============================================================================
+File: tools/optimize-droids.py
+Line: 1 to 5
+Type: potential_issue
+
+
+
+
+============================================================================
+File: tasks/tasks-droid-optimization.md
+Line: 7
+Type: potential_issue
+
+Prompt for AI Agent:
+In tasks/tasks-droid-optimization.md around line 7, the project status header is incorrectly set to "✅ PROJECT COMPLETED" while most task checkboxes remain unchecked (only a few Priority 2 tasks on lines ~22-27 are marked done). Either change the status line to accurately reflect progress (e.g., "🔄 IN PROGRESS - X/Y droids optimized") and keep individual checkboxes as-is, or mark all completed tasks with [x] to truly reflect completion; update the status text accordingly to match the real count and ensure consistency between the header and task checkboxes.
+
+
+
+============================================================================
+File: .factory/droids/caching-assessment-droid-forge.md
+Line: 5
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/caching-assessment-droid-forge.md around line 5: the tools list includes Edit and MultiEdit which conflict with the "caching assessment specialist" role; remove Edit and MultiEdit from the tools array (leaving only non-editing tools like Execute, Read, LS, Create, Grep, Glob, WebSearch, FetchUrl, Task) or alternatively change the droid's role/classification to an implementation/action droid if editing capabilities are required; update the file accordingly so the declared role matches the permitted tools.
+
+
+
+============================================================================
+File: .factory/droids/caching-assessment-droid-forge.md
+Line: 239 to 242
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/caching-assessment-droid-forge.md around lines 239 to 242, the set method writes values without expiration when ttl is undefined which can cause unbounded Redis growth; change the implementation to enforce a TTL (either by applying a sane default constant like DEFAULT_TTL_SECONDS or by throwing if ttl is omitted), and update the call to use the Redis EX/SETEX variant with that TTL so every key has an expiry; also add a short comment and adjust any callers/tests to either pass ttl or rely on the default.
+
+
+
+============================================================================
+File: .factory/droids/nextjs15-assessment-droid-forge.md
+Line: 5
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/nextjs15-assessment-droid-forge.md around line 5, the tools list includes Edit and MultiEdit which conflict with the assessment-droid rule; remove Edit and MultiEdit from the tools array on that line so the droid only retains non-modifying/read/analysis tools (e.g., Execute, Read, LS, Grep, Glob, WebSearch, FetchUrl, Task, TodoWrite), then save the file.
+
+
+
+============================================================================
+File: tools/optimize-droids.py
+Line: 13 to 22
+Type: nitpick
+
+Prompt for AI Agent:
+In tools/optimize-droids.py around lines 13 to 22, the optimize_code_examples function is a stub that returns content unchanged and lacks a clear indication it's incomplete; update the docstring/comment to mark this as a TODO/stub and add logic to warn when many code blocks are detected: after finding code_blocks, if len(code_blocks) > 3 print a concise warning like "→ Found X code blocks - manual reduction recommended" so callers see it's not automated and manual review is advised.
+
+
+
+============================================================================
+File: .factory/droids/trpc-tanstack-integration-droid-forge.md
+Line: 117 to 146
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/trpc-tanstack-integration-droid-forge.md around lines 117–146, the TRPCProvider uses useState, React.ReactNode and getAuthToken but they are not imported; add the missing imports from React (useState and the ReactNode type) and import your getAuthToken helper from its module, then update the component type annotation to use the imported ReactNode type (e.g., replace React.ReactNode with ReactNode). Ensure imports are at the top of the file and use the correct path for getAuthToken.
+
+
+
+============================================================================
+File: tools/aggressive-optimize.py
+Line: 64 to 76
+Type: refactor_suggestion
+
+
+
+
+============================================================================
+File: tools/aggressive-optimize.py
+Line: 22 to 27
+Type: potential_issue
+
+Prompt for AI Agent:
+In tools/aggressive-optimize.py around lines 22 to 27, the current logic automatically deletes code blocks larger than 500 characters which may remove important, necessary examples; instead, remove the automatic deletion and replace it with a warning and manual-review path so large or many code blocks are not dropped silently. Update the block handling to detect when more than 4 code blocks exist, print a clear warning with the count and abort automatic removal (leave content unchanged or flag for manual inspection), and ensure no code blocks are removed by the script without human confirmation.
+
+
+
+============================================================================
+File: .factory/droids/typescript-integration-droid-forge.md
+Line: 262 to 268
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/typescript-integration-droid-forge.md around lines 262 to 268, typedFetch currently only checks response.ok and returns response.json() cast to T; add a schema parameter (e.g., a Zod or io-ts runtime validator) to the function signature so the function fetches JSON, parses it, and runs it through the validator, returning the validated value as T on success and throwing a detailed ValidationError on failure; keep backward compatibility by making the schema optional and if omitted behave as today (or perform a shallow null/array/object check), and ensure thrown errors include both HTTP and validation context for easier debugging.
+
+
+
+============================================================================
+File: .factory/droids/valkey-caching-strategist-droid-forge.md.backup
+Line: 1
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/valkey-caching-strategist-droid-forge.md.backup (line 1), the filename has an extra .backup extension; rename the file to .factory/droids/valkey-caching-strategist-droid-forge.md using git mv to preserve history, update any references to the old filename in the repo (docs, imports, CI/config) to the new name, run a quick repo-wide search to ensure no remaining .backup references, and commit the rename with an explanatory message.
+
+
+
+============================================================================
+File: .factory/droids/typescript-assessment-droid-forge.md
+Line: 5
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/typescript-assessment-droid-forge.md around line 5: the tools list currently includes Edit and MultiEdit which contradicts the policy that assessment droids must never modify source code; remove Edit and MultiEdit from the tools array while keeping Read, LS, Grep, Glob, WebSearch, FetchUrl, Execute, Task and the permitted Create and TodoWrite (per lines 232-235) so only non-modifying tools plus task/report authorship tools remain.
+
+
+
+============================================================================
+File: .factory/droids/performance-test-droid-forge.md
+Line: 97
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/performance-test-droid-forge.md around line 97, the options object is declared with let but is never reassigned; change the declaration from let to const so the k6 options configuration is immutable. Replace the current let options = { ... } declaration with const options = { ... } and ensure any references remain valid.
+
+
+
+============================================================================
+File: .factory/droids/manager-orchestrator-droid-forge.md
+Line: 178 to 184
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/manager-orchestrator-droid-forge.md lines 178-184: the example sed commands reference a hard-coded file name which conflicts with the guidance to update the existing task file for the current project; change the examples to use a clear placeholder (e.g., tasks/tasks-[current-date].md or tasks/.md) and add a brief note reminding users to run the commands against the actual existing task file for their project rather than creating a new one.
+
+
+
+============================================================================
+File: .factory/droids/valkey-caching-strategist-droid-forge.md
+Line: 127 to 148
+Type: nitpick
+
+
+
+
+============================================================================
+File: .factory/droids/e2e-test-droid-forge.md
+Line: 187 to 192
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/e2e-test-droid-forge.md around lines 187 to 192, GitHub Actions steps reference old action tags; update actions/checkout@v3 → actions/checkout@v5, actions/setup-node@v3 → actions/setup-node@v6, and actions/upload-artifact@v3 → actions/upload-artifact@v4 in the workflow snippet so the steps use the latest stable major versions; keep the rest of the lines unchanged and ensure the updated tags are applied exactly in the uses fields.
+
+
+
+============================================================================
+File: .factory/droids/frontend-engineer-droid-forge.md.backup
+Line: 1
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/frontend-engineer-droid-forge.md.backup lines 1-1 the file uses a .backup extension which violates the guideline that droid definitions live as .factory/droids/*.md; rename the file to remove the .backup suffix (e.g. .factory/droids/frontend-engineer-droid-forge.md) or, if it is intended only as historical backup, move it to a dedicated docs/history/ or rely on git history, then update any references and commit the change.
+
+
+
+============================================================================
+File: .factory/droids/auth-assessment-droid-forge.md
+Line: 72 to 76
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/auth-assessment-droid-forge.md around lines 72 to 76, the comment that recommends "short expiration times (15-30 min)" is ambiguous; update the text to explicitly state this applies to access tokens only and add a brief note that refresh tokens should use longer expirations (e.g., days/weeks) with rotation and secure storage. Modify the existing line or add a single-sentence clarification right after it to prevent confusion between access and refresh token lifetimes.
+
+
+
+============================================================================
+File: .factory/droids/frontend-engineer-droid-forge.md
+Line: 311
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/frontend-engineer-droid-forge.md around line 311: aria-describedby currently uses cn(errorId, helperText && ${inputId}-helper) which mixes a className utility for ID concatenation and can drop the helper ID if errorId is undefined; replace this with an explicit ID join: build an array of possible IDs ([errorId, helperText ? ${inputId}-helper : undefined]), filter out falsy values, join with a space (or set to undefined when no IDs) and pass that string to aria-describedby so helper and error IDs are reliably included.
+
+
+
+============================================================================
+File: .factory/droids/typescript-professional-droid-forge.md
+Line: 263 to 278
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/typescript-professional-droid-forge.md around lines 263 to 278, fix the forward reference to HttpMethod and the fragile route parsing: move or import/declare the HttpMethod type so it appears before apiCall, then replace route.split(' ')[0] with a robust extractor (e.g. use a regex to capture a leading uppercase method token or accept an explicit method parameter), default to 'GET' when no method is present, validate the extracted method against the HttpMethod union and throw a clear error if invalid, and ensure request body is only set for methods that allow it (omit body for GET/HEAD).
+
+
+
+============================================================================
+File: .factory/droids/devops-pipeline-droid-forge.md
+Line: 69
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/devops-pipeline-droid-forge.md around line 69, the cache-dependency-path is incorrectly set to the node_modules directory; change it to point to the repository’s lock file (e.g., /package-lock.json or /yarn.lock or /pnpm-lock.yaml depending on which package manager this repo uses) so the cache is invalidated when dependency versions change; replace '/node_modules' with the appropriate lock-file glob and ensure the cache key uses that file for dependency-change detection.
+
+
+
+============================================================================
+File: .factory/droids/bug-hunter-droid-forge.md
+Line: 396 to 400
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/bug-hunter-droid-forge.md around lines 396-400, the allowed commands list references a non-standard raw name "type-check"; replace that entry with a standard command (for example "npm run type-check" or an explicit TypeScript check like "tsc --noEmit") and ensure the docs note that the project must define a corresponding npm script in package.json if using "npm run type-check".
+
+
+
+============================================================================
+File: tests/installation-gitignore.test.sh
+Line: 81
+Type: potential_issue
+
+Prompt for AI Agent:
+In tests/installation-gitignore.test.sh around line 81, the script calls print_info but that function is not defined; add a print_info function definition near the other print_* helper functions (before any calls at lines 81/118/121). Implement it to write informational messages to stdout (consistent formatting with the existing print_error/print_success functions, e.g., include the same prefix and color handling if used) so calls to print_info do not fail at runtime.
+
+
+
+============================================================================
+File: .factory/droids/trpc-tanstack-integration-droid-forge.md
+Line: 44 to 52
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/trpc-tanstack-integration-droid-forge.md around lines 44 to 52, the file both imports Context from './context' and then redefines an interface named Context, creating redundancy and potential type conflicts; remove the inline Context interface definition and either rely on the imported Context type or replace the import with the correct source if the local definition was intended to be the canonical type, ensuring only one Context definition remains and updating any references to use the single exported type.
+
+
+
+============================================================================
+File: .factory/droids/code-reviewer-droid-forge.md
+Line: 195 to 206
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/code-reviewer-droid-forge.md around lines 195 to 206: the current regex only matches single/double-quoted strings concatenated with + and misses template literals and interpolation; update the detection to also match backtick-delimited template literals that contain interpolation (${...}) and tagged/template usage, e.g. add or replace with a second pattern that looks for (?:query|execute)\s\(\s[^]\$\{[^}]+\}[^]\s*\) and/or include backtick forms and tagged template forms so template-based SQL concatenation is detected; ensure both the original quoted-concat pattern and the new template-literal/interpolation pattern are applied and push evidence using the same extractContext call.
+
+
+
+============================================================================
+File: .factory/droids/better-auth-integration-droid-forge.md
+Line: 39 to 41
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/better-auth-integration-droid-forge.md around lines 39 to 41, replace the Google provider keys oauthId and oauthSecret with the expected clientId and clientSecret; update the object properties to use clientId: env.GOOGLE_OAUTH_ID and clientSecret: env.GOOGLE_OAUTH_SECRET (or rename the env vars if desired) and ensure any downstream references/readers expect the new property names.
+
+
+
+============================================================================
+File: .factory/droids/typescript-comprehensive-droid-forge.md
+Line: 86
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/typescript-comprehensive-droid-forge.md around line 86: the provided regex for detecting missing return types is malformed and will not compile; either replace it with a syntactically-correct regex that properly escapes braces and matches function declarations without a trailing colon+type (e.g., ensure you match "function name(...)" and assert absence of ":" before the next "{", and verify flags and escaping for your JS/TS regex engine), or better yet replace the regex-based check entirely with a TypeScript compiler API / AST-based check that reliably detects functions lacking explicit return type annotations.
+
+
+
+============================================================================
+File: .factory/droids/devops-pipeline-droid-forge.md
+Line: 261 to 262
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/devops-pipeline-droid-forge.md around lines 261 to 262, the Alpine Linux user/group creation uses wrong flags; replace the current commands with Alpine-compatible ones by creating a system group with addgroup -S node and creating a system user with adduser -S -G node node (optionally adding -H and -s /sbin/nologin if a no-login system user is desired), then keep the chown -R node:node /app line as-is.
+
+
+
+============================================================================
+File: .factory/droids/manager-orchestrator-droid-forge.md
+Line: 45 to 47
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/manager-orchestrator-droid-forge.md around lines 45 to 47, the task declaration uses "Task tool subagent_type=" which is inconsistent with the rest of the file that uses "Task tool with subagent_type="; update this instance to "Task tool with subagent_type=" to match the other examples, and then scan the file for any other occurrences to ensure all task delegation lines use the same "with subagent_type=" syntax for consistency.
+
+
+
+============================================================================
+File: .factory/droids/visual-regression-droid-forge.md
+Line: 134 to 166
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/visual-regression-droid-forge.md around lines 134 to 166, the pageName generation uses replace('/', 'homepage') which yields wrong names; change it so that if pagePath === '/' set pageName to 'homepage', otherwise strip leading slashes (e.g., with a regex to remove one or more leading '/' characters) and optionally replace any remaining '/' with '-' to produce safe filenames like 'contact' or 'products-item'; update the code accordingly.
+
+
+
+============================================================================
+File: .factory/droids/typescript-comprehensive-droid-forge.md
+Line: 209 to 226
+Type: potential_issue
+
+
+
+
+============================================================================
+File: .factory/droids/accessibility-test-droid-forge.md
+Line: 202 to 211
+Type: nitpick
+
+Prompt for AI Agent:
+.factory/droids/accessibility-test-droid-forge.md around lines 202 to 211: The rgbToHex function currently only matches "rgb(r, g, b)" and returns black for non-matches; update it to accept "rgba(r, g, b, a)" as well (alpha optional) by changing the regex to allow an optional alpha group, parse the first three numeric channels into integers, clamp them to 0–255, convert to two-digit hex, and ignore the alpha channel when producing the hex string; ensure the function still returns a valid hex (e.g., default to #000000 only on truly invalid input).
+
+
+
+============================================================================
+File: .factory/droids/unit-test-droid-forge.md
+Line: 206
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/unit-test-droid-forge.md around line 206, the mock call uses a relative path '../services/UserService' which is inconsistent with the import at line 193 and the project alias; update the mock to use the alias path (e.g., '@/services/UserService') so it matches the import pattern and the @ alias configured in vitest.config.ts, ensuring the mock resolution is consistent across the test file.
+
+
+
+============================================================================
+File: .factory/droids/frontend-engineer-droid-forge.md.backup
+Line: 388
+Type: nitpick
+
+Prompt for AI Agent:
+In .factory/droids/frontend-engineer-droid-forge.md.backup around line 388, replace the deprecated use of substr(2, 9) when building the random id with a non-deprecated method; compute the end index as start + length (2 + 9 = 11) and use either string.slice(2, 11) or string.substring(2, 11) so the behavior remains identical (e.g., Math.random().toString(36).slice(2, 11)).
+
+
+
+============================================================================
+File: .factory/droids/devops-pipeline-droid-forge.md
+Line: 98
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/devops-pipeline-droid-forge.md around line 98, the docker push command includes an extraneous trailing period which will break the command; remove the trailing period so the run line uses: docker push ${{ secrets.REGISTRY }}/myapp:${{ github.sha }} (no trailing dot) and ensure no extra characters or whitespace remain after the tag.
+
+
+
+============================================================================
+File: .factory/droids/database-performance-droid-forge.md
+Line: 197 to 199
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/database-performance-droid-forge.md around lines 197-199, the exponential backoff uses Math.pow(2, attempt)  1000 which can grow unbounded; change it to compute the delay then cap it with a maximum (e.g. const maxBackoffMs = 30000) and use Math.min(Math.pow(2, attempt)  1000, maxBackoffMs) (or Math.min(2  attempt * 1000, maxBackoffMs)) when calling setTimeout so retries never wait longer than the configured cap.
+
+
+
+============================================================================
+File: .factory/droids/devops-pipeline-droid-forge.md
+Line: 204
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/devops-pipeline-droid-forge.md around line 204, the Terraform resource is referencing an invalid attribute self.ip; replace it with the correct attribute for the IP you intend to use (either self.public_ip for the public address or self.private_ip for the private one) and update any dependent references or documentation accordingly so the resource uses the valid attribute name.
+
+
+
+============================================================================
+File: .factory/droids/auto-pr-droid-forge.md
+Line: 61 to 63
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/auto-pr-droid-forge.md around lines 61 to 63, the Task tool invocation still includes subagent_type="auto-pr-droid-forge" even though the PR summary states it should be removed; edit the Task tool line to delete the subagent_type="auto-pr-droid-forge" attribute so the invocation reads without that parameter, ensuring spacing and other attributes (description, prompt) remain unchanged.
+
+
+
+============================================================================
+File: .factory/droids/devops-pipeline-droid-forge.md
+Line: 194
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/devops-pipeline-droid-forge.md around line 194, user_data is being base64-encoded even though the argument expects plain text; remove the base64 encoding and pass the decoded/plain user data directly (or if you intentionally need base64-encoded content for CloudFormation, switch to using user_data_base64 instead), ensuring the final value is plain text for user_data or use the _base64 variant when appropriate.
+
+
+
+============================================================================
+File: .factory/droids/drizzle-assessment-droid-forge.md
+Line: 86 to 88
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/drizzle-assessment-droid-forge.md around lines 86 to 88, the safety and deployment fields use array notation which is inconsistent with the surrounding object-structured migration checks; convert these arrays into the same object structure used elsewhere (e.g., key: boolean or nested objects as in the other checks) so both safety and deployment follow the file's established format, and ensure keys match the existing check names and value types used elsewhere in the file.
+
+
+
+============================================================================
+File: .factory/droids/caching-assessment-droid-forge.md
+Line: 138 to 148
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/caching-assessment-droid-forge.md around lines 138 to 148, the cdnChecks object is malformed: the performance entry is declared as an array then followed by standalone property lines (loadBalancing, failoverSupport, healthMonitoring) which causes a syntax error. Fix it by making performance an object (replace the array with an object literal) and move those three boolean properties inside it (ensure proper commas and matching braces), or alternatively remove those stray lines if performance should remain an array—ensure the overall cdnChecks object has consistent brackets and commas so it parses correctly.
+
+
+
+============================================================================
+File: .factory/droids/performance-test-droid-forge.md
+Line: 54 to 62
+Type: potential_issue
+
+Prompt for AI Agent:
+.factory/droids/performance-test-droid-forge.md around lines 54 to 62: the current LCP observer resolves on the first entry and can return an intermediate value; instead keep the latest LCP entry and only resolve after entries stop updating (or after a short debounce timeout) or when the page is hidden/unloaded; implement the PerformanceObserver to update a local variable with each LCP entry, add a timer that resets on each update and resolves with the last value after e.g. 500ms of no changes (and also resolve immediately on visibilitychange/pagehide), and ensure the observer is disconnected when resolving.
+
+
+
+============================================================================
+File: .factory/droids/security-fix-droid-forge.md
+Line: 395 to 409
+Type: potential_issue
+
+Prompt for AI Agent:
+In .factory/droids/security-fix-droid-forge.md around lines 395 to 409, the encryption code uses the deprecated crypto.createCipher and doesn't pass the IV or guarantee a unique IV per operation; replace createCipher with crypto.createCipheriv, generate a random IV per encryption (ivLength bytes), pass the algorithm, secretKey and IV to createCipheriv, call cipher.setAAD before cipher.update, produce encrypted via update+final, call cipher.getAuthTag and return the hex-encoded encrypted payload, iv and tag; ensure secretKey is the correct length for the algorithm. Also add the corresponding decryption changes: use crypto.createDecipheriv with the same algorithm, key and IV, call decipher.setAuthTag(tag) and setAAD before decipher.update, then decipher.update+final to recover plaintext.
+
+
+
+Review completed ✔

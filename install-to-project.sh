@@ -297,7 +297,7 @@ verify_key_droids() {
     done
     
     if [ ${#missing_droids[@]} -eq 0 ]; then
-        print_success "All key droids verified ($found_droids/$#key_droids)"
+        print_success "All key droids verified ($found_droids/${#key_droids[@]})"
     else
         print_warning "Missing ${#missing_droids[@]} key droids: ${missing_droids[*]}"
         print_info "These droids are recommended for optimal Droid Forge functionality"

@@ -113,7 +113,7 @@ Task tool subagent_type="code-reviewer-lite-droid-forge" \
 ```typescript
 // Quick security checks
 const SECURITY_PATTERNS = {
-  hardcoded_secrets: /(?:password|secret|key|token)\s*=\s*['"][^'"]{8,}['"]/gi,
+  hardcoded_secrets: /\b(?:password|secret|key|token)\b\s*=\s*['"][^'"]{12,}['"](?!.*(?:PLACEHOLDER|ENV|TODO|_ENV_))/gi,
   sql_injection: /(?:query|execute)\s*\(\s*['"][^'"]*\+[^)]*\)/gi,
   command_injection: /(?:exec|spawn)\s*\(\s*[^)]*\+/gi,
   missing_auth: /(?:router|app)\.(?:get|post|put|delete)\s*\([^,)]*\)(?!.*auth)/gi

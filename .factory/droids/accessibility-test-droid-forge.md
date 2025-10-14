@@ -200,12 +200,14 @@ test.describe('Color Contrast', () => {
 });
 
 function rgbToHex(rgb: string): string {
-  const match = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+  // Handle both rgb() and rgba() formats
+  const match = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
   if (!match) return '#000000';
   
-  const r = parseInt(match[1]).toString(16).padStart(2, '0');
-  const g = parseInt(match[2]).toString(16).padStart(2, '0');
-  const b = parseInt(match[3]).toString(16).padStart(2, '0');
+  // Parse and clamp RGB values to 0-255 range
+  const r = Math.min(255, Math.max(0, parseInt(match[1]))).toString(16).padStart(2, '0');
+  const g = Math.min(255, Math.max(0, parseInt(match[2]))).toString(16).padStart(2, '0');
+  const b = Math.min(255, Math.max(0, parseInt(match[3]))).toString(16).padStart(2, '0');
   
   return `#${r}${g}${b}`;
 }

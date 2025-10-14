@@ -244,7 +244,28 @@ class OptimizedRedisCache {
 
 // Multi-level cache pattern
 class MultiLevelCache {
+  private pendingRequests: Map<string, Promise<any>> = new Map();
+
   async get(key: string): Promise<any> {
+    // Check if there's already a pending request for this key
+    const existingRequest = this.pendingRequests.get(key);
+    if (existingRequest) {
+      return existingRequest;
+    }
+
+    // Create a new request and track it
+    const requestPromise = this._getValueWithCacheStampedePrevention(key);
+    this.pendingRequests.set(key, requestPromise);
+
+    try {
+      return await requestPromise;
+    } finally {
+      // Clean up the pending request
+      this.pendingRequests.delete(key);
+    }
+  }
+
+  private async _getValueWithCacheStampedePrevention(key: string): Promise<any> {
     // L1: Memory cache
     let value = this.l1Cache.get(key);
     if (value !== undefined) return value;
@@ -268,10 +289,14 @@ class MultiLevelCache {
   }
 
   async set(key: string, value: any, ttl?: number): Promise<void> {
+    // Enforce TTL to prevent unbounded Redis growth
+    const DEFAULT_TTL_SECONDS = 300; // 5 minutes
+    const finalTtl = ttl ?? DEFAULT_TTL_SECONDS;
+    
     // Set in all cache levels
     this.l1Cache.set(key, value);
-    await this.l2Cache.set(key, value, ttl);
-    await this.l3Cache.set(key, value, ttl);
+    await this.l2Cache.set(key, value, finalTtl);
+    await this.l3Cache.set(key, value, finalTtl);
   }
 
   async invalidate(key: string): Promise<void> {

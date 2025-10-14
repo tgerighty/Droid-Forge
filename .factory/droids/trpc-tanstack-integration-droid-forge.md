@@ -39,17 +39,9 @@ tags: ["trpc", "tanstack-query", "react-query", "typescript", "api", "cache", "d
 ### tRPC Server Setup
 ```typescript
 // server/trpc.ts
-import { initTRPC } from '@trpc/server';
+import { initTRPC, TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import type { Context } from './context';
-
-export interface Context {
-  user?: {
-    id: string;
-    email: string;
-    role: string;
-  };
-}
 
 const t = initTRPC.context<Context>().create();
 
@@ -72,9 +64,9 @@ import { UserService } from '../services/UserService';
 
 export const userRouter = router({
   profile: protectedProcedure
-    .input(z.string().optional())
+    .input(z.object({ userId: z.string().optional() }).optional())
     .query(async ({ input, ctx }) => {
-      const userId = input || ctx.user.id;
+      const userId = input?.userId || ctx.user.id;
       return UserService.getUserById(userId);
     }),
 
@@ -102,10 +94,12 @@ export const userRouter = router({
 ### Client Setup with TanStack Query
 ```typescript
 // client/trpc.ts
+import { useState, type ReactNode } from 'react';
 import { createTRPCReact } from '@trpc/react-query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink } from '@trpc/client';
 import type { AppRouter } from '../server/router';
+import { getAuthToken } from '../utils/auth';
 
 export const trpc = createTRPCReact<AppRouter>();
 
@@ -114,7 +108,7 @@ const getBaseUrl = () => {
   return `http://localhost:${process.env.PORT ?? 3000}`;
 };
 
-export function TRPCProvider({ children }: { children: React.ReactNode }) {
+export function TRPCProvider({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
       queries: { staleTime: 60 * 1000, refetchOnWindowFocus: false },
@@ -209,21 +203,20 @@ export function UserProfile({ userId }: { userId?: string }) {
 ```typescript
 // hooks/useOptimisticUserUpdate.ts
 import { trpc } from '../trpc';
-import { useQueryClient } from '@tanstack/react-query';
 
 export function useOptimisticUserUpdate() {
-  const queryClient = useQueryClient();
+  const utils = trpc.useUtils();
 
   const updateUser = trpc.user.update.useMutation({
     onMutate: async (newUserData) => {
       // Cancel any outgoing refetches
-      await queryClient.cancelQueries({ queryKey: [['user', 'profile']] });
+      await utils.user.profile.cancel();
 
       // Snapshot the previous value
-      const previousUser = queryClient.getQueryData([['user', 'profile']]);
+      const previousUser = utils.user.profile.getData();
 
       // Optimistically update to the new value
-      queryClient.setQueryData([['user', 'profile']], (old: any) =>
+      utils.user.profile.setData(undefined, (old: any) =>
         old ? { ...old, ...newUserData } : undefined
       );
 
@@ -234,13 +227,13 @@ export function useOptimisticUserUpdate() {
     onError: (err, newUserData, context) => {
       // Rollback on error
       if (context?.previousUser) {
-        queryClient.setQueryData([['user', 'profile']], context.previousUser);
+        utils.user.profile.setData(undefined, context.previousUser);
       }
     },
     
     onSettled: () => {
       // Always refetch after error or success
-      queryClient.invalidateQueries({ queryKey: [['user', 'profile']] });
+      utils.user.profile.invalidate();
     },
   });
 
@@ -306,6 +299,8 @@ export function UserList() {
 // components/LiveNotifications.tsx
 import { trpc } from '../trpc';
 import { useEffect, useState } from 'react';
+import type { Notification } from '../types';
+import { NotificationItem } from './NotificationItem';
 
 export function LiveNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>([]);

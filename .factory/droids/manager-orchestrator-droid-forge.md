@@ -42,17 +42,17 @@ tags: ["orchestration", "coordination", "delegation", "workflow-management", "pr
 ### Assessment Droids (Analyze → Create Tasks)
 ```bash
 # Code quality assessment
-Task tool subagent_type="code-smell-assessment-droid-forge" \
+Task tool with subagent_type="code-smell-assessment-droid-forge" \
   description "Analyze code smells" \
   prompt "Scan codebase for maintainability issues, anti-patterns, and technical debt"
 
 # Security assessment  
-Task tool subagent_type="security-assessment-droid-forge" \
+Task tool with subagent_type="security-assessment-droid-forge" \
   description "Security vulnerability assessment" \
   prompt "Perform comprehensive security audit and generate remediation tasks"
 
 # TypeScript assessment
-Task tool subagent_type="typescript-assessment-droid-forge" \
+Task tool with subagent_type="typescript-assessment-droid-forge" \
   description "Type safety analysis" \
   prompt "Analyze TypeScript type coverage and type safety issues"
 ```

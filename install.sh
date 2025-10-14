@@ -170,11 +170,22 @@ install_core_droids() {
                     action="Installed"
                     new_count=$((new_count + 1))
                 elif [ -n "$source_version" ] && [ -n "$target_version" ]; then
-                    # Both have version info - compare them
-                    if [ "$source_version" != "$target_version" ]; then
-                        should_copy=true
-                        action="Updated"
-                        updated_count=$((updated_count + 1))
+                    # Both have version info - compare them using semantic version comparison
+                    if command -v sort >/dev/null 2>&1; then
+                        # Use sort -V for semantic version comparison
+                        if [ "$(printf '%s\n' "$source_version" "$target_version" | sort -V | head -n1)" = "$target_version" ]; then
+                            # Source version is newer than target version
+                            should_copy=true
+                            action="Updated"
+                            updated_count=$((updated_count + 1))
+                        fi
+                    else
+                        # Fallback to string comparison if sort -V not available
+                        if [ "$source_version" != "$target_version" ]; then
+                            should_copy=true
+                            action="Updated"
+                            updated_count=$((updated_count + 1))
+                        fi
                     fi
                 else
                     # Missing version info - copy to ensure latest
@@ -247,7 +258,7 @@ verify_key_droids() {
     done
     
     if [ ${#missing_droids[@]} -eq 0 ]; then
-        print_success "All key droids verified ($found_droids/$#key_droids)"
+        print_success "All key droids verified ($found_droids/${#key_droids[@]})"
     else
         print_warning "Missing ${#missing_droids[@]} key droids: ${missing_droids[*]}"
         print_info "These droids are recommended for optimal Droid Forge functionality"

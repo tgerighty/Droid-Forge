@@ -395,7 +395,7 @@ rg -n "addEventListener\(" --type js | rg -v "removeEventListener\("
 **Allowed Commands**:
 - `npm audit` - Security vulnerability scanning
 - `eslint .` - Code quality analysis
-- `type-check` - TypeScript type checking
+- `npm run type-check` - TypeScript type checking
 - `npm test` - Run test suite to catch bugs
 
 ## Analysis Report Template

@@ -123,7 +123,9 @@ perform_root_cause_analysis() {
 ```bash
 # System health assessment
 assess_system_health() {
-  for service in $1; do
+  # Convert comma-separated string to space-separated for iteration
+  local services=$(echo "$1" | tr ',' ' ')
+  for service in $services; do
     local health_status=$(check_service_health "$service")
     local performance_metrics=$(collect_performance_metrics "$service")
     [ "$health_status" != "healthy" ] && trigger_health_alert "$service" "$health_status" "$performance_metrics"
