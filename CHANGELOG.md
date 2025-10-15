@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Task 3.6 completion: All development tools successfully integrated
 - Git workflow orchestration system establishment (Phase 4.0)
 - Branch creation and management strategies implementation (Task 4.1)
+- **New specialist droids**:
+  - **change-auditor-droid-forge**: Change verification specialist that audits implementations, runs security scans, and reports PASS/FAIL status with minimal fix recommendations
+  - **code-implementer-droid-forge**: Phase implementation specialist that executes phase specifications with unified patches, command execution, and minimal evidence collection
+  - **context-scout-droid-forge**: Context analysis specialist that processes handoff envelopes and returns compact digests with citations and file targets for session manifest creation
 
 ### Completed
 

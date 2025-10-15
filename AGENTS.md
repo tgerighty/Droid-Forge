@@ -110,7 +110,7 @@ Task tool subagent_type="manager-orchestrator-droid-forge" prompt "Mark 1.2 done
 | frontend-engineer | React/Next.js, CSS, a11y, state |
 | backend-engineer | REST/GraphQL, DB, microservices, cache |
 
-### Infrastructure (8)
+### Infrastructure (11)
 
 | Droid | Role |
 |-------|------|
@@ -121,7 +121,10 @@ Task tool subagent_type="manager-orchestrator-droid-forge" prompt "Mark 1.2 done
 | ai-dev-tasks-integrator | PRD → task files |
 | git-workflow-orchestrator | Branches, commits, merges |
 | biome | Lint, format |
-| typescript-professional | Advanced TS (use assessment+fix instead)
+| typescript-professional | Advanced TS (use assessment+fix instead) |
+| **change-auditor** | **Change verification, security scans, PASS/FAIL reporting** |
+| **code-implementer** | **Phase execution, unified patches, minimal evidence** |
+| **context-scout** | **Handoff processing, compact digests, session manifests** |
 
 ---
 
@@ -141,6 +144,9 @@ Task tool subagent_type="manager-orchestrator-droid-forge" prompt "Mark 1.2 done
 | Incident | reliability | "50% error rate: classify, notify, execute playbook" |
 | Security | security-assessment | "Scan: injection, XSS, CSRF, secrets, deps" |
 | Tests | unit-test | "UserService.ts: unit tests, 90%+ coverage, edges" |
+| **Change audit** | **change-auditor** | **"Audit implementation changes: git analysis, security scan, PASS/FAIL verification"** |
+| **Phase execution** | **code-implementer** | **"Execute phase specification: unified patches, command execution, minimal evidence"** |
+| **Context analysis** | **context-scout** | **"Process handoff envelope: compact digest, citations, file targets for session manifest"** |
 
 **Auto-PR Flow:** Create PR → Monitor comments → Categorize (code/style/security/tests/perf) → Route to specialists → Fix → Update PR → Repeat (max 5x) → Fix CI/CD
 
@@ -298,6 +304,9 @@ Task tool subagent_type="reliability-droid-forge" \
 | Tests | unit-test |
 | Format | biome |
 | Git | git-workflow-orchestrator |
+| **Change audit** | **change-auditor** |
+| **Phase execution** | **code-implementer** |
+| **Context analysis** | **context-scout** |
 
 **Pattern:** `Task tool subagent_type="droid-name" prompt "details"`
 

@@ -99,6 +99,22 @@ delegation_rules:
       droid_types: ["valkey-caching-strategist-droid-forge"]
       priority: 1
 
+    # New specialized workflow droids
+    - pattern: "handoff|envelope|context-analysis|session-manifest|file-targeting|citation"
+      capabilities: ["context-analysis", "handoff-processing", "digest-generation", "file-mapping"]
+      droid_types: ["context-scout-droid-forge"]
+      priority: 1
+
+    - pattern: "phase-spec|implementation|unified-patches|phase-execution|evidence-collection"
+      capabilities: ["phase-implementation", "unified-patches", "command-execution", "path-safety"]
+      droid_types: ["code-implementer-droid-forge"]
+      priority: 1
+
+    - pattern: "change-audit|verification|security-scan|git-analysis|pass-fail|change-verification"
+      capabilities: ["change-auditing", "security-scanning", "git-analysis", "quality-assurance"]
+      droid_types: ["change-auditor-droid-forge"]
+      priority: 1
+
     - pattern: "database-performance|postgresql|postgres18|query-optimization"
       capabilities: ["database-performance", "postgresql", "query-tuning", "optimization"]
       droid_types: ["database-performance-droid-forge"]
