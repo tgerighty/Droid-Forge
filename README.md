@@ -280,6 +280,12 @@ fix: resolve login validation bug
 - **🔗 AI-Dev-Tasks Integrator** - Process file synchronization and PRD integration
 - **📊 Changelog Maintainer** - Run tracking and change documentation
 
+### New Specialist Droids
+
+- **🔍 Change Auditor** - Change verification specialist that audits implementations, runs security scans, and reports PASS/FAIL status with minimal fix recommendations
+- **⚡ Code Implementer** - Phase implementation specialist that executes phase specifications with unified patches, command execution, and minimal evidence collection
+- **🗺️ Context Scout** - Context analysis specialist that processes handoff envelopes and returns compact digests with citations and file targets for session manifest creation
+
 ### Directory Structure
 
 ```
