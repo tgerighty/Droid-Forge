@@ -18,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **change-auditor-droid-forge**: Change verification specialist that audits implementations, runs security scans, and reports PASS/FAIL status with minimal fix recommendations
   - **code-implementer-droid-forge**: Phase implementation specialist that executes phase specifications with unified patches, command execution, and minimal evidence collection
   - **context-scout-droid-forge**: Context analysis specialist that processes handoff envelopes and returns compact digests with citations and file targets for session manifest creation
+- **Comprehensive uninstaller**: Added `uninstall.sh` script with safety features:
+  - Interactive mode with installation selection options
+  - Project-only, user-only, and both removal modes
+  - Dry run mode to preview changes before execution
+  - Verbose output for detailed tracking
+  - Complete removal of droids, configuration files, and related directories
+  - Safe cleanup of .gitignore entries
+  - Graceful error handling and informative reporting
 
 ### Completed
 

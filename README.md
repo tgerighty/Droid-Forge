@@ -146,6 +146,19 @@ Droid Forge is a declarative, droid-based framework that uses Factory.ai's own d
    
    Simply invoke the droid CLI and ask the manager orchestrator to perform tasks.
 
+### Uninstallation (When needed)
+
+To completely remove Droid Forge from your system:
+```bash
+# Interactive mode with safety options
+./uninstall.sh
+
+# Or use specific options
+./uninstall.sh --project-only  # Remove from current project
+./uninstall.sh --user-only     # Remove from personal directory
+./uninstall.sh --dry-run       # Preview what would be removed
+```
+
 ### Basic Usage
 
 **Analyze a feature request and create tasks:**
@@ -165,6 +178,42 @@ This triggers:
 droid
 > Ask manager-orchestrator-droid-forge to show current task status
 ```
+
+### Uninstallation
+
+**Remove Droid Forge completely:**
+```bash
+# Interactive mode with options
+./uninstall.sh
+
+# Remove from current project only
+./uninstall.sh --project-only
+
+# Remove from personal directory only
+./uninstall.sh --user-only
+
+# Remove from both locations
+./uninstall.sh --both
+
+# Preview what would be removed (dry run)
+./uninstall.sh --dry-run
+
+# Show detailed output
+./uninstall.sh --verbose
+```
+
+The uninstaller safely removes:
+- All droids from `.factory/droids/` (project)
+- All droids from `~/.factory/droids/` (personal)
+- Configuration files (`droid-forge.yaml`, `AGENTS.md`)
+- Tools, tests, and working directories
+- `.gitignore` entries related to Droid Forge
+
+**Safety features:**
+- Dry run mode to preview changes
+- Interactive confirmation required
+- Verbose output for detailed tracking
+- Graceful error handling and reporting
 
 ## 🔧 Contributing (For Framework Development)
 
