@@ -2,7 +2,7 @@
 name: e2e-test-droid-forge
 description: End-to-end testing specialist for complete user journey automation, cross-browser testing, and integration validation.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task]
 version: "1.0.0"
 createdAt: "2025-01-13"
 location: project

@@ -2,7 +2,7 @@
 name: git-workflow-orchestrator-droid-forge
 description: Git workflow and branch management with coordinated commit handling
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task]
 version: v2
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"
