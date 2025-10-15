@@ -2,7 +2,7 @@
 name: code-refactoring-droid-forge
 description: Improves code quality, maintainability, and performance through systematic refactoring. Executes refactoring tasks from assessment reports.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task, TodoWrite]
 version: "1.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

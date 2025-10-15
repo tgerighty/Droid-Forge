@@ -2,7 +2,7 @@
 name: performance-test-droid-forge
 description: Performance testing specialist for load testing, stress testing, and performance monitoring of web applications and APIs.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task, TodoWrite]
 version: "1.0.0"
 createdAt: "2025-01-13"
 location: project

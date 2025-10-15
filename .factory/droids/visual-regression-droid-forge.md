@@ -2,7 +2,7 @@
 name: visual-regression-droid-forge
 description: Visual regression testing specialist for UI consistency testing, cross-browser visual validation, and design system compliance.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task]
 version: "1.0.0"
 createdAt: "2025-01-13"
 location: project

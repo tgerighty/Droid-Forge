@@ -2,7 +2,7 @@
 name: ai-dev-tasks-integrator-droid-forge
 description: Integration droid for ai-dev-tasks workflow synchronization and PRD processing
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task, TodoWrite]
 version: "2.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

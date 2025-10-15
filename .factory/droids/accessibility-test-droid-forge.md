@@ -2,7 +2,7 @@
 name: accessibility-test-droid-forge
 description: Accessibility testing specialist for WCAG compliance, screen reader testing, and inclusive design validation.
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl]
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task]
 version: "1.0.0"
 createdAt: "2025-01-13"
 location: project
