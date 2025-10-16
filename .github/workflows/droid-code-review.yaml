@@ -1,0 +1,687 @@
+name: Droid Code Review
+
+'on':
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to review'
+        required: true
+        type: number
+
+concurrency:
+  group: droid-review-${{ github.event.pull_request.number || inputs.pr_number }}
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: write
+  contents: read
+  issues: write
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Skip automated code review for draft PRs only (manual dispatch always runs)
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+
+    steps:
+      # Set PR number from either event or manual input
+      - name: Set PR number
+        id: pr-number
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "number=${{ inputs.pr_number }}" >> $GITHUB_OUTPUT
+            echo "Manual trigger for PR #${{ inputs.pr_number }}"
+          else
+            echo "number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+            echo "Automatic trigger for PR #${{ github.event.pull_request.number }}"
+          fi
+
+      # Fetch PR details for manual dispatch
+      - name: Fetch PR details
+        id: pr-details
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_DATA=$(gh api repos/${{ github.repository }}/pulls/${{ inputs.pr_number }})
+          echo "head_sha=$(echo "$PR_DATA" | jq -r '.head.sha')" >> $GITHUB_OUTPUT
+          echo "base_ref=$(echo "$PR_DATA" | jq -r '.base.ref')" >> $GITHUB_OUTPUT
+          echo "head_ref=$(echo "$PR_DATA" | jq -r '.head.ref')" >> $GITHUB_OUTPUT
+          echo "changed_files=$(echo "$PR_DATA" | jq -r '.changed_files')" >> $GITHUB_OUTPUT
+          echo "draft=$(echo "$PR_DATA" | jq -r '.draft')" >> $GITHUB_OUTPUT
+
+      # Validate API keys first - fail fast to save GitHub Actions minutes
+      - name: Check API keys configuration
+        id: check-keys
+        env:
+          FACTORY_API_KEY: ${{ secrets.FACTORY_API_KEY }}
+          MODEL_API_KEY: ${{ secrets.MODEL_API_KEY }}
+        run: |
+          set -euo pipefail
+
+          MISSING_KEYS=""
+
+          if [ -z "$FACTORY_API_KEY" ]; then
+            MISSING_KEYS="${MISSING_KEYS}- \`FACTORY_API_KEY\`\n"
+          fi
+
+          if [ -z "$MODEL_API_KEY" ]; then
+            MISSING_KEYS="${MISSING_KEYS}- \`MODEL_API_KEY\`\n"
+          fi
+
+          if [ -n "$MISSING_KEYS" ]; then
+            echo "keys_missing=true" >> $GITHUB_OUTPUT
+            echo "missing_keys<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$MISSING_KEYS" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "keys_missing=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Post comment about missing API keys
+        if: steps.check-keys.outputs.keys_missing == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const missingKeys = `${{ steps.check-keys.outputs.missing_keys }}`;
+            const comment = `## ⚠️ Droid Code Review: Configuration Required
+
+            The automated code review cannot run because the following API keys are not configured:
+
+            ${missingKeys}
+
+            ### Setup Instructions
+
+            1. Go to repository **Settings** → **Secrets and variables** → **Actions**
+            2. Click **New repository secret** for each missing key:
+               - **FACTORY_API_KEY**: Your Factory.ai API key
+               - **MODEL_API_KEY**: Your Z.ai API key (for GLM-4.6 model)
+            3. Re-run this workflow or push a new commit to trigger the review
+
+            For more details, see the [workflow documentation](https://github.com/${{ github.repository }}/blob/main/README.md).
+
+            <!-- droid-review:missing-keys -->`;
+
+            const prNumber = context.payload.pull_request?.number || ${{ steps.pr-number.outputs.number }};
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: comment
+            });
+
+      - name: Exit if API keys are missing
+        if: steps.check-keys.outputs.keys_missing == 'true'
+        run: |
+          echo "❌ API keys are missing. Posted comment on PR. Exiting gracefully."
+          exit 0
+
+      # OPTIMIZATION #3: Shallow checkout with enough depth for merge base
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || steps.pr-details.outputs.head_sha }}
+
+      # OPTIMIZATION #4: Validate prerequisites (API keys already checked)
+      - name: Validate prerequisites
+        env:
+          DROID_INSTALLER_SHA256: ${{ vars.DROID_INSTALLER_SHA256 }}
+        run: |
+          set -euo pipefail
+
+          # Validation (API keys already checked in first step)
+          if [ -z "${DROID_INSTALLER_SHA256:-}" ]; then
+            echo "❌ DROID_INSTALLER_SHA256 repository variable is not configured."
+            echo "Set vars.DROID_INSTALLER_SHA256 to the expected sha256 digest of the Droid CLI installer."
+            exit 1
+          fi
+
+          # OPTIMIZATION #7: Skip jq installation (pre-installed on GitHub runners)
+          echo "✅ Prerequisites validated (jq is pre-installed on GitHub runners)"
+
+      - name: Restore Droid CLI cache
+        id: cache-droid
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.local/bin/droid
+            ~/.factory
+          key: droid-cli-${{ vars.DROID_INSTALLER_SHA256 }}
+
+      - name: Install Droid CLI
+        env:
+          DROID_INSTALLER_SHA256: ${{ vars.DROID_INSTALLER_SHA256 }}
+        run: |
+          set -euo pipefail
+          
+          # Check if droid exists and is executable
+          if [ -f "$HOME/.local/bin/droid" ] && [ -x "$HOME/.local/bin/droid" ]; then
+            echo "✅ Droid CLI found in cache"
+          else
+            echo "📥 Installing Droid CLI..."
+            curl -fsSL --compressed https://app.factory.ai/cli -o droid-cli-installer.sh
+            echo "${DROID_INSTALLER_SHA256}  droid-cli-installer.sh" | sha256sum --check --status
+            sh droid-cli-installer.sh
+            rm -f droid-cli-installer.sh
+          fi
+          
+          # Add to PATH for subsequent steps
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          
+          # Verify installation
+          if [ -f "$HOME/.local/bin/droid" ]; then
+            "$HOME/.local/bin/droid" --version
+          else
+            echo "❌ ERROR: Droid CLI installation failed - binary not found at $HOME/.local/bin/droid"
+            exit 1
+          fi
+
+      - name: Configure custom model
+        env:
+          MODEL_API_KEY: ${{ secrets.MODEL_API_KEY }}
+        run: |
+          set -euo pipefail
+
+          # Create .factory directory if it doesn't exist
+          mkdir -p "$HOME/.factory"
+
+          # Create config.json with custom model configuration
+          cat > "$HOME/.factory/config.json" << 'EOF'
+          {
+            "custom_models": [
+              {
+                "model_display_name": "GLM-4.6 Coding Plan",
+                "model": "GLM-4.6",
+                "base_url": "https://api.z.ai/api/anthropic",
+                "api_key": "MODEL_API_KEY_PLACEHOLDER",
+                "provider": "zia"
+              }
+            ]
+          }
+          EOF
+
+          # Replace the API key placeholder with actual key using jq
+          jq --arg key "$MODEL_API_KEY" '.custom_models[0].api_key = $key' "$HOME/.factory/config.json" > "$HOME/.factory/config.json.tmp"
+          mv "$HOME/.factory/config.json.tmp" "$HOME/.factory/config.json"
+
+          echo "✅ Custom model configuration created at $HOME/.factory/config.json"
+
+          # Verify the config (without showing the API key)
+          jq '.custom_models[0] | {model_display_name, model, base_url, provider, api_key_set: (.api_key != "")}' "$HOME/.factory/config.json"
+
+      # OPTIMIZATION #10: Add early exit for no changes
+      - name: Check for code changes
+        id: changes
+        run: |
+          set -euo pipefail
+          BASE_REF="${{ github.event.pull_request.base.ref || steps.pr-details.outputs.base_ref }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha || steps.pr-details.outputs.head_sha }}"
+          
+          # Fetch base branch (full history already available from checkout)
+          git fetch origin "$BASE_REF"
+
+          # Check if there are actual code changes
+          DIFF_SIZE=$(git diff "origin/$BASE_REF...$HEAD_SHA" | wc -l)
+
+          if [ "$DIFF_SIZE" -eq 0 ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "⚠️ No code changes detected. Skipping review."
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "✅ Found $DIFF_SIZE lines of changes to review"
+          fi
+
+      # OPTIMIZATION #6: Check PR size and adjust review strategy
+      - name: Determine review strategy
+        id: pr-size
+        if: steps.changes.outputs.skip != 'true'
+        run: |
+          FILES=${{ github.event.pull_request.changed_files || steps.pr-details.outputs.changed_files }}
+          if [ "$FILES" -gt 50 ]; then
+            echo "large=true" >> $GITHUB_OUTPUT
+            echo "max_comments=5" >> $GITHUB_OUTPUT
+            echo "⚠️ Large PR detected ($FILES files). Review will focus on critical issues only."
+          else
+            echo "large=false" >> $GITHUB_OUTPUT
+            echo "max_comments=10" >> $GITHUB_OUTPUT
+            echo "✅ Standard PR size ($FILES files). Full review will be performed."
+          fi
+
+      # OPTIMIZATION #2: Parallelize API calls for faster data gathering
+      - name: Prepare review context
+        if: steps.changes.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr-number.outputs.number }}
+        run: |
+          set -euo pipefail
+          
+          BASE_REF="${{ github.event.pull_request.base.ref || steps.pr-details.outputs.base_ref }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha || steps.pr-details.outputs.head_sha }}"
+
+          fetch_paginated() {
+            local url="$1"
+            local output="$2"
+            local page=1
+            echo "[]" > "$output"
+
+            while true; do
+              local response
+              response=$(curl -fsSL \
+                -H "Authorization: token ${GH_TOKEN}" \
+                -H "Accept: application/vnd.github.v3+json" \
+                "${url}?per_page=100&page=${page}")
+
+              if [ "$(echo "$response" | jq 'length')" -eq 0 ]; then
+                break
+              fi
+
+              jq -s '.[0] + .[1]' "$output" <(echo "$response") > "${output}.tmp"
+              mv "${output}.tmp" "$output"
+              page=$((page + 1))
+            done
+          }
+
+          # Get the PR diff
+          git diff "origin/$BASE_REF...$HEAD_SHA" > diff.txt
+
+          # OPTIMIZATION #2: Run all API calls in parallel
+          echo "📡 Fetching PR data in parallel..."
+          (
+            fetch_paginated "https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/comments" "existing_issue_comments.json" &
+
+            fetch_paginated "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}/comments" "existing_review_comments.json" &
+
+            curl -fsSL \
+                 -H "Authorization: token ${GH_TOKEN}" \
+                 -H "Accept: application/vnd.github.v3+json" \
+                 "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}/files?per_page=100" \
+                 > files_raw.json &
+
+            # Wait for all parallel processes to complete
+            wait
+          )
+
+          echo "✅ All API calls completed"
+
+          # Merge comments for deduplication
+          jq -s '.[0] + .[1]' existing_issue_comments.json existing_review_comments.json > existing_comments.json
+
+          # Process files data
+          jq '[.[] | select(.patch != null) | {filename: .filename, patch: .patch}]' files_raw.json > files.json
+          jq '[.[] | select(.patch == null) | .filename]' files_raw.json > truncated_files.json
+          if [ "$(jq 'length' truncated_files.json)" -eq 0 ]; then
+            rm -f truncated_files.json
+          fi
+
+      - name: Perform automated code review
+        if: steps.changes.outputs.skip != 'true'
+        env:
+          FACTORY_API_KEY: ${{ secrets.FACTORY_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_COMMENTS: ${{ steps.pr-size.outputs.max_comments }}
+          IS_LARGE_PR: ${{ steps.pr-size.outputs.large }}
+        run: |
+          # OPTIMIZATION #6: Adjust prompt based on PR size
+          MAX_COMMENTS_TEXT="Maximum ${MAX_COMMENTS} comments total"
+          if [ "$IS_LARGE_PR" = "true" ]; then
+            PRIORITY_NOTE="⚠️ LARGE PR: Focus ONLY on the most critical bugs and security issues."
+          else
+            PRIORITY_NOTE=""
+          fi
+
+          cat > prompt.txt << EOF
+          You are an automated code review system. Review the PR diff and identify clear issues that need to be fixed.
+
+          ${PRIORITY_NOTE}
+
+          Input files (already in current directory):
+          - diff.txt: the code changes to review
+          - files.json: file patches with line numbers for positioning comments
+          - existing_comments.json: skip issues already mentioned here
+          - truncated_files.json (optional): files whose patches were truncated by GitHub; ignore these to avoid misaligned comments
+
+          Task: Create a file called comments.json with this exact format:
+          [{ "path": "path/to/file.js", "position": 42, "body": "Your comment here" }]
+
+          Focus on these types of issues:
+          - Dead/unreachable code (if (false), while (false), code after return/throw/break)
+          - Broken control flow (missing break in switch, fallthrough bugs)
+          - Async/await mistakes (missing await, .then without return, unhandled promise rejections)
+          - Array/object mutations in React components or reducers
+          - UseEffect dependency array problems (missing deps, incorrect deps)
+          - Incorrect operator usage (== vs ===, && vs ||, = in conditions)
+          - Off-by-one errors in loops or array indexing
+          - Integer overflow/underflow in calculations
+          - Regex catastrophic backtracking vulnerabilities
+          - Missing base cases in recursive functions
+          - Incorrect type coercion that changes behavior
+          - Environment variable access without defaults or validation
+          - Null/undefined dereferences
+          - Resource leaks (unclosed files or connections)
+          - SQL/XSS injection vulnerabilities
+          - Concurrency/race conditions
+          - Missing error handling for critical operations
+
+          Comment format:
+          - Clearly describe the issue: "This code block is unreachable due to the if (false) condition"
+          - Provide a concrete fix: "Remove this entire if block as it will never execute"
+          - When possible, suggest the exact code change:
+            \`\`\`suggestion
+            // Remove the unreachable code
+            \`\`\`
+          - Be specific about why it's a problem: "This will cause a TypeError if input is null"
+          - No emojis, just clear technical language
+
+          Skip commenting on:
+          - Code style, formatting, or naming conventions
+          - Minor performance optimizations
+          - Architectural decisions or design patterns
+          - Features or functionality (unless broken)
+          - Test coverage (unless tests are clearly broken)
+
+          Position calculation:
+          - Use the "position" field from files.json patches
+          - This is the line number in the diff, not the file
+          - Comments must align with exact changed lines only
+
+          Output:
+          - Empty array [] if no issues found
+          - Otherwise array of comment objects with path, position, body
+          - Each comment should be actionable and clear about what needs to be fixed
+          - ${MAX_COMMENTS_TEXT}; prioritize the most critical issues
+
+          CRITICAL: Ensure the comments.json file contains valid JSON that can be parsed by JSON.parse().
+          - All strings in JSON must be properly escaped
+          - Use \n for newlines in body strings
+          - Use \" for quotes in strings
+          - Use \\\\ for backslashes
+          - Use \t for tabs
+          - No unescaped newlines, quotes, backslashes, or control characters in the JSON text
+          - Test your JSON by running: python3 -m json.tool comments.json
+          - The JSON must be a single line without line breaks within string values
+          EOF
+
+          # Run droid exec with the prompt using custom GLM-4.6 model
+          echo "Running code review analysis with custom GLM-4.6 model..."
+          droid exec -f prompt.txt --model custom:GLM-4.6 --skip-permissions-unsafe || {
+            echo "❌ ERROR: droid exec failed"
+            echo "This could be due to missing FACTORY_API_KEY, MODEL_API_KEY, or other runtime issues."
+            exit 1
+          }
+
+          # Check if comments.json was created
+          if [ ! -f comments.json ]; then
+            echo "❌ ERROR: droid exec did not create comments.json"
+            echo "This usually indicates the review run failed (e.g. missing FACTORY_API_KEY or runtime error)."
+            exit 1
+          fi
+
+          echo "=== Review Results ==="
+          cat comments.json
+
+          # Validate JSON before proceeding
+          echo "Validating JSON format..."
+          if ! python3 -m json.tool comments.json > /dev/null 2>&1; then
+            echo "❌ ERROR: Invalid JSON in comments.json"
+            echo "Content that failed validation:"
+            cat comments.json
+            echo ""
+            echo "This usually means the AI generated unescaped characters in the comment body."
+            echo "Creating a fallback empty comments.json to allow the workflow to continue..."
+            echo "[]" > comments.json
+          fi
+          echo "✅ JSON validation passed"
+
+      # OPTIMIZATION #9: Replace Python with faster jq for sanitization
+      - name: Sanitize review comments
+        if: steps.changes.outputs.skip != 'true'
+        run: |
+          set -euo pipefail
+          if [ ! -f comments.json ]; then
+            exit 0
+          fi
+
+          # Use jq for faster JSON processing
+          echo "Sanitizing comments with jq..."
+          jq -c '
+            [.[] |
+             select(type == "object" and .path and .position and .body) |
+             {
+               path: .path,
+               position: .position,
+               body: (.body | tostring | if length > 65000 then .[0:64997] + "..." else . end)
+             }] |
+            unique_by({path, position, body})
+          ' comments.json > comments_clean.json
+
+          mv comments_clean.json comments.json
+          echo "✅ Comments sanitized"
+
+      - name: Submit inline review comments
+        if: steps.changes.outputs.skip != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+            const NO_ISSUES_MARKER = '<!-- droid-review:no-issues -->';
+
+            // Safely get PR number with validation
+            const prNumber = context.payload.pull_request?.number || ${{ steps.pr-number.outputs.number }};
+            if (!prNumber) {
+              core.error('Unable to determine PR number from context');
+              throw new Error('PR number is undefined');
+            }
+            core.info(`Processing PR #${prNumber}`);
+
+            // Check if comments.json exists
+            if (!fs.existsSync('comments.json')) {
+              core.info('comments.json missing; skipping review submission');
+              return;
+            }
+
+            // Read and parse comments with error handling
+            const commentsContent = fs.readFileSync('comments.json', 'utf8');
+            core.info(`Raw comments.json content (first 500 chars): ${commentsContent.substring(0, 500)}`);
+            
+            let comments;
+            try {
+              comments = JSON.parse(commentsContent);
+              core.info(`Successfully parsed comments.json: ${comments.length} comments found`);
+            } catch (error) {
+              core.error('Failed to parse comments.json: ' + error.message);
+              core.error('JSON content: ' + commentsContent);
+              throw new Error('Invalid JSON in comments.json: ' + error.message);
+            }
+
+            // Validate comments is an array
+            if (!Array.isArray(comments)) {
+              core.error(`Expected comments to be an array, got: ${typeof comments}`);
+              throw new Error('comments.json must contain an array');
+            }
+
+            // Get existing reviews with error handling
+            let existingReviews = [];
+            try {
+              existingReviews = await github.paginate(github.rest.pulls.listReviews, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                per_page: 100
+              });
+              core.info(`Found ${existingReviews.length} existing reviews`);
+            } catch (error) {
+              core.warning(`Failed to fetch existing reviews: ${error.message}`);
+            }
+
+            // Handle empty comments array
+            if (comments.length === 0) {
+              const hasNoIssuesComment = existingReviews.some(review => (review.body || '').includes(NO_ISSUES_MARKER));
+
+              if (!hasNoIssuesComment) {
+                const payload = {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber,
+                  event: 'COMMENT',
+                  body: `✅ No issues found in the current changes.\n\n${NO_ISSUES_MARKER}`
+                };
+
+                for (let attempt = 1; attempt <= 3; attempt++) {
+                  try {
+                    await github.rest.pulls.createReview(payload);
+                    core.info('Posted "no issues" comment');
+                    break;
+                  } catch (error) {
+                    if (attempt === 3) {
+                      core.error(`Failed to post "no issues" comment after 3 attempts: ${error.message}`);
+                      throw error;
+                    }
+                    core.warning(`createReview attempt ${attempt} failed: ${error.message}. Retrying...`);
+                    await sleep(attempt * 2000);
+                  }
+                }
+              }
+              return;
+            }
+
+            // Get existing review comments with error handling
+            let existingReviewComments = [];
+            try {
+              existingReviewComments = await github.paginate(github.rest.pulls.listReviewComments, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                per_page: 100
+              });
+              core.info(`Found ${existingReviewComments.length} existing review comments`);
+            } catch (error) {
+              core.warning(`Failed to fetch existing review comments: ${error.message}`);
+            }
+
+            const existingKeys = new Set(
+              existingReviewComments.map(comment => {
+                const path = comment.path || '';
+                const position = comment.position ?? comment.original_position ?? '';
+                const body = (comment.body || '').trim();
+                return `${path}::${position}::${body}`;
+              })
+            );
+
+            // Validate and filter comments with detailed logging
+            const filtered = [];
+            for (let i = 0; i < comments.length; i++) {
+              const entry = comments[i];
+              
+              // Validate comment structure
+              if (!entry || typeof entry !== 'object') {
+                core.warning(`Skipping comment ${i}: not an object`);
+                continue;
+              }
+
+              const path = entry.path;
+              const position = entry.position;
+              const body = typeof entry.body === 'string' ? entry.body.trim() : '';
+
+              // Validate required fields
+              if (!path) {
+                core.warning(`Skipping comment ${i}: missing path`);
+                continue;
+              }
+              if (typeof position !== 'number') {
+                core.warning(`Skipping comment ${i}: invalid position (${typeof position})`);
+                continue;
+              }
+              if (!body) {
+                core.warning(`Skipping comment ${i}: empty body`);
+                continue;
+              }
+
+              // Check for duplicates
+              const key = `${path}::${position}::${body}`;
+              if (existingKeys.has(key)) {
+                core.info(`Skipping comment ${i}: duplicate (${path}:${position})`);
+                continue;
+              }
+
+              filtered.push({ path, position, body });
+            }
+
+            core.info(`After filtering: ${filtered.length} new comments to post`);
+
+            if (filtered.length === 0) {
+              core.info('All proposed comments already exist; skipping new review submission.');
+              return;
+            }
+
+            // Log comments being posted for debugging
+            core.info('Comments to be posted:');
+            filtered.forEach((c, i) => {
+              core.info(`  ${i + 1}. ${c.path}:${c.position} (${c.body.substring(0, 50)}...)`);
+            });
+
+            const summary = `Found ${filtered.length} potential issue${filtered.length === 1 ? '' : 's'} that should be addressed.`;
+            const payload = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              commit_id: '${{ github.event.pull_request.head.sha || steps.pr-details.outputs.head_sha }}',
+              event: 'COMMENT',
+              body: `${summary}\n\n${NO_ISSUES_MARKER}`,
+              comments: filtered
+            };
+
+            core.info(`Creating review with commit_id: ${payload.commit_id}`);
+
+            for (let attempt = 1; attempt <= 3; attempt++) {
+              try {
+                const result = await github.rest.pulls.createReview(payload);
+                core.info(`✅ Successfully submitted review with ${filtered.length} inline comments`);
+                core.info(`Review ID: ${result.data.id}, URL: ${result.data.html_url}`);
+                break;
+              } catch (error) {
+                core.error(`createReview attempt ${attempt} failed: ${error.message}`);
+                if (error.response) {
+                  core.error(`Status: ${error.response.status}`);
+                  core.error(`Response: ${JSON.stringify(error.response.data)}`);
+                }
+                if (attempt === 3) {
+                  core.error('Failed to post review after 3 attempts');
+                  throw error;
+                }
+                core.warning(`Retrying in ${attempt * 2} seconds...`);
+                await sleep(attempt * 2000);
+              }
+            }
+
+      - name: Upload debug artifacts on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: droid-review-debug-${{ github.run_id }}
+          path: |
+            diff.txt
+            files.json
+            existing_comments.json
+            prompt.txt
+            comments.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Log completion status
+        if: always()
+        run: |
+          echo "=== Code Review Workflow Summary ==="
+          if [ -f comments.json ]; then
+            echo "✅ comments.json created successfully"
+            echo "File size: $(wc -c < comments.json) bytes"
+            echo "Number of comments: $(jq 'length' comments.json 2>/dev/null || echo "Invalid JSON")"
+          else
+            echo "⚠️ comments.json was not created (workflow may have been skipped)"
+          fi
+          echo "Workflow completed at $(date)"
