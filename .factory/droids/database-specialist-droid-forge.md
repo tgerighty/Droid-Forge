@@ -13,6 +13,7 @@ tags: ["database", "postgresql", "postgres18", "drizzle", "orm", "performance"]
 PostgreSQL 18 performance optimization and Drizzle ORM expertise - schema design, query tuning, assessment.
 
 ## Core Capabilities
+
 **PostgreSQL 18**: Performance tuning, configuration optimization, parallel queries
 **Drizzle ORM**: Schema design, type-safe queries, migrations, performance optimization
 **Performance Assessment**: Query analysis, bottleneck identification, optimization recommendations
@@ -111,7 +112,6 @@ export const posts = pgTable('posts', {
 }, (table) => ({
   authorIdx: index('posts_author_idx').on(table.authorId),
   publishedIdx: index('posts_published_idx').on(table.published),
-  authorPublishedIdx: index('posts_author_published_idx').on(table.authorId, table.published),
 }));
 ```
 
@@ -121,16 +121,13 @@ import { db } from './db';
 import { users, posts } from './schema';
 import { eq } from 'drizzle-orm';
 
-type User = typeof users.$inferSelect;
-type NewUser = typeof users.$inferInsert;
-
 class UserService {
-  async create(userData: NewUser): Promise<User> {
+  async create(userData: any): Promise<any> {
     const [user] = await db.insert(users).values(userData).returning();
     return user;
   }
 
-  async findById(id: number): Promise<User | null> {
+  async findById(id: number): Promise<any | null> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user || null;
   }
@@ -144,31 +141,13 @@ class UserService {
   }
 }
 
-const createUserWithPost = async (userData: NewUser, postData: typeof posts.$inferInsert) => {
+const createUserWithPost = async (userData: any, postData: any) => {
   return await db.transaction(async (tx) => {
     const [user] = await tx.insert(users).values(userData).returning();
     const [post] = await tx.insert(posts).values({ ...postData, authorId: user.id }).returning();
     return { user, post };
   });
 };
-```
-
-### Index Management & Performance
-```typescript
-export class IndexManager {
-  async analyzeIndexes(): Promise<IndexAnalysis> {
-    const [indexUsage, missingIndexes] = await Promise.all([this.getIndexUsage(), this.suggestMissingIndexes()]);
-    return { currentIndexes: indexUsage, missingIndexes, recommendations: this.generateRecommendations(indexUsage, missingIndexes) };
-  }
-
-  async createOptimizedIndexes() {
-    const analysis = await this.analyzeIndexes();
-    for (const index of analysis.missingIndexes) {
-      const indexName = `idx_${index.table}_${index.columns.join('_')}`;
-      await this.db.execute(`CREATE INDEX CONCURRENTLY ${indexName} ON ${index.table} (${index.columns.join(', ')})`);
-    }
-  }
-}
 ```
 
 ## Performance Monitoring
@@ -188,16 +167,16 @@ FROM pg_stat_user_indexes WHERE idx_scan = 0 ORDER BY pg_relation_size(indexreli
 ### Performance Metrics
 ```typescript
 export class PerformanceMonitor {
-  async getPerformanceMetrics(): Promise<PerformanceMetrics> {
+  async getPerformanceMetrics(): Promise<any> {
     const [queries, indexes, connections] = await Promise.all([
       this.getQueryMetrics(), this.getIndexMetrics(), this.getConnectionMetrics()
     ]);
     return { queries, indexes, connections, timestamp: new Date() };
   }
 
-  async checkPerformanceAlerts(): Promise<PerformanceAlert[]> {
+  async checkPerformanceAlerts(): Promise<any[]> {
     const metrics = await this.getPerformanceMetrics();
-    const alerts: PerformanceAlert[] = [];
+    const alerts: any[] = [];
     if (metrics.connections.active > metrics.connections.total * 0.8) {
       alerts.push({
         type: 'high_connection_usage', severity: 'warning',
@@ -233,8 +212,12 @@ const safeMigration = async () => {
 };
 ```
 
-## Best Practices
+## Task Integration
 
-**Performance**: Monitor EXPLAIN ANALYZE, use appropriate indexes, optimize connection pool, regular audits
-**Schema Design**: Proper normalization, appropriate data types, consistent naming, type-safe definitions
-**Migration Safety**: Test in staging, zero-downtime patterns, rollback strategies, document changes
+**Reads**: `/tasks/tasks-[prd-id]-database-*.md`
+**Status**: `[ ]` `[~]` `[x]` `[!]`
+
+**Commands**: `psql`, `EXPLAIN ANALYZE`, performance monitoring queries
+**Create**: Schema definitions, migrations, performance optimization scripts
+
+**Best Practices**: Monitor EXPLAIN ANALYZE, use appropriate indexes, optimize connection pool, regular audits, proper normalization, appropriate data types, consistent naming, type-safe definitions, test in staging, zero-downtime patterns, rollback strategies, document changes.

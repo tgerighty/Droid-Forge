@@ -1,21 +1,22 @@
 ---
-name: testing-specialist-droid-forge
-description: Comprehensive testing specialist - unit, E2E, performance, accessibility, WCAG compliance testing
+name: comprehensive-testing-droid-forge
+description: Unit, E2E, performance, accessibility, WCAG compliance, visual regression testing
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task, TodoWrite]
-version: "4.0.0"
+tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
+version: "3.0.0"
 location: project
-tags: ["testing", "unit-testing", "e2e-testing", "performance", "accessibility", "wcag"]
+tags: ["testing", "unit-testing", "e2e-testing", "performance", "accessibility", "visual-regression"]
 ---
 
-# Testing Specialist Droid
+# Comprehensive Testing Droid
 
-Comprehensive testing specialist covering unit tests, E2E testing, performance testing, accessibility/WCAG compliance.
+Unit tests, E2E testing, performance testing, accessibility/WCAG compliance, visual regression testing.
 
 ## Core Capabilities
 
 **Unit Testing**: Jest, Vitest, React Testing Library, component testing, service testing
-**E2E Testing**: Playwright, user journeys, cross-browser compatibility, visual regression
+**E2E Testing**: Playwright, user journeys, cross-browser compatibility, visual regression integration
+**Visual Testing**: Screenshot comparison, pixel-perfect validation, visual diff analysis
 **Accessibility Testing**: WCAG 2.1 AA compliance, screen reader testing, keyboard navigation
 **Performance Testing**: Load testing, stress testing, performance monitoring
 
@@ -36,11 +37,16 @@ export default defineConfig({
 });
 ```
 
-### Playwright E2E Setup
+### Playwright E2E & Visual Setup
 ```typescript
 export default {
   testDir: './e2e',
   fullyParallel: true,
+  use: {
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+    trace: 'retain-on-failure',
+  },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
@@ -53,7 +59,6 @@ export default {
 
 ### Unit Testing
 ```typescript
-// Service Testing
 describe('UserService', () => {
   let userService: UserService;
   let mockRepo: jest.Mocked<UserRepository>;
@@ -72,19 +77,26 @@ describe('UserService', () => {
     expect(mockRepo.create).toHaveBeenCalledWith(userData);
   });
 });
+```
 
-// Component Testing
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-
-it('calls onUpdate when form is submitted', async () => {
-  const mockOnUpdate = jest.fn();
-  render(<UserProfile user={mockUser} onUpdate={mockOnUpdate} />);
-  fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Jane' } });
-  fireEvent.click(screen.getByRole('button', { name: 'Update' }));
-  await waitFor(() => {
-    expect(mockOnUpdate).toHaveBeenCalledWith({ ...mockUser, name: 'Jane' });
-  });
+### Visual Regression Testing
+```typescript
+test('homepage visual consistency', async ({ page }) => {
+  await page.goto('/');
+  await expect(page).toHaveScreenshot('homepage-full.png');
 });
+
+// Cross-Browser Visual Testing
+const browsers = ['chromium', 'firefox', 'webkit'];
+for (const browser of browsers) {
+  test.describe(`${browser} - Visual Tests`, () => {
+    test.use({ ...devices[browser] });
+    test('layout consistency', async ({ page }) => {
+      await page.goto('/');
+      await expect(page).toHaveScreenshot(`homepage-${browser}.png`);
+    });
+  });
+}
 ```
 
 ### E2E Testing with Accessibility
@@ -100,11 +112,6 @@ test('complete registration flow with WCAG compliance', async ({ page }) => {
   // Keyboard navigation
   await page.keyboard.press('Tab');
   await page.keyboard.type('user@example.com');
-  await page.keyboard.press('Tab');
-  await page.keyboard.type('SecurePass123!');
-
-  // Submit form
-  await page.keyboard.press('Space'); // Check terms
   await page.keyboard.press('Enter'); // Submit
 
   await expect(page.locator('[data-testid="success-message"]')).toBeVisible();
@@ -121,7 +128,6 @@ export let options = {
   stages: [
     { duration: '2m', target: 100 },
     { duration: '5m', target: 500 },
-    { duration: '10m', target: 1000 },
   ],
   thresholds: {
     http_req_duration: ['p(95)<500'],
@@ -145,13 +151,45 @@ export default function () {
 
 **Statement Coverage**: 90%+ | Branch Coverage: 85%+ | Function Coverage: 95%+ | Line Coverage: 90%+
 
+## CI/CD Integration
+
+### GitHub Actions
+```yaml
+name: Comprehensive Tests
+on: [push, pull_request]
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm run test:coverage
+      - uses: codecov/codecov-action@v3
+
+  visual-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test:visual
+```
+
+## Task Integration
+
+**Reads**: `/tasks/tasks-[prd-id]-testing.md`, `/tasks/tasks-[prd-id]-visual-regression.md`
+**Status**: `[ ]` `[~]` `[x]` `[!]`
+
 ## Tool Usage
 
-**Execute**: `npm test`, `npm run test:coverage`, `npm run test:e2e`, `k6 run`, `npx playwright test`
-**Create**: `tests/**/*.test.ts`, `e2e/**/*.test.ts`, `tests/setup.ts`, `tests/mocks/**`
+**Execute**: `npm test`, `npm run test:coverage`, `npm run test:e2e`, `npm run test:visual`, `k6 run`
+**Create**: `tests/**/*.test.ts`, `e2e/**/*.test.ts`, `tests/visual/**/*.test.ts`, `tests/setup.ts`
 
 ## Best Practices
 
 **Test Structure**: Arrange-Act-Assert, descriptive names, single assertion, test isolation
+**Visual Testing**: Clear baseline images, consistent viewports, cross-browser testing, CI/CD integration
 **Accessibility**: WCAG 2.1 AA compliance, screen reader testing, keyboard navigation, color contrast (4.5:1)
 **Performance**: Response times < 200ms, gradual ramp-up, CPU/memory monitoring
