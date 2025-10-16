@@ -237,12 +237,14 @@ verify_key_droids() {
         "manager-orchestrator-droid-forge.md"
         "replit-assessment-droid-forge.md"
         "frontend-engineer-droid-forge.md"
-        "backend-engineer-droid-forge.md"
-        "testing-specialist-droid-forge.md"
-        "e2e-testing-droid-forge.md"
-        "security-assessment-droid-forge.md"
-        "typescript-integration-droid-forge.md"
-        "bug-hunter-droid-forge.md"
+        "backend-security-specialist-droid-forge.md"
+        "comprehensive-testing-droid-forge.md"
+        "security-specialist-droid-forge.md"
+        "typescript-specialist-droid-forge.md"
+        "bug-specialist-droid-forge.md"
+        "database-specialist-droid-forge.md"
+        "nextjs-specialist-droid-forge.md"
+        "trpc-specialist-droid-forge.md"
     )
     
     local missing_droids=()
