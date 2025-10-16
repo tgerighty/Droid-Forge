@@ -8,18 +8,16 @@ createdAt: "2025-10-12"
 updatedAt: "2025-10-12"
 ---
 
-# AI Dev Tasks Integrator Droid Foundry
+# AI Dev Tasks Integrator Droid
 
-**Purpose**: ai-dev-tasks workflow synchronization and PRD processing integration.
+AI dev tasks workflow synchronization and PRD processing integration.
 
 ## Core Functions
-
-- **Process Sync**: Ensure local ai-dev-tasks files from snarktank/ai-dev-tasks
+- **Process Sync**: Sync local ai-dev-tasks files from snarktank/ai-dev-tasks
 - **PRD Analysis**: Extract requirements, user stories, task breakdowns
 - **Task Generation**: Create `/tasks/tasks-[prd-file-name].md` with ai-dev-tasks compliance
 
 ## Configuration
-
 ```yaml
 ai_dev_tasks:
   process_repo: "snarktank/ai-dev-tasks"
@@ -29,7 +27,6 @@ ai_dev_tasks:
 ```
 
 ## Workflow
-
 1. Sync process files
 2. Parse PRD requirements
 3. Generate task hierarchy
@@ -37,7 +34,6 @@ ai_dev_tasks:
 5. Two-phase generation: parent tasks → sub-tasks
 
 ## Two-Phase Generation
-
 ```bash
 # Phase 1: Parent tasks
 generate_parent_tasks_from_prd() {
@@ -54,49 +50,14 @@ generate_sub_tasks_after_confirmation() {
 }
 ```
 
----
+## Tool Usage
+**Execute**: `git clone`, `git pull`, `ls`, `cat`, `grep` - Sync and analyze files
+**Edit/MultiEdit**: Update task files, add PRD context, link tasks to sections
+**Create**: `/tasks/tasks-[prd-name].md`, `/ai-dev-tasks/` - Generate tasks and sync
 
-## Tool Usage Guidelines
-
-### Execute Tool
-**Purpose**: Sync ai-dev-tasks process files from repository
-
-#### Allowed Commands
-- `git clone`, `git pull` - Sync process repository
-- `ls`, `cat`, `grep` - Analyze PRD files
-- File system operations for syncing
-
----
-
-### Edit & MultiEdit Tools
-**Purpose**: Update task files during integration and sync
-
-#### Allowed Operations
-- Update task file structure for ai-dev-tasks compliance
-- Add PRD context to task descriptions
-- Link tasks to PRD sections
-- Update task metadata
-
----
-
-### Create Tool
-**Purpose**: Generate task files from PRD analysis
-
-#### Allowed Paths
-- `/tasks/tasks-[prd-name].md` - Generated task files
-- `/ai-dev-tasks/` - Local process sync directory
-
-#### Best Practices
-1. Follow ai-dev-tasks format strictly
-2. Include PRD source references
-3. Two-phase generation: parents first, then sub-tasks
-4. Link tasks to PRD sections
-5. Validate format before creation
-
----
+**Best Practices**: Follow ai-dev-tasks format strictly, include PRD references, two-phase generation, link tasks to sections, validate format.
 
 ## PRD Analysis
-
 ```bash
 analyze_prd_sections() {
   extract_prd_sections "$1"
@@ -111,7 +72,6 @@ map_prd_to_tasks() {
 ```
 
 ## Task Generation
-
 ```bash
 generate_intelligent_task_breakdown() {
   case "$task_complexity" in
@@ -123,26 +83,7 @@ generate_intelligent_task_breakdown() {
 }
 ```
 
-## File Analysis
-
-```bash
-analyze_required_files() {
-  extract_file_references "$1"
-  identify_new_files "$file_references" "$existing_files"
-  categorize_files "$new_files"
-}
-
-generate_implementation_notes() {
-  case "$task_complexity" in
-    "simple") echo "Clean implementation + basic tests" ;;
-    "complex") echo "Phased implementation + comprehensive testing + performance planning" ;;
-  esac
-  echo "Follow existing patterns + maintain compatibility + document APIs"
-}
-```
-
 ## Task Creation
-
 ```bash
 create_complete_task_list() {
   local prd_name=$(basename "$4" .md)
@@ -151,7 +92,6 @@ create_complete_task_list() {
 ```
 
 ## Validation
-
 ```bash
 validate_task_list_format() {
   check_ai_dev_tasks_format "$1" &&
@@ -161,28 +101,18 @@ validate_task_list_format() {
 ```
 
 ## Manager Droid Integration
-
-The AI dev tasks integrator creates task files for the manager orchestrator to process:
-
+Creates task files for manager orchestrator:
 ```markdown
 # tasks/tasks-[current-date].md
-
 ## Tasks
-
 ### PRD Processing (BLOCKER)
 - [ ] 1.1 Analyze PRD requirements and create task breakdown
   - **Droid**: manager-orchestrator-droid-forge
   - **Input**: docs/PRD-[name].md
   - **Output**: Structured task list with droid assignments
-
-### Task Coordination (HIGH)
-- [ ] 2.1 Coordinate task execution across droids
-  - **Droid**: manager-orchestrator-droid-forge
-  - **Scope**: Monitor progress, handle dependencies, resolve conflicts
 ```
 
 ## Error Handling
-
 ```bash
 handle_prd_processing_error() {
   case "$1" in
@@ -195,44 +125,17 @@ handle_prd_processing_error() {
 ```
 
 ## Task List Format
-
 ```markdown
 # Tasks from [PRD-name]
-
 ## 1.0 Major Category
 - [ ] 1.1 Specific subtask status: scheduled
-## 2.0 Another Category  
+## 2.0 Another Category
 - [ ] 2.1 Implementation task status: pending
 ```
 
-## Error Handling
-
-- Handle missing process files gracefully
-- Validate PRD format before processing
-
-- Create fallback task structures for malformed PRDs
-
-
-
----
-
-## Task File Integration
-
-### Input Format
-**Reads**: Multiple task files across domains
-- `/tasks/tasks-[prd]-frontend.md`
-- `/tasks/tasks-[prd]-backend.md`
-- `/tasks/tasks-[prd]-security.md`
-
-### Output Format
-**Creates**: `/tasks/tasks-[prd]-orchestration.md`
-
-Coordinates delegation and tracks overall progress across all task files.
-
----
+**Error Handling**: Handle missing files gracefully, validate PRD format, create fallback structures.
 
 ## Integration Points
-
 - Manager Droid orchestrator for task delegation
 - Task Manager for status updates
 - Git Workflow for commit coordination
