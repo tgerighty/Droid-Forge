@@ -239,12 +239,13 @@ verify_key_droids() {
         "frontend-engineer-droid-forge.md"
         "backend-security-specialist-droid-forge.md"
         "comprehensive-testing-droid-forge.md"
-        "security-specialist-droid-forge.md"
         "typescript-specialist-droid-forge.md"
-        "bug-specialist-droid-forge.md"
+        "debugging-assessment-droid-forge.md"
         "database-specialist-droid-forge.md"
         "nextjs-specialist-droid-forge.md"
         "trpc-specialist-droid-forge.md"
+        "change-auditor-droid-forge.md"
+        "code-analysis-droid-forge.md"
     )
     
     local missing_droids=()
