@@ -104,7 +104,7 @@ updatedAt: "2025-01-12"
 1. better-auth-integration-droid-forge
 2. trpc-tanstack-integration-droid-forge
 3. typescript-integration-droid-forge
-4. valkey-caching-strategist-droid-forge
+4. caching-specialist-droid-forge
 
 ---
 

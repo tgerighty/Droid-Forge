@@ -96,7 +96,7 @@ delegation_rules:
 
     - pattern: "valkey|redis|caching|cache-strategy"
       capabilities: ["caching", "valkey", "redis", "performance-optimization"]
-      droid_types: ["valkey-caching-strategist-droid-forge"]
+      droid_types: ["caching-specialist-droid-forge"]
       priority: 1
 
     # New specialized workflow droids
