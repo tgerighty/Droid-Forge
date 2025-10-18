@@ -63,7 +63,7 @@ INTEGRATION_DROIDS=(
   "better-auth-integration-droid-forge.md"
   "trpc-tanstack-integration-droid-forge.md"
   "typescript-integration-droid-forge.md"
-  "valkey-caching-strategist-droid-forge.md"
+  "caching-specialist-droid-forge.md"
 )
 
 # Function to add timestamps to YAML frontmatter

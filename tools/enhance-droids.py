@@ -276,7 +276,7 @@ def main():
     
     integration_droids = [
         "better-auth-integration", "trpc-tanstack-integration",
-        "typescript-integration", "valkey-caching-strategist"
+        "typescript-integration", "caching-specialist"
     ]
     
     enhanced_count = 0

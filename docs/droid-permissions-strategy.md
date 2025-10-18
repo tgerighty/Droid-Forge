@@ -107,7 +107,7 @@
 4. trpc-tanstack-integration-droid-forge
 5. typescript-integration-droid-forge
 6. typescript-professional-droid-forge
-7. valkey-caching-strategist-droid-forge
+7. caching-specialist-droid-forge
 8. database-performance-droid-forge
 
 ### 4. Infrastructure Droids (Specialized Permissions)
@@ -170,7 +170,7 @@ tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, Fetch
 - trpc-tanstack-integration-droid-forge
 - typescript-integration-droid-forge
 - typescript-professional-droid-forge
-- valkey-caching-strategist-droid-forge
+- caching-specialist-droid-forge
 - database-performance-droid-forge
 
 ## Best Practices

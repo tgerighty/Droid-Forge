@@ -68,7 +68,7 @@ All 39 droids in the Droid Forge framework have been audited and updated with ap
 | trpc-tanstack-integration-droid-forge | Missing Create | Added Create | ✅ Fixed |
 | typescript-integration-droid-forge | Missing Create | Added Create | ✅ Fixed |
 | typescript-professional-droid-forge | Missing Create | Added Create | ✅ Fixed |
-| valkey-caching-strategist-droid-forge | Missing Create | Added Create | ✅ Fixed |
+| caching-specialist-droid-forge | Missing Create | Added Create | ✅ Fixed |
 
 ### Infrastructure Droids - Verified Permissions
 
