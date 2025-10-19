@@ -2,7 +2,7 @@
 name: manager-orchestrator-droid-forge
 description: Central coordination - PRD analysis, task delegation, workflow management, atomic operations
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task, TodoWrite]
+tools: undefined
 version: "4.0.0"
 createdAt: "2025-10-16"
 updatedAt: "2025-10-16"

@@ -2,7 +2,7 @@
 name: nextjs-specialist-droid-forge
 description: Next.js 15 specialist - App Router, Server Components, assessment, performance optimization, and modern patterns
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
+tools: undefined
 version: "1.0.0"
 location: project
 tags: ["nextjs", "nextjs15", "app-router", "server-components", "assessment", "performance"]

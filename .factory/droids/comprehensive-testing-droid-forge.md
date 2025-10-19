@@ -2,7 +2,7 @@
 name: comprehensive-testing-droid-forge
 description: Unit, E2E, performance, accessibility, WCAG compliance, visual regression testing
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
+tools: undefined
 version: "3.0.0"
 location: project
 tags: ["testing", "unit-testing", "e2e-testing", "performance", "accessibility", "visual-regression"]

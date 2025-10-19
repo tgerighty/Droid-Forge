@@ -2,7 +2,7 @@
 name: code-tools-specialist-droid-forge
 description: Comprehensive code tools specialist - bug analysis, code quality assessment, phase implementation, unified patches
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
+tools: undefined
 version: "3.0.0"
 location: project
 tags: ["code-quality", "bug-analysis", "implementation", "code-smells", "debugging"]

@@ -2,7 +2,7 @@
 name: trpc-specialist-droid-forge
 description: tRPC specialist - API architecture, TanStack Query integration, type safety, performance optimization, and assessment
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
+tools: undefined
 version: "1.0.0"
 location: project
 tags: ["trpc", "tanstack-query", "api", "typescript", "type-safety"]
