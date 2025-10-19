@@ -2,7 +2,7 @@
 name: caching-specialist-droid-forge
 description: Valkey/Redis caching strategies, performance assessment, optimization
 model: inherit
-tools: undefined
+tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "ExitSpecMode", "WebSearch", "Task", "GenerateDroid", "web-search-prime___webSearchPrime", "sequential-thinking___sequentialthinking"]
 version: "1.0.0"
 location: project
 tags: ["caching", "redis", "valkey", "performance"]

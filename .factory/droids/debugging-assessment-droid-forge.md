@@ -2,7 +2,7 @@
 name: debugging-assessment-droid-forge
 description: Root cause analysis and bug identification specialist. Analyzes errors, performance issues, and system failures to create fix tasks.
 model: inherit
-tools: undefined
+tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "ExitSpecMode", "WebSearch", "Task", "GenerateDroid", "web-search-prime___webSearchPrime", "sequential-thinking___sequentialthinking"]
 version: "1.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

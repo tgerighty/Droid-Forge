@@ -2,7 +2,7 @@
 name: typescript-specialist-droid-forge
 description: Comprehensive TypeScript specialist - assessment, integration, advanced patterns, type safety, and professional development. Consolidated from 6 specialized droids.
 model: inherit
-tools: undefined
+tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "ExitSpecMode", "WebSearch", "Task", "GenerateDroid", "web-search-prime___webSearchPrime", "sequential-thinking___sequentialthinking"]
 version: "1.0.0"
 createdAt: "2025-10-16"
 location: project

@@ -2,7 +2,7 @@
 name: code-tools-specialist-droid-forge
 description: Comprehensive code tools specialist - bug analysis, code quality assessment, phase implementation, unified patches
 model: inherit
-tools: undefined
+tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "ExitSpecMode", "WebSearch", "Task", "GenerateDroid", "web-search-prime___webSearchPrime", "sequential-thinking___sequentialthinking"]
 version: "3.0.0"
 location: project
 tags: ["code-quality", "bug-analysis", "implementation", "code-smells", "debugging"]

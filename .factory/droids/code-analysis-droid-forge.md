@@ -2,7 +2,7 @@
 name: code-analysis-droid-forge
 description: Context analysis, impact assessment, file mapping, propagation tracing, session manifest generation
 model: inherit
-tools: undefined
+tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "ExitSpecMode", "WebSearch", "Task", "GenerateDroid", "web-search-prime___webSearchPrime", "sequential-thinking___sequentialthinking"]
 version: "2.0.0"
 location: project
 tags: ["context-analysis", "impact-analysis", "file-mapping", "propagation-tracing", "session-manifest"]
