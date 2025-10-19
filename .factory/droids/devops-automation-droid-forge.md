@@ -2,7 +2,7 @@
 name: devops-automation-droid-forge
 description: DevOps automation specialist - CI/CD pipelines, automated issue-to-PR workflows, deployment automation
 model: inherit
-tools: undefined
+tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "ExitSpecMode", "WebSearch", "Task", "GenerateDroid", "web-search-prime___webSearchPrime", "sequential-thinking___sequentialthinking"]
 version: "2.0.0"
 location: project
 tags: ["devops", "automation", "ci-cd", "pull-requests", "github-actions"]

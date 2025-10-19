@@ -2,7 +2,7 @@
 name: code-refactoring-droid-forge
 description: Code refactoring specialist - improves code quality, maintainability, and performance through systematic refactoring
 model: inherit
-tools: undefined
+tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "ExitSpecMode", "WebSearch", "Task", "GenerateDroid", "web-search-prime___webSearchPrime", "sequential-thinking___sequentialthinking"]
 version: "1.0.0"
 location: project
 tags: ["refactoring", "code-quality", "maintainability", "technical-debt", "clean-code"]

@@ -2,7 +2,7 @@
 name: plan-review-droid-forge
 description: Pre-implementation plan validator. Provides GREEN/YELLOW/RED decisions with confidence scores based on codebase alignment, scope clarity, and risk assessment.
 model: inherit
-tools: undefined
+tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "ExitSpecMode", "WebSearch", "Task", "GenerateDroid", "web-search-prime___webSearchPrime", "sequential-thinking___sequentialthinking"]
 version: "1.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"
