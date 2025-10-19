@@ -2,7 +2,7 @@
 name: change-auditor-droid-forge
 description: Change verification specialist - audits implementations, runs security scans, reports PASS/FAIL status
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, Task, TodoWrite]
+tools: undefined
 version: "1.0.0"
 location: project
 tags: ["change-auditing", "verification", "security-scanning", "git-analysis"]

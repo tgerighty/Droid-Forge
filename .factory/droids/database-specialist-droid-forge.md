@@ -2,7 +2,7 @@
 name: database-specialist-droid-forge
 description: PostgreSQL 18 expert with Drizzle ORM - performance optimization, schema design, query tuning
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
+tools: undefined
 version: "4.0.0"
 location: project
 tags: ["database", "postgresql", "postgres18", "drizzle", "orm", "performance"]

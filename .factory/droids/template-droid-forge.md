@@ -2,7 +2,7 @@
 name: template-droid-forge
 description: Template droid with standardized structure and patterns for all specialized droids
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
+tools: undefined
 version: "1.0.0"
 createdAt: "2025-01-14"
 location: project

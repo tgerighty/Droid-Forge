@@ -2,7 +2,7 @@
 name: backend-security-specialist-droid-forge
 description: Backend development and security specialist - API design, database integration, security assessment, vulnerability remediation
 model: inherit
-tools: [Execute, Read, LS, Edit, MultiEdit, Create, Grep, Glob, WebSearch, FetchUrl, TodoWrite]
+tools: undefined
 version: "2.0.0"
 location: project
 tags: ["backend", "security", "api", "database", "vulnerabilities"]
