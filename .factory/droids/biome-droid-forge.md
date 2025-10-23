@@ -2,7 +2,7 @@
 name: biome-droid-forge
 description: Biome droid for JavaScript/TypeScript code quality management combining ESLint, Prettier, and TypeScript functionality
 model: inherit
-tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "ExitSpecMode", "WebSearch", "Task", "GenerateDroid", "web-search-prime___webSearchPrime", "sequential-thinking___sequentialthinking"]
+tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "WebSearch"]
 version: "2.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"

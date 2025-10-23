@@ -2,7 +2,7 @@
 name: code-reviewer-droid-forge
 description: Senior engineer code review specialist - security, performance, correctness, integration, test quality, critical issues detection
 model: inherit
-tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "ExitSpecMode", "WebSearch", "Task", "GenerateDroid", "web-search-prime___webSearchPrime", "sequential-thinking___sequentialthinking"]
+tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "WebSearch"]
 version: "4.0.0"
 location: project
 tags: ["code-review", "security", "performance", "quality", "critical-issues"]
