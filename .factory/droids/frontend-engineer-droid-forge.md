@@ -2,7 +2,7 @@
 name: frontend-engineer-droid-forge
 description: Frontend development specialist - React/Next.js components, responsive design, accessibility
 model: inherit
-tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "ExitSpecMode", "WebSearch", "Task", "GenerateDroid", "web-search-prime___webSearchPrime", "sequential-thinking___sequentialthinking", "playwright___browser_navigate", "playwright___browser_snapshot", "playwright___browser_click", "playwright___browser_type", "playwright___browser_take_screenshot", "chrome-devtools___navigate_page", "chrome-devtools___take_snapshot", "chrome-devtools___click", "chrome-devtools___evaluate_script", "zai-mcp-server___analyze_image"]
+tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "WebSearch"]
 version: "2.0.0"
 location: project
 tags: ["frontend", "react", "nextjs", "typescript", "accessibility"]

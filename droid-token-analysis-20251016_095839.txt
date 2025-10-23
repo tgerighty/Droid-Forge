@@ -1,0 +1,242 @@
+DETAILED TOKEN ANALYSIS REPORT
+Generated on: Thu 16 Oct 2025 09:58:38 BST
+==========================================
+
+File: ai-dev-tasks-integrator-droid-forge
+  Lines:      195
+  Words:      625
+  Characters:     5518
+  Estimated Tokens: 1387
+  File Size: 8.0K
+
+File: auto-pr-droid-forge
+  Lines:      275
+  Words:      807
+  Characters:     7159
+  Estimated Tokens: 1871
+  File Size: 8.0K
+
+File: backend-engineer-droid-forge
+  Lines:      348
+  Words:      989
+  Characters:     8187
+  Estimated Tokens: 2281
+  File Size: 8.0K
+
+File: better-auth-integration-droid-forge
+  Lines:      172
+  Words:      545
+  Characters:     4847
+  Estimated Tokens: 1219
+  File Size: 8.0K
+
+File: biome-droid-forge
+  Lines:       81
+  Words:      352
+  Characters:     2884
+  Estimated Tokens: 666
+  File Size: 4.0K
+
+File: bug-fix-droid-forge
+  Lines:      147
+  Words:      521
+  Characters:     4183
+  Estimated Tokens: 1069
+  File Size: 8.0K
+
+File: bug-hunter-droid-forge
+  Lines:      286
+  Words:     1111
+  Characters:     7559
+  Estimated Tokens: 2076
+  File Size: 8.0K
+
+File: caching-specialist-droid-forge
+  Lines:      363
+  Words:     1195
+  Characters:    10692
+  Estimated Tokens: 2632
+  File Size:  12K
+
+File: change-auditor-droid-forge
+  Lines:      416
+  Words:     1434
+  Characters:    13022
+  Estimated Tokens: 3109
+  File Size:  16K
+
+File: code-implementer-droid-forge
+  Lines:      351
+  Words:     1257
+  Characters:    10836
+  Estimated Tokens: 2631
+  File Size:  12K
+
+File: code-quality-specialist-droid-forge
+  Lines:      367
+  Words:     1347
+  Characters:    11080
+  Estimated Tokens: 2745
+  File Size:  12K
+
+File: code-refactoring-droid-forge
+  Lines:      193
+  Words:      572
+  Characters:     4987
+  Estimated Tokens: 1312
+  File Size: 8.0K
+
+File: code-reviewer-droid-forge
+  Lines:      129
+  Words:      500
+  Characters:     4794
+  Estimated Tokens: 1051
+  File Size: 8.0K
+
+File: code-reviewer-lite-droid-forge
+  Lines:      253
+  Words:      946
+  Characters:     7964
+  Estimated Tokens: 1927
+  File Size: 8.0K
+
+File: context-scout-droid-forge
+  Lines:      261
+  Words:      952
+  Characters:     8755
+  Estimated Tokens: 2022
+  File Size:  12K
+
+File: database-performance-droid-forge
+  Lines:      559
+  Words:     1874
+  Characters:    16928
+  Estimated Tokens: 4106
+  File Size:  20K
+
+File: debugging-assessment-droid-forge
+  Lines:      237
+  Words:      921
+  Characters:     6796
+  Estimated Tokens: 1765
+  File Size: 8.0K
+
+File: devops-pipeline-droid-forge
+  Lines:      314
+  Words:      942
+  Characters:     8353
+  Estimated Tokens: 2161
+  File Size:  12K
+
+File: drizzle-orm-specialist-droid-forge
+  Lines:      603
+  Words:     1856
+  Characters:    17171
+  Estimated Tokens: 4265
+  File Size:  20K
+
+File: e2e-testing-droid-forge
+  Lines:      447
+  Words:     1588
+  Characters:    14988
+  Estimated Tokens: 3444
+  File Size:  16K
+
+File: frontend-engineer-droid-forge
+  Lines:      480
+  Words:     1400
+  Characters:    12902
+  Estimated Tokens: 3297
+  File Size:  16K
+
+File: git-workflow-orchestrator-droid-forge
+  Lines:      195
+  Words:      617
+  Characters:     5250
+  Estimated Tokens: 1361
+  File Size: 8.0K
+
+File: impact-analyzer-droid-forge
+  Lines:      181
+  Words:      680
+  Characters:     5054
+  Estimated Tokens: 1326
+  File Size: 8.0K
+
+File: manager-orchestrator-droid-forge
+  Lines:      197
+  Words:      604
+  Characters:     5532
+  Estimated Tokens: 1386
+  File Size: 8.0K
+
+File: nextjs-specialist-droid-forge
+  Lines:      312
+  Words:      986
+  Characters:     8011
+  Estimated Tokens: 2145
+  File Size: 8.0K
+
+File: plan-review-droid-forge
+  Lines:      164
+  Words:      596
+  Characters:     4520
+  Estimated Tokens: 1188
+  File Size: 8.0K
+
+File: replit-assessment-droid-forge
+  Lines:       78
+  Words:      459
+  Characters:     3206
+  Estimated Tokens: 731
+  File Size: 4.0K
+
+File: security-specialist-droid-forge
+  Lines:      203
+  Words:      859
+  Characters:     7183
+  Estimated Tokens: 1656
+  File Size: 8.0K
+
+File: task-manager-droid-forge
+  Lines:       98
+  Words:      388
+  Characters:     2866
+  Estimated Tokens: 737
+  File Size: 4.0K
+
+File: template-droid-forge
+  Lines:      200
+  Words:      684
+  Characters:     5250
+  Estimated Tokens: 1408
+  File Size: 8.0K
+
+File: testing-specialist-droid-forge
+  Lines:      420
+  Words:     1503
+  Characters:    12215
+  Estimated Tokens: 3085
+  File Size:  12K
+
+File: trpc-specialist-droid-forge
+  Lines:      260
+  Words:      839
+  Characters:     6972
+  Estimated Tokens: 1820
+  File Size: 8.0K
+
+File: typescript-specialist-droid-forge
+  Lines:      170
+  Words:      739
+  Characters:     5812
+  Estimated Tokens: 1379
+  File Size: 8.0K
+
+File: visual-regression-droid-forge
+  Lines:      274
+  Words:      871
+  Characters:     7857
+  Estimated Tokens: 1955
+  File Size: 8.0K
+

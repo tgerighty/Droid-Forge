@@ -2,7 +2,7 @@
 name: replit-assessment-droid-forge
 description: Platform optimization specialist for Replit - identifies tasks Replit handles, eliminating 70% infrastructure work
 model: inherit
-tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "ExitSpecMode", "WebSearch", "FetchUrl", "Task", "GenerateDroid", "web-search-prime___webSearchPrime", "sequential-thinking___sequentialthinking"]
+tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "WebSearch", "FetchUrl"]
 version: "1.0.0"
 createdAt: "2025-10-12"
 updatedAt: "2025-10-12"
