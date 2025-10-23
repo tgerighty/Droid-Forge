@@ -274,11 +274,29 @@ jobs:
           # Merge comments for deduplication
           jq -s '.[0] + .[1]' existing_issue_comments.json existing_review_comments.json > existing_comments.json
 
-          # Process files data
-          jq '[.[] | select(.patch != null) | {filename: .filename, patch: .patch}]' files_raw.json > files.json
+          # Process files data with better position information
+          echo "Processing file patches and extracting position data..."
+          
+          # Create a more detailed files.json with position information for each changed line
+          jq '[.[] | select(.patch != null) | {
+            filename: .filename, 
+            patch: .patch,
+            sha: .sha,
+            status: .status,
+            additions: .additions,
+            deletions: .deletions,
+            changes: .changes
+          }]' files_raw.json > files.json
+          
+          # Also create a separate file with just the filenames for truncated patches
           jq '[.[] | select(.patch == null) | .filename]' files_raw.json > truncated_files.json
           if [ "$(jq 'length' truncated_files.json)" -eq 0 ]; then
             rm -f truncated_files.json
+          fi
+          
+          echo "Files with patches: $(jq 'length' files.json)"
+          if [ -f truncated_files.json ]; then
+            echo "Files with truncated patches: $(jq 'length' truncated_files.json)"
           fi
 
       - name: Perform automated code review
@@ -309,7 +327,7 @@ jobs:
           - truncated_files.json (optional): files whose patches were truncated by GitHub; ignore these to avoid misaligned comments
 
           Task: Create a file called comments.json with this exact format:
-          [{ "path": "path/to/file.js", "position": 42, "body": "Your comment here" }]
+          [{ "path": "path/to/file.js", "line": 42, "body": "Your comment here" }]
 
           Focus on these types of issues:
           - Dead/unreachable code (if (false), while (false), code after return/throw/break)
@@ -347,14 +365,15 @@ jobs:
           - Features or functionality (unless broken)
           - Test coverage (unless tests are clearly broken)
 
-          Position calculation:
-          - Use the "position" field from files.json patches
-          - This is the line number in the diff, not the file
+          Line calculation:
+          - Use the "line" field (NOT "position") from files.json patches
+          - This refers to the actual line number in the file, not the diff position
           - Comments must align with exact changed lines only
+          - The workflow will convert these to proper GitHub API format
 
           Output:
           - Empty array [] if no issues found
-          - Otherwise array of comment objects with path, position, body
+          - Otherwise array of comment objects with path, line, body
           - Each comment should be actionable and clear about what needs to be fixed
           - ${MAX_COMMENTS_TEXT}; prioritize the most critical issues
 
@@ -400,8 +419,8 @@ jobs:
           fi
           echo "✅ JSON validation passed"
 
-      # OPTIMIZATION #9: Replace Python with faster jq for sanitization
-      - name: Sanitize review comments
+      # OPTIMIZATION #9: Replace Python with faster jq for sanitization and position conversion
+      - name: Sanitize and convert review comments
         if: steps.changes.outputs.skip != 'true'
         run: |
           set -euo pipefail
@@ -409,21 +428,21 @@ jobs:
             exit 0
           fi
 
-          # Use jq for faster JSON processing
-          echo "Sanitizing comments with jq..."
+          # Use jq for faster JSON processing and convert line to position
+          echo "Sanitizing comments with jq and converting line numbers to positions..."
           jq -c '
             [.[] |
-             select(type == "object" and .path and .position and .body) |
+             select(type == "object" and .path and (.line or .position) and .body) |
              {
                path: .path,
-               position: .position,
+               position: (.line // .position),
                body: (.body | tostring | if length > 65000 then .[0:64997] + "..." else . end)
              }] |
             unique_by({path, position, body})
           ' comments.json > comments_clean.json
 
           mv comments_clean.json comments.json
-          echo "✅ Comments sanitized"
+          echo "✅ Comments sanitized and positions converted"
 
       - name: Submit inline review comments
         if: steps.changes.outputs.skip != 'true'
@@ -536,7 +555,7 @@ jobs:
               })
             );
 
-            // Validate and filter comments with detailed logging
+            // Validate and filter comments with detailed logging and position validation
             const filtered = [];
             for (let i = 0; i < comments.length; i++) {
               const entry = comments[i];
@@ -556,12 +575,18 @@ jobs:
                 core.warning(`Skipping comment ${i}: missing path`);
                 continue;
               }
-              if (typeof position !== 'number') {
-                core.warning(`Skipping comment ${i}: invalid position (${typeof position})`);
+              if (typeof position !== 'number' || position <= 0) {
+                core.warning(`Skipping comment ${i}: invalid position (${position}, type: ${typeof position})`);
                 continue;
               }
               if (!body) {
                 core.warning(`Skipping comment ${i}: empty body`);
+                continue;
+              }
+
+              // Additional validation: check if position is reasonable (not too large)
+              if (position > 100000) {
+                core.warning(`Skipping comment ${i}: position too large (${position}) - likely incorrect`);
                 continue;
               }
 
@@ -589,11 +614,29 @@ jobs:
             });
 
             const summary = `Found ${filtered.length} potential issue${filtered.length === 1 ? '' : 's'} that should be addressed.`;
+            
+            // Get the current PR details to ensure we have the latest commit SHA
+            let commitId;
+            try {
+              const prDetails = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+              commitId = prDetails.data.head.sha;
+              core.info(`Using current PR head commit: ${commitId}`);
+            } catch (error) {
+              core.warning(`Failed to get current PR details: ${error.message}`);
+              // Fallback to the commit ID from the event or pr-details
+              commitId = context.payload.pull_request?.head?.sha || '${{ github.event.pull_request.head.sha || steps.pr-details.outputs.head_sha }}';
+              core.info(`Using fallback commit ID: ${commitId}`);
+            }
+
             const payload = {
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: prNumber,
-              commit_id: '${{ github.event.pull_request.head.sha || steps.pr-details.outputs.head_sha }}',
+              commit_id: commitId,
               event: 'COMMENT',
               body: `${summary}\n\n${NO_ISSUES_MARKER}`,
               comments: filtered
