@@ -369,9 +369,9 @@ jobs:
           - The JSON must be a single line without line breaks within string values
           EOF
 
-          # Run droid exec with the prompt using Factory's built-in GLM-4.6 model
-          echo "Running code review analysis with Factory's GLM-4.6 model..."
-          droid exec -f prompt.txt --model GLM-4.6 --skip-permissions-unsafe || {
+          # Run droid exec with the prompt using Factory's built-in glm-4.6 model
+          echo "Running code review analysis with Factory's glm-4.6 model..."
+          droid exec -f prompt.txt --model glm-4.6 --skip-permissions-unsafe || {
             echo "❌ ERROR: droid exec failed"
             echo "This could be due to missing FACTORY_API_KEY or other runtime issues."
             exit 1
