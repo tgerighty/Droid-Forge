@@ -1,16 +1,16 @@
 ---
 name: advanced-senior-developer-code-assessment-droid-forge
-description: Enterprise code quality analysis for Next.js 16 stack - security, performance, maintainability, technical debt assessment
+description: Enterprise code quality analysis for Next.js 15 & 16 stack - security, performance, maintainability, technical debt assessment with latest release expertise
 model: inherit
 tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "WebSearch", "Task"]
-version: "2.0.0"
+version: "2.1.0"
 location: project
-tags: ["code-assessment", "nextjs16", "trpc", "drizzle", "security", "performance", "technical-debt"]
+tags: ["code-assessment", "nextjs-expert", "nextjs15", "nextjs16", "trpc", "drizzle", "security", "performance", "technical-debt"]
 ---
 
-# Advanced Code Assessment Droid - Next.js 16 Stack
+# Advanced Code Assessment Droid - Next.js 15 & 16 Expert
 
-Enterprise-grade analysis for modern web stack: Next.js 16, tRPC, Drizzle, Redis, better-auth, shadcn/ui, BullMQ, PostHog, Polar.
+Enterprise-grade analysis for Next.js 15 & 16 stack with latest release expertise: App Router, Server Components, tRPC, Drizzle, Redis, better-auth, shadcn/ui, BullMQ, PostHog, Polar.
 
 ## Assessment Framework
 
@@ -66,10 +66,32 @@ const ANTI_PATTERNS = {
 ```typescript
 const STACK_PATTERNS = {
   nextjs: {
+    // App Router Patterns (Next.js 13+)
     server_client_mixed: /['"]use client['"][\s\S]*?useEffect/gi,
+    missing_client_directive: /useEffect|useState[\s\S]*?(?:!'"]use client['"])/gi,
+    layout_caching_missing: /export\s+default\s+function\s+Layout[\s\S]*?(?:!revalidate|!cache)/gi,
+    parallel_routes_missing: /layout\.(?:ts|tsx)[\s\S]*?children[\s\S]*?(?:!@.*?\:)/gi,
+    
+    // Next.js 15 Specific Patterns
+    turbo_patterns: /turbo(?:\.pack)[\s\S]*?(?:!cache|!experimental)/gi,
+    next_conf_missing: /next\.config\.[jt]s[\s\S]*?(?:!turbo|!experimental)/gi,
+    partial_prerendering: /prerender:\s*true[\s\S]*?(?:!revalidate|!experimental)/gi,
+    ppr_misconfig: /experimental:\s*\{[\s\S]*?ppr:\s*(?:!auto|!true)/gi,
+    
+    // Next.js 15 Advanced Features
+    async_request_apis: /await\s+(?:headers|cookies|params)\(\)[\s\S]*?(?:!try|!Promise\.resolve)/gi,
+    server_actions_missing: /['"]use server['"][\s\S]*?(?:!async|!function)/gi,
+    streaming_patterns: /await\s+slowOperation\(\)[\s\S]*?return\s*<Suspense[^>]*>[^<]*<\/div>/gi,
+    
+    // Next.js 15 & 16 Security & Performance
     middleware_auth: /middleware\.(?:ts|js)[\s\S]*?(?:!auth|!better-auth)/gi,
     isr_misconfig: /revalidate:\s*[0-9][\s\S]*?generateStaticParams\(\)[\s\S]*?export\s+default\s+async/gi,
-    caching_missing: /fetch\([^)]*\)[\s\S]*?(?!cache|revalidate)/gi
+    caching_missing: /fetch\([^)]*\)[\s\S]*?(?!cache|revalidate)/gi,
+    
+    // Cross-Version Compatibility Issues
+    deprecated_patterns: /(?:getStaticProps|getServerSideProps)[\s\S]*?app\/(page|layout)/gi,
+    router_compat_mismatch: /router\.push\([^)]*\)[\s\S]*?(?:!useRouter|!router\.push)/gi,
+    api_route_version_mismatch: /export\s+default\s+function\s+handler[\s\S]*?(?:!NextApiRequest|!NextApiResponse)/gi
   },
   trpc: {
     unprotected: /createTRPC\.router\(\)[\s\S]*?\.public\(/gi,
@@ -300,12 +322,29 @@ const DEFAULT_CONFIG: AssessmentConfig = {
 ## Usage
 
 ```typescript
-// Basic assessment
+// Basic assessment with Next.js version detection
 const assessment = await analyzeProject('./my-app');
 const report = generateReport(assessment);
+console.log(`Next.js version detected: ${assessment.nextjs_version}`);
+
+// Next.js 15 specific analysis
+const nextjs15Analysis = await analyzeNextJSVersionSpecific('15');
+console.log('Next.js 15 optimizations:', nextjs15Analysis);
+
+// Next.js 16 specific analysis  
+const nextjs16Analysis = await analyzeNextJSVersionSpecific('16');
+console.log('Next.js 16 features:', nextjs16Analysis);
 
 // Custom configuration
-const config = { ...DEFAULT_CONFIG, thresholds: { complexity: 8 } };
+const config = { 
+  ...DEFAULT_CONFIG, 
+  thresholds: { complexity: 8 },
+  features: { 
+    security_analysis: true, 
+    stack_specific: true,
+    nextjs_version_analysis: true 
+  }
+};
 const customAssessment = await analyzeProject('./my-app', config);
 
 // Quality gate check
@@ -313,10 +352,115 @@ const passed = checkQualityGate(assessment, QUALITY_GATES.enterprise_release);
 if (!passed) {
   console.log('Build failed - quality gates not met');
 }
+
+// Cross-version compatibility check
+const compatibility = checkCrossVersionCompatibility();
+console.log('Upgrade recommendations:', compatibility);
+```
+
+## Next.js Version-Specific Analysis
+
+```typescript
+interface NextJSVersionAnalysis {
+  version: '15' | '16' | 'unknown';
+  features: {
+    app_router: boolean;
+    server_components: boolean;
+    turbopack: boolean;
+    ppr: boolean;
+    async_apis: boolean;
+  };
+  compatibility_issues: CompatibilityIssue[];
+}
+
+const detectNextJSVersion = (packageJson: any): NextJSVersionAnalysis => {
+  const nextVersion = packageJson?.dependencies?.next || packageJson?.devDependencies?.next;
+  const version = nextVersion ? (nextVersion.startsWith('16') ? '16' : '15') : 'unknown';
+  
+  return {
+    version,
+    features: {
+      app_router: fs.existsSync('app'),
+      server_components: version !== 'unknown',
+      turbopack: fs.existsSync('turbo.json') || nextVersion?.includes('turbo'),
+      ppr: checkPPRUsage(),
+      async_apis: checkAsyncAPIUsage()
+    },
+    compatibility_issues: detectCompatibilityIssues(version)
+  };
+};
+
+const analyzeNextJSVersionSpecific = (version: '15' | '16'): Finding[] => {
+  const findings = [];
+  
+  if (version === '15') {
+    // Next.js 15 specific checks
+    findings.push({
+      type: 'NEXTJS15_TURBO_OPTIMIZATION',
+      severity: checkTurboOptimization() ? 'INFO' : 'MEDIUM',
+      description: 'Next.js 15 Turbopack optimization opportunities'
+    });
+    
+    findings.push({
+      type: 'NEXTJS15_PPR_CONFIGURATION',
+      severity: checkPPRConfiguration() ? 'INFO' : 'MEDIUM', 
+      description: 'Partial Prerendering configuration review needed'
+    });
+  }
+  
+  if (version === '16') {
+    // Next.js 16 specific checks
+    findings.push({
+      type: 'NEXTJS16_ADVANCED_FEATURES',
+      severity: checkAdvancedFeatureUsage() ? 'INFO' : 'LOW',
+      description: 'Next.js 16 advanced feature utilization'
+    });
+    
+    findings.push({
+      type: 'NEXTJS16_PERFORMANCE_UPGRADES',
+      severity: checkPerformanceUpgrades() ? 'INFO' : 'MEDIUM',
+      description: 'Next.js 16 performance upgrade opportunities'
+    });
+  }
+  
+  // Cross-version checks
+  findings.push(...checkCrossVersionCompatibility());
+  findings.push(...checkUpgradePath(version));
+  
+  return findings;
+};
+
+const checkCrossVersionCompatibility = (): Finding[] => {
+  const issues = [];
+  
+  // Check for deprecated patterns
+  if (fs.existsSync('pages')) {
+    issues.push({
+      type: 'LEGACY_PAGES_ROUTER',
+      severity: 'HIGH',
+      description: 'Legacy pages router detected - consider migration to App Router'
+    });
+  }
+  
+  // Check for outdated configuration
+  const nextConfig = fs.existsSync('next.config.js');
+  if (nextConfig && !includesModernConfig()) {
+    issues.push({
+      type: 'OUTDATED_NEXT_CONFIG',
+      severity: 'MEDIUM',
+      description: 'Next.js configuration may need updates for latest features'
+    });
+  }
+  
+  return issues;
+};
 ```
 
 ## Advanced Features
 
+- **Next.js Version Detection**: Automatic detection of Next.js 15 vs 16 usage patterns
+- **Cross-Version Compatibility**: Analysis of upgrade paths and migration blockers
+- **Version-Specific Optimizations**: Tailored recommendations for each Next.js version
 - **Import Analysis**: Detect unused imports and type-only imports
 - **Duplicate Code**: Find code duplication across files  
 - **Test Coverage**: Analyze test coverage patterns
