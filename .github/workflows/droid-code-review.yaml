@@ -53,12 +53,11 @@ jobs:
           echo "changed_files=$(echo "$PR_DATA" | jq -r '.changed_files')" >> $GITHUB_OUTPUT
           echo "draft=$(echo "$PR_DATA" | jq -r '.draft')" >> $GITHUB_OUTPUT
 
-      # Validate API keys first - fail fast to save GitHub Actions minutes
-      - name: Check API keys configuration
+      # Validate API key first - fail fast to save GitHub Actions minutes
+      - name: Check API key configuration
         id: check-keys
         env:
           FACTORY_API_KEY: ${{ secrets.FACTORY_API_KEY }}
-          MODEL_API_KEY: ${{ secrets.MODEL_API_KEY }}
         run: |
           set -euo pipefail
 
@@ -66,10 +65,6 @@ jobs:
 
           if [ -z "$FACTORY_API_KEY" ]; then
             MISSING_KEYS="${MISSING_KEYS}- \`FACTORY_API_KEY\`\n"
-          fi
-
-          if [ -z "$MODEL_API_KEY" ]; then
-            MISSING_KEYS="${MISSING_KEYS}- \`MODEL_API_KEY\`\n"
           fi
 
           if [ -n "$MISSING_KEYS" ]; then
@@ -89,16 +84,15 @@ jobs:
             const missingKeys = `${{ steps.check-keys.outputs.missing_keys }}`;
             const comment = `## ⚠️ Droid Code Review: Configuration Required
 
-            The automated code review cannot run because the following API keys are not configured:
+            The automated code review cannot run because the following API key is not configured:
 
             ${missingKeys}
 
             ### Setup Instructions
 
             1. Go to repository **Settings** → **Secrets and variables** → **Actions**
-            2. Click **New repository secret** for each missing key:
+            2. Click **New repository secret**:
                - **FACTORY_API_KEY**: Your Factory.ai API key
-               - **MODEL_API_KEY**: Your Z.ai API key (for GLM-4.6 model)
             3. Re-run this workflow or push a new commit to trigger the review
 
             For more details, see the [workflow documentation](https://github.com/${{ github.repository }}/blob/main/README.md).
@@ -180,38 +174,7 @@ jobs:
             exit 1
           fi
 
-      - name: Configure custom model
-        env:
-          MODEL_API_KEY: ${{ secrets.MODEL_API_KEY }}
-        run: |
-          set -euo pipefail
 
-          # Create .factory directory if it doesn't exist
-          mkdir -p "$HOME/.factory"
-
-          # Create config.json with custom model configuration
-          cat > "$HOME/.factory/config.json" << 'EOF'
-          {
-            "custom_models": [
-              {
-                "model_display_name": "GLM-4.6 Coding Plan",
-                "model": "GLM-4.6",
-                "base_url": "https://api.z.ai/api/anthropic",
-                "api_key": "MODEL_API_KEY_PLACEHOLDER",
-                "provider": "zia"
-              }
-            ]
-          }
-          EOF
-
-          # Replace the API key placeholder with actual key using jq
-          jq --arg key "$MODEL_API_KEY" '.custom_models[0].api_key = $key' "$HOME/.factory/config.json" > "$HOME/.factory/config.json.tmp"
-          mv "$HOME/.factory/config.json.tmp" "$HOME/.factory/config.json"
-
-          echo "✅ Custom model configuration created at $HOME/.factory/config.json"
-
-          # Verify the config (without showing the API key)
-          jq '.custom_models[0] | {model_display_name, model, base_url, provider, api_key_set: (.api_key != "")}' "$HOME/.factory/config.json"
 
       # OPTIMIZATION #10: Add early exit for no changes
       - name: Check for code changes
@@ -406,11 +369,11 @@ jobs:
           - The JSON must be a single line without line breaks within string values
           EOF
 
-          # Run droid exec with the prompt using custom GLM-4.6 model
-          echo "Running code review analysis with custom GLM-4.6 model..."
-          droid exec -f prompt.txt --model custom:GLM-4.6 --skip-permissions-unsafe || {
+          # Run droid exec with the prompt using Factory's built-in GLM-4.6 model
+          echo "Running code review analysis with Factory's GLM-4.6 model..."
+          droid exec -f prompt.txt --model GLM-4.6 --skip-permissions-unsafe || {
             echo "❌ ERROR: droid exec failed"
-            echo "This could be due to missing FACTORY_API_KEY, MODEL_API_KEY, or other runtime issues."
+            echo "This could be due to missing FACTORY_API_KEY or other runtime issues."
             exit 1
           }
 
