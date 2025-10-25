@@ -428,21 +428,54 @@ jobs:
             exit 0
           fi
 
-          # Use jq for faster JSON processing and convert line to position
-          echo "Sanitizing comments with jq and converting line numbers to positions..."
+          # Enhanced position validation and fallback logic
+          echo "Validating comment positions and creating safe position mapping..."
+          
+          # Create a mapping of file paths to their available line positions from the diff
+          jq -r '.[] | select(.patch) | "\(.filename):\(.patch)"' files.json > file_patches.txt
+          
+          # Process comments with better position validation
           jq -c '
+            def get_valid_position(file_path; line_num):
+              # Try to find the position in the diff patch for this line
+              input("file_patches.txt") | 
+              if test("^" + file_path + ":") then
+                # Extract patch and find line position
+                split("\n") | 
+                map(select(startswith("@@"))) | 
+                .[0] // "" |
+                if test("\\+[0-9]+") then
+                  # Extract the start position from hunk header
+                  capture("\\+([0-9]+)") | 
+                  .[0] | tonumber
+                else
+                  null
+                end
+              else
+                null
+              end;
+            
             [.[] |
              select(type == "object" and .path and (.line or .position) and .body) |
              {
                path: .path,
-               position: (.line // .position),
+               line: (.line // .position),
+               position: (
+                 if .line then
+                   # Try to get valid position from diff, fallback to line number
+                   get_valid_position(.path; .line) // .line
+                 else
+                   .position
+                 end
+               ),
                body: (.body | tostring | if length > 65000 then .[0:64997] + "..." else . end)
-             }] |
+             } |
+             select(.position > 0 and .position < 50000)] |
             unique_by({path, position, body})
           ' comments.json > comments_clean.json
 
           mv comments_clean.json comments.json
-          echo "✅ Comments sanitized and positions converted"
+          echo "✅ Comments validated with enhanced position mapping"
 
       - name: Submit inline review comments
         if: steps.changes.outputs.skip != 'true'
@@ -584,9 +617,15 @@ jobs:
                 continue;
               }
 
-              // Additional validation: check if position is reasonable (not too large)
-              if (position > 100000) {
-                core.warning(`Skipping comment ${i}: position too large (${position}) - likely incorrect`);
+              // Enhanced position validation
+              if (position <= 0 || position > 50000) {
+                core.warning(`Skipping comment ${i}: invalid position (${position}) - outside valid range [1, 50000]`);
+                continue;
+              }
+              
+              // Additional validation: check if path exists and is reasonable
+              if (typeof path !== 'string' || path.length > 500 || path.length < 1) {
+                core.warning(`Skipping comment ${i}: invalid path (${path})`);
                 continue;
               }
 
@@ -607,11 +646,28 @@ jobs:
               return;
             }
 
-            // Log comments being posted for debugging
+            // Enhanced logging for debugging position issues
             core.info('Comments to be posted:');
             filtered.forEach((c, i) => {
               core.info(`  ${i + 1}. ${c.path}:${c.position} (${c.body.substring(0, 50)}...)`);
             });
+            
+            // Log position validation details
+            core.info(`Position validation: total comments=${comments.length}, filtered=${filtered.length}`);
+            if (filtered.length === 0 && comments.length > 0) {
+              core.warning('All comments were filtered out due to invalid positions. This suggests a position calculation issue.');
+              core.warning('Comment details that were filtered:');
+              comments.forEach((c, i) => {
+                if (!c || typeof c !== 'object') {
+                  core.warning(`  Comment ${i}: Not an object`);
+                } else {
+                  const pos = c.position ?? c.line;
+                  const path = c.path ?? 'missing';
+                  const posType = typeof pos;
+                  core.warning(`  Comment ${i}: path=${path}, position=${pos} (${posType})`);
+                }
+              });
+            }
 
             const summary = `Found ${filtered.length} potential issue${filtered.length === 1 ? '' : 's'} that should be addressed.`;
             
