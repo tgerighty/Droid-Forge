@@ -35,84 +35,7 @@ jobs:
             echo "number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
           fi
 
-<<<<<<< HEAD
-      # Fetch PR details for manual dispatch
-      - name: Fetch PR details
-        id: pr-details
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          PR_DATA=$(gh api repos/${{ github.repository }}/pulls/${{ inputs.pr_number }})
-          echo "head_sha=$(echo "$PR_DATA" | jq -r '.head.sha')" >> $GITHUB_OUTPUT
-          echo "base_ref=$(echo "$PR_DATA" | jq -r '.base.ref')" >> $GITHUB_OUTPUT
-          echo "head_ref=$(echo "$PR_DATA" | jq -r '.head.ref')" >> $GITHUB_OUTPUT
-          echo "changed_files=$(echo "$PR_DATA" | jq -r '.changed_files')" >> $GITHUB_OUTPUT
-          echo "draft=$(echo "$PR_DATA" | jq -r '.draft')" >> $GITHUB_OUTPUT
 
-      # Validate API key first - fail fast to save GitHub Actions minutes
-      - name: Check API key configuration
-        id: check-keys
-        env:
-          FACTORY_API_KEY: ${{ secrets.FACTORY_API_KEY }}
-        run: |
-          set -euo pipefail
-
-          MISSING_KEYS=""
-
-          if [ -z "$FACTORY_API_KEY" ]; then
-            MISSING_KEYS="${MISSING_KEYS}- \`FACTORY_API_KEY\`\n"
-          fi
-
-          if [ -n "$MISSING_KEYS" ]; then
-            echo "keys_missing=true" >> $GITHUB_OUTPUT
-            echo "missing_keys<<EOF" >> $GITHUB_OUTPUT
-            echo -e "$MISSING_KEYS" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          else
-            echo "keys_missing=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Post comment about missing API keys
-        if: steps.check-keys.outputs.keys_missing == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const missingKeys = `${{ steps.check-keys.outputs.missing_keys }}`;
-            const comment = `## ⚠️ Droid Code Review: Configuration Required
-
-            The automated code review cannot run because the following API key is not configured:
-
-            ${missingKeys}
-
-            ### Setup Instructions
-
-            1. Go to repository **Settings** → **Secrets and variables** → **Actions**
-            2. Click **New repository secret**:
-               - **FACTORY_API_KEY**: Your Factory.ai API key
-            3. Re-run this workflow or push a new commit to trigger the review
-
-            For more details, see the [workflow documentation](https://github.com/${{ github.repository }}/blob/main/README.md).
-
-            <!-- droid-review:missing-keys -->`;
-
-            const prNumber = context.payload.pull_request?.number || ${{ steps.pr-number.outputs.number }};
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber,
-              body: comment
-            });
-
-      - name: Exit if API keys are missing
-        if: steps.check-keys.outputs.keys_missing == 'true'
-        run: |
-          echo "❌ API keys are missing. Posted comment on PR. Exiting gracefully."
-          exit 0
-
-      # OPTIMIZATION #3: Shallow checkout with enough depth for merge base
-=======
->>>>>>> main
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -143,10 +66,7 @@ jobs:
           fi
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
-<<<<<<< HEAD
-
-
-      # OPTIMIZATION #10: Add early exit for no changes
+# OPTIMIZATION #10: Add early exit for no changes
       - name: Check for code changes
         id: changes
         run: |
@@ -717,30 +637,4 @@ jobs:
             echo "⚠️ comments.json was not created (workflow may have been skipped)"
           fi
           echo "Workflow completed at $(date)"
-=======
-      - name: Configure custom model
-        env:
-          MODEL_API_KEY: ${{ secrets.MODEL_API_KEY }}
-        run: |
-          mkdir -p "$HOME/.factory"
-          cat > "$HOME/.factory/config.json" << 'EOF'
-          {
-            "custom_models": [
-              {
-                "model_display_name": "GLM-4.6 Coding Plan",
-                "model": "GLM-4.6",
-                "base_url": "https://api.z.ai/api/anthropic",
-                "api_key": "MODEL_API_KEY_PLACEHOLDER",
-                "provider": "zia"
-              }
-            ]
-          }
-          EOF
-          jq --arg key "$MODEL_API_KEY" '.custom_models[0].api_key = $key' "$HOME/.factory/config.json" > "$HOME/.factory/config.json.tmp"
-          mv "$HOME/.factory/config.json.tmp" "$HOME/.factory/config.json"
 
-      - name: Test droid exec
-        run: |
-          echo "Testing droid exec with custom:GLM-4.6 model..."
-          droid exec "hello world" --model custom:GLM-4.6 --skip-permissions-unsafe
->>>>>>> main
