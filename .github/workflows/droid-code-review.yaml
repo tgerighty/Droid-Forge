@@ -66,6 +66,40 @@ jobs:
           fi
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
+      - name: Configure custom model
+        env:
+          MODEL_API_KEY: ${{ secrets.MODEL_API_KEY }}
+        run: |
+          set -euo pipefail
+
+          # Create .factory directory if it doesn't exist
+          mkdir -p "$HOME/.factory"
+
+          # Create config.json with custom model configuration
+          cat > "$HOME/.factory/config.json" << 'EOF'
+          {
+            "custom_models": [
+              {
+                "model_display_name": "GLM-4.6 [Z.AI]",
+                "model": "GLM-4.6",
+                "base_url": "https://api.z.ai/api/coding/paas/v4",
+                "api_key": "MODEL_API_KEY_PLACEHOLDER",
+                "provider": "generic-chat-completion-api",
+                "max_tokens": 131072
+              }
+            ]
+          }
+          EOF
+
+          # Replace the API key placeholder with actual key using jq
+          jq --arg key "$MODEL_API_KEY" '.custom_models[0].api_key = $key' "$HOME/.factory/config.json" > "$HOME/.factory/config.json.tmp"
+          mv "$HOME/.factory/config.json.tmp" "$HOME/.factory/config.json"
+
+          echo "✅ Custom model configuration created at $HOME/.factory/config.json"
+
+          # Verify the config (without showing the API key)
+          jq '.custom_models[0] | {model_display_name, model, base_url, provider, api_key_set: (.api_key != "")}' "$HOME/.factory/config.json"
+
 # OPTIMIZATION #10: Add early exit for no changes
       - name: Check for code changes
         id: changes
