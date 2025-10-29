@@ -1,4 +1,6 @@
 name: Droid Code Review - GLM4.6
+# Source: /Users/terry.gerighty/nxio.ai/tools/droid-github-code-review
+# Updated: 2025-10-29
 
 on:
   pull_request:
@@ -355,43 +357,14 @@ jobs:
           # Enhanced position validation and fallback logic
           echo "Validating comment positions and creating safe position mapping..."
           
-          # Create a mapping of file paths to their available line positions from the diff
-          jq -r '.[] | select(.patch) | "\(.filename):\(.patch)"' files.json > file_patches.txt
-          
-          # Process comments with better position validation
+          # Simple sanitization without complex position mapping to avoid jq input issues
           jq -c '
-            def get_valid_position(file_path; line_num):
-              # Try to find the position in the diff patch for this line
-              input("file_patches.txt") | 
-              if test("^" + file_path + ":") then
-                # Extract patch and find line position
-                split("\n") | 
-                map(select(startswith("@@"))) | 
-                .[0] // "" |
-                if test("\\+[0-9]+") then
-                  # Extract the start position from hunk header
-                  capture("\\+([0-9]+)") | 
-                  .[0] | tonumber
-                else
-                  null
-                end
-              else
-                null
-              end;
-            
             [.[] |
              select(type == "object" and .path and (.line or .position) and .body) |
              {
                path: .path,
                line: (.line // .position),
-               position: (
-                 if .line then
-                   # Try to get valid position from diff, fallback to line number
-                   get_valid_position(.path; .line) // .line
-                 else
-                   .position
-                 end
-               ),
+               position: (.line // .position),
                body: (.body | tostring | if length > 65000 then .[0:64997] + "..." else . end)
              } |
              select(.position > 0 and .position < 50000)] |
@@ -399,7 +372,7 @@ jobs:
           ' comments.json > comments_clean.json
 
           mv comments_clean.json comments.json
-          echo "✅ Comments validated with enhanced position mapping"
+          echo "✅ Comments validated with position mapping"
 
       - name: Submit inline review comments
         if: steps.changes.outputs.skip != 'true'
