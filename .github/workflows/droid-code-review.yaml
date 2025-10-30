@@ -1,6 +1,12 @@
-name: Droid Code Review - GLM4.6
-# Source: /Users/terry.gerighty/nxio.ai/tools/droid-github-code-review
-# Updated: 2025-10-29
+# Droid Code Review Workflow - Version 2
+# Updated: 2025-10-30
+# Changes from v1:
+# - Now runs on draft PRs (removed draft filter)
+# - Optimized with caching, parallelization, and smart PR size detection
+# - Enhanced error handling and validation
+# - Improved position mapping for inline comments
+
+name: Droid Code Review - v2
 
 on:
   pull_request:
@@ -25,7 +31,6 @@ jobs:
   code-review:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
 
     steps:
       - name: Set PR number
