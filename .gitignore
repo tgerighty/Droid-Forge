@@ -43,4 +43,21 @@ build/
 # Biome configuration
 biome.json
 
+# Documentation and reports (generated/working files)
+AGENTS.md
+docs/CHANGELOG.md
+docs/CONSOLIDATION_REPORT.md
+docs/DROID_OPTIMIZATION_SUMMARY.md
+docs/FINAL-DROID-TOKEN-REPORT.md
+docs/FINAL-OPTIMIZATION-REPORT.md
+docs/OPTIMIZATION_REPORT.md
+docs/optimization-tracking.md
+docs/SEPARATION-SUMMARY.md
+docs/test-optimized-droid.md
+docs/token-optimization-report.md
+docs/sample-code-for-analysis.ts
+
+# Token analysis reports
+docs/droid-token-analysis-*.txt
+*-token-analysis-*.txt
 

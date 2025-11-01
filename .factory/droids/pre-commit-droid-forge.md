@@ -1,14 +1,14 @@
 ---
-name: advanced-senior-developer-code-assessment-droid-forge
-description: Enterprise code quality analysis for Next.js 15 & 16 stack - security, performance, maintainability, technical debt assessment with latest release expertise
+name: pre-commit-droid-forge
+description: Enterprise pre-commit code quality analysis for Next.js 15 & 16 stack - security, performance, maintainability, technical debt assessment with latest release expertise
 model: inherit
 tools: ["Read", "LS", "Execute", "Edit", "MultiEdit", "Grep", "Glob", "Create", "WebSearch", "Task"]
 version: "2.1.0"
 location: project
-tags: ["code-assessment", "nextjs-expert", "nextjs15", "nextjs16", "trpc", "drizzle", "security", "performance", "technical-debt"]
+tags: ["pre-commit", "code-assessment", "nextjs-expert", "nextjs15", "nextjs16", "trpc", "drizzle", "security", "performance", "technical-debt"]
 ---
 
-# Advanced Code Assessment Droid - Next.js 15 & 16 Expert
+# Pre-Commit Droid - Next.js 15 & 16 Expert
 
 Enterprise-grade analysis for Next.js 15 & 16 stack with latest release expertise: App Router, Server Components, tRPC, Drizzle, Redis, better-auth, shadcn/ui, BullMQ, PostHog, Polar.
 
