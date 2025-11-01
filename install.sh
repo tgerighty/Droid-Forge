@@ -90,45 +90,115 @@ setup_directories() {
     fi
 }
 
+# Get available models from droid exec --help
+get_available_models() {
+    local models=()
+    
+    # Check if droid command is available
+    if ! command -v droid &> /dev/null; then
+        print_warning "droid command not found - using fallback model list"
+        echo "claude-sonnet-4-5-20250929"
+        echo "claude-opus-4-1-20250805"
+        echo "claude-haiku-4-5-20251001"
+        echo "gpt-5-codex"
+        echo "gpt-5-2025-08-07"
+        return
+    fi
+    
+    # Get help output and parse models
+    local help_output
+    help_output=$(droid exec --help 2>&1)
+    
+    # Extract models from "Available Models:" section
+    echo "$help_output" | awk '/^Available Models:/,/^Custom Models:/' | grep -E '^\s+[a-z]' | awk '{print $1}'
+    
+    # Extract custom models from "Custom Models:" section
+    echo "$help_output" | awk '/^Custom Models:/,/^Model details:/' | grep -E '^\s+custom:' | awk '{print $1}'
+}
+
 # Ask user for model configuration
 select_model_configuration() {
     echo ""
     print_info "Model Configuration"
     echo "How would you like to configure the model for your droids?"
     echo "1) Leave as 'inherit' (use Factory.ai default model)"
-    echo "2) Use a built-in Factory.ai model"
-    echo "3) Use a custom model identifier"
+    echo "2) Select a model from available models"
     echo ""
     
     while true; do
-        read -p "Select option (1, 2, or 3): " -n 1 -r
+        read -p "Select option (1 or 2): " -n 1 -r
         echo
-        if [[ $REPLY =~ ^[123]$ ]]; then
+        if [[ $REPLY =~ ^[12]$ ]]; then
             break
         else
-            print_warning "Please enter 1, 2, or 3"
+            print_warning "Please enter 1 or 2"
         fi
     done
     
     if [ "$REPLY" = "1" ]; then
         MODEL_SELECTION="inherit"
         print_info "Using 'inherit' - droids will use Factory.ai default model"
-    elif [ "$REPLY" = "2" ]; then
-        echo ""
-        print_info "Available built-in models:"
-        echo "  - claude-3-5-sonnet-20241022"
-        echo "  - claude-3-5-haiku-20241022"
-        echo "  - gpt-4o"
-        echo "  - gpt-4o-mini"
-        echo ""
-        read -p "Enter model name: " MODEL_SELECTION
-        MODEL_SELECTION=$(echo "$MODEL_SELECTION" | xargs) # trim whitespace
-        print_info "Using built-in model: $MODEL_SELECTION"
     else
         echo ""
-        read -p "Enter custom model identifier: " MODEL_SELECTION
-        MODEL_SELECTION=$(echo "$MODEL_SELECTION" | xargs) # trim whitespace
-        print_info "Using custom model: $MODEL_SELECTION"
+        print_info "Fetching available models..."
+        
+        # Get models into an array
+        local models=()
+        while IFS= read -r model; do
+            models+=("$model")
+        done < <(get_available_models)
+        
+        if [ ${#models[@]} -eq 0 ]; then
+            print_error "No models found. Falling back to manual entry."
+            read -p "Enter model identifier: " MODEL_SELECTION
+            MODEL_SELECTION=$(echo "$MODEL_SELECTION" | xargs)
+        else
+            echo ""
+            print_info "Available Models:"
+            echo "==============================================="
+            
+            # Display numbered list of models
+            local i=1
+            for model in "${models[@]}"; do
+                # Add description for some known models
+                case "$model" in
+                    claude-sonnet-4-5-*)
+                        echo "$i) $model (Claude Sonnet 4.5 - Default, balanced)"
+                        ;;
+                    claude-opus-4-*)
+                        echo "$i) $model (Claude Opus 4 - Most capable)"
+                        ;;
+                    claude-haiku-4-*)
+                        echo "$i) $model (Claude Haiku 4 - Fast and efficient)"
+                        ;;
+                    gpt-5-codex*)
+                        echo "$i) $model (GPT-5 Codex - Code optimized)"
+                        ;;
+                    gpt-5-*)
+                        echo "$i) $model (GPT-5)"
+                        ;;
+                    custom:*)
+                        echo "$i) $model"
+                        ;;
+                    *)
+                        echo "$i) $model"
+                        ;;
+                esac
+                i=$((i + 1))
+            done
+            
+            echo ""
+            while true; do
+                read -p "Select model number (1-${#models[@]}): " model_num
+                if [[ "$model_num" =~ ^[0-9]+$ ]] && [ "$model_num" -ge 1 ] && [ "$model_num" -le ${#models[@]} ]; then
+                    MODEL_SELECTION="${models[$((model_num - 1))]}"
+                    print_info "Selected: $MODEL_SELECTION"
+                    break
+                else
+                    print_warning "Please enter a number between 1 and ${#models[@]}"
+                fi
+            done
+        fi
     fi
     
     export MODEL_SELECTION
