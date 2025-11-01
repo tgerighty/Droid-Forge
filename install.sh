@@ -90,6 +90,61 @@ setup_directories() {
     fi
 }
 
+# Ask user for model configuration
+select_model_configuration() {
+    echo ""
+    print_info "Model Configuration"
+    echo "How would you like to configure the model for your droids?"
+    echo "1) Leave as 'inherit' (use Factory.ai default model)"
+    echo "2) Use a built-in Factory.ai model"
+    echo "3) Use a custom model identifier"
+    echo ""
+    
+    while true; do
+        read -p "Select option (1, 2, or 3): " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[123]$ ]]; then
+            break
+        else
+            print_warning "Please enter 1, 2, or 3"
+        fi
+    done
+    
+    if [ "$REPLY" = "1" ]; then
+        MODEL_SELECTION="inherit"
+        print_info "Using 'inherit' - droids will use Factory.ai default model"
+    elif [ "$REPLY" = "2" ]; then
+        echo ""
+        print_info "Available built-in models:"
+        echo "  - claude-3-5-sonnet-20241022"
+        echo "  - claude-3-5-haiku-20241022"
+        echo "  - gpt-4o"
+        echo "  - gpt-4o-mini"
+        echo ""
+        read -p "Enter model name: " MODEL_SELECTION
+        MODEL_SELECTION=$(echo "$MODEL_SELECTION" | xargs) # trim whitespace
+        print_info "Using built-in model: $MODEL_SELECTION"
+    else
+        echo ""
+        read -p "Enter custom model identifier: " MODEL_SELECTION
+        MODEL_SELECTION=$(echo "$MODEL_SELECTION" | xargs) # trim whitespace
+        print_info "Using custom model: $MODEL_SELECTION"
+    fi
+    
+    export MODEL_SELECTION
+}
+
+# Modify droid file to set the model
+modify_droid_model() {
+    local droid_file="$1"
+    local model="$2"
+    local temp_file="${droid_file}.tmp"
+    
+    # Use sed to replace the model line in the frontmatter
+    sed "s/^model: .*/model: $model/" "$droid_file" > "$temp_file"
+    mv "$temp_file" "$droid_file"
+}
+
 # Install core droids
 install_core_droids() {
     print_info "Setting up droids..."
@@ -118,6 +173,9 @@ install_core_droids() {
         INSTALL_LOCATION="user"
         print_info "Installing to user directory (~/.factory/droids)"
     fi
+    
+    # Ask for model configuration
+    select_model_configuration
     
     # Create the target directory if needed
     if [ "$INSTALL_LOCATION" = "user" ]; then
@@ -196,10 +254,24 @@ install_core_droids() {
                 
                 if [ "$should_copy" = true ]; then
                     cp "$droid_file" "$TARGET_FILE"
+                    
+                    # Modify the model if not using 'inherit'
+                    if [ "$MODEL_SELECTION" != "inherit" ]; then
+                        modify_droid_model "$TARGET_FILE" "$MODEL_SELECTION"
+                    fi
+                    
                     if [ -n "$source_version" ]; then
-                        print_success "$action: $droid_name (v$source_version)"
+                        if [ "$MODEL_SELECTION" != "inherit" ]; then
+                            print_success "$action: $droid_name (v$source_version, model: $MODEL_SELECTION)"
+                        else
+                            print_success "$action: $droid_name (v$source_version)"
+                        fi
                     else
-                        print_success "$action: $droid_name"
+                        if [ "$MODEL_SELECTION" != "inherit" ]; then
+                            print_success "$action: $droid_name (model: $MODEL_SELECTION)"
+                        else
+                            print_success "$action: $droid_name"
+                        fi
                     fi
                 else
                     print_info "Skipped: $droid_name (already up to date)"
@@ -368,6 +440,17 @@ run_tests() {
 show_next_steps() {
     print_info "Installation completed! Next steps:"
     echo ""
+    
+    # Show model configuration
+    if [ -n "$MODEL_SELECTION" ]; then
+        if [ "$MODEL_SELECTION" = "inherit" ]; then
+            echo "📋 Model Configuration: Using 'inherit' (Factory.ai default)"
+        else
+            echo "📋 Model Configuration: All droids configured to use '$MODEL_SELECTION'"
+        fi
+        echo ""
+    fi
+    
     echo "1. Review and customize droid-forge.yaml:"
     echo "   nano droid-forge.yaml"
     echo ""
@@ -375,13 +458,17 @@ show_next_steps() {
     echo "   factory \"Analyze this project and create tasks\""
     echo ""
     echo "3. Explore available droids:"
-    echo "   ls -la ~/.factory/droids/"
-    echo "   cat ~/.factory/droids/manager-orchestrator-droid-forge.md"
+    if [ "$INSTALL_LOCATION" = "user" ]; then
+        echo "   ls -la ~/.factory/droids/"
+        echo "   cat ~/.factory/droids/manager-orchestrator-droid-forge.md"
+    else
+        echo "   ls -la .factory/droids/"
+        echo "   cat .factory/droids/manager-orchestrator-droid-forge.md"
+    fi
     echo ""
     echo "4. Read the documentation:"
     echo "   - README.md (overview and usage)"
-    echo "   - DROID_CREATION_GUIDE.md (create custom droids)"
-    echo "   - GITHUB_REPO_GUIDE.md (GitHub integration)"
+    echo "   - docs/droid-creation-guide.md (create custom droids)"
     echo ""
     print_success "Droid Forge is ready to use! 🚀"
     
