@@ -359,25 +359,111 @@ jobs:
             exit 0
           fi
 
-          # Enhanced position validation and fallback logic
-          echo "Validating comment positions and creating safe position mapping..."
+          # Enhanced position validation with proper diff position calculation
+          echo "Converting line numbers to diff positions..."
           
-          # Simple sanitization without complex position mapping to avoid jq input issues
-          jq -c '
-            [.[] |
-             select(type == "object" and .path and (.line or .position) and .body) |
-             {
-               path: .path,
-               line: (.line // .position),
-               position: (.line // .position),
-               body: (.body | tostring | if length > 65000 then .[0:64997] + "..." else . end)
-             } |
-             select(.position > 0 and .position < 50000)] |
-            unique_by({path, position, body})
-          ' comments.json > comments_clean.json
-
-          mv comments_clean.json comments.json
-          echo "✅ Comments validated with position mapping"
+          # Create a position mapping from files.json
+          # GitHub API requires position in diff, not line number in file
+          jq -r '
+            # Build a mapping of file paths to their patches
+            .[] | 
+            select(.patch != null) |
+            .filename as $file |
+            .patch |
+            # Parse the patch to create line -> position mappings
+            split("\n") |
+            to_entries |
+            map(
+              select(.value | startswith("+") or startswith("-") or startswith(" ") or test("^@@ ")) |
+              {
+                file: $file,
+                diffPos: (.key + 1),
+                line: .value,
+                # Extract the line number from the line content
+                # Format: @@ -start,count +start,count @@
+                isHunk: (.value | startswith("@@")),
+                value: .value
+              }
+            ) |
+            # Calculate actual line numbers from hunks
+            reduce .[] as $item (
+              {lineNum: 0, diffPos: 0, hunks: []};
+              if $item.isHunk then
+                # Extract the +start from @@ -x,y +start,count @@
+                ($item.value | match("\\+([0-9]+)") | .captures[0].string | tonumber) as $startLine |
+                .lineNum = ($startLine - 1) |
+                .diffPos = $item.diffPos
+              else
+                .diffPos = $item.diffPos |
+                if ($item.line | startswith("+") or startswith(" ")) then
+                  .lineNum = (.lineNum + 1) |
+                  .hunks += [{file: $item.file, line: .lineNum, position: .diffPos}]
+                else
+                  # Deletion lines dont increment line counter
+                  .hunks += [{file: $item.file, line: .lineNum, position: .diffPos}]
+                end
+              end
+            ) |
+            .hunks[] |
+            "\(.file):\(.line):\(.position)"
+          ' files.json > position_map.txt || {
+            echo "Warning: Could not create position map from files.json"
+            touch position_map.txt
+          }
+          
+          echo "Position map created with $(wc -l < position_map.txt) entries"
+          if [ -s position_map.txt ]; then
+            head -20 position_map.txt
+          fi
+          
+          # Now convert comments.json to use proper positions
+          # Read position map into a bash associative array for faster lookup
+          declare -A posMap
+          while IFS=: read -r file line pos; do
+            posMap["${file}:${line}"]="$pos"
+          done < position_map.txt
+          
+          # Process comments and map line numbers to positions
+          jq -c '.[]' comments.json | while read -r comment; do
+            path=$(echo "$comment" | jq -r '.path')
+            line=$(echo "$comment" | jq -r '.line // .position')
+            body=$(echo "$comment" | jq -r '.body')
+            
+            # Look up the position in our map
+            key="${path}:${line}"
+            position="${posMap[$key]}"
+            
+            if [ -n "$position" ] && [ "$position" -gt 0 ]; then
+              echo "$comment" | jq -c --arg pos "$position" '. + {position: ($pos | tonumber)}'
+            else
+              echo "Warning: Could not find position for $key (line $line in $path)" >&2
+            fi
+          done | jq -s '.' > comments_mapped.json
+          
+          # If mapping produced valid results, use it; otherwise fall back to sanitized original
+          if [ -s comments_mapped.json ] && [ "$(jq 'length' comments_mapped.json)" -gt 0 ]; then
+            mv comments_mapped.json comments.json
+            echo "✅ Successfully mapped $(jq 'length' comments.json) comments to diff positions"
+          else
+            echo "⚠️ Position mapping produced no results, keeping original line-based comments"
+            # Simple sanitization as fallback
+            jq -c '
+              [.[] |
+               select(type == "object" and .path and (.line or .position) and .body) |
+               {
+                 path: .path,
+                 line: (.line // .position),
+                 position: (.line // .position),
+                 body: (.body | tostring | if length > 65000 then .[0:64997] + "..." else . end)
+               } |
+               select(.position > 0 and .position < 50000)] |
+              unique_by({path, position, body})
+            ' comments.json > comments_clean.json
+            mv comments_clean.json comments.json
+          fi
+          
+          echo "Final comments to submit:"
+          jq '.' comments.json
 
       - name: Submit inline review comments
         if: steps.changes.outputs.skip != 'true'
@@ -490,6 +576,21 @@ jobs:
               })
             );
 
+            // Get list of files in the PR to validate comments are for changed files
+            let prFiles = [];
+            try {
+              const filesResponse = await github.rest.pulls.listFiles({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                per_page: 100
+              });
+              prFiles = filesResponse.data.map(f => f.filename);
+              core.info(`PR contains ${prFiles.length} changed files`);
+            } catch (error) {
+              core.warning(`Failed to fetch PR files: ${error.message}`);
+            }
+
             // Validate and filter comments with detailed logging and position validation
             const filtered = [];
             for (let i = 0; i < comments.length; i++) {
@@ -516,6 +617,12 @@ jobs:
               }
               if (!body) {
                 core.warning(`Skipping comment ${i}: empty body`);
+                continue;
+              }
+
+              // Check if file is actually in the PR
+              if (prFiles.length > 0 && !prFiles.includes(path)) {
+                core.warning(`Skipping comment ${i}: file ${path} not in PR changeset`);
                 continue;
               }
 
