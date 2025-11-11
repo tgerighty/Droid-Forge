@@ -429,9 +429,9 @@ jobs:
             line=$(echo "$comment" | jq -r '.line // .position')
             body=$(echo "$comment" | jq -r '.body')
             
-            # Look up the position in our map
+            # Look up the position in our map (safely handle missing keys)
             key="${path}:${line}"
-            position="${posMap[$key]}"
+            position="${posMap[$key]:-}"
             
             if [ -n "$position" ] && [ "$position" -gt 0 ]; then
               echo "$comment" | jq -c --arg pos "$position" '. + {position: ($pos | tonumber)}'
