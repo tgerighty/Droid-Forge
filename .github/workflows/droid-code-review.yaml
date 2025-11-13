@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: 'PR number to review'
+        description: "PR number to review"
         required: true
         type: number
 
@@ -41,7 +41,6 @@ jobs:
           else
             echo "number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
           fi
-
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -107,14 +106,14 @@ jobs:
           # Verify the config (without showing the API key)
           jq '.custom_models[0] | {model_display_name, model, base_url, provider, api_key_set: (.api_key != "")}' "$HOME/.factory/config.json"
 
-# OPTIMIZATION #10: Add early exit for no changes
+      # OPTIMIZATION #10: Add early exit for no changes
       - name: Check for code changes
         id: changes
         run: |
           set -euo pipefail
           BASE_REF="${{ github.event.pull_request.base.ref || steps.pr-details.outputs.base_ref }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha || steps.pr-details.outputs.head_sha }}"
-          
+
           # Fetch base branch (full history already available from checkout)
           git fetch origin "$BASE_REF"
 
@@ -153,7 +152,7 @@ jobs:
           PR_NUMBER: ${{ steps.pr-number.outputs.number }}
         run: |
           set -euo pipefail
-          
+
           BASE_REF="${{ github.event.pull_request.base.ref || steps.pr-details.outputs.base_ref }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha || steps.pr-details.outputs.head_sha }}"
 
@@ -207,7 +206,7 @@ jobs:
 
           # Process files data with better position information
           echo "Processing file patches and extracting position data..."
-          
+
           # Create a more detailed files.json with position information for each changed line
           jq '[.[] | select(.patch != null) | {
             filename: .filename, 
@@ -218,13 +217,13 @@ jobs:
             deletions: .deletions,
             changes: .changes
           }]' files_raw.json > files.json
-          
+
           # Also create a separate file with just the filenames for truncated patches
           jq '[.[] | select(.patch == null) | .filename]' files_raw.json > truncated_files.json
           if [ "$(jq 'length' truncated_files.json)" -eq 0 ]; then
             rm -f truncated_files.json
           fi
-          
+
           echo "Files with patches: $(jq 'length' files.json)"
           if [ -f truncated_files.json ]; then
             echo "Files with truncated patches: $(jq 'length' truncated_files.json)"
@@ -361,7 +360,7 @@ jobs:
 
           # Enhanced position validation with proper diff position calculation
           echo "Converting line numbers to diff positions..."
-          
+
           # Create a position mapping from files.json
           # GitHub API requires position in diff, not line number in file
           jq -r '
@@ -410,19 +409,19 @@ jobs:
             echo "Warning: Could not create position map from files.json"
             touch position_map.txt
           }
-          
+
           echo "Position map created with $(wc -l < position_map.txt) entries"
           if [ -s position_map.txt ]; then
             head -20 position_map.txt
           fi
-          
+
           # Now convert comments.json to use proper positions
           # Read position map into a bash associative array for faster lookup
           declare -A posMap
           while IFS=: read -r file line pos; do
             posMap["${file}:${line}"]="$pos"
           done < position_map.txt
-          
+
           # Process comments and map line numbers to positions
           jq -c '.[]' comments.json | while read -r comment; do
             path=$(echo "$comment" | jq -r '.path')
@@ -439,7 +438,7 @@ jobs:
               echo "Warning: Could not find position for $key (line $line in $path)" >&2
             fi
           done | jq -s '.' > comments_mapped.json
-          
+
           # If mapping produced valid results, use it; otherwise fall back to sanitized original
           if [ -s comments_mapped.json ] && [ "$(jq 'length' comments_mapped.json)" -gt 0 ]; then
             mv comments_mapped.json comments.json
@@ -461,7 +460,7 @@ jobs:
             ' comments.json > comments_clean.json
             mv comments_clean.json comments.json
           fi
-          
+
           echo "Final comments to submit:"
           jq '.' comments.json
 
@@ -491,7 +490,7 @@ jobs:
             // Read and parse comments with error handling
             const commentsContent = fs.readFileSync('comments.json', 'utf8');
             core.info(`Raw comments.json content (first 500 chars): ${commentsContent.substring(0, 500)}`);
-            
+
             let comments;
             try {
               comments = JSON.parse(commentsContent);
@@ -660,7 +659,7 @@ jobs:
             filtered.forEach((c, i) => {
               core.info(`  ${i + 1}. ${c.path}:${c.position} (${c.body.substring(0, 50)}...)`);
             });
-            
+
             // Log position validation details
             core.info(`Position validation: total comments=${comments.length}, filtered=${filtered.length}`);
             if (filtered.length === 0 && comments.length > 0) {
@@ -679,7 +678,7 @@ jobs:
             }
 
             const summary = `Found ${filtered.length} potential issue${filtered.length === 1 ? '' : 's'} that should be addressed.`;
-            
+
             // Get the current PR details to ensure we have the latest commit SHA
             let commitId;
             try {
@@ -756,4 +755,3 @@ jobs:
             echo "⚠️ comments.json was not created (workflow may have been skipped)"
           fi
           echo "Workflow completed at $(date)"
-
