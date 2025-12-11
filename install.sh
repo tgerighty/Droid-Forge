@@ -376,30 +376,49 @@ verify_key_droids() {
     print_info "Verifying key droids installation..."
     
     local key_droids=(
-        "pre-commit-droid-forge.md"
-        "ai-dev-tasks-integrator-droid-forge.md"
-        "backend-security-specialist-droid-forge.md"
-        "better-auth-integration-droid-forge.md"
-        "biome-droid-forge.md"
-        "caching-specialist-droid-forge.md"
-        "change-auditor-droid-forge.md"
-        "code-analysis-droid-forge.md"
-        "code-refactoring-droid-forge.md"
-        "code-reviewer-droid-forge.md"
-        "code-tools-specialist-droid-forge.md"
-        "comprehensive-testing-droid-forge.md"
-        "database-specialist-droid-forge.md"
-        "debugging-assessment-droid-forge.md"
-        "devops-automation-droid-forge.md"
-        "frontend-engineer-droid-forge.md"
-        "git-workflow-orchestrator-droid-forge.md"
+        # Orchestrators
         "manager-orchestrator-droid-forge.md"
+        "pr-review-droid-forge.md"
+        # PR Review Analysis Droids (SonarQube-style)
+        "security-vulnerability-droid-forge.md"
+        "bug-detection-droid-forge.md"
+        "architecture-analysis-droid-forge.md"
+        "code-smells-droid-forge.md"
+        "duplicate-code-droid-forge.md"
+        "performance-analysis-droid-forge.md"
+        "test-quality-droid-forge.md"
+        "dependency-recommendations-droid-forge.md"
+        "dependency-updates-droid-forge.md"
+        "dead-code-hunter-droid-forge.md"
+        # Core Specialists
+        "code-reviewer-droid-forge.md"
+        "backend-security-specialist-droid-forge.md"
+        "frontend-engineer-droid-forge.md"
+        "database-specialist-droid-forge.md"
+        "typescript-specialist-droid-forge.md"
         "nextjs-specialist-droid-forge.md"
+        "trpc-specialist-droid-forge.md"
+        # Quality & Testing
+        "comprehensive-testing-droid-forge.md"
+        "biome-droid-forge.md"
+        "ultracite-droid-forge.md"
+        # Refactoring & Analysis
+        "code-refactoring-droid-forge.md"
+        "code-analysis-droid-forge.md"
+        "code-tools-specialist-droid-forge.md"
+        # Workflow & DevOps
+        "git-workflow-orchestrator-droid-forge.md"
+        "devops-automation-droid-forge.md"
+        "change-auditor-droid-forge.md"
+        "pre-commit-droid-forge.md"
+        # Other Specialists
+        "better-auth-integration-droid-forge.md"
+        "caching-specialist-droid-forge.md"
+        "debugging-assessment-droid-forge.md"
         "plan-review-droid-forge.md"
+        "ai-dev-tasks-integrator-droid-forge.md"
         "replit-assessment-droid-forge.md"
         "template-droid-forge.md"
-        "trpc-specialist-droid-forge.md"
-        "typescript-specialist-droid-forge.md"
     )
     
     local missing_droids=()

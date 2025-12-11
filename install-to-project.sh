@@ -273,14 +273,29 @@ verify_key_droids() {
     print_step "Verifying key droids installation"
     
     local key_droids=(
+        # Orchestrators
         "manager-orchestrator-droid-forge.md"
-        "replit-assessment-droid-forge.md"
+        "pr-review-droid-forge.md"
+        # PR Review Analysis Droids (SonarQube-style)
+        "security-vulnerability-droid-forge.md"
+        "bug-detection-droid-forge.md"
+        "architecture-analysis-droid-forge.md"
+        "code-smells-droid-forge.md"
+        "duplicate-code-droid-forge.md"
+        "performance-analysis-droid-forge.md"
+        "test-quality-droid-forge.md"
+        "dependency-recommendations-droid-forge.md"
+        "dependency-updates-droid-forge.md"
+        "dead-code-hunter-droid-forge.md"
+        # Core Specialists
+        "code-reviewer-droid-forge.md"
+        "backend-security-specialist-droid-forge.md"
         "frontend-engineer-droid-forge.md"
-        "backend-engineer-droid-forge.md"
-        "unit-test-droid-forge.md"
-        "security-assessment-droid-forge.md"
-        "typescript-integration-droid-forge.md"
-        "bug-hunter-droid-forge.md"
+        "database-specialist-droid-forge.md"
+        "typescript-specialist-droid-forge.md"
+        # Quality & Testing
+        "comprehensive-testing-droid-forge.md"
+        "biome-droid-forge.md"
     )
     
     local missing_droids=()
